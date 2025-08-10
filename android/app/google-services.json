@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "139553149732",
+    "project_id": "appsmanda-203ae",
+    "storage_bucket": "appsmanda-203ae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:139553149732:android:8dfd964d500eb5297dd9b1",
+        "android_client_info": {
+          "package_name": "com.smanda.new_sistem_informasi_smanda"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwXV3FU7q9-_qzvsm5q1c344nDHbo8Eyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

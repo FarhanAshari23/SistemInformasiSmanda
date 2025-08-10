@@ -1,0 +1,38 @@
+class AppImages {
+  static const String basePath = "assets/images/";
+
+  static const String logoSMA = "${basePath}logo_sma.png";
+  static const String students = "${basePath}students.png";
+  static const String eskul = "${basePath}eskul.png";
+  static const String teacher = "${basePath}teacher.png";
+  static const String calendar = "${basePath}calendar.png";
+  static const String arrowRight = "${basePath}arrow_right.png";
+  static const String megaphone = "${basePath}megaphone.png";
+  static const String information = "${basePath}information.png";
+  static const String classroom = "${basePath}classroom.jpg";
+  static const String kir = "${basePath}KIR.png";
+  static const String marchingBand = "${basePath}marching_band.png";
+  static const String osis = "${basePath}OSIS.png";
+  static const String paskib = "${basePath}paskib.png";
+  static const String pmr = "${basePath}pmr.png";
+  static const String pramuka = "${basePath}pramuka.png";
+  static const String rohis = "${basePath}rohis.png";
+  static const String clock = "${basePath}clock.png";
+  static const String task = "${basePath}task.png";
+  static const String splashLogout = "${basePath}splashLogout.png";
+  static const String splashDelete = "${basePath}delete_splash.png";
+  static const String verification = "${basePath}verification.png";
+  static const String attendance = "${basePath}attendance.png";
+  static const String camera = "${basePath}camera.png";
+  static const String search = "${basePath}search.png";
+  static const String structural = "${basePath}organization-structure.png";
+  static const String teaching = "${basePath}teach.png";
+  static const String staff = "${basePath}staff.png";
+  static const String notfound = "${basePath}notfound.png";
+  static const String girlStudent = "${basePath}girl-student.png";
+  static const String boyStudent = "${basePath}boy-student.png";
+  static const String guru = "${basePath}guru.png";
+  static const String tendik = "${basePath}tendik.png";
+  static const String splashEkskul = "${basePath}splashEkskul.jpg";
+  static const String testFoto = "${basePath}test_foto.JPG";
+}
