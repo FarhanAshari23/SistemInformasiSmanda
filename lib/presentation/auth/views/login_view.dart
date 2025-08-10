@@ -138,6 +138,17 @@ class LoginView extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: height * 0.095),
+                  SizedBox(height: height * 0.095),
+                  const Text(
+                    'Belum memiliki akun?',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(height: height * 0.095),
                   _continueButton(context),
                 ],
               ),
