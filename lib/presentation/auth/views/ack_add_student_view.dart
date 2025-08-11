@@ -12,6 +12,7 @@ import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_ad
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import 'login_view.dart';
 
 class AckAddStudentView extends StatelessWidget {
   final UserCreationReq userCreationReq;
@@ -111,9 +112,9 @@ class AckAddStudentView extends StatelessWidget {
                             );
                         AppNavigator.push(
                           context,
-                          const SuccesPage(
-                            page: HomeViewAdmin(),
-                            title: "Data Siswa Berhasil Ditambahkan",
+                          SuccesPage(
+                            page: LoginView(),
+                            title: "Akun berhasil dibuat",
                           ),
                         );
                       },

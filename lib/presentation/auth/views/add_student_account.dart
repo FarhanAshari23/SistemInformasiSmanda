@@ -29,14 +29,14 @@ class AddStudentView extends StatelessWidget {
               child: Column(
                 children: [
                   const Text(
-                    'TAMBAH DATA SISWA',
+                    'Buat akun siswa',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w900,
                       color: AppColors.primary,
                     ),
                   ),
-                  SizedBox(height: height * 0.1),
+                  SizedBox(height: height * 0.05),
                   TextField(
                     controller: _emailC,
                     autocorrect: false,
@@ -55,7 +55,7 @@ class AddStudentView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: height * 0.02),
+                  SizedBox(height: height * 0.03),
                   TextField(
                     controller: _passC,
                     autocorrect: false,
