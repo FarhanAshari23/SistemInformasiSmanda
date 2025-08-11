@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/button/button_state.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
 
@@ -36,6 +37,7 @@ class ButtonRole extends StatelessWidget {
   Widget _loading(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
     return GestureDetector(
       onTap: onPressed,
       child: Container(
@@ -43,10 +45,28 @@ class ButtonRole extends StatelessWidget {
         height: height * 0.085,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: AppColors.primary,
         ),
-        child: const Center(
-          child: CircularProgressIndicator(),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            const Text(
+              'Tunggu sebentar..',
+              style: TextStyle(
+                color: Colors.black87, // lebih kontras
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
     );

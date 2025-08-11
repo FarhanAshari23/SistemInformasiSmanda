@@ -51,9 +51,11 @@ class SuccesPage extends StatelessWidget {
               ),
               child: Center(
                 child: Container(
-                  width: width * 0.45,
-                  height: height * 0.1,
-                  color: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  margin: const EdgeInsets.symmetric(horizontal: 32),
+                  decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(16)),
                   child: const Center(
                     child: Text(
                       'Selesai',

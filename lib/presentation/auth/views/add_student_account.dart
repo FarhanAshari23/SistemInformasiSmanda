@@ -4,7 +4,7 @@ import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.da
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageStudent/views/add_student_detail_view.dart';
+import 'package:new_sistem_informasi_smanda/presentation/auth/views/add_student_detail_view.dart';
 
 class AddStudentView extends StatelessWidget {
   AddStudentView({super.key});
@@ -55,7 +55,7 @@ class AddStudentView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: height * 0.01),
+                  SizedBox(height: height * 0.02),
                   TextField(
                     controller: _passC,
                     autocorrect: false,
@@ -75,37 +75,38 @@ class AddStudentView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: height * 0.1),
-                  BasicButton(
-                    onPressed: () {
-                      if (_emailC.text.isEmpty || _passC.text.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            backgroundColor: AppColors.primary,
-                            content: Text(
-                              'Please fill all the textfield',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        );
-                      } else {
-                        AppNavigator.push(
-                          context,
-                          AddStudentDetailView(
-                            userCreationReq: UserCreationReq(
-                              email: _emailC.text,
-                              password: _passC.text,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    title: 'Lanjut',
-                  )
                 ],
               ),
-            )
+            ),
+            const Spacer(),
+            BasicButton(
+              onPressed: () {
+                if (_emailC.text.isEmpty || _passC.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text(
+                        'Tolong isi kolom email dan password yang telah tersedia',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  AppNavigator.push(
+                    context,
+                    AddStudentDetailView(
+                      userCreationReq: UserCreationReq(
+                        email: _emailC.text,
+                        password: _passC.text,
+                      ),
+                    ),
+                  );
+                }
+              },
+              title: 'Lanjut',
+            ),
           ],
         ),
       ),

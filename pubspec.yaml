@@ -31,6 +31,7 @@ dependencies:
   onesignal_flutter: ^5.3.0
   path_provider: ^2.1.4
   rename: ^3.0.2
+  shimmer: ^3.0.0
   shared_preferences: ^2.5.1
   smooth_page_indicator: ^1.2.0+3
   stacked_listview: ^1.0.4

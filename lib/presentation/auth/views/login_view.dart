@@ -8,6 +8,7 @@ import 'package:new_sistem_informasi_smanda/core/configs/assets/app_lotties.dart
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_admin.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/bloc/password_cubit.dart';
+import 'package:new_sistem_informasi_smanda/presentation/auth/views/add_student_account.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/button_role.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_admin.dart';
@@ -138,18 +139,35 @@ class LoginView extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: height * 0.095),
-                  SizedBox(height: height * 0.095),
-                  const Text(
-                    'Belum memiliki akun?',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                  SizedBox(height: height * 0.095),
                   _continueButton(context),
+                  SizedBox(height: height * 0.02),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Belum memiliki akun?',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      TextButton(
+                        onPressed: () => AppNavigator.push(
+                          context,
+                          AddStudentView(),
+                        ),
+                        child: const Text(
+                          'Buat Akun',
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -168,7 +186,7 @@ class LoginView extends StatelessWidget {
             if (_usernameC.text.isEmpty || _passC.text.isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: Colors.red,
                   content: Text(
                     'Tolong Isi Kolom Username dan Password yang Disediakan',
                     style: TextStyle(

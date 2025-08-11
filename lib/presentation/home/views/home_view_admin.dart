@@ -18,7 +18,7 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../domain/usecases/auth/logout.dart';
 import '../../auth/views/login_view.dart';
-import '../../manageStudent/views/add_student_account.dart';
+import '../../auth/views/add_student_account.dart';
 
 class HomeViewAdmin extends StatelessWidget {
   const HomeViewAdmin({super.key});

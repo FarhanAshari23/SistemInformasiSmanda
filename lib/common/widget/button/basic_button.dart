@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
 
-class BasicButton extends StatelessWidget {
+class BasicButton extends StatefulWidget {
   final VoidCallback onPressed;
   final String title;
   const BasicButton({
@@ -14,22 +14,36 @@ class BasicButton extends StatelessWidget {
   });
 
   @override
+  State<BasicButton> createState() => _BasicButtonState();
+}
+
+class _BasicButtonState extends State<BasicButton> {
+  bool _isPressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
     return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: width * 0.45,
-        height: height * 0.1,
-        color: AppColors.primary,
+      onTap: widget.onPressed,
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) => setState(() => _isPressed = false),
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        padding: EdgeInsets.symmetric(vertical: height * 0.02),
+        margin: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: _isPressed ? Colors.grey.shade200 : AppColors.primary,
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Center(
           child: Text(
-            title,
-            style: const TextStyle(
+            widget.title,
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              color: AppColors.inversePrimary,
+              color: _isPressed ? Colors.black : AppColors.inversePrimary,
             ),
           ),
         ),
