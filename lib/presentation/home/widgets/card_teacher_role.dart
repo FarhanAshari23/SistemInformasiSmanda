@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
 
@@ -18,15 +19,13 @@ class CardTeacherRole extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return GestureDetector(
+    return CustomInkWell(
       onTap: () => AppNavigator.push(context, nextPage),
-      child: Container(
+      borderRadius: 8,
+      defaultColor: AppColors.secondary,
+      child: SizedBox(
         width: width * 0.435,
         height: height * 0.25,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: AppColors.secondary,
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

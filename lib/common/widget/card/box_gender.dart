@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/gender_selection_cubit.dart';
 
-import '../../core/configs/theme/app_colors.dart';
+import '../../../core/configs/theme/app_colors.dart';
 
 class BoxGender extends StatelessWidget {
   BuildContext context;

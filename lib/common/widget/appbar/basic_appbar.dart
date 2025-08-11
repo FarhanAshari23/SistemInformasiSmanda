@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/extract_name.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_state.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/views/profile_view.dart';
@@ -54,15 +55,13 @@ class BasicAppbar extends StatelessWidget {
                   children: [
                     Visibility(
                       visible: isBackViewed,
-                      child: GestureDetector(
+                      child: CustomInkWell(
                         onTap: () => Navigator.pop(context),
-                        child: Container(
+                        borderRadius: 8,
+                        defaultColor: AppColors.tertiary,
+                        child: SizedBox(
                           width: width * 0.125,
                           height: height * 0.06,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: AppColors.tertiary,
-                          ),
                           child: const Center(
                             child: Icon(
                               Icons.arrow_back,

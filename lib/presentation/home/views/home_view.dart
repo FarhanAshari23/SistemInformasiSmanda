@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/bloc/bar_navigation_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/screens/ekskul_screen.dart';
@@ -82,20 +83,20 @@ class HomeView extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         itemCount: iconImage.length,
                         itemBuilder: (context, index) {
-                          return GestureDetector(
+                          return CustomInkWell(
                             onTap: () {
                               context
                                   .read<BarNavigationCubit>()
                                   .changeColor(index);
                             },
-                            child: Container(
+                            defaultColor:
+                                context.watch<BarNavigationCubit>().state ==
+                                        index
+                                    ? AppColors.primary
+                                    : AppColors.tertiary,
+                            child: SizedBox(
                               width: width * 0.2,
                               height: height * 0.1,
-                              color:
-                                  context.watch<BarNavigationCubit>().state ==
-                                          index
-                                      ? AppColors.primary
-                                      : AppColors.tertiary,
                               child: Center(
                                 child: Image.asset(
                                   iconImage[index],

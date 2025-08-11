@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_display_state.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_sepuluh_display_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
 import '../../bloc/kelas/stundets_cubit.dart';
@@ -31,23 +32,21 @@ class ListKelasSepuluh extends StatelessWidget {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
+                    return CustomInkWell(
+                      borderRadius: 12,
                       onTap: () {
                         context.read<KelasNavigationCubit>().changeColor(index);
                         context.read<StudentsDisplayCubit>().displayStudents(
                               params: state.kelas[index].data()['value'],
                             );
                       },
-                      child: Container(
-                        width: width * 0.2,
-                        height: height * 0.035,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: context.watch<KelasNavigationCubit>().state ==
-                                  index
+                      defaultColor:
+                          context.watch<KelasNavigationCubit>().state == index
                               ? AppColors.primary
                               : AppColors.tertiary,
-                        ),
+                      child: SizedBox(
+                        width: width * 0.2,
+                        height: height * 0.035,
                         child: Center(
                           child: Text(
                             state.kelas[index].data()['value'],

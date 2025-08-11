@@ -8,7 +8,7 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../common/bloc/gender_selection_cubit.dart';
-import '../../../common/widget/box_gender.dart';
+import '../../../common/widget/card/box_gender.dart';
 
 class AddStudentDetailView extends StatelessWidget {
   final UserCreationReq userCreationReq;

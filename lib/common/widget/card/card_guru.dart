@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -21,15 +22,13 @@ class CardGuru extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return GestureDetector(
+    return CustomInkWell(
       onTap: () => AppNavigator.push(context, page),
-      child: Container(
+      borderRadius: 8,
+      defaultColor: AppColors.secondary,
+      child: SizedBox(
         width: width * 0.45,
         height: height * 0.25,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: AppColors.secondary,
-        ),
         child: Padding(
           padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
           child: Column(

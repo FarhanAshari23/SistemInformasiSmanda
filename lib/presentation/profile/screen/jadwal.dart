@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/screen/jadwal_jumat.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/screen/jadwal_kamis.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/screen/jadwal_rabu.dart';
@@ -48,19 +49,19 @@ class JadwalScreen extends StatelessWidget {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: dayName.length,
-            itemBuilder: (context, index) => GestureDetector(
+            itemBuilder: (context, index) => CustomInkWell(
               onTap: () {
                 context.read<BarDaysCubit>().changeColor(index);
                 context
                     .read<JadwalDisplayCubit>()
                     .displayJadwal(params: dayName[index]);
               },
-              child: Container(
+              defaultColor: context.watch<BarDaysCubit>().state == index
+                  ? AppColors.primary
+                  : AppColors.inversePrimary,
+              child: SizedBox(
                 width: width * 0.1825,
                 height: height * 0.1,
-                color: context.watch<BarDaysCubit>().state == index
-                    ? AppColors.primary
-                    : AppColors.inversePrimary,
                 child: Center(
                   child: Text(
                     dayName[index],

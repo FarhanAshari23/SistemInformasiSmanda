@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_display_state.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_sebelas_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
 import '../../bloc/kelas/kelas_navigation.dart';
@@ -31,22 +32,20 @@ class ListKelasSebelas extends StatelessWidget {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
+                    return CustomInkWell(
                       onTap: () {
                         context.read<KelasNavigationCubit>().changeColor(index);
                         context.read<StudentsDisplayCubit>().displayStudents(
                             params: state.kelas[index].data()['value']);
                       },
-                      child: Container(
-                        width: width * 0.2,
-                        height: height * 0.035,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: context.watch<KelasNavigationCubit>().state ==
-                                  index
+                      borderRadius: 12,
+                      defaultColor:
+                          context.watch<KelasNavigationCubit>().state == index
                               ? AppColors.primary
                               : AppColors.tertiary,
-                        ),
+                      child: SizedBox(
+                        width: width * 0.2,
+                        height: height * 0.035,
                         child: Center(
                           child: Text(
                             state.kelas[index].data()['value'],

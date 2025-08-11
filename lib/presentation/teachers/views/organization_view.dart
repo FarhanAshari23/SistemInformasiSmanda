@@ -60,6 +60,7 @@ class OrganizationView extends StatelessWidget {
                           return CardKepalaSekolah(
                             nisn: state.teacher[0].nip,
                             title: state.teacher[0].nama,
+                            page: TeacherDetail(teachers: state.teacher[0]),
                           );
                         }
                         return Container();
