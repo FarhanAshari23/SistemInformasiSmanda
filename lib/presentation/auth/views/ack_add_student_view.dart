@@ -7,7 +7,6 @@ import 'package:new_sistem_informasi_smanda/common/widget/landing/succes.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/signup.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/widgets/card_ack.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_admin.dart';
 
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';

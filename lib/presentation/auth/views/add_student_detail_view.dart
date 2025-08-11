@@ -7,8 +7,8 @@ import 'package:new_sistem_informasi_smanda/presentation/auth/views/ack_add_stud
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../manageStudent/bloc/gender_selection_cubit.dart';
-import '../../manageStudent/widgets/box_gender.dart';
+import '../../../common/bloc/gender_selection_cubit.dart';
+import '../../../common/widget/box_gender.dart';
 
 class AddStudentDetailView extends StatelessWidget {
   final UserCreationReq userCreationReq;

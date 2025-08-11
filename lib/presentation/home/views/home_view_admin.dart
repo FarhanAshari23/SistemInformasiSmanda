@@ -18,7 +18,6 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../domain/usecases/auth/logout.dart';
 import '../../auth/views/login_view.dart';
-import '../../auth/views/add_student_account.dart';
 
 class HomeViewAdmin extends StatelessWidget {
   const HomeViewAdmin({super.key});
@@ -29,7 +28,7 @@ class HomeViewAdmin extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     List<String> title = [
       'Olah Data Kehadiran',
-      'Olah Data Siswa',
+      'Ubah Data Siswa',
       'Olah Data Guru',
       'Unggah Pengumuman',
       'Olah Data Ekskul',
@@ -43,13 +42,7 @@ class HomeViewAdmin extends StatelessWidget {
     ];
     List<Widget> pages = [
       const ManageDataAttendances(),
-      ManageObjectView(
-        title: 'Apa yang ingin anda lakukan dengan data murid',
-        namaFiturSatu: 'Tambah Data Murid',
-        namaFiturDua: 'Edit Data Murid',
-        pageSatu: AddStudentView(),
-        pageDua: const EditStudentView(),
-      ),
+      const EditStudentView(),
       ManageObjectView(
         title: 'Apa yang ingin anda lakukan dengan data guru',
         namaFiturSatu: 'Tambah Data Guru',
