@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/bloc/religion_cubit.dart';
@@ -107,7 +106,7 @@ class AddStudentDetailView extends StatelessWidget {
                                       SizedBox(
                                         width: width * 0.9,
                                         height: height * 0.25,
-                                        child: ScanQrNisn(),
+                                        child: const ScanQrNisn(),
                                       ),
                                     ],
                                   ),
