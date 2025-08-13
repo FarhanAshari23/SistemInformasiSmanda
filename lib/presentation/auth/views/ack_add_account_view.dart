@@ -47,6 +47,7 @@ class AckAddStudentView extends StatelessWidget {
       userCreationReq.agama,
     ];
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: BlocProvider(
         create: (context) => ButtonStateCubit(),
         child: BlocListener<ButtonStateCubit, ButtonState>(
@@ -60,68 +61,70 @@ class AckAddStudentView extends StatelessWidget {
             }
           },
           child: SafeArea(
-            child: Column(
-              children: [
-                const BasicAppbar(
-                  isBackViewed: true,
-                  isProfileViewed: false,
-                ),
-                const Text(
-                  'TAMBAH DATA SISWA',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.primary,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const BasicAppbar(
+                    isBackViewed: true,
+                    isProfileViewed: false,
                   ),
-                ),
-                SizedBox(height: height * 0.05),
-                const Text(
-                  'Apakah data sudah sesuai?',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.primary,
+                  const Text(
+                    'TAMBAH DATA SISWA',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.primary,
+                    ),
                   ),
-                ),
-                SizedBox(height: height * 0.04),
-                SizedBox(
-                  width: double.infinity,
-                  height: height * 0.4,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return CardAck(
-                        title: titleList[index],
-                        content: contentList[index],
-                      );
-                    },
-                    separatorBuilder: (context, index) =>
-                        SizedBox(width: width * 0.01),
-                    itemCount: titleList.length,
+                  SizedBox(height: height * 0.05),
+                  const Text(
+                    'Apakah data sudah sesuai?',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.primary,
+                    ),
                   ),
-                ),
-                SizedBox(height: height * 0.06),
-                Builder(
-                  builder: (context) {
-                    return BasicButton(
-                      onPressed: () {
-                        context.read<ButtonStateCubit>().execute(
-                              usecase: SignUpUseCase(),
-                              params: userCreationReq,
-                            );
-                        AppNavigator.push(
-                          context,
-                          SuccesPage(
-                            page: LoginView(),
-                            title: "Akun berhasil dibuat",
-                          ),
+                  SizedBox(height: height * 0.04),
+                  SizedBox(
+                    width: double.infinity,
+                    height: height * 0.4,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return CardAck(
+                          title: titleList[index],
+                          content: contentList[index],
                         );
                       },
-                      title: 'Simpan',
-                    );
-                  },
-                ),
-              ],
+                      separatorBuilder: (context, index) =>
+                          SizedBox(width: width * 0.01),
+                      itemCount: titleList.length,
+                    ),
+                  ),
+                  SizedBox(height: height * 0.06),
+                  Builder(
+                    builder: (context) {
+                      return BasicButton(
+                        onPressed: () {
+                          context.read<ButtonStateCubit>().execute(
+                                usecase: SignUpUseCase(),
+                                params: userCreationReq,
+                              );
+                          AppNavigator.push(
+                            context,
+                            SuccesPage(
+                              page: LoginView(),
+                              title: "Akun berhasil dibuat",
+                            ),
+                          );
+                        },
+                        title: 'Simpan',
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

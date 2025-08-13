@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/views/ack_add_student_view.dart';
+import 'package:new_sistem_informasi_smanda/presentation/auth/bloc/religion_cubit.dart';
+import 'package:new_sistem_informasi_smanda/presentation/auth/views/ack_add_account_view.dart';
+import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/scan_qr_nisn.dart';
 
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
@@ -20,16 +24,23 @@ class AddStudentDetailView extends StatelessWidget {
   final TextEditingController _noHPC = TextEditingController();
   final TextEditingController _alamatC = TextEditingController();
   final TextEditingController _ekskulC = TextEditingController();
-  final TextEditingController _agamaC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: BlocProvider(
-        create: (context) => GenderSelectionCubit(),
+      resizeToAvoidBottomInset: true,
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => GenderSelectionCubit(),
+          ),
+          BlocProvider(
+            create: (context) => ReligionCubit(),
+          ),
+        ],
         child: SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -39,7 +50,7 @@ class AddStudentDetailView extends StatelessWidget {
                 isProfileViewed: false,
               ),
               const Text(
-                'TAMBAH DATA SISWA',
+                'Isi detail akun',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
@@ -70,13 +81,88 @@ class AddStudentDetailView extends StatelessWidget {
                     TextField(
                       controller: _nisnC,
                       autocorrect: false,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'NISN:',
+                        suffixIcon: IconButton(
+                          onPressed: () async {
+                            final result = await showDialog(
+                              useSafeArea: true,
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    "Scan QR NISN",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                          "Arahkan kamera ke barcode kartu siswamu."),
+                                      SizedBox(height: height * 0.01),
+                                      SizedBox(
+                                        width: width * 0.9,
+                                        height: height * 0.25,
+                                        child: ScanQrNisn(),
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(); // Tutup dialog
+                                      },
+                                      child: const Text("Tutup"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            if (result != null && result.isNotEmpty) {
+                              _nisnC.text = result;
+                            }
+                          },
+                          icon: const Icon(Icons.qr_code_2),
+                        ),
                       ),
                     ),
                     SizedBox(height: height * 0.01),
                     TextField(
                       controller: _tanggalC,
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime.now(),
+                          initialDate: DateTime.now(),
+                          locale: const Locale('id', 'ID'),
+                          confirmText: "Oke",
+                          cancelText: "Keluar",
+                          builder: (context, child) {
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                inputDecorationTheme: InputDecorationTheme(
+                                  filled: true,
+                                  fillColor: AppColors
+                                      .inversePrimary, // warna background field input tanggal
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                              child: child!,
+                            );
+                          },
+                        );
+                        _tanggalC.text = DateFormat("d MMMM y", "id_ID")
+                            .format(pickedDate ?? DateTime.now());
+                      },
                       autocorrect: false,
                       decoration: const InputDecoration(
                         hintText: 'Tanggal Lahir:',
@@ -84,6 +170,7 @@ class AddStudentDetailView extends StatelessWidget {
                     ),
                     SizedBox(height: height * 0.01),
                     TextField(
+                      keyboardType: TextInputType.number,
                       controller: _noHPC,
                       autocorrect: false,
                       decoration: const InputDecoration(
@@ -91,12 +178,26 @@ class AddStudentDetailView extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: height * 0.01),
-                    TextField(
-                      controller: _agamaC,
-                      autocorrect: false,
-                      decoration: const InputDecoration(
-                        hintText: 'Agama:',
-                      ),
+                    BlocBuilder<ReligionCubit, String?>(
+                      builder: (context, selectedValue) {
+                        final cubit = context.read<ReligionCubit>();
+                        return DropdownButtonFormField<String>(
+                          decoration: const InputDecoration(
+                            labelText: "Agama",
+                            border: OutlineInputBorder(),
+                          ),
+                          value: selectedValue,
+                          items: cubit.items.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            context.read<ReligionCubit>().selectItem(value);
+                          },
+                        );
+                      },
                     ),
                     SizedBox(height: height * 0.01),
                     const Text(
@@ -174,12 +275,12 @@ class AddStudentDetailView extends StatelessWidget {
                         _nisnC.text.isEmpty ||
                         _tanggalC.text.isEmpty ||
                         _noHPC.text.isEmpty ||
-                        _agamaC.text.isEmpty) {
+                        context.read<ReligionCubit>().state == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           backgroundColor: Colors.red,
                           content: Text(
-                            'Tolong isi kolom email dan password yang telah tersedia',
+                            'Tolong isi semua kolom yang sudah tersedia',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -195,9 +296,11 @@ class AddStudentDetailView extends StatelessWidget {
                       userCreationReq.address = _alamatC.text;
                       userCreationReq.ekskul = _ekskulC.text;
                       userCreationReq.isAdmin = false;
-                      userCreationReq.agama = _agamaC.text;
+                      userCreationReq.agama =
+                          context.read<ReligionCubit>().state;
                       userCreationReq.gender =
                           context.read<GenderSelectionCubit>().selectedIndex;
+                      FocusScope.of(context).unfocus();
                       AppNavigator.push(
                         context,
                         AckAddStudentView(userCreationReq: userCreationReq),

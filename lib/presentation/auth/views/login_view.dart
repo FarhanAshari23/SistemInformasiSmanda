@@ -8,7 +8,7 @@ import 'package:new_sistem_informasi_smanda/core/configs/assets/app_lotties.dart
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_admin.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/bloc/password_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/views/add_student_account.dart';
+import 'package:new_sistem_informasi_smanda/presentation/auth/views/add_account_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/button_role.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_admin.dart';
