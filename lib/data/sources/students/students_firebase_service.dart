@@ -14,6 +14,7 @@ abstract class StudentsFirebaseService {
   Future<Either> getClassSepuluhInit();
   Future<Either> getClassSebelasInit();
   Future<Either> getClassDuabelasInit();
+  Future<Either> getStudentByRegister();
   Future<Either> updateStudent(UpdateUserReq updateUserReq);
   Future<Either> deleteStudent(String nisnStudent);
   Future<Either> searchStudentByNISN(String nisnStudent);
@@ -213,6 +214,20 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       return const Right('Delete Data Student Success');
     } catch (e) {
       return const Left('Something Wrong');
+    }
+  }
+
+  @override
+  Future<Either> getStudentByRegister() async {
+    try {
+      var returnedData = await FirebaseFirestore.instance
+          .collection("Students")
+          .where("is_register", isEqualTo: false)
+          .orderBy(FieldPath.documentId, descending: true)
+          .get();
+      return Right(returnedData.docs.map((e) => e.data()).toList());
+    } catch (e) {
+      return const Left("Error get data, please try again later");
     }
   }
 }

@@ -10,6 +10,7 @@ import 'package:new_sistem_informasi_smanda/common/widget/screen/manage_object_v
 import 'package:new_sistem_informasi_smanda/presentation/home/widgets/card_activity.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageNews/views/edit_news_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/views/edit_student_view.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageStudent/views/register_student_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/views/add_teacher_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/views/edit_teacher_view.dart';
 import '../../../common/bloc/button/button.cubit.dart';
@@ -28,7 +29,7 @@ class HomeViewAdmin extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     List<String> title = [
       'Olah Data Kehadiran',
-      'Ubah Data Siswa',
+      'Olah Data Siswa',
       'Olah Data Guru',
       'Unggah Pengumuman',
       'Olah Data Ekskul',
@@ -42,7 +43,13 @@ class HomeViewAdmin extends StatelessWidget {
     ];
     List<Widget> pages = [
       const ManageDataAttendances(),
-      const EditStudentView(),
+      const ManageObjectView(
+        title: 'Apa yang ingin anda lakukan dengan data murid',
+        namaFiturSatu: 'Registrasi Data Murid',
+        namaFiturDua: 'Edit Data Murid',
+        pageSatu: RegisterStudentView(),
+        pageDua: EditStudentView(),
+      ),
       ManageObjectView(
         title: 'Apa yang ingin anda lakukan dengan data guru',
         namaFiturSatu: 'Tambah Data Guru',

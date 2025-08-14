@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
@@ -22,56 +23,54 @@ class CardActivity extends StatelessWidget {
     final bodyHeight = mediaQueryHeight -
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
-    return Container(
-      height: bodyHeight * 0.16,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: AppColors.secondary,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 21),
-            child: Row(
-              children: [
-                Container(
-                  width: width * 0.195,
-                  height: bodyHeight * 0.095,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.tertiary,
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      image,
-                      width: width * 0.125,
+    return CustomInkWell(
+      borderRadius: 16,
+      onTap: () => AppNavigator.push(context, page),
+      defaultColor: AppColors.secondary,
+      child: SizedBox(
+        height: bodyHeight * 0.16,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 21),
+              child: Row(
+                children: [
+                  Container(
+                    width: width * 0.195,
+                    height: bodyHeight * 0.095,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.tertiary,
                     ),
-                  ),
-                ),
-                SizedBox(width: width * 0.035),
-                SizedBox(
-                  width: width * 0.425,
-                  height: bodyHeight * 0.15,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    child: Center(
+                      child: Image.asset(
+                        image,
+                        width: width * 0.125,
                       ),
                     ),
                   ),
-                )
-              ],
+                  SizedBox(width: width * 0.035),
+                  SizedBox(
+                    width: width * 0.425,
+                    height: bodyHeight * 0.15,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: GestureDetector(
-              onTap: () => AppNavigator.push(context, page),
+            Align(
+              alignment: Alignment.bottomRight,
               child: Container(
                 width: 56,
                 height: 56,
@@ -86,8 +85,8 @@ class CardActivity extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

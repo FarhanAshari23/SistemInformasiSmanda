@@ -11,6 +11,7 @@ abstract class StudentRepository {
   Future<Either> searchStudentByNISN(String nisnStudent);
   Future<Either> getStudent();
   Future<Either> getStudentsByClass(String kelas);
+  Future<Either> getStudentByRegister();
   Future<Either> getClassSepuluhInit();
   Future<Either> getClassSebelasInit();
   Future<Either> getClassDuabelasInit();

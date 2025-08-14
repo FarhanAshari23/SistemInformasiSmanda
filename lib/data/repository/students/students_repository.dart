@@ -163,4 +163,24 @@ class StudentsRepositoryImpl extends StudentRepository {
   Future<Either> deleteStudentByClass(String kelas) async {
     return await sl<StudentsFirebaseService>().deleteStudentByClass(kelas);
   }
+
+  @override
+  Future<Either> getStudentByRegister() async {
+    var returnedData =
+        await sl<StudentsFirebaseService>().getStudentByRegister();
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          List.from(data)
+              .map(
+                (e) => UserModel.fromMap(e).toEntity(),
+              )
+              .toList(),
+        );
+      },
+    );
+  }
 }
