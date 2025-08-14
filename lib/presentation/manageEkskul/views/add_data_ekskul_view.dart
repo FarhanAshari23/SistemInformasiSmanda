@@ -49,7 +49,6 @@ class AddDataEkskulView extends StatelessWidget {
       5,
     ];
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           children: [
@@ -65,72 +64,62 @@ class AddDataEkskulView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: height * 0.02),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: height * 0.55,
-                    child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        return TextField(
-                          controller: listC[index],
-                          maxLines: maxLines[index],
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                            hintText: hintText[index],
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) => SizedBox(
-                        height: height * 0.01,
-                      ),
-                      itemCount: listC.length,
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemBuilder: (context, index) {
+                  return TextField(
+                    controller: listC[index],
+                    maxLines: maxLines[index],
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      hintText: hintText[index],
                     ),
-                  ),
-                  SizedBox(height: height * 0.02),
-                  SizedBox(height: height * 0.025),
-                  BasicButton(
-                    onPressed: () {
-                      if (_namePembinaC.text.isEmpty ||
-                          _nameKetuaC.text.isEmpty ||
-                          _nameWakilC.text.isEmpty ||
-                          _nameSekretarisC.text.isEmpty ||
-                          _nameBendaharaC.text.isEmpty ||
-                          _deskripsiC.text.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            backgroundColor: AppColors.primary,
-                            content: Text(
-                              'Please fill all the textfield',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        );
-                      } else {
-                        AppNavigator.push(
-                          context,
-                          AckEkskulView(
-                            ekskulCreateReq: EkskulModel(
-                              namaEkskul: _namaEkskulC.text,
-                              namaPembina: _namePembinaC.text,
-                              namaKetua: _nameKetuaC.text,
-                              namaWakilKetua: _nameWakilC.text,
-                              namaSekretaris: _nameSekretarisC.text,
-                              namaBendahara: _nameBendaharaC.text,
-                              deskripsi: _deskripsiC.text,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    title: 'Lanjut',
-                  )
-                ],
+                  );
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                  height: height * 0.01,
+                ),
+                itemCount: listC.length,
               ),
+            ),
+            BasicButton(
+              onPressed: () {
+                if (_namePembinaC.text.isEmpty ||
+                    _nameKetuaC.text.isEmpty ||
+                    _nameWakilC.text.isEmpty ||
+                    _nameSekretarisC.text.isEmpty ||
+                    _nameBendaharaC.text.isEmpty ||
+                    _deskripsiC.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text(
+                        'Tolong isi semua kolom yang tersedia',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  AppNavigator.push(
+                    context,
+                    AckEkskulView(
+                      ekskulCreateReq: EkskulModel(
+                        namaEkskul: _namaEkskulC.text,
+                        namaPembina: _namePembinaC.text,
+                        namaKetua: _nameKetuaC.text,
+                        namaWakilKetua: _nameWakilC.text,
+                        namaSekretaris: _nameSekretarisC.text,
+                        namaBendahara: _nameBendaharaC.text,
+                        deskripsi: _deskripsiC.text,
+                      ),
+                    ),
+                  );
+                }
+              },
+              title: 'Lanjut',
             )
           ],
         ),

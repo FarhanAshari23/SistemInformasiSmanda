@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
 
@@ -18,15 +19,13 @@ class CardFeature extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return GestureDetector(
+    return CustomInkWell(
       onTap: onpressed,
-      child: Container(
+      borderRadius: 12,
+      defaultColor: AppColors.secondary,
+      child: SizedBox(
         width: width * 0.435,
         height: height * 0.25,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: AppColors.secondary,
-        ),
         child: Padding(
           padding: const EdgeInsets.only(
             left: 16,

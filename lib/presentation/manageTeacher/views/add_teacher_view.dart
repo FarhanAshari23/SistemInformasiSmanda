@@ -39,7 +39,6 @@ class AddTeacherView extends StatelessWidget {
     ];
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           children: [
@@ -55,54 +54,49 @@ class AddTeacherView extends StatelessWidget {
                 color: AppColors.primary,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: height * 0.04),
-                  const Text(
-                    'Masukan informasi yang sesuai pada kolom berikut:',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                      color: AppColors.primary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: height * 0.02),
-                  SizedBox(
-                    width: double.infinity,
-                    height: height * 0.45,
-                    child: ListView.separated(
-                      itemBuilder: (context, index) => TextField(
-                        controller: controller[index],
-                        autocorrect: false,
-                        decoration: InputDecoration(
-                          hintText: hinttext[index],
+            SizedBox(height: height * 0.04),
+            const Text(
+              'Masukan informasi yang sesuai pada kolom berikut:',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+                color: AppColors.primary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: height * 0.02),
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemBuilder: (context, index) {
+                  if (index == hinttext.length) {
+                    return const Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '*Beri tanda "-" jika guru tidak memiliki baik wali kelas maupun jabatan ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                          color: AppColors.primary,
                         ),
                       ),
-                      separatorBuilder: (context, index) => SizedBox(
-                        height: height * 0.01,
+                    );
+                  } else {
+                    return TextField(
+                      controller: controller[index],
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        hintText: hinttext[index],
                       ),
-                      itemCount: hinttext.length,
-                    ),
-                  ),
-                  const Align(
-                    alignment: Alignment.bottomRight,
-                    child: Text(
-                      '*Beri tanda "-" jika guru tidak memiliki baik wali kelas maupun jabatan ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                ],
+                    );
+                  }
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                  height: height * 0.01,
+                ),
+                itemCount: hinttext.length + 1,
               ),
             ),
-            SizedBox(height: height * 0.05),
             BasicButton(
               onPressed: () {
                 if (_namaC.text.isEmpty ||
@@ -113,9 +107,9 @@ class AddTeacherView extends StatelessWidget {
                     _jabatanC.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: Colors.red,
                       content: Text(
-                        'Please fill all the textfield',
+                        'Tolong isi semua kolom yang sudah disediakan',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),

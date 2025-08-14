@@ -22,7 +22,6 @@ class AddNewsView extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     Timestamp now = Timestamp.now();
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           children: [
@@ -39,59 +38,54 @@ class AddNewsView extends StatelessWidget {
               ),
             ),
             SizedBox(height: height * 0.05),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SizedBox(
-                width: double.infinity,
-                height: height * 0.525,
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FieldNews(
-                          title: 'Masukkan Judul Pengumuman',
-                          controller: _titleC,
-                          hinttext: 'Judul Pengumuman...',
-                          line: 2,
-                        ),
-                        SizedBox(height: height * 0.02),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: width * 0.45,
-                              child: FieldNews(
-                                title: 'Untuk Siapa Pengumuman Ini?',
-                                controller: _toC,
-                                hinttext: 'Untuk Siapa...',
-                                line: 2,
-                              ),
+            Expanded(
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FieldNews(
+                        title: 'Masukkan Judul Pengumuman',
+                        controller: _titleC,
+                        hinttext: 'Judul Pengumuman...',
+                        line: 2,
+                      ),
+                      SizedBox(height: height * 0.02),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: width * 0.45,
+                            child: FieldNews(
+                              title: 'Untuk Siapa Pengumuman Ini?',
+                              controller: _toC,
+                              hinttext: 'Untuk Siapa...',
+                              line: 2,
                             ),
-                            SizedBox(
-                              width: width * 0.45,
-                              child: FieldNews(
-                                title: 'Dari Siapa Pengumuman Ini?',
-                                controller: _fromC,
-                                hinttext: 'Dari Siapa...',
-                                line: 2,
-                              ),
+                          ),
+                          SizedBox(
+                            width: width * 0.45,
+                            child: FieldNews(
+                              title: 'Dari Siapa Pengumuman Ini?',
+                              controller: _fromC,
+                              hinttext: 'Dari Siapa...',
+                              line: 2,
                             ),
-                          ],
-                        ),
-                        SizedBox(height: height * 0.02),
-                        FieldNews(
-                          title: 'Masukkan Isi Pengumuman',
-                          controller: _contentC,
-                          hinttext: 'Isi Pengumuman...',
-                          line: 8,
-                        ),
-                        SizedBox(height: height * 0.3),
-                      ],
-                    ),
-                  ],
-                ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: height * 0.02),
+                      FieldNews(
+                        title: 'Masukkan Isi Pengumuman',
+                        controller: _contentC,
+                        hinttext: 'Isi Pengumuman...',
+                        line: 8,
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
             SizedBox(height: height * 0.04),
@@ -103,7 +97,7 @@ class AddNewsView extends StatelessWidget {
                     _toC.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: Colors.red,
                       content: Text(
                         'Tolong Isi Semua Kolom yang Sudah Disediakan',
                         style: TextStyle(
