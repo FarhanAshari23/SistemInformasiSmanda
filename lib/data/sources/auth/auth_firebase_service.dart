@@ -12,6 +12,7 @@ abstract class AuthFirebaseService {
   Future<bool> isLoggedIn();
   Future<Either> getUser();
   Future<Either> isAdmin();
+  Future<Either> isRegister();
 }
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
@@ -126,6 +127,27 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  @override
+  Future<Either> isRegister() async {
+    try {
+      FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+      var user = await firebaseFirestore
+          .collection('Students')
+          .doc(firebaseAuth.currentUser?.uid)
+          .get();
+
+      bool isRegister = user.get('is_register');
+
+      return right(isRegister);
+    } catch (e) {
+      return left(
+        'Akun anda belum terdaftar. Jika merasa sudah mendaftar, harap tunggu admin mengkonfirmasi pendaftaran anda.',
+      );
     }
   }
 }

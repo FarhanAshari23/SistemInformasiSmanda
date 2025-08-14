@@ -15,6 +15,7 @@ class UserModel {
   final String ekskul;
   final int gender;
   final bool isAdmin;
+  final bool isRegister;
   final String agama;
   Timestamp? timeIn;
 
@@ -30,6 +31,7 @@ class UserModel {
     required this.gender,
     required this.isAdmin,
     required this.agama,
+    required this.isRegister,
     this.timeIn,
   });
 
@@ -46,6 +48,7 @@ class UserModel {
       'gender': gender,
       'isAdmin': isAdmin,
       'agama': agama,
+      'is_register': isRegister,
       'jam_masuk': timeIn,
     };
   }
@@ -63,6 +66,7 @@ class UserModel {
         gender: map['gender']?.toInt() ?? 0,
         isAdmin: map['isAdmin'] ?? false,
         timeIn: map['jam_masuk'] ?? Timestamp.now(),
+        isRegister: map['is_register'] ?? false,
         agama: map['agama'] ?? '');
   }
 
@@ -87,6 +91,7 @@ extension UserModelX on UserModel {
       isAdmin: isAdmin,
       agama: agama,
       timeIn: timeIn,
+      isRegister: isRegister,
     );
   }
 }

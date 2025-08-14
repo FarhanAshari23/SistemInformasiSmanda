@@ -11,6 +11,7 @@ class UserEntity {
   String? ekskul;
   int? gender;
   bool? isAdmin;
+  bool? isRegister;
   String? agama;
   Timestamp? timeIn;
 
@@ -26,6 +27,7 @@ class UserEntity {
     required this.gender,
     required this.isAdmin,
     required this.agama,
+    required this.isRegister,
     this.timeIn,
   });
 }

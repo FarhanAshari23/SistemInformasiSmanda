@@ -26,6 +26,7 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/attendance/get_atten
 import 'package:new_sistem_informasi_smanda/domain/usecases/attendance/get_attendance_students.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/attendance/get_list_attendances.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_admin.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_register.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/is_logged_in.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/delete_ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/update_ekskul.dart';
@@ -122,6 +123,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<IsAdminUsecase>(
     IsAdminUsecase(),
+  );
+  sl.registerSingleton<IsRegisterUsecase>(
+    IsRegisterUsecase(),
   );
   sl.registerSingleton<SignUpUseCase>(
     SignUpUseCase(),

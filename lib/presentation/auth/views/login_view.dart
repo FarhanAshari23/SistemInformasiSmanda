@@ -7,6 +7,7 @@ import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_lotties.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_admin.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_register.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/bloc/password_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/views/add_account_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/button_role.dart';
@@ -52,25 +53,33 @@ class LoginView extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(snackbar);
                 }
                 if (state is ButtonSuccessState) {
-                  var resultAdmin = await sl<IsAdminUsecase>().call();
-                  return resultAdmin.fold(
-                    (error) {
-                      var snackbar = SnackBar(content: Text(error));
+                  var resultRegister = await sl<IsRegisterUsecase>().call();
+                  return resultRegister.fold(
+                    (l) {
+                      var snackbar = SnackBar(content: Text(l));
                       ScaffoldMessenger.of(context).showSnackBar(snackbar);
                     },
-                    (r) {
-                      bool checkAdmin = true;
-                      if (checkAdmin == r) {
-                        AppNavigator.pushAndRemoveUntil(
-                          context,
-                          const HomeViewAdmin(),
-                        );
-                      } else {
-                        AppNavigator.pushAndRemoveUntil(
-                          context,
-                          const HomeView(),
-                        );
-                      }
+                    (r) async {
+                      var resultAdmin = await sl<IsAdminUsecase>().call();
+                      return resultAdmin.fold(
+                        (error) {
+                          var snackbar = SnackBar(content: Text(error));
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                        },
+                        (r) {
+                          if (r) {
+                            AppNavigator.pushAndRemoveUntil(
+                              context,
+                              const HomeViewAdmin(),
+                            );
+                          } else {
+                            AppNavigator.pushAndRemoveUntil(
+                              context,
+                              const HomeView(),
+                            );
+                          }
+                        },
+                      );
                     },
                   );
                 }

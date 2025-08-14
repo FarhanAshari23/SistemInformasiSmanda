@@ -9,4 +9,5 @@ abstract class AuthRepository {
   Future<bool> isLoggedIn();
   Future<Either> getUser();
   Future<Either> isAdmin();
+  Future<Either> isRegister();
 }
