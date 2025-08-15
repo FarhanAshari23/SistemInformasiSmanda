@@ -115,7 +115,8 @@ class AckAddStudentView extends StatelessWidget {
                             context,
                             SuccesPage(
                               page: LoginView(),
-                              title: "Akun berhasil dibuat",
+                              title:
+                                  "Akun berhasil dibuat\nTunggu admin menyetujui akun anda untuk bisa digunakan",
                             ),
                           );
                         },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/bloc/get_student_registration_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/bloc/get_student_registration_state.dart';
 
@@ -47,7 +48,67 @@ class RegisterStudentView extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (state is StudentsRegistrationLoaded) {
-                    return Text('Sukses ambil data, nama ${state.students}');
+                    return Expanded(
+                      child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          final students = state.students[index];
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 16,
+                            ),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: AppColors.secondary,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      students.nama ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.inversePrimary,
+                                      ),
+                                    ),
+                                    Text(
+                                      students.nisn ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.inversePrimary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                CustomInkWell(
+                                  borderRadius: 999,
+                                  defaultColor: AppColors.primary,
+                                  onTap: () {},
+                                  child: const SizedBox(
+                                    width: 32,
+                                    height: 32,
+                                    child: Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: height * 0.01),
+                        itemCount: state.students.length,
+                      ),
+                    );
                   }
                   if (state is StudentsRegistrationFailure) {
                     return Text(state.toString());

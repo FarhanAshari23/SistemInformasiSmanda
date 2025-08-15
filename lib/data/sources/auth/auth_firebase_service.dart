@@ -97,6 +97,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           'gender': murid.gender,
           'isAdmin': murid.isAdmin,
           'agama': murid.agama,
+          'is_register': murid.isRegister,
         },
       );
       return const Right('Signup was succesfull');
