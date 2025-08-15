@@ -8,6 +8,7 @@ import '../../models/auth/update_user.dart';
 abstract class StudentsFirebaseService {
   Future<Either> getStudent();
   Future<Either> getStudentsByClass(String kelas);
+  Future<Either> acceptStudentAccount(String nisn);
   Future<Either> getKelasSepuluh();
   Future<Either> getKelasSebelas();
   Future<Either> getKelasDuabelas();
@@ -228,6 +229,26 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
       return const Left("Error get data, please try again later");
+    }
+  }
+
+  @override
+  Future<Either> acceptStudentAccount(String nisn) async {
+    try {
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Students');
+      QuerySnapshot querySnapshot =
+          await users.where('nisn', isEqualTo: nisn).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        String docId = querySnapshot.docs[0].id;
+        await users.doc(docId).update({
+          "is_register": true,
+        });
+        return right('Update Student Account Success');
+      }
+      return right('Update Student Account Success');
+    } catch (e) {
+      return const Left('Something Wrong');
     }
   }
 }

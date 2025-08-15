@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/students/accept_student_register_usecase.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/bloc/get_student_registration_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/bloc/get_student_registration_state.dart';
 
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../service_locator.dart';
 
 class RegisterStudentView extends StatelessWidget {
   const RegisterStudentView({super.key});
@@ -90,7 +92,30 @@ class RegisterStudentView extends StatelessWidget {
                                 CustomInkWell(
                                   borderRadius: 999,
                                   defaultColor: AppColors.primary,
-                                  onTap: () {},
+                                  onTap: () async {
+                                    var result =
+                                        await sl<UpdateStudentRegisterUsecase>()
+                                            .call(params: students.nisn);
+                                    result.fold(
+                                      (error) {
+                                        var snackbar = const SnackBar(
+                                          content: Text("Gagal Mengubah Data"),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackbar);
+                                      },
+                                      (r) {
+                                        context
+                                            .read<GetStudentRegistrationCubit>()
+                                            .displayStudentRegistration();
+                                        var snackbar = const SnackBar(
+                                          content: Text("Data Berhasil Diubah"),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackbar);
+                                      },
+                                    );
+                                  },
                                   child: const SizedBox(
                                     width: 32,
                                     height: 32,

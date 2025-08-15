@@ -32,6 +32,7 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/delete_ekskul
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/update_ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/news/delete_news.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/news/update_news.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/students/accept_student_register_usecase.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_student_by_class.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_duabelas.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_sebelas.dart';
@@ -191,6 +192,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<UpdateStudentUsecase>(
     UpdateStudentUsecase(),
+  );
+  sl.registerSingleton<UpdateStudentRegisterUsecase>(
+    UpdateStudentRegisterUsecase(),
   );
   sl.registerSingleton<DeleteStudentUsecase>(
     DeleteStudentUsecase(),

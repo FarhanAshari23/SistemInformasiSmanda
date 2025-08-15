@@ -4,6 +4,7 @@ import '../../../data/models/auth/update_user.dart';
 
 abstract class StudentRepository {
   Future<Either> updateStudent(UpdateUserReq updateUserReq);
+  Future<Either> acceptStudentAccount(String nisn);
   Future<Either> deleteStudent(String nisnStudent);
   Future<Either> getKelasSepuluh();
   Future<Either> getKelasSebelas();
