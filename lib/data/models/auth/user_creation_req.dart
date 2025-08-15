@@ -10,6 +10,7 @@ class UserCreationReq {
   String? ekskul;
   int? gender;
   bool? isAdmin;
+  bool? isRegister;
   String? agama;
 
   UserCreationReq({
@@ -25,5 +26,6 @@ class UserCreationReq {
     this.gender,
     this.isAdmin,
     this.agama,
+    this.isRegister,
   });
 }

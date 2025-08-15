@@ -299,6 +299,7 @@ class AddStudentDetailView extends StatelessWidget {
                           context.read<ReligionCubit>().state;
                       userCreationReq.gender =
                           context.read<GenderSelectionCubit>().selectedIndex;
+                      userCreationReq.isRegister = false;
                       FocusScope.of(context).unfocus();
                       AppNavigator.push(
                         context,
