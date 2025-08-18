@@ -4,10 +4,14 @@ import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
 import '../../../common/bloc/gender_selection_cubit.dart';
+import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/card/box_gender.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../data/models/auth/update_user.dart';
+import '../../../domain/usecases/students/update_user.dart';
+import '../../../service_locator.dart';
 import '../../auth/bloc/religion_cubit.dart';
 import '../../auth/widgets/scan_qr_nisn.dart';
 
@@ -39,7 +43,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
     _nisnC = TextEditingController(text: widget.user.nisn);
     _tanggalC = TextEditingController(text: widget.user.tanggalLahir);
     _noHPC = TextEditingController(text: widget.user.noHP);
-    _alamatC = TextEditingController(text: widget.user.agama);
+    _alamatC = TextEditingController(text: widget.user.alamat);
     _ekskulC = TextEditingController(text: widget.user.ekskul);
   }
 
@@ -72,7 +76,11 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
             },
           ),
           BlocProvider(
-            create: (context) => ReligionCubit(),
+            create: (context) {
+              final cubit = ReligionCubit();
+              cubit.selectItem(widget.user.agama);
+              return cubit;
+            },
           ),
         ],
         child: SafeArea(
@@ -303,12 +311,13 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
               ),
               Builder(builder: (context) {
                 return BasicButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_namaC.text.isEmpty ||
                         _kelasC.text.isEmpty ||
                         _nisnC.text.isEmpty ||
                         _tanggalC.text.isEmpty ||
                         _noHPC.text.isEmpty ||
+                        _alamatC.text.isEmpty ||
                         context.read<ReligionCubit>().state == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -322,11 +331,41 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                         ),
                       );
                     } else {
-                      FocusScope.of(context).unfocus();
-                      Navigator.pop(context);
+                      var result = await sl<UpdateStudentUsecase>().call(
+                        params: UpdateUserReq(
+                          nama: _namaC.text,
+                          kelas: _kelasC.text,
+                          nisn: _nisnC.text,
+                          tanggalLahir: _tanggalC.text,
+                          noHp: _noHPC.text,
+                          alamat: _alamatC.text,
+                          ekskul: _ekskulC.text,
+                          agama: context.read<ReligionCubit>().state ?? '',
+                          gender: context
+                              .read<GenderSelectionCubit>()
+                              .selectedIndex,
+                        ),
+                      );
+                      result.fold((error) {
+                        var snackbar = const SnackBar(
+                          content: Text("Gagal Mengubah Data"),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                      }, (r) {
+                        context.read<StudentsDisplayCubit>().displayStudents(
+                              params: _kelasC.text,
+                            );
+                        FocusScope.of(context).unfocus();
+                        var snackbar = const SnackBar(
+                          content: Text("Data Berhasil Diubah"),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+
+                        Navigator.pop(context);
+                      });
                     }
                   },
-                  title: 'Lanjut',
+                  title: 'Ubah',
                 );
               })
             ],

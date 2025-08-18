@@ -70,6 +70,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
           "No_HP": updateUserReq.noHp,
           "alamat": updateUserReq.alamat,
           "ekskul": updateUserReq.ekskul,
+          "gender": updateUserReq.gender,
         });
         return right('Update Data Student Success');
       }

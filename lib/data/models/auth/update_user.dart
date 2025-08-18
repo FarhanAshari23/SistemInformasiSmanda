@@ -7,6 +7,7 @@ class UpdateUserReq {
   final String alamat;
   final String ekskul;
   final String agama;
+  final int gender;
 
   UpdateUserReq({
     required this.nama,
@@ -17,5 +18,6 @@ class UpdateUserReq {
     required this.alamat,
     required this.ekskul,
     required this.agama,
+    required this.gender,
   });
 }

@@ -59,7 +59,6 @@ class SearchStudentEdit extends StatelessWidget {
       itemBuilder: (context, index) {
         return CardEditUser(
           student: students[0],
-          backPage: const SearchStudentEdit(),
         );
       },
       separatorBuilder: (context, index) => SizedBox(height: height * 0.02),

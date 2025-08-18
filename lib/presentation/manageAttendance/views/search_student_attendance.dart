@@ -7,7 +7,6 @@ import '../../../common/bloc/kelas/students_state.dart';
 import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/widget/landing/not_found.dart';
 import '../../../domain/entities/auth/user.dart';
-import '../../manageStudent/views/search_student_edit.dart';
 import '../../manageStudent/widgets/card_edit_user.dart';
 
 class SearchStudentAttendance extends StatelessWidget {
@@ -61,7 +60,6 @@ class SearchStudentAttendance extends StatelessWidget {
       itemBuilder: (context, index) {
         return CardEditUser(
           student: students[0],
-          backPage: const SearchStudentEdit(),
         );
       },
       separatorBuilder: (context, index) => SizedBox(height: height * 0.02),

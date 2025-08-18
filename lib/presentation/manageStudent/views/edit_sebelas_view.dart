@@ -56,7 +56,6 @@ class EditSebelasView extends StatelessWidget {
                                     itemBuilder: (context, index) {
                                       return CardEditUser(
                                         student: state.students[index],
-                                        backPage: const EditSebelasView(),
                                       );
                                     },
                                     separatorBuilder: (context, index) =>
@@ -86,7 +85,6 @@ class EditSebelasView extends StatelessWidget {
                                         itemBuilder: (context, index) {
                                           return CardEditUser(
                                             student: state.students[index],
-                                            backPage: const EditSebelasView(),
                                           );
                                         },
                                         separatorBuilder: (context, index) =>

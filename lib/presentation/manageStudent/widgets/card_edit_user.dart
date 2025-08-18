@@ -2,6 +2,8 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/kelas/stundets_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
@@ -15,11 +17,9 @@ import '../views/edit_student_detail.dart';
 
 class CardEditUser extends StatelessWidget {
   final UserEntity student;
-  final Widget backPage;
   const CardEditUser({
     super.key,
     required this.student,
-    required this.backPage,
   });
 
   @override
@@ -101,7 +101,12 @@ class CardEditUser extends StatelessWidget {
             child: PopupMenuButton(
               onSelected: (String value) {
                 if (value == 'Edit') {
-                  AppNavigator.push(context, EditStudentDetail(user: student));
+                  AppNavigator.push(
+                      context,
+                      BlocProvider.value(
+                        value: context.read<StudentsDisplayCubit>(),
+                        child: EditStudentDetail(user: student),
+                      ));
                 } else if (value == 'Hapus') {
                   showDialog(
                     context: context,
@@ -156,7 +161,10 @@ class CardEditUser extends StatelessWidget {
                                       );
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackbar);
-                                      AppNavigator.push(context, backPage);
+                                      context
+                                          .read<StudentsDisplayCubit>()
+                                          .displayStudents(
+                                              params: student.kelas);
                                     },
                                   );
                                 },

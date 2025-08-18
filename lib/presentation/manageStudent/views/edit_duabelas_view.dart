@@ -202,7 +202,6 @@ class EditDuabelasView extends StatelessWidget {
                                       } else {
                                         return CardEditUser(
                                           student: state.students[index - 1],
-                                          backPage: const EditDuabelasView(),
                                         );
                                       }
                                     },
@@ -370,8 +369,6 @@ class EditDuabelasView extends StatelessWidget {
                                             return CardEditUser(
                                               student:
                                                   state.students[index - 1],
-                                              backPage:
-                                                  const EditDuabelasView(),
                                             );
                                           }
                                         },
