@@ -1,34 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/bloc/religion_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/views/ack_add_account_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/scan_qr_nisn.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
-import '../../../common/helper/app_navigation.dart';
-import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../core/configs/theme/app_colors.dart';
 import '../../../common/bloc/gender_selection_cubit.dart';
+import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/card/box_gender.dart';
+import '../../../core/configs/theme/app_colors.dart';
+import '../../auth/bloc/religion_cubit.dart';
+import '../../auth/widgets/scan_qr_nisn.dart';
 
-class AddStudentDetailView extends StatefulWidget {
-  final UserCreationReq userCreationReq;
-  const AddStudentDetailView({super.key, required this.userCreationReq});
+class EditStudentDetail extends StatefulWidget {
+  final UserEntity user;
+  const EditStudentDetail({
+    super.key,
+    required this.user,
+  });
 
   @override
-  State<AddStudentDetailView> createState() => _AddStudentDetailViewState();
+  State<EditStudentDetail> createState() => _EditStudentDetailState();
 }
 
-class _AddStudentDetailViewState extends State<AddStudentDetailView> {
-  final TextEditingController _namaC = TextEditingController();
-  final TextEditingController _kelasC = TextEditingController();
-  final TextEditingController _nisnC = TextEditingController();
-  final TextEditingController _tanggalC = TextEditingController();
-  final TextEditingController _noHPC = TextEditingController();
-  final TextEditingController _alamatC = TextEditingController();
-  final TextEditingController _ekskulC = TextEditingController();
+class _EditStudentDetailState extends State<EditStudentDetail> {
+  late TextEditingController _namaC;
+  late TextEditingController _kelasC;
+  late TextEditingController _nisnC;
+  late TextEditingController _tanggalC;
+  late TextEditingController _noHPC;
+  late TextEditingController _alamatC;
+  late TextEditingController _ekskulC;
+
+  @override
+  void initState() {
+    super.initState();
+    _namaC = TextEditingController(text: widget.user.nama);
+    _kelasC = TextEditingController(text: widget.user.kelas);
+    _nisnC = TextEditingController(text: widget.user.nisn);
+    _tanggalC = TextEditingController(text: widget.user.tanggalLahir);
+    _noHPC = TextEditingController(text: widget.user.noHP);
+    _alamatC = TextEditingController(text: widget.user.agama);
+    _ekskulC = TextEditingController(text: widget.user.ekskul);
+  }
 
   @override
   void dispose() {
@@ -52,7 +65,11 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => GenderSelectionCubit(),
+            create: (context) {
+              final cubit = GenderSelectionCubit();
+              cubit.selectGender(widget.user.gender ?? 0);
+              return cubit;
+            },
           ),
           BlocProvider(
             create: (context) => ReligionCubit(),
@@ -67,7 +84,7 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                 isProfileViewed: false,
               ),
               const Text(
-                'Isi detail akun',
+                'Ubah data siswa',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
@@ -305,25 +322,8 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                         ),
                       );
                     } else {
-                      widget.userCreationReq.nama = _namaC.text;
-                      widget.userCreationReq.kelas = _kelasC.text;
-                      widget.userCreationReq.nisn = _nisnC.text;
-                      widget.userCreationReq.tanggalLahir = _tanggalC.text;
-                      widget.userCreationReq.noHP = _noHPC.text;
-                      widget.userCreationReq.address = _alamatC.text;
-                      widget.userCreationReq.ekskul = _ekskulC.text;
-                      widget.userCreationReq.isAdmin = false;
-                      widget.userCreationReq.agama =
-                          context.read<ReligionCubit>().state;
-                      widget.userCreationReq.gender =
-                          context.read<GenderSelectionCubit>().selectedIndex;
-                      widget.userCreationReq.isRegister = false;
                       FocusScope.of(context).unfocus();
-                      AppNavigator.push(
-                        context,
-                        AckAddStudentView(
-                            userCreationReq: widget.userCreationReq),
-                      );
+                      Navigator.pop(context);
                     }
                   },
                   title: 'Lanjut',

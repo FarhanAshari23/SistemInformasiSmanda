@@ -21,6 +21,7 @@ class BoxGender extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    final selectedIndex = context.watch<GenderSelectionCubit>().state;
     return GestureDetector(
       onTap: () =>
           context.read<GenderSelectionCubit>().selectGender(genderIndex),
@@ -29,10 +30,9 @@ class BoxGender extends StatelessWidget {
         height: height * 0.06,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color:
-              context.read<GenderSelectionCubit>().selectedIndex == genderIndex
-                  ? AppColors.primary
-                  : AppColors.tertiary,
+          color: selectedIndex == genderIndex
+              ? AppColors.primary
+              : AppColors.tertiary,
         ),
         child: Center(
           child: Text(
@@ -40,8 +40,7 @@ class BoxGender extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 16,
-              color: context.read<GenderSelectionCubit>().selectedIndex ==
-                      genderIndex
+              color: selectedIndex == genderIndex
                   ? AppColors.inversePrimary
                   : AppColors.primary,
             ),
