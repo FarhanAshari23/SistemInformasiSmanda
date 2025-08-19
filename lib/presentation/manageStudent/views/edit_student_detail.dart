@@ -224,10 +224,6 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                       builder: (context, selectedValue) {
                         final cubit = context.read<ReligionCubit>();
                         return DropdownButtonFormField<String>(
-                          decoration: const InputDecoration(
-                            labelText: "Agama",
-                            border: OutlineInputBorder(),
-                          ),
                           value: selectedValue,
                           items: cubit.items.map((String value) {
                             return DropdownMenuItem<String>(

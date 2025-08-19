@@ -199,9 +199,11 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                       builder: (context, selectedValue) {
                         final cubit = context.read<ReligionCubit>();
                         return DropdownButtonFormField<String>(
-                          decoration: const InputDecoration(
-                            labelText: "Agama",
-                            border: OutlineInputBorder(),
+                          hint: const Text(
+                            'Agama: ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
                           value: selectedValue,
                           items: cubit.items.map((String value) {
