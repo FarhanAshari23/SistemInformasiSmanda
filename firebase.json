@@ -1,1 +1,36 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"appsmanda-203ae","appId":"1:139553149732:android:8dfd964d500eb5297dd9b1","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"appsmanda-203ae","configurations":{"android":"1:139553149732:android:8dfd964d500eb5297dd9b1","ios":"1:139553149732:ios:76f05afb1042611c7dd9b1","web":"1:139553149732:web:2e4d73f276abc76d7dd9b1"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "appsmanda-203ae",
+          "appId": "1:139553149732:android:8dfd964d500eb5297dd9b1",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "appsmanda-203ae",
+          "configurations": {
+            "android": "1:139553149732:android:8dfd964d500eb5297dd9b1",
+            "ios": "1:139553149732:ios:76f05afb1042611c7dd9b1",
+            "web": "1:139553149732:web:2e4d73f276abc76d7dd9b1"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}
