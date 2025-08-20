@@ -35,4 +35,5 @@ class AppImages {
   static const String tendik = "${basePath}tendik.png";
   static const String splashEkskul = "${basePath}splashEkskul.jpg";
   static const String testFoto = "${basePath}test_foto.JPG";
+  static const String emptyRegistrationChara = "${basePath}chibi_sma.png";
 }

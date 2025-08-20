@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
+import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/accept_student_register_usecase.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/bloc/get_student_registration_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/bloc/get_student_registration_state.dart';
@@ -15,6 +16,7 @@ class RegisterStudentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: BlocProvider(
@@ -43,6 +45,7 @@ class RegisterStudentView extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(height: height * 0.1),
               BlocBuilder<GetStudentRegistrationCubit,
                   StudentsRegistrationState>(
                 builder: (context, state) {
@@ -50,6 +53,25 @@ class RegisterStudentView extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (state is StudentsRegistrationLoaded) {
+                    if (state.students.isEmpty) {
+                      return Column(
+                        children: [
+                          Image.asset(
+                            AppImages.emptyRegistrationChara,
+                            width: height * 0.2,
+                            height: height * 0.2,
+                          ),
+                          const Text(
+                            'Tidak ada akun yang harus di konfirmasi',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      );
+                    }
                     return Expanded(
                       child: ListView.separated(
                         itemBuilder: (context, index) {
