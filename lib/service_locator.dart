@@ -32,6 +32,7 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/delete_ekskul
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/update_ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/news/delete_news.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/news/update_news.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/get_all_jadwal.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/accept_student_register_usecase.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_student_by_class.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_duabelas.dart';
@@ -187,9 +188,6 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<GetStudentsRegisterUsecase>(
     GetStudentsRegisterUsecase(),
   );
-  sl.registerSingleton<GetJadwalUsecase>(
-    GetJadwalUsecase(),
-  );
   sl.registerSingleton<UpdateStudentUsecase>(
     UpdateStudentUsecase(),
   );
@@ -260,5 +258,13 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<GetAttendanceNameUsecase>(
     GetAttendanceNameUsecase(),
+  );
+
+  //schedule
+  sl.registerSingleton<GetJadwalUsecase>(
+    GetJadwalUsecase(),
+  );
+  sl.registerSingleton<GetAllJadwalUsecase>(
+    GetAllJadwalUsecase(),
   );
 }

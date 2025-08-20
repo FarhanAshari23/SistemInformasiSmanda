@@ -19,6 +19,8 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../domain/usecases/auth/logout.dart';
 import '../../auth/views/login_view.dart';
+import '../../manageSchedule/views/add_schedule_view.dart';
+import '../../manageSchedule/views/edit_schedule_view.dart';
 
 class HomeViewAdmin extends StatelessWidget {
   const HomeViewAdmin({super.key});
@@ -33,6 +35,7 @@ class HomeViewAdmin extends StatelessWidget {
       'Olah Data Guru',
       'Unggah Pengumuman',
       'Olah Data Ekskul',
+      'Olah Jadwal Pelajaran'
     ];
     List<String> images = [
       AppImages.verification,
@@ -40,6 +43,7 @@ class HomeViewAdmin extends StatelessWidget {
       AppImages.teacher,
       AppImages.megaphone,
       AppImages.eskul,
+      AppImages.calendar,
     ];
     List<Widget> pages = [
       const ManageDataAttendances(),
@@ -70,6 +74,13 @@ class HomeViewAdmin extends StatelessWidget {
         namaFiturDua: 'Edit Data Ekskul',
         pageSatu: AddDataEkskulView(),
         pageDua: const EditDataEkskulView(),
+      ),
+      const ManageObjectView(
+        title: 'Apa yang ingin anda lakukan dengan data jadwal',
+        namaFiturSatu: 'Tambah Jadwal Pelajaran',
+        namaFiturDua: 'Edit Jadwal Pelajaran',
+        pageSatu: AddScheduleView(),
+        pageDua: EditScheduleView(),
       ),
     ];
     return Scaffold(

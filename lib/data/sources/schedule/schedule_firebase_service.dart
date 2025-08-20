@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class ScheduleFirebaseService {
   Future<Either> getJadwal();
+  Future<Either> getAllJadwal();
 }
 
 class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
@@ -22,6 +23,17 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
       return Left(e);
+    }
+  }
+
+  @override
+  Future<Either> getAllJadwal() async {
+    try {
+      var returnedData =
+          await FirebaseFirestore.instance.collection("Jadwals").get();
+      return Right(returnedData.docs.map((e) => e.data()).toList());
+    } catch (e) {
+      return const Left("Error get data, please try again later");
     }
   }
 }
