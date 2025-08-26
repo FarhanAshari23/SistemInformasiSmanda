@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ReligionCubit extends Cubit<String?> {
   ReligionCubit() : super(null);
 
-  // Daftar pilihan (bisa juga dari API)
   final List<String> items = [
     "Islam",
     "Kristen Protestan",
@@ -14,6 +13,8 @@ class ReligionCubit extends Cubit<String?> {
   ];
 
   void selectItem(String? value) {
-    emit(value);
+    if (value != null) {
+      emit(value);
+    }
   }
 }

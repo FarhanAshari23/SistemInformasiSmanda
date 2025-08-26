@@ -72,6 +72,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
           "alamat": updateUserReq.alamat,
           "ekskul": updateUserReq.ekskul,
           "gender": updateUserReq.gender,
+          "agama": updateUserReq.agama,
         });
         return right('Update Data Student Success');
       }
@@ -258,15 +259,13 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   Future<Either> getAllKelas() async {
     try {
       final results = await Future.wait([
-        FirebaseFirestore.instance.collection('Duabelas').get(),
-        FirebaseFirestore.instance.collection('Sebelas').get(),
         FirebaseFirestore.instance.collection('Sepuluh').get(),
+        FirebaseFirestore.instance.collection('Sebelas').get(),
+        FirebaseFirestore.instance.collection('Duabelas').get(),
       ]);
-      List<String> allDataClass = [];
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> allDataClass = [];
       for (var snapshot in results) {
-        allDataClass.addAll(snapshot.docs.map(
-          (e) => e['value'] as String,
-        ));
+        allDataClass.addAll(snapshot.docs);
       }
       return Right(allDataClass);
     } catch (e) {

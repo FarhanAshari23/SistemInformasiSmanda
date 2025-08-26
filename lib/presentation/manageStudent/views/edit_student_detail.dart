@@ -124,7 +124,6 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                     BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
                       builder: (context, state) {
                         if (state is KelasDisplayLoading) {
-                          print('Loading');
                           return TextField(
                             controller: _kelasC,
                             autocorrect: false,
@@ -134,23 +133,30 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                           );
                         }
                         if (state is KelasDisplayLoaded) {
-                          return DropdownButtonFormField<String>(
-                            hint: Text(
-                              widget.user.kelas ?? '',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w300,
+                          return DropdownMenu<String>(
+                            width: width * 0.92,
+                            inputDecorationTheme: const InputDecorationTheme(
+                              fillColor: AppColors.tertiary,
+                              filled: true,
+                              hintStyle: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black, // <-- warna hint
                               ),
                             ),
-                            value: state.selected,
-                            items: state.kelas.map((doc) {
+                            menuHeight: 200,
+                            hintText: widget.user.kelas,
+                            dropdownMenuEntries: state.kelas.map((doc) {
                               final kelas = doc.data()['value'] as String;
-                              return DropdownMenuItem<String>(
+                              return DropdownMenuEntry(
                                 value: kelas,
-                                child: Text(kelas),
+                                label: kelas,
                               );
                             }).toList(),
-                            onChanged: (value) {
-                              context.read<ReligionCubit>().selectItem(value);
+                            onSelected: (value) {
+                              context
+                                  .read<GetAllKelasCubit>()
+                                  .selectItem(value);
                             },
                           );
                         }
@@ -261,16 +267,31 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                     BlocBuilder<ReligionCubit, String?>(
                       builder: (context, selectedValue) {
                         final cubit = context.read<ReligionCubit>();
-                        return DropdownButtonFormField<String>(
-                          value: selectedValue,
-                          items: cubit.items.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
+                        return DropdownMenu<String>(
+                          width: width * 0.92,
+                          inputDecorationTheme: const InputDecorationTheme(
+                            fillColor: AppColors.tertiary,
+                            filled: true,
+                            hintStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black, // <-- warna hint
+                            ),
+                          ),
+                          menuHeight: 200,
+                          hintText: widget.user.agama,
+                          dropdownMenuEntries: cubit.items.map((doc) {
+                            return DropdownMenuEntry(
+                              value: doc,
+                              label: doc,
                             );
                           }).toList(),
-                          onChanged: (value) {
-                            context.read<ReligionCubit>().selectItem(value);
+                          onSelected: (value) {
+                            final cubit = context.read<ReligionCubit>();
+                            if (value != null) {
+                              cubit.selectItem(value);
+                              print(cubit.state);
+                            }
                           },
                         );
                       },
@@ -347,7 +368,6 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                 return BasicButton(
                   onPressed: () async {
                     if (_namaC.text.isEmpty ||
-                        _kelasC.text.isEmpty ||
                         _nisnC.text.isEmpty ||
                         _tanggalC.text.isEmpty ||
                         _noHPC.text.isEmpty ||
@@ -365,16 +385,20 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                         ),
                       );
                     } else {
+                      final cubit = context.read<GetAllKelasCubit>().state;
                       var result = await sl<UpdateStudentUsecase>().call(
                         params: UpdateUserReq(
                           nama: _namaC.text,
-                          kelas: _kelasC.text,
+                          kelas: cubit is KelasDisplayLoaded &&
+                                  cubit.selected != null
+                              ? cubit.selected!
+                              : widget.user.kelas!,
                           nisn: _nisnC.text,
                           tanggalLahir: _tanggalC.text,
                           noHp: _noHPC.text,
                           alamat: _alamatC.text,
                           ekskul: _ekskulC.text,
-                          agama: context.read<ReligionCubit>().state ?? '',
+                          agama: context.read<ReligionCubit>().state!,
                           gender: context
                               .read<GenderSelectionCubit>()
                               .selectedIndex,
