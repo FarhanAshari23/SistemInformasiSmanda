@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/get_all_kelas_cubit.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
 import '../../../common/bloc/gender_selection_cubit.dart';
+import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
@@ -12,7 +14,7 @@ import '../../../core/configs/theme/app_colors.dart';
 import '../../../data/models/auth/update_user.dart';
 import '../../../domain/usecases/students/update_user.dart';
 import '../../../service_locator.dart';
-import '../../auth/bloc/religion_cubit.dart';
+import '../../../common/bloc/religion_cubit.dart';
 import '../../auth/widgets/scan_qr_nisn.dart';
 
 class EditStudentDetail extends StatefulWidget {
@@ -82,6 +84,13 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
               return cubit;
             },
           ),
+          BlocProvider(
+            create: (context) {
+              final cubit = GetAllKelasCubit()..displayAll();
+              cubit.selectItem(widget.user.kelas);
+              return cubit;
+            },
+          ),
         ],
         child: SafeArea(
           child: Column(
@@ -112,12 +121,41 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                       ),
                     ),
                     SizedBox(height: height * 0.01),
-                    TextField(
-                      controller: _kelasC,
-                      autocorrect: false,
-                      decoration: const InputDecoration(
-                        hintText: 'kelas:',
-                      ),
+                    BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
+                      builder: (context, state) {
+                        if (state is KelasDisplayLoading) {
+                          print('Loading');
+                          return TextField(
+                            controller: _kelasC,
+                            autocorrect: false,
+                            decoration: const InputDecoration(
+                              hintText: 'kelas:',
+                            ),
+                          );
+                        }
+                        if (state is KelasDisplayLoaded) {
+                          return DropdownButtonFormField<String>(
+                            hint: Text(
+                              widget.user.kelas ?? '',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            value: state.selected,
+                            items: state.kelas.map((doc) {
+                              final kelas = doc.data()['value'] as String;
+                              return DropdownMenuItem<String>(
+                                value: kelas,
+                                child: Text(kelas),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              context.read<ReligionCubit>().selectItem(value);
+                            },
+                          );
+                        }
+                        return const SizedBox();
+                      },
                     ),
                     SizedBox(height: height * 0.01),
                     TextField(

@@ -188,4 +188,9 @@ class StudentsRepositoryImpl extends StudentRepository {
   Future<Either> acceptStudentAccount(String nisn) async {
     return await sl<StudentsFirebaseService>().acceptStudentAccount(nisn);
   }
+
+  @override
+  Future<Either> getAllKelas() async {
+    return await sl<StudentsFirebaseService>().getAllKelas();
+  }
 }

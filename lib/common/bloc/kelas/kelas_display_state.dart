@@ -6,7 +6,21 @@ class KelasDisplayLoading extends KelasDisplayState {}
 
 class KelasDisplayLoaded extends KelasDisplayState {
   final List<QueryDocumentSnapshot<Map<String, dynamic>>> kelas;
-  KelasDisplayLoaded({required this.kelas});
+  final String? selected;
+  KelasDisplayLoaded({
+    required this.kelas,
+    this.selected,
+  });
+
+  KelasDisplayLoaded copyWith({
+    List<QueryDocumentSnapshot<Map<String, dynamic>>>? kelas,
+    String? selected,
+  }) {
+    return KelasDisplayLoaded(
+      kelas: kelas ?? this.kelas,
+      selected: selected ?? this.selected,
+    );
+  }
 }
 
 class KelasDisplayFailure extends KelasDisplayState {

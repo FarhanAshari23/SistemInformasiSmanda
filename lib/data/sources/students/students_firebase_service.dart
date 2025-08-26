@@ -12,6 +12,7 @@ abstract class StudentsFirebaseService {
   Future<Either> getKelasSepuluh();
   Future<Either> getKelasSebelas();
   Future<Either> getKelasDuabelas();
+  Future<Either> getAllKelas();
   Future<Either> getClassSepuluhInit();
   Future<Either> getClassSebelasInit();
   Future<Either> getClassDuabelasInit();
@@ -250,6 +251,26 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       return right('Update Student Account Success');
     } catch (e) {
       return const Left('Something Wrong');
+    }
+  }
+
+  @override
+  Future<Either> getAllKelas() async {
+    try {
+      final results = await Future.wait([
+        FirebaseFirestore.instance.collection('Duabelas').get(),
+        FirebaseFirestore.instance.collection('Sebelas').get(),
+        FirebaseFirestore.instance.collection('Sepuluh').get(),
+      ]);
+      List<String> allDataClass = [];
+      for (var snapshot in results) {
+        allDataClass.addAll(snapshot.docs.map(
+          (e) => e['value'] as String,
+        ));
+      }
+      return Right(allDataClass);
+    } catch (e) {
+      return const Left('Please try again');
     }
   }
 }
