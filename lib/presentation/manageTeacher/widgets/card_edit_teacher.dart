@@ -1,14 +1,17 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/delete_teacher.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teacher.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/presentation/home/bloc/teacher_cubit.dart';
 
+import '../../../common/helper/app_navigation.dart';
+import '../../../common/widget/button/basic_button.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/usecases/teacher/delete_teacher.dart';
 import '../../../service_locator.dart';
+import '../views/edit_teacher_detail_view.dart';
 
 class CardEditTeacher extends StatelessWidget {
   final TeacherEntity teacher;
@@ -24,40 +27,6 @@ class CardEditTeacher extends StatelessWidget {
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
-    TextEditingController _nameC = TextEditingController(text: teacher.nama);
-    TextEditingController _nipC = TextEditingController(text: teacher.nip);
-    TextEditingController _mengajarC =
-        TextEditingController(text: teacher.mengajar);
-    TextEditingController _tanggalC =
-        TextEditingController(text: teacher.tanggalLahir);
-    TextEditingController _waliKelasC =
-        TextEditingController(text: teacher.waliKelas);
-    TextEditingController _jabatanC =
-        TextEditingController(text: teacher.jabatan);
-    List<String> namaHint = [
-      'Nama: ',
-      'NIP: ',
-      'Mengajar: ',
-      'Tanggal Lahir: ',
-      'Wali Kelas: ',
-      'Jabatan Tambahan: ',
-    ];
-    List<TextEditingController> listController = [
-      _nameC,
-      _nipC,
-      _mengajarC,
-      _tanggalC,
-      _waliKelasC,
-      _jabatanC,
-    ];
-    List<int> maxLines = [
-      1,
-      1,
-      1,
-      1,
-      1,
-      2,
-    ];
     return Container(
       width: width * 0.7,
       height: bodyHeight * 0.175,
@@ -124,113 +93,12 @@ class CardEditTeacher extends StatelessWidget {
             child: PopupMenuButton(
               onSelected: (String value) {
                 if (value == 'Edit') {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        backgroundColor: AppColors.inversePrimary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: SingleChildScrollView(
-                          child: SizedBox(
-                            height: bodyHeight * 0.695,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 20,
-                                horizontal: 16,
-                              ),
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    'Ubah Data Guru',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                  SizedBox(height: bodyHeight * 0.02),
-                                  SizedBox(
-                                    width: width * 0.6,
-                                    height: bodyHeight * 0.5,
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.vertical,
-                                      itemBuilder: (context, index) {
-                                        return TextField(
-                                          maxLines: maxLines[index],
-                                          controller: listController[index],
-                                          autocorrect: false,
-                                          decoration: InputDecoration(
-                                            hintText: namaHint[index],
-                                          ),
-                                        );
-                                      },
-                                      separatorBuilder: (context, index) =>
-                                          SizedBox(
-                                        height: bodyHeight * 0.01,
-                                      ),
-                                      itemCount: namaHint.length,
-                                    ),
-                                  ),
-                                  SizedBox(height: bodyHeight * 0.01),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      var result =
-                                          await sl<UpdateTeacherUsecase>().call(
-                                        params: TeacherEntity(
-                                          nama: _nameC.text,
-                                          mengajar: _mengajarC.text,
-                                          nip: _nipC.text,
-                                          tanggalLahir: _tanggalC.text,
-                                          waliKelas: _waliKelasC.text,
-                                          jabatan: _jabatanC.text,
-                                        ),
-                                      );
-                                      result.fold(
-                                        (error) {
-                                          var snackbar = const SnackBar(
-                                            content:
-                                                Text("Gagal Mengubah Data"),
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackbar);
-                                        },
-                                        (r) {
-                                          var snackbar = const SnackBar(
-                                            content:
-                                                Text("Data Berhasil Diubah"),
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackbar);
-                                          Navigator.pop(context);
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      width: width * 0.3,
-                                      height: bodyHeight * 0.08,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: AppColors.secondary,
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'Ubah',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w800,
-                                            color: AppColors.inversePrimary,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+                  AppNavigator.push(
+                    context,
+                    BlocProvider.value(
+                      value: context.read<TeacherCubit>(),
+                      child: EditTeacherDetailView(teacher: teacher),
+                    ),
                   );
                 } else if (value == 'Hapus') {
                   showDialog(
