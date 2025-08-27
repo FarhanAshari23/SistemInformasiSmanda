@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../gen/fonts.gen.dart';
 import 'app_colors.dart';
 
 class AppTheme {
@@ -10,7 +11,7 @@ class AppTheme {
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: AppColors.background,
     brightness: Brightness.light,
-    fontFamily: 'Satoshi',
+    fontFamily: FontFamily.satoshi,
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.tertiary,
