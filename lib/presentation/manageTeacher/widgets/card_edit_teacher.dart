@@ -1,12 +1,10 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/delete_teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teacher.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/views/edit_teacher_view.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -204,10 +202,7 @@ class CardEditTeacher extends StatelessWidget {
                                           );
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(snackbar);
-                                          AppNavigator.push(
-                                            context,
-                                            const EditTeacherView(),
-                                          );
+                                          Navigator.pop(context);
                                         },
                                       );
                                     },
@@ -280,7 +275,7 @@ class CardEditTeacher extends StatelessWidget {
                                     (error) {
                                       var snackbar = const SnackBar(
                                         content: Text(
-                                            "Gagal Menghapus Murid, Coba Lagi"),
+                                            "Gagal Menghapus Data Guru, Coba Lagi"),
                                       );
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackbar);

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/get_all_kelas_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
-import '../../../common/bloc/gender_selection_cubit.dart';
+import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
@@ -14,7 +14,7 @@ import '../../../core/configs/theme/app_colors.dart';
 import '../../../data/models/auth/update_user.dart';
 import '../../../domain/usecases/students/update_user.dart';
 import '../../../service_locator.dart';
-import '../../../common/bloc/religion_cubit.dart';
+import '../../../common/bloc/religion/religion_cubit.dart';
 import '../../auth/widgets/scan_qr_nisn.dart';
 
 class EditStudentDetail extends StatefulWidget {

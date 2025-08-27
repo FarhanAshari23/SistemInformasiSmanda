@@ -4,15 +4,15 @@ import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_display_state.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/get_all_kelas_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/religion_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/religion/religion_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/views/ack_add_account_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/scan_qr_nisn.dart';
 
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../common/bloc/gender_selection_cubit.dart';
+import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/widget/card/box_gender.dart';
 
 class AddStudentDetailView extends StatefulWidget {
