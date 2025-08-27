@@ -104,6 +104,18 @@ class AddStudentView extends StatelessWidget {
                         ),
                       ),
                     );
+                  } else if (_passC.text.length < 8) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text(
+                          'Password anda kurang dari 8 karakter, silakan coba masukkan kembali',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    );
                   } else {
                     AppNavigator.push(
                       context,

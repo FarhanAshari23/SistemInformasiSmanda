@@ -104,23 +104,30 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                           );
                         }
                         if (state is KelasDisplayLoaded) {
-                          return DropdownButtonFormField<String>(
-                            hint: const Text(
-                              'Kelas: ',
-                              style: TextStyle(
+                          return DropdownMenu<String>(
+                            width: width * 0.92,
+                            inputDecorationTheme: const InputDecorationTheme(
+                              fillColor: AppColors.tertiary,
+                              filled: true,
+                              hintStyle: TextStyle(
+                                fontSize: 16,
                                 fontWeight: FontWeight.w300,
+                                color: Colors.black, // <-- warna hint
                               ),
                             ),
-                            value: state.selected,
-                            items: state.kelas.map((doc) {
+                            menuHeight: 200,
+                            hintText: 'Kelas',
+                            dropdownMenuEntries: state.kelas.map((doc) {
                               final kelas = doc.data()['value'] as String;
-                              return DropdownMenuItem<String>(
+                              return DropdownMenuEntry(
                                 value: kelas,
-                                child: Text(kelas),
+                                label: kelas,
                               );
                             }).toList(),
-                            onChanged: (value) {
-                              context.read<ReligionCubit>().selectItem(value);
+                            onSelected: (value) {
+                              context
+                                  .read<GetAllKelasCubit>()
+                                  .selectItem(value);
                             },
                           );
                         }
@@ -231,22 +238,30 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                     BlocBuilder<ReligionCubit, String?>(
                       builder: (context, selectedValue) {
                         final cubit = context.read<ReligionCubit>();
-                        return DropdownButtonFormField<String>(
-                          hint: const Text(
-                            'Agama: ',
-                            style: TextStyle(
+                        return DropdownMenu<String>(
+                          width: width * 0.92,
+                          inputDecorationTheme: const InputDecorationTheme(
+                            fillColor: AppColors.tertiary,
+                            filled: true,
+                            hintStyle: TextStyle(
+                              fontSize: 16,
                               fontWeight: FontWeight.w300,
+                              color: Colors.black, // <-- warna hint
                             ),
                           ),
-                          value: selectedValue,
-                          items: cubit.items.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
+                          menuHeight: 200,
+                          hintText: "Agama:",
+                          dropdownMenuEntries: cubit.items.map((doc) {
+                            return DropdownMenuEntry(
+                              value: doc,
+                              label: doc,
                             );
                           }).toList(),
-                          onChanged: (value) {
-                            context.read<ReligionCubit>().selectItem(value);
+                          onSelected: (value) {
+                            final cubit = context.read<ReligionCubit>();
+                            if (value != null) {
+                              cubit.selectItem(value);
+                            }
                           },
                         );
                       },
@@ -323,11 +338,16 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                 return BasicButton(
                   onPressed: () {
                     if (_namaC.text.isEmpty ||
-                        _kelasC.text.isEmpty ||
                         _nisnC.text.isEmpty ||
                         _tanggalC.text.isEmpty ||
                         _noHPC.text.isEmpty ||
-                        context.read<ReligionCubit>().state == null) {
+                        context.read<ReligionCubit>().state == null ||
+                        (context.read<GetAllKelasCubit>().state
+                                is KelasDisplayLoaded &&
+                            (context.read<GetAllKelasCubit>().state
+                                        as KelasDisplayLoaded)
+                                    .selected ==
+                                null)) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           backgroundColor: Colors.red,
@@ -340,8 +360,10 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                         ),
                       );
                     } else {
+                      final cubit = context.read<GetAllKelasCubit>().state;
                       widget.userCreationReq.nama = _namaC.text;
-                      widget.userCreationReq.kelas = _kelasC.text;
+                      widget.userCreationReq.kelas =
+                          cubit is KelasDisplayLoaded ? cubit.selected : '';
                       widget.userCreationReq.nisn = _nisnC.text;
                       widget.userCreationReq.tanggalLahir = _tanggalC.text;
                       widget.userCreationReq.noHP = _noHPC.text;

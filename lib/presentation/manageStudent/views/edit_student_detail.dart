@@ -290,7 +290,6 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                             final cubit = context.read<ReligionCubit>();
                             if (value != null) {
                               cubit.selectItem(value);
-                              print(cubit.state);
                             }
                           },
                         );
