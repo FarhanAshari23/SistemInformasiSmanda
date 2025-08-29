@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_honor.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/bloc/teacher_state.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_state.dart';
 
 import '../../../service_locator.dart';
 

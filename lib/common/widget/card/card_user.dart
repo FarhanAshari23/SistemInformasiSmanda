@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
-import '../../helper/app_navigation.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../helper/display_image.dart';
@@ -11,12 +10,12 @@ class CardUser extends StatelessWidget {
   final String name;
   final String nisn;
   final int gender;
-  final Widget nextPage;
+  final VoidCallback? onTap;
   const CardUser({
     super.key,
     required this.name,
     required this.nisn,
-    required this.nextPage,
+    required this.onTap,
     required this.gender,
   });
 
@@ -30,10 +29,7 @@ class CardUser extends StatelessWidget {
     return CustomInkWell(
       borderRadius: 12,
       defaultColor: AppColors.secondary,
-      onTap: () => AppNavigator.push(
-        context,
-        nextPage,
-      ),
+      onTap: onTap,
       child: SizedBox(
         width: width * 0.7,
         height: bodyHeight * 0.175,

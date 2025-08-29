@@ -68,12 +68,12 @@ class HomeViewAdmin extends StatelessWidget {
         pageSatu: AddNewsView(),
         pageDua: const EditNewsView(),
       ),
-      ManageObjectView(
+      const ManageObjectView(
         title: 'Apa yang ingin anda lakukan dengan data ekskul',
         namaFiturSatu: 'Tambah Data Ekskul',
         namaFiturDua: 'Edit Data Ekskul',
         pageSatu: AddDataEkskulView(),
-        pageDua: const EditDataEkskulView(),
+        pageDua: EditDataEkskulView(),
       ),
       const ManageObjectView(
         title: 'Apa yang ingin anda lakukan dengan data jadwal',

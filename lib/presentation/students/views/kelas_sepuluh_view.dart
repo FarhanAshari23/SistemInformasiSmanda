@@ -10,6 +10,8 @@ import 'package:new_sistem_informasi_smanda/presentation/students/bloc/sepuluh_i
 import 'package:new_sistem_informasi_smanda/presentation/students/views/murid_detail.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/list_view/list_kelas_sepuluh.dart';
 
+import '../../../common/helper/app_navigation.dart';
+
 class KelasSepuluhView extends StatelessWidget {
   const KelasSepuluhView({super.key});
 
@@ -56,8 +58,11 @@ class KelasSepuluhView extends StatelessWidget {
                                 ? ListView.separated(
                                     itemBuilder: (context, index) {
                                       return CardUser(
-                                        nextPage: MuridDetail(
-                                          user: state.students[index],
+                                        onTap: () => AppNavigator.push(
+                                          context,
+                                          MuridDetail(
+                                            user: state.students[index],
+                                          ),
                                         ),
                                         name: state.students[index].nama!,
                                         nisn: state.students[index].nisn!,
@@ -90,9 +95,13 @@ class KelasSepuluhView extends StatelessWidget {
                                     ? ListView.separated(
                                         itemBuilder: (context, index) {
                                           return CardUser(
-                                              nextPage: MuridDetail(
-                                                user: state.students[index],
-                                              ),
+                                              onTap: () => AppNavigator.push(
+                                                    context,
+                                                    MuridDetail(
+                                                      user:
+                                                          state.students[index],
+                                                    ),
+                                                  ),
                                               name: state.students[index].nama!,
                                               nisn: state.students[index].nisn!,
                                               gender: state

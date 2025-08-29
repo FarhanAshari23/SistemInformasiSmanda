@@ -1,29 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/widgets/card_edit_teacher.dart';
 
+import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/card/card_guru.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/bloc/teacher/teacher_state.dart';
 
-class EditTeacherView extends StatelessWidget {
-  const EditTeacherView({super.key});
+class ListTeacherView extends StatelessWidget {
+  const ListTeacherView({super.key});
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: BlocProvider(
-          create: (context) => TeacherCubit()..displayTeacher(),
+      body: BlocProvider(
+        create: (context) => TeacherCubit()..displayTeacher(),
+        child: SafeArea(
           child: Column(
             children: [
-              const BasicAppbar(
-                isBackViewed: true,
-                isProfileViewed: false,
-              ),
+              const BasicAppbar(isBackViewed: true, isProfileViewed: false),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
@@ -48,15 +45,30 @@ class EditTeacherView extends StatelessWidget {
                           return SizedBox(
                             width: double.infinity,
                             height: height * 0.7,
-                            child: ListView.separated(
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                return CardEditTeacher(
-                                    teacher: state.teacher[index]);
-                              },
-                              separatorBuilder: (context, index) =>
-                                  SizedBox(height: height * 0.02),
+                            child: GridView.builder(
                               itemCount: state.teacher.length,
+                              scrollDirection: Axis.vertical,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 12.0,
+                                mainAxisSpacing: 12.0,
+                                mainAxisExtent: height * 0.25,
+                              ),
+                              itemBuilder: (context, index) {
+                                return CustomInkWell(
+                                  onTap: () => Navigator.pop(
+                                    context,
+                                    state.teacher[index].nama,
+                                  ),
+                                  borderRadius: 8,
+                                  defaultColor: AppColors.secondary,
+                                  child: CardGuru(
+                                    nip: state.teacher[index].nip,
+                                    title: state.teacher[index].nama,
+                                  ),
+                                );
+                              },
                             ),
                           );
                         }
@@ -65,7 +77,7 @@ class EditTeacherView extends StatelessWidget {
                     )
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),

@@ -6,7 +6,7 @@ import 'package:new_sistem_informasi_smanda/presentation/teachers/views/staff_de
 
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../home/bloc/teacher_state.dart';
+import '../../../common/bloc/teacher/teacher_state.dart';
 
 class ListStaffView extends StatelessWidget {
   const ListStaffView({super.key});

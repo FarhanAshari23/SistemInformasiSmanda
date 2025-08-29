@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/presentation/students/bloc/duabelas_init_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/students/views/murid_detail.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/list_view/list_kelas_duabelas.dart';
 
+import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../domain/usecases/students/get_students_with_kelas.dart';
 import '../../../common/bloc/kelas/students_state.dart';
@@ -54,13 +56,18 @@ class KelasDuabelasView extends StatelessWidget {
                             return state.students.isNotEmpty
                                 ? ListView.separated(
                                     itemBuilder: (context, index) {
-                                      return CardUser(
-                                        nextPage: MuridDetail(
-                                          user: state.students[index],
+                                      return CustomInkWell(
+                                        child: CardUser(
+                                          onTap: () => AppNavigator.push(
+                                            context,
+                                            MuridDetail(
+                                              user: state.students[index],
+                                            ),
+                                          ),
+                                          name: state.students[index].nama!,
+                                          nisn: state.students[index].nisn!,
+                                          gender: state.students[index].gender!,
                                         ),
-                                        name: state.students[index].nama!,
-                                        nisn: state.students[index].nisn!,
-                                        gender: state.students[index].gender!,
                                       );
                                     },
                                     separatorBuilder: (context, index) =>
@@ -89,9 +96,13 @@ class KelasDuabelasView extends StatelessWidget {
                                     ? ListView.separated(
                                         itemBuilder: (context, index) {
                                           return CardUser(
-                                              nextPage: MuridDetail(
-                                                user: state.students[index],
-                                              ),
+                                              onTap: () => AppNavigator.push(
+                                                    context,
+                                                    MuridDetail(
+                                                      user:
+                                                          state.students[index],
+                                                    ),
+                                                  ),
                                               name: state.students[index].nama!,
                                               nisn: state.students[index].nisn!,
                                               gender: state

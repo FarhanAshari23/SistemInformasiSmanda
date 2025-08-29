@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/bloc/teacher_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
 
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/button/basic_button.dart';

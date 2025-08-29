@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/landing/not_found.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_teacher_by_name.dart';
@@ -8,7 +9,9 @@ import 'package:new_sistem_informasi_smanda/presentation/teachers/blocs/get_teac
 import 'package:new_sistem_informasi_smanda/presentation/teachers/views/teacher_detail.dart';
 import 'package:new_sistem_informasi_smanda/presentation/teachers/widgets/search_teacher_appbar.dart';
 
+import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/card/card_guru.dart';
+import '../../../core/configs/theme/app_colors.dart';
 
 class SearchScreenTeacher extends StatelessWidget {
   const SearchScreenTeacher({super.key});
@@ -64,11 +67,18 @@ class SearchScreenTeacher extends StatelessWidget {
         mainAxisExtent: height * 0.25,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return CardGuru(
-          nip: teachers[index].nip,
-          title: teachers[index].nama,
-          page: TeacherDetail(
-            teachers: teachers[index],
+        return CustomInkWell(
+          onTap: () => AppNavigator.push(
+            context,
+            TeacherDetail(
+              teachers: teachers[index],
+            ),
+          ),
+          borderRadius: 8,
+          defaultColor: AppColors.secondary,
+          child: CardGuru(
+            nip: teachers[index].nip,
+            title: teachers[index].nama,
           ),
         );
       },

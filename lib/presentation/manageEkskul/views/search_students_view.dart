@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/students_state.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/stundets_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/landing/not_found.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_student_appbar.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/card/card_user.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_student_by_name.dart';
 
-import '../../../common/helper/app_navigation.dart';
-import 'murid_detail.dart';
+import '../../../common/bloc/kelas/students_state.dart';
+import '../../../common/bloc/kelas/stundets_cubit.dart';
+import '../../../common/widget/card/card_user.dart';
+import '../../../common/widget/landing/not_found.dart';
+import '../../../domain/entities/auth/user.dart';
+import '../../../domain/usecases/students/get_student_by_name.dart';
+import '../../../common/widget/searchbar/search_student_appbar.dart';
 
-class SearchScreenStudent extends StatelessWidget {
-  const SearchScreenStudent({super.key});
+class SearchStudentsView extends StatelessWidget {
+  const SearchStudentsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +58,7 @@ class SearchScreenStudent extends StatelessWidget {
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         return CardUser(
-          onTap: () => AppNavigator.push(
-            context,
-            MuridDetail(
-              user: students[index],
-            ),
-          ),
+          onTap: () => Navigator.pop(context, students[index].nama),
           name: students[index].nama!,
           nisn: students[index].nisn!,
           gender: students[index].gender!,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../common/bloc/kelas/stundets_cubit.dart';
+import '../../bloc/kelas/stundets_cubit.dart';
 
 class SearchStudentAppBar extends StatelessWidget {
   const SearchStudentAppBar({super.key});

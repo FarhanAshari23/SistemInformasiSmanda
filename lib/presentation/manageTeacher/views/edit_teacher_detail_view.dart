@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/bloc/teacher_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
 
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/bloc/kelas/kelas_display_state.dart';

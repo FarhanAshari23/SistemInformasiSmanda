@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/card/card_guru.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/bloc/teacher_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/teachers/views/teacher_detail.dart';
 
+import '../../../common/helper/app_navigation.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../home/bloc/teacher_state.dart';
+import '../../../common/bloc/teacher/teacher_state.dart';
 
 class TeacherView extends StatelessWidget {
   const TeacherView({super.key});
@@ -56,11 +58,18 @@ class TeacherView extends StatelessWidget {
                                 mainAxisExtent: height * 0.25,
                               ),
                               itemBuilder: (context, index) {
-                                return CardGuru(
-                                  nip: state.teacher[index].nip,
-                                  title: state.teacher[index].nama,
-                                  page: TeacherDetail(
-                                    teachers: state.teacher[index],
+                                return CustomInkWell(
+                                  onTap: () => AppNavigator.push(
+                                    context,
+                                    TeacherDetail(
+                                      teachers: state.teacher[index],
+                                    ),
+                                  ),
+                                  borderRadius: 8,
+                                  defaultColor: AppColors.secondary,
+                                  child: CardGuru(
+                                    nip: state.teacher[index].nip,
+                                    title: state.teacher[index].nama,
                                   ),
                                 );
                               },
