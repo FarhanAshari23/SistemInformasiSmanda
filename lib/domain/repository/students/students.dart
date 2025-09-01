@@ -7,9 +7,6 @@ abstract class StudentRepository {
   Future<Either> acceptStudentAccount(String nisn);
   Future<Either> deleteStudent(String nisnStudent);
   Future<Either> getAllKelas();
-  Future<Either> getKelasSepuluh();
-  Future<Either> getKelasSebelas();
-  Future<Either> getKelasDuabelas();
   Future<Either> searchStudentByNISN(String nisnStudent);
   Future<Either> getStudent();
   Future<Either> getStudentsByClass(String kelas);

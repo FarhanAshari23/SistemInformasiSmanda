@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_display_state.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_sebelas_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
@@ -17,16 +17,19 @@ class ListKelasSebelas extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return BlocProvider(
-      create: (context) => KelasSebelasCubit()..displaySebelas(),
+      create: (context) => GetAllKelasCubit()..displayAll(),
       child: SizedBox(
         width: double.infinity,
         height: height * 0.05,
-        child: BlocBuilder<KelasSebelasCubit, KelasDisplayState>(
+        child: BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
           builder: (context, state) {
             if (state is KelasDisplayLoading) {
               return const ListKelasLoading();
             }
             if (state is KelasDisplayLoaded) {
+              final kelas = state.kelas
+                  .where((element) => element['degree'] == 11)
+                  .toList();
               return BlocProvider(
                 create: (context) => KelasNavigationCubit(),
                 child: ListView.separated(
@@ -36,7 +39,7 @@ class ListKelasSebelas extends StatelessWidget {
                       onTap: () {
                         context.read<KelasNavigationCubit>().changeColor(index);
                         context.read<StudentsDisplayCubit>().displayStudents(
-                            params: state.kelas[index].data()['value']);
+                            params: kelas[index].data()['class']);
                       },
                       borderRadius: 12,
                       defaultColor:
@@ -48,7 +51,7 @@ class ListKelasSebelas extends StatelessWidget {
                         height: height * 0.035,
                         child: Center(
                           child: Text(
-                            state.kelas[index].data()['value'],
+                            kelas[index].data()['class'],
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
@@ -65,7 +68,7 @@ class ListKelasSebelas extends StatelessWidget {
                   },
                   separatorBuilder: (context, index) =>
                       SizedBox(width: width * 0.01),
-                  itemCount: state.kelas.length,
+                  itemCount: kelas.length,
                 ),
               );
             }

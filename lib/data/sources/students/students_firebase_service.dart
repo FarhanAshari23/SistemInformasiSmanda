@@ -258,16 +258,12 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   @override
   Future<Either> getAllKelas() async {
     try {
-      final results = await Future.wait([
-        FirebaseFirestore.instance.collection('Sepuluh').get(),
-        FirebaseFirestore.instance.collection('Sebelas').get(),
-        FirebaseFirestore.instance.collection('Duabelas').get(),
-      ]);
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> allDataClass = [];
-      for (var snapshot in results) {
-        allDataClass.addAll(snapshot.docs);
-      }
-      return Right(allDataClass);
+      var returnedData = await FirebaseFirestore.instance
+          .collection('Kelas')
+          .orderBy('degree')
+          .orderBy('order')
+          .get();
+      return Right(returnedData.docs);
     } catch (e) {
       return const Left('Please try again');
     }

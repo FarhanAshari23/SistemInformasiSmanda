@@ -85,21 +85,6 @@ class StudentsRepositoryImpl extends StudentRepository {
   }
 
   @override
-  Future<Either> getKelasSepuluh() async {
-    return await sl<StudentsFirebaseService>().getKelasSepuluh();
-  }
-
-  @override
-  Future<Either> getKelasDuabelas() async {
-    return await sl<StudentsFirebaseService>().getKelasDuabelas();
-  }
-
-  @override
-  Future<Either> getKelasSebelas() async {
-    return await sl<StudentsFirebaseService>().getKelasSebelas();
-  }
-
-  @override
   Future<Either> getClassDuabelasInit() async {
     var returnedData =
         await sl<StudentsFirebaseService>().getClassDuabelasInit();
