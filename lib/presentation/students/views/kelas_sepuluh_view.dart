@@ -6,7 +6,6 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_student
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/students_state.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/stundets_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/card/card_user.dart';
-import 'package:new_sistem_informasi_smanda/presentation/students/bloc/sepuluh_init_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/students/views/murid_detail.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/list_view/list_kelas_sepuluh.dart';
 
@@ -24,10 +23,8 @@ class KelasSepuluhView extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) =>
-                StudentsDisplayCubit(usecase: GetStudentsWithKelas()),
-          ),
-          BlocProvider(
-            create: (context) => SepuluhInitCubit()..displaySepuluhInit(),
+                StudentsDisplayCubit(usecase: GetStudentsWithKelas())
+                  ..displayStudentsInit(params: '10 1'),
           ),
         ],
         child: SafeArea(
@@ -82,42 +79,7 @@ class KelasSepuluhView extends StatelessWidget {
                               child: Text('Something wrongs'),
                             );
                           }
-                          return BlocBuilder<SepuluhInitCubit,
-                              StudentsDisplayState>(
-                            builder: (context, state) {
-                              if (state is StudentsDisplayLoading) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              if (state is StudentsDisplayLoaded) {
-                                return state.students.isNotEmpty
-                                    ? ListView.separated(
-                                        itemBuilder: (context, index) {
-                                          return CardUser(
-                                              onTap: () => AppNavigator.push(
-                                                    context,
-                                                    MuridDetail(
-                                                      user:
-                                                          state.students[index],
-                                                    ),
-                                                  ),
-                                              name: state.students[index].nama!,
-                                              nisn: state.students[index].nisn!,
-                                              gender: state
-                                                  .students[index].gender!);
-                                        },
-                                        separatorBuilder: (context, index) =>
-                                            SizedBox(height: height * 0.02),
-                                        itemCount: state.students.length,
-                                      )
-                                    : const Center(
-                                        child: Text('Belum ada data'),
-                                      );
-                              }
-                              return Container();
-                            },
-                          );
+                          return Container();
                         },
                       ),
                     )

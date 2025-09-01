@@ -11,9 +11,6 @@ abstract class StudentRepository {
   Future<Either> getStudent();
   Future<Either> getStudentsByClass(String kelas);
   Future<Either> getStudentByRegister();
-  Future<Either> getClassSepuluhInit();
-  Future<Either> getClassSebelasInit();
-  Future<Either> getClassDuabelasInit();
   Future<Either> deleteStudentByClass(String kelas);
   Future<Either> getStudentsByname(String name);
 }

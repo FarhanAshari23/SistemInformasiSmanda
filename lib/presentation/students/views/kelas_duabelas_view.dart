@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
-import 'package:new_sistem_informasi_smanda/presentation/students/bloc/duabelas_init_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/students/views/murid_detail.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/list_view/list_kelas_duabelas.dart';
 
@@ -23,10 +22,8 @@ class KelasDuabelasView extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) =>
-                StudentsDisplayCubit(usecase: GetStudentsWithKelas()),
-          ),
-          BlocProvider(
-            create: (context) => DuabelasInitCubit()..displayDuabelasInit(),
+                StudentsDisplayCubit(usecase: GetStudentsWithKelas())
+                  ..displayStudentsInit(params: '12 1'),
           ),
         ],
         child: SafeArea(
@@ -83,43 +80,7 @@ class KelasDuabelasView extends StatelessWidget {
                               child: Text('Something wrongs'),
                             );
                           }
-                          return BlocBuilder<DuabelasInitCubit,
-                              StudentsDisplayState>(
-                            builder: (context, state) {
-                              if (state is StudentsDisplayLoading) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              if (state is StudentsDisplayLoaded) {
-                                return state.students.isNotEmpty
-                                    ? ListView.separated(
-                                        itemBuilder: (context, index) {
-                                          return CardUser(
-                                              onTap: () => AppNavigator.push(
-                                                    context,
-                                                    MuridDetail(
-                                                      user:
-                                                          state.students[index],
-                                                    ),
-                                                  ),
-                                              name: state.students[index].nama!,
-                                              nisn: state.students[index].nisn!,
-                                              gender: state
-                                                  .students[index].gender!);
-                                        },
-                                        separatorBuilder: (context, index) =>
-                                            SizedBox(height: height * 0.02),
-                                        itemCount: state.students.length,
-                                      )
-                                    : const Center(
-                                        child: Text(
-                                            'Data kelas 12 belum dimasukkan'),
-                                      );
-                              }
-                              return Container();
-                            },
-                          );
+                          return Container();
                         },
                       ),
                     )

@@ -36,7 +36,6 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/get_all_jad
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/accept_student_register_usecase.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_student_by_class.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_all_kelas_usecase.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_sepuluh_init.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_student.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_student_by_name.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_students_register.dart';
@@ -61,8 +60,6 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teach
 import 'domain/usecases/news/create_news.dart';
 import 'domain/usecases/schedule/get_jadwal.dart';
 import 'domain/usecases/students/delete_student.dart';
-import 'domain/usecases/students/get_duabelas_init.dart';
-import 'domain/usecases/students/get_sebelas_init.dart';
 
 final sl = GetIt.instance;
 
@@ -200,18 +197,6 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<GetStudentByNameUsecase>(
     GetStudentByNameUsecase(),
-  );
-
-  sl.registerSingleton<GetSepuluhInitUsecase>(
-    GetSepuluhInitUsecase(),
-  );
-
-  sl.registerSingleton<GetSebelasInitUsecase>(
-    GetSebelasInitUsecase(),
-  );
-
-  sl.registerSingleton<GetDuabelasInitUsecase>(
-    GetDuabelasInitUsecase(),
   );
 
   sl.registerSingleton<GetAllKelasUsecase>(

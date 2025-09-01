@@ -6,7 +6,6 @@ import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/list_view/list_kelas_sepuluh.dart';
 import '../../../domain/usecases/students/get_students_with_kelas.dart';
-import '../../students/bloc/sepuluh_init_cubit.dart';
 import '../widgets/card_edit_user.dart';
 
 class EditSepuluhView extends StatelessWidget {
@@ -22,10 +21,8 @@ class EditSepuluhView extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) =>
-                StudentsDisplayCubit(usecase: GetStudentsWithKelas()),
-          ),
-          BlocProvider(
-            create: (context) => SepuluhInitCubit()..displaySepuluhInit(),
+                StudentsDisplayCubit(usecase: GetStudentsWithKelas())
+                  ..displayStudentsInit(params: '10 1'),
           ),
         ],
         child: SafeArea(
@@ -72,33 +69,7 @@ class EditSepuluhView extends StatelessWidget {
                               child: Text('Something wrongs'),
                             );
                           }
-                          return BlocBuilder<SepuluhInitCubit,
-                              StudentsDisplayState>(
-                            builder: (context, state) {
-                              if (state is StudentsDisplayLoading) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              if (state is StudentsDisplayLoaded) {
-                                return state.students.isNotEmpty
-                                    ? ListView.separated(
-                                        itemBuilder: (context, index) {
-                                          return CardEditUser(
-                                            student: state.students[index],
-                                          );
-                                        },
-                                        separatorBuilder: (context, index) =>
-                                            SizedBox(height: height * 0.02),
-                                        itemCount: state.students.length,
-                                      )
-                                    : const Center(
-                                        child: Text('Belum ada data'),
-                                      );
-                              }
-                              return Container();
-                            },
-                          );
+                          return Container();
                         },
                       ),
                     )

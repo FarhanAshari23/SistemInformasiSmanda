@@ -9,13 +9,7 @@ abstract class StudentsFirebaseService {
   Future<Either> getStudent();
   Future<Either> getStudentsByClass(String kelas);
   Future<Either> acceptStudentAccount(String nisn);
-  Future<Either> getKelasSepuluh();
-  Future<Either> getKelasSebelas();
-  Future<Either> getKelasDuabelas();
   Future<Either> getAllKelas();
-  Future<Either> getClassSepuluhInit();
-  Future<Either> getClassSebelasInit();
-  Future<Either> getClassDuabelasInit();
   Future<Either> getStudentByRegister();
   Future<Either> updateStudent(UpdateUserReq updateUserReq);
   Future<Either> deleteStudent(String nisnStudent);
@@ -123,81 +117,6 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
           .where("nama", isGreaterThanOrEqualTo: nameCapital)
           .where('isAdmin', isEqualTo: false)
           .where('nama', isLessThan: '${nameCapital}z')
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
-    } catch (e) {
-      return const Left("Error get data, please try again later");
-    }
-  }
-
-  @override
-  Future<Either> getKelasSepuluh() async {
-    try {
-      var returnedData =
-          await FirebaseFirestore.instance.collection('Sepuluh').get();
-      return Right(returnedData.docs);
-    } catch (e) {
-      return const Left('Please try again');
-    }
-  }
-
-  @override
-  Future<Either> getKelasDuabelas() async {
-    try {
-      var returnedData =
-          await FirebaseFirestore.instance.collection('Duabelas').get();
-      return Right(returnedData.docs);
-    } catch (e) {
-      return const Left('Please try again');
-    }
-  }
-
-  @override
-  Future<Either> getKelasSebelas() async {
-    try {
-      var returnedData =
-          await FirebaseFirestore.instance.collection('Sebelas').get();
-      return Right(returnedData.docs);
-    } catch (e) {
-      return const Left('Please try again');
-    }
-  }
-
-  @override
-  Future<Either> getClassDuabelasInit() async {
-    try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Students")
-          .where("kelas", isEqualTo: '12 1')
-          .orderBy('nama')
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
-    } catch (e) {
-      return const Left("Error get data, please try again later");
-    }
-  }
-
-  @override
-  Future<Either> getClassSebelasInit() async {
-    try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Students")
-          .where("kelas", isEqualTo: '11 1')
-          .orderBy('nama')
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
-    } catch (e) {
-      return const Left("Error get data, please try again later");
-    }
-  }
-
-  @override
-  Future<Either> getClassSepuluhInit() async {
-    try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Students")
-          .where("kelas", isEqualTo: '10 1')
-          .orderBy('nama')
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {

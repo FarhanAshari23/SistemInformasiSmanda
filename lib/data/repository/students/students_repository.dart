@@ -85,66 +85,6 @@ class StudentsRepositoryImpl extends StudentRepository {
   }
 
   @override
-  Future<Either> getClassDuabelasInit() async {
-    var returnedData =
-        await sl<StudentsFirebaseService>().getClassDuabelasInit();
-    return returnedData.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(
-          List.from(data)
-              .map(
-                (e) => UserModel.fromMap(e).toEntity(),
-              )
-              .toList(),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<Either> getClassSebelasInit() async {
-    var returnedData =
-        await sl<StudentsFirebaseService>().getClassSebelasInit();
-    return returnedData.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(
-          List.from(data)
-              .map(
-                (e) => UserModel.fromMap(e).toEntity(),
-              )
-              .toList(),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<Either> getClassSepuluhInit() async {
-    var returnedData =
-        await sl<StudentsFirebaseService>().getClassSepuluhInit();
-    return returnedData.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(
-          List.from(data)
-              .map(
-                (e) => UserModel.fromMap(e).toEntity(),
-              )
-              .toList(),
-        );
-      },
-    );
-  }
-
-  @override
   Future<Either> deleteStudentByClass(String kelas) async {
     return await sl<StudentsFirebaseService>().deleteStudentByClass(kelas);
   }

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/list_view/list_kelas_duabelas.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_student_by_class.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/views/edit_student_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/students/bloc/duabelas_init_cubit.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
@@ -30,10 +29,8 @@ class EditDuabelasView extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) =>
-                StudentsDisplayCubit(usecase: GetStudentsWithKelas()),
-          ),
-          BlocProvider(
-            create: (context) => DuabelasInitCubit()..displayDuabelasInit(),
+                StudentsDisplayCubit(usecase: GetStudentsWithKelas())
+                  ..displayStudentsInit(params: '12 1'),
           ),
         ],
         child: SafeArea(
@@ -210,7 +207,7 @@ class EditDuabelasView extends StatelessWidget {
                                     itemCount: state.students.length + 1,
                                   )
                                 : const Center(
-                                    child: Text('Belum ada kelas'),
+                                    child: Text('Belum ada murid'),
                                   );
                           }
                           if (state is StudentsDisplayFailure) {
@@ -218,171 +215,7 @@ class EditDuabelasView extends StatelessWidget {
                               child: Text('Something wrongs'),
                             );
                           }
-                          return BlocBuilder<DuabelasInitCubit,
-                              StudentsDisplayState>(
-                            builder: (context, state) {
-                              if (state is StudentsDisplayLoading) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              if (state is StudentsDisplayLoaded) {
-                                return state.students.isNotEmpty
-                                    ? ListView.separated(
-                                        itemBuilder: (context, index) {
-                                          if (index == 0) {
-                                            return Padding(
-                                              padding: EdgeInsets.only(
-                                                right: width * 0.5,
-                                              ),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return Dialog(
-                                                        backgroundColor:
-                                                            AppColors.secondary,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      20.0),
-                                                        ),
-                                                        child: SizedBox(
-                                                          height:
-                                                              height * 0.565,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .symmetric(
-                                                              horizontal: 12,
-                                                            ),
-                                                            child: Column(
-                                                              children: [
-                                                                Image.asset(
-                                                                  AppImages
-                                                                      .splashDelete,
-                                                                ),
-                                                                SizedBox(
-                                                                    height:
-                                                                        height *
-                                                                            0.02),
-                                                                Text(
-                                                                  'Apakah Anda Yakin Ingin Menghapus Seluruh Data Kelas ${state.students[0].kelas}?',
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800,
-                                                                    color: AppColors
-                                                                        .inversePrimary,
-                                                                  ),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                ),
-                                                                SizedBox(
-                                                                    height:
-                                                                        height *
-                                                                            0.02),
-                                                                BlocProvider(
-                                                                  create: (context) =>
-                                                                      ButtonStateCubit(),
-                                                                  child: BlocListener<
-                                                                      ButtonStateCubit,
-                                                                      ButtonState>(
-                                                                    listener:
-                                                                        (context,
-                                                                            state) {
-                                                                      if (state
-                                                                          is ButtonSuccessState) {
-                                                                        AppNavigator.pushReplacement(
-                                                                            context,
-                                                                            const EditStudentView());
-                                                                      }
-                                                                      if (state
-                                                                          is ButtonFailureState) {
-                                                                        var snackbar =
-                                                                            SnackBar(
-                                                                          content:
-                                                                              Text(state.errorMessage),
-                                                                          behavior:
-                                                                              SnackBarBehavior.floating,
-                                                                        );
-                                                                        ScaffoldMessenger.of(context)
-                                                                            .showSnackBar(snackbar);
-                                                                      }
-                                                                    },
-                                                                    child: Builder(
-                                                                        builder:
-                                                                            (context) {
-                                                                      return BasicButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          context
-                                                                              .read<ButtonStateCubit>()
-                                                                              .execute(
-                                                                                usecase: DeleteStudentByClassUsecase(),
-                                                                                params: state.students[0].kelas,
-                                                                              );
-                                                                        },
-                                                                        title:
-                                                                            'Hapus',
-                                                                      );
-                                                                    }),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                child: Container(
-                                                  height: height * 0.075,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    color: AppColors.secondary,
-                                                  ),
-                                                  child: const Center(
-                                                    child: Text(
-                                                      'Hapus Semua',
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        color: AppColors
-                                                            .inversePrimary,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          } else {
-                                            return CardEditUser(
-                                              student:
-                                                  state.students[index - 1],
-                                            );
-                                          }
-                                        },
-                                        separatorBuilder: (context, index) =>
-                                            SizedBox(height: height * 0.02),
-                                        itemCount: state.students.length + 1,
-                                      )
-                                    : const Center(
-                                        child: Text('Belum ada data'),
-                                      );
-                              }
-                              return Container();
-                            },
-                          );
+                          return Container();
                         },
                       ),
                     )
