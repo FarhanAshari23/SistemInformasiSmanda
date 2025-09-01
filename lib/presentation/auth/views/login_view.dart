@@ -103,7 +103,6 @@ class LoginView extends StatelessWidget {
                         ),
                         textAlign: TextAlign.start,
                       ),
-                      Image.asset(Assets.images.rohis.path)
                     ],
                   ),
                   SizedBox(height: height * 0.015),

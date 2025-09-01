@@ -118,7 +118,7 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                             menuHeight: 200,
                             hintText: 'Kelas',
                             dropdownMenuEntries: state.kelas.map((doc) {
-                              final kelas = doc.data()['value'] as String;
+                              final kelas = doc.data()['class'] as String;
                               return DropdownMenuEntry(
                                 value: kelas,
                                 label: kelas,
