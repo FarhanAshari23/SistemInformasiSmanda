@@ -18,6 +18,7 @@ class UserModel {
   final bool isRegister;
   final String agama;
   Timestamp? timeIn;
+  List<dynamic>? keywords;
 
   UserModel({
     required this.email,
@@ -33,6 +34,7 @@ class UserModel {
     required this.agama,
     required this.isRegister,
     this.timeIn,
+    this.keywords,
   });
 
   Map<String, dynamic> toMap() {
@@ -50,24 +52,27 @@ class UserModel {
       'agama': agama,
       'is_register': isRegister,
       'jam_masuk': timeIn,
+      'keywords': keywords,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-        email: map['email'] ?? '',
-        nama: map['nama'] ?? '',
-        kelas: map['kelas'] ?? '',
-        nisn: map['nisn'] ?? '',
-        tanggalLahir: map['tanggal_lahir'] ?? '',
-        noHp: map['No_HP'] ?? '',
-        alamat: map['alamat'] ?? '',
-        ekskul: map['ekskul'] ?? '',
-        gender: map['gender']?.toInt() ?? 0,
-        isAdmin: map['isAdmin'] ?? false,
-        timeIn: map['jam_masuk'] ?? Timestamp.now(),
-        isRegister: map['is_register'] ?? false,
-        agama: map['agama'] ?? '');
+      email: map['email'] ?? '',
+      nama: map['nama'] ?? '',
+      kelas: map['kelas'] ?? '',
+      nisn: map['nisn'] ?? '',
+      tanggalLahir: map['tanggal_lahir'] ?? '',
+      noHp: map['No_HP'] ?? '',
+      alamat: map['alamat'] ?? '',
+      ekskul: map['ekskul'] ?? '',
+      gender: map['gender']?.toInt() ?? 0,
+      isAdmin: map['isAdmin'] ?? false,
+      timeIn: map['jam_masuk'] ?? Timestamp.now(),
+      keywords: map['keywords'] ?? '',
+      isRegister: map['is_register'] ?? false,
+      agama: map['agama'] ?? '',
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -92,6 +97,7 @@ extension UserModelX on UserModel {
       agama: agama,
       timeIn: timeIn,
       isRegister: isRegister,
+      keyword: keywords,
     );
   }
 }

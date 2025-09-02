@@ -362,6 +362,7 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                     } else {
                       final cubit = context.read<GetAllKelasCubit>().state;
                       widget.userCreationReq.nama = _namaC.text;
+                      widget.userCreationReq.keywords = _namaC.text;
                       widget.userCreationReq.kelas =
                           cubit is KelasDisplayLoaded ? cubit.selected : '';
                       widget.userCreationReq.nisn = _nisnC.text;

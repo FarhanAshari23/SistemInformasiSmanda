@@ -12,6 +12,7 @@ class UserEntity {
   int? gender;
   bool? isAdmin;
   bool? isRegister;
+  List<dynamic>? keyword;
   String? agama;
   Timestamp? timeIn;
 
@@ -28,6 +29,7 @@ class UserEntity {
     required this.isAdmin,
     required this.agama,
     required this.isRegister,
+    this.keyword,
     this.timeIn,
   });
 }

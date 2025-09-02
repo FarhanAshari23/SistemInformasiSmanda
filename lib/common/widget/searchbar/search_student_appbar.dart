@@ -1,15 +1,45 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
 import '../../bloc/kelas/stundets_cubit.dart';
 
-class SearchStudentAppBar extends StatelessWidget {
+class SearchStudentAppBar extends StatefulWidget {
   const SearchStudentAppBar({super.key});
 
   @override
+  State<SearchStudentAppBar> createState() => _SearchStudentAppBarState();
+}
+
+class _SearchStudentAppBarState extends State<SearchStudentAppBar> {
+  final TextEditingController searchC = TextEditingController();
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    searchC.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String value) {
+    // cancel timer sebelumnya
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+    // set timer baru
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      if (value.isEmpty) {
+        context.read<StudentsDisplayCubit>().displayInitial();
+      } else {
+        context.read<StudentsDisplayCubit>().displayStudents(params: value);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController searchC = TextEditingController();
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
@@ -49,15 +79,7 @@ class SearchStudentAppBar extends StatelessWidget {
               child: Center(
                 child: TextField(
                   controller: searchC,
-                  onChanged: (value) {
-                    if (value.isEmpty) {
-                      context.read<StudentsDisplayCubit>().displayInitial();
-                    } else {
-                      context
-                          .read<StudentsDisplayCubit>()
-                          .displayStudents(params: value);
-                    }
-                  },
+                  onChanged: _onSearchChanged,
                   decoration: const InputDecoration(
                     hintText: 'Masukkan Nama:',
                     fillColor: AppColors.inversePrimary,

@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/signin_user_req.dart';
 
+import '../../../common/helper/generate_keyword.dart';
 import '../../models/auth/user_creation_req.dart';
 
 abstract class AuthFirebaseService {
@@ -75,6 +76,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
 
   @override
   Future<Either> signUp(UserCreationReq murid) async {
+    final keywords = generateKeywords(murid.nama ?? '');
     try {
       var returnedData =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -98,6 +100,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           'isAdmin': murid.isAdmin,
           'agama': murid.agama,
           'is_register': murid.isRegister,
+          'keywords': keywords,
         },
       );
       return const Right('Signup was succesfull');

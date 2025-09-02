@@ -12,6 +12,7 @@ class UserCreationReq {
   bool? isAdmin;
   bool? isRegister;
   String? agama;
+  String? keywords;
 
   UserCreationReq({
     this.email,
@@ -27,5 +28,6 @@ class UserCreationReq {
     this.isAdmin,
     this.agama,
     this.isRegister,
+    this.keywords,
   });
 }

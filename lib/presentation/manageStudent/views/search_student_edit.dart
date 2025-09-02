@@ -58,7 +58,7 @@ class SearchStudentEdit extends StatelessWidget {
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         return CardEditUser(
-          student: students[0],
+          student: students[index],
         );
       },
       separatorBuilder: (context, index) => SizedBox(height: height * 0.02),
