@@ -27,9 +27,8 @@ class ListKelasSebelas extends StatelessWidget {
               return const ListKelasLoading();
             }
             if (state is KelasDisplayLoaded) {
-              final kelas = state.kelas
-                  .where((element) => element['degree'] == 11)
-                  .toList();
+              final kelas =
+                  state.kelas.where((element) => element.degree == 11).toList();
               return BlocProvider(
                 create: (context) => KelasNavigationCubit(),
                 child: ListView.separated(
@@ -38,8 +37,9 @@ class ListKelasSebelas extends StatelessWidget {
                     return CustomInkWell(
                       onTap: () {
                         context.read<KelasNavigationCubit>().changeColor(index);
-                        context.read<StudentsDisplayCubit>().displayStudents(
-                            params: kelas[index].data()['class']);
+                        context
+                            .read<StudentsDisplayCubit>()
+                            .displayStudents(params: kelas[index].kelas);
                       },
                       borderRadius: 12,
                       defaultColor:
@@ -51,7 +51,7 @@ class ListKelasSebelas extends StatelessWidget {
                         height: height * 0.035,
                         child: Center(
                           child: Text(
-                            kelas[index].data()['class'],
+                            kelas[index].kelas,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,

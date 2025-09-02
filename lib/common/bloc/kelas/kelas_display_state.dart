@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/kelas/kelas.dart';
 
 abstract class KelasDisplayState {}
 
 class KelasDisplayLoading extends KelasDisplayState {}
 
 class KelasDisplayLoaded extends KelasDisplayState {
-  final List<QueryDocumentSnapshot<Map<String, dynamic>>> kelas;
+  final List<KelasEntity> kelas;
   final String? selected;
   KelasDisplayLoaded({
     required this.kelas,
@@ -13,7 +13,7 @@ class KelasDisplayLoaded extends KelasDisplayState {
   });
 
   KelasDisplayLoaded copyWith({
-    List<QueryDocumentSnapshot<Map<String, dynamic>>>? kelas,
+    List<KelasEntity>? kelas,
     String? selected,
   }) {
     return KelasDisplayLoaded(

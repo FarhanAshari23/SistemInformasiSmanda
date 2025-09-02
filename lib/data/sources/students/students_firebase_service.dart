@@ -182,7 +182,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
           .orderBy('degree')
           .orderBy('order')
           .get();
-      return Right(returnedData.docs);
+      return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
       return const Left('Please try again');
     }

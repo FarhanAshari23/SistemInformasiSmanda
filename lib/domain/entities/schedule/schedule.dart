@@ -2,6 +2,8 @@ import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
 
 class ScheduleEntity {
   final String kelas;
+  final int order;
+  final int degree;
   final List<DayEntity> hariSenin;
   final List<DayEntity> hariSelasa;
   final List<DayEntity> hariRabu;
@@ -10,6 +12,8 @@ class ScheduleEntity {
 
   ScheduleEntity({
     required this.kelas,
+    required this.degree,
+    required this.order,
     required this.hariSenin,
     required this.hariSelasa,
     required this.hariRabu,

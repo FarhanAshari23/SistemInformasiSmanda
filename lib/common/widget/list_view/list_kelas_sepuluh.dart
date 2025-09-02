@@ -27,9 +27,8 @@ class ListKelasSepuluh extends StatelessWidget {
               return const ListKelasLoading();
             }
             if (state is KelasDisplayLoaded) {
-              final kelas = state.kelas
-                  .where((element) => element['degree'] == 10)
-                  .toList();
+              final kelas =
+                  state.kelas.where((element) => element.degree == 10).toList();
               return BlocProvider(
                 create: (context) => KelasNavigationCubit(),
                 child: ListView.separated(
@@ -40,7 +39,7 @@ class ListKelasSepuluh extends StatelessWidget {
                       onTap: () {
                         context.read<KelasNavigationCubit>().changeColor(index);
                         context.read<StudentsDisplayCubit>().displayStudents(
-                              params: kelas[index].data()['class'],
+                              params: kelas[index].kelas,
                             );
                       },
                       defaultColor:
@@ -52,7 +51,7 @@ class ListKelasSepuluh extends StatelessWidget {
                         height: height * 0.035,
                         child: Center(
                           child: Text(
-                            kelas[index].data()['class'],
+                            kelas[index].kelas,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,

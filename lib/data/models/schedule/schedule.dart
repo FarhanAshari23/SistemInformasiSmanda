@@ -5,6 +5,8 @@ import 'package:new_sistem_informasi_smanda/domain/entities/schedule/schedule.da
 
 class ScheduleModel {
   final String kelas;
+  final int order;
+  final int degree;
   final List<DayModel> hariSenin;
   final List<DayModel> hariSelasa;
   final List<DayModel> hariRabu;
@@ -18,11 +20,15 @@ class ScheduleModel {
     required this.hariRabu,
     required this.hariKamis,
     required this.hariJumat,
+    required this.degree,
+    required this.order,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       "kelas": kelas,
+      "degree": degree,
+      "order": order,
       "Senin": hariSenin.map((e) => e.toMap()).toList(),
       'Selasa': hariSelasa.map((e) => e.toMap()).toList(),
       'Rabu': hariRabu.map((e) => e.toMap()).toList(),
@@ -34,6 +40,8 @@ class ScheduleModel {
   factory ScheduleModel.fromMap(Map<String, dynamic> map) {
     return ScheduleModel(
       kelas: map['kelas'] as String,
+      degree: map['degree'] as int,
+      order: map['order'] as int,
       hariSenin: List<DayModel>.from(
         map['Senin'].map(
           (e) => DayModel.fromMap(e),
@@ -72,6 +80,8 @@ extension ScheduleXModel on ScheduleModel {
   ScheduleEntity toEntity() {
     return ScheduleEntity(
       kelas: kelas,
+      degree: degree,
+      order: order,
       hariSenin: hariSenin.map((e) => e.toEntity()).toList(),
       hariSelasa: hariSelasa.map((e) => e.toEntity()).toList(),
       hariRabu: hariRabu.map((e) => e.toEntity()).toList(),
@@ -85,6 +95,8 @@ extension ScheduleXEntity on ScheduleEntity {
   ScheduleModel fromEntity() {
     return ScheduleModel(
       kelas: kelas,
+      degree: degree,
+      order: order,
       hariSenin: hariSenin.map((e) => e.fromEntity()).toList(),
       hariSelasa: hariSelasa.map((e) => e.fromEntity()).toList(),
       hariRabu: hariRabu.map((e) => e.fromEntity()).toList(),

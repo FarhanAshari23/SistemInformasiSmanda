@@ -128,7 +128,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                               }
                               if (state is KelasDisplayLoaded) {
                                 final entries = state.kelas.map((doc) {
-                                  final kelas = doc.data()['class'] as String;
+                                  final kelas = doc.kelas;
                                   return DropdownMenuEntry(
                                     value: kelas,
                                     label: kelas,

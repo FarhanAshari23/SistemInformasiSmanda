@@ -29,8 +29,11 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   @override
   Future<Either> getAllJadwal() async {
     try {
-      var returnedData =
-          await FirebaseFirestore.instance.collection("Jadwals").get();
+      var returnedData = await FirebaseFirestore.instance
+          .collection("Jadwals")
+          .orderBy('degree')
+          .orderBy('order')
+          .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
       return const Left("Error get data, please try again later");

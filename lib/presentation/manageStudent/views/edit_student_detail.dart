@@ -147,7 +147,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                             menuHeight: 200,
                             hintText: widget.user.kelas,
                             dropdownMenuEntries: state.kelas.map((doc) {
-                              final kelas = doc.data()['class'] as String;
+                              final kelas = doc.kelas;
                               return DropdownMenuEntry(
                                 value: kelas,
                                 label: kelas,

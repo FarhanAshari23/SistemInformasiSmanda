@@ -109,7 +109,7 @@ class AddTeacherView extends StatelessWidget {
                                   menuHeight: 200,
                                   hintText: 'Wali Kelas:',
                                   dropdownMenuEntries: state.kelas.map((doc) {
-                                    final kelas = doc.data()['class'] as String;
+                                    final kelas = doc.kelas;
                                     return DropdownMenuEntry(
                                       value: kelas,
                                       label: kelas,

@@ -5,6 +5,7 @@ import 'package:new_sistem_informasi_smanda/data/sources/students/students_fireb
 import 'package:new_sistem_informasi_smanda/domain/repository/students/students.dart';
 
 import '../../../service_locator.dart';
+import '../../models/kelas/class.dart';
 
 class StudentsRepositoryImpl extends StudentRepository {
   @override
@@ -116,6 +117,20 @@ class StudentsRepositoryImpl extends StudentRepository {
 
   @override
   Future<Either> getAllKelas() async {
-    return await sl<StudentsFirebaseService>().getAllKelas();
+    var returnedData = await sl<StudentsFirebaseService>().getAllKelas();
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          List.from(data)
+              .map(
+                (e) => KelasModel.fromMap(e).toEntity(),
+              )
+              .toList(),
+        );
+      },
+    );
   }
 }

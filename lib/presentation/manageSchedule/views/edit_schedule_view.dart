@@ -28,24 +28,6 @@ class EditScheduleView extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (state is GetAllJadwalLoaded) {
-                    final List<String> data =
-                        state.jadwals.map((doc) => doc.kelas).toList();
-                    data.sort((a, b) {
-                      final aParts = a.split(' ');
-                      final bParts = b.split(' ');
-
-                      final aTingkat = int.parse(aParts[0]);
-                      final aSub = int.parse(aParts[1]);
-                      final bTingkat = int.parse(bParts[0]);
-                      final bSub = int.parse(bParts[1]);
-
-                      if (aTingkat != bTingkat) {
-                        return aTingkat.compareTo(bTingkat);
-                      } else {
-                        return aSub.compareTo(bSub);
-                      }
-                    });
-
                     return Expanded(
                       child: ListView.separated(
                         padding: const EdgeInsets.symmetric(
@@ -60,7 +42,7 @@ class EditScheduleView extends StatelessWidget {
                             ),
                             color: AppColors.primary,
                             child: Text(
-                              data[index],
+                              state.jadwals[index].kelas,
                               style: const TextStyle(
                                 color: Colors.white,
                               ),

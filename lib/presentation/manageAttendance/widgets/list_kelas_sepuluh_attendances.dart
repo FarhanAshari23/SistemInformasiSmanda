@@ -29,9 +29,8 @@ class ListKelasSepuluhAttendances extends StatelessWidget {
               return const ListKelasLoading();
             }
             if (state is KelasDisplayLoaded) {
-              final kelas = state.kelas
-                  .where((element) => element['degree'] == 10)
-                  .toList();
+              final kelas =
+                  state.kelas.where((element) => element.degree == 10).toList();
               return BlocProvider(
                 create: (context) => KelasNavigationCubit(),
                 child: ListView.separated(
@@ -45,7 +44,7 @@ class ListKelasSepuluhAttendances extends StatelessWidget {
                             .displayAttendanceStudent(
                               params: ParamAttendanceEntity(
                                 date: date,
-                                kelas: kelas[index].data()['class'],
+                                kelas: kelas[index].kelas,
                               ),
                             );
                       },
@@ -61,7 +60,7 @@ class ListKelasSepuluhAttendances extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            kelas[index].data()['class'],
+                            kelas[index].kelas,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
