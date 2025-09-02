@@ -89,7 +89,7 @@ class AddTeacherView extends StatelessWidget {
                                   controller: _waliKelasC,
                                   autocorrect: false,
                                   decoration: const InputDecoration(
-                                    hintText: 'kelas:',
+                                    hintText: 'Wali Kelas:',
                                   ),
                                 );
                               }
