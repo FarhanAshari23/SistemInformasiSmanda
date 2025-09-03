@@ -125,8 +125,8 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                 ),
                 Builder(builder: (context) {
                   return BasicButton(
-                    onPressed: () {
-                      context.read<ButtonStateCubit>().execute(
+                    onPressed: () async {
+                      await context.read<ButtonStateCubit>().execute(
                             usecase: CreateClassUsecase(),
                             params: KelasEntity(
                               kelas: _kelasC.text,

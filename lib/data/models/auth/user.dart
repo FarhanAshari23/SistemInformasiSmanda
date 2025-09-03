@@ -69,7 +69,7 @@ class UserModel {
       gender: map['gender']?.toInt() ?? 0,
       isAdmin: map['isAdmin'] ?? false,
       timeIn: map['jam_masuk'] ?? Timestamp.now(),
-      keywords: map['keywords'] ?? '',
+      keywords: map['keywords'] ?? [],
       isRegister: map['is_register'] ?? false,
       agama: map['agama'] ?? '',
     );
