@@ -58,6 +58,7 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_waka.dar
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teacher.dart';
 
 import 'domain/usecases/news/create_news.dart';
+import 'domain/usecases/schedule/create_class_usecase.dart';
 import 'domain/usecases/schedule/get_jadwal.dart';
 import 'domain/usecases/students/delete_student.dart';
 
@@ -244,5 +245,8 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<GetAllJadwalUsecase>(
     GetAllJadwalUsecase(),
+  );
+  sl.registerSingleton<CreateClassUsecase>(
+    CreateClassUsecase(),
   );
 }

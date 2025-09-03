@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/kelas/kelas.dart';
 import 'package:new_sistem_informasi_smanda/domain/repository/schedule/schedule.dart';
 
 import '../../../service_locator.dart';
@@ -40,5 +41,10 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
         );
       },
     );
+  }
+
+  @override
+  Future<Either> createClass(KelasEntity kelasReq) async {
+    return await sl<ScheduleFirebaseService>().createClass(kelasReq);
   }
 }
