@@ -4,12 +4,16 @@ import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/kelas/kelas.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_state.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/add_schedule_button.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/card_schedule.dart';
 
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/schedule/create_class_usecase.dart';
 import '../bloc/class_field_cubit.dart';
+import '../bloc/create_schedule_cubit.dart';
 
 class AddScheduleView extends StatefulWidget {
   const AddScheduleView({super.key});
@@ -36,6 +40,9 @@ class _AddScheduleViewState extends State<AddScheduleView> {
         ),
         BlocProvider(
           create: (context) => ButtonStateCubit(),
+        ),
+        BlocProvider(
+          create: (context) => CreateScheduleCubit(),
         ),
       ],
       child: BlocListener<ButtonStateCubit, ButtonState>(
@@ -115,11 +122,54 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                         ),
                       );
                     }
-                    return Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.all(16),
-                        color: Colors.yellow,
-                      ),
+                    return BlocBuilder<CreateScheduleCubit,
+                        CreateScheduleState>(
+                      builder: (context, state) {
+                        return Expanded(
+                          child: ListView(
+                            children: state.schedules.keys.map((day) {
+                              return Card(
+                                margin: const EdgeInsets.all(8),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        day,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      // Daftar aktivitas
+                                      Column(
+                                        children: [
+                                          for (int i = 0;
+                                              i < state.schedules[day]!.length;
+                                              i++)
+                                            CardSchedule(
+                                              day: day,
+                                              index: i,
+                                              schedule:
+                                                  state.schedules[day]![i],
+                                            ),
+
+                                          // Tombol tambah
+                                          AddScheduleButton(day: day),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
