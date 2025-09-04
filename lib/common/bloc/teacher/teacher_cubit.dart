@@ -18,4 +18,11 @@ class TeacherCubit extends Cubit<TeacherState> {
       },
     );
   }
+
+  void selectItem(String? value) {
+    final currentState = state;
+    if (currentState is TeacherLoaded) {
+      emit(currentState.copyWith(selected: value));
+    }
+  }
 }

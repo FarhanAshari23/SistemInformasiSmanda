@@ -6,7 +6,18 @@ class TeacherLoading extends TeacherState {}
 
 class TeacherLoaded extends TeacherState {
   final List<TeacherEntity> teacher;
-  TeacherLoaded({required this.teacher});
+  final String? selected;
+  TeacherLoaded({required this.teacher, this.selected});
+
+  TeacherLoaded copyWith({
+    List<TeacherEntity>? teacher,
+    String? selected,
+  }) {
+    return TeacherLoaded(
+      teacher: teacher ?? this.teacher,
+      selected: selected ?? this.selected,
+    );
+  }
 }
 
 class TeacherFailure extends TeacherState {

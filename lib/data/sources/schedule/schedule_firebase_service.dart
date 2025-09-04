@@ -9,6 +9,7 @@ import '../../../domain/entities/kelas/kelas.dart';
 abstract class ScheduleFirebaseService {
   Future<Either> getJadwal();
   Future<Either> getAllJadwal();
+  Future<Either> getActivities();
   Future<Either> createClass(KelasEntity kelasReq);
 }
 
@@ -76,6 +77,17 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
       return const Right('Data kelas berhasil ditambahkan');
     } catch (e) {
       return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> getActivities() async {
+    try {
+      var returnedData =
+          await FirebaseFirestore.instance.collection('Activities').get();
+      return Right(returnedData.docs.map((e) => e.data()).toList());
+    } catch (e) {
+      return const Left('Please try again');
     }
   }
 }

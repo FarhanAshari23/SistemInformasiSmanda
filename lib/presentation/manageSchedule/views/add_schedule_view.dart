@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/kelas/kelas.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_state.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/durasi_cubit.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_activities_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/add_schedule_button.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/card_schedule.dart';
 
@@ -43,6 +46,15 @@ class _AddScheduleViewState extends State<AddScheduleView> {
         ),
         BlocProvider(
           create: (context) => CreateScheduleCubit(),
+        ),
+        BlocProvider(
+          create: (context) => TeacherCubit()..displayTeacher(),
+        ),
+        BlocProvider(
+          create: (context) => GetActivitiesCubit()..displayActivites(),
+        ),
+        BlocProvider(
+          create: (context) => DurasiCubit(),
         ),
       ],
       child: BlocListener<ButtonStateCubit, ButtonState>(
