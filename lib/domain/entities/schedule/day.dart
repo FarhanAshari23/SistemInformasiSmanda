@@ -8,4 +8,12 @@ class DayEntity {
     required this.kegiatan,
     required this.pelaksana,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      "jam": jam,
+      "kegiatan": kegiatan,
+      "pelaksana": pelaksana,
+    };
+  }
 }

@@ -4,7 +4,9 @@ import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart
 import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
+import 'package:new_sistem_informasi_smanda/data/models/schedule/schedule.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/kelas/kelas.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/schedule/schedule.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_state.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/durasi_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_activities_cubit.dart';
@@ -15,6 +17,7 @@ import '../../../common/bloc/button/button_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/schedule/create_class_usecase.dart';
+import '../../../domain/usecases/schedule/create_schedule_usecase.dart';
 import '../bloc/class_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
 
@@ -188,6 +191,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                 Builder(builder: (context) {
                   return BasicButton(
                     onPressed: () async {
+                      final cubit = context.read<CreateScheduleCubit>();
                       await context.read<ButtonStateCubit>().execute(
                             usecase: CreateClassUsecase(),
                             params: KelasEntity(
@@ -196,6 +200,18 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                               degree: 0,
                             ),
                           );
+                      await context.read<ButtonStateCubit>().execute(
+                          usecase: CreateScheduleUsecase(),
+                          params: ScheduleModel(
+                              kelas: _kelasC.text,
+                              hari: cubit.state.schedules));
+                      var snackbar = SnackBar(
+                        content: Text(
+                          'Berhasil menambahkan jadwal untuk kelas ${_kelasC.text}',
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
                       Navigator.pop(context);
                     },
                     title: 'Tambah Jadwal',

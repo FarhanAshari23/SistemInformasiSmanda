@@ -5,15 +5,15 @@ import 'package:new_sistem_informasi_smanda/domain/entities/schedule/schedule.da
 
 class ScheduleModel {
   final String kelas;
-  final int order;
-  final int degree;
+  final int? order;
+  final int? degree;
   final Map<String, List<DayModel>> hari;
 
   ScheduleModel({
     required this.kelas,
     required this.hari,
-    required this.degree,
-    required this.order,
+    this.degree,
+    this.order,
   });
 
   Map<String, dynamic> toMap() {

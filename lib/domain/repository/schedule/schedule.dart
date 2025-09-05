@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../data/models/schedule/schedule.dart';
 import '../../entities/kelas/kelas.dart';
 
 abstract class ScheduleRepository {
@@ -7,5 +8,5 @@ abstract class ScheduleRepository {
   Future<Either> getAllJadwal();
   Future<Either> getActivities();
   Future<Either> createClass(KelasEntity kelasReq);
-  Future<Either> createJadwal();
+  Future<Either> createJadwal(ScheduleModel scheduleReq);
 }

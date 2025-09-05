@@ -5,12 +5,15 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../domain/entities/kelas/kelas.dart';
+import '../../../domain/entities/schedule/day.dart';
+import '../../models/schedule/schedule.dart';
 
 abstract class ScheduleFirebaseService {
   Future<Either> getJadwal();
   Future<Either> getAllJadwal();
   Future<Either> getActivities();
   Future<Either> createClass(KelasEntity kelasReq);
+  Future<Either> createSchedule(ScheduleModel scheduleReq);
 }
 
 class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
@@ -88,6 +91,18 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
       return const Left('Please try again');
+    }
+  }
+
+  @override
+  Future<Either> createSchedule(ScheduleModel scheduleReq) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Jadwals')
+          .add(scheduleReq.toMap());
+      return const Right("Success add schedule data");
+    } catch (e) {
+      return Left('Something error: $e');
     }
   }
 }
