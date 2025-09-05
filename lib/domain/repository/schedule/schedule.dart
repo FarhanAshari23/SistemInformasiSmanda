@@ -7,4 +7,5 @@ abstract class ScheduleRepository {
   Future<Either> getAllJadwal();
   Future<Either> getActivities();
   Future<Either> createClass(KelasEntity kelasReq);
+  Future<Either> createJadwal();
 }

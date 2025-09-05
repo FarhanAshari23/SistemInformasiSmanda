@@ -65,4 +65,10 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
       },
     );
   }
+
+  @override
+  Future<Either> createJadwal() async {
+    // TODO: implement createJadwal
+    throw UnimplementedError();
+  }
 }

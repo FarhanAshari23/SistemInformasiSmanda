@@ -7,19 +7,11 @@ class ScheduleModel {
   final String kelas;
   final int order;
   final int degree;
-  final List<DayModel> hariSenin;
-  final List<DayModel> hariSelasa;
-  final List<DayModel> hariRabu;
-  final List<DayModel> hariKamis;
-  final List<DayModel> hariJumat;
+  final Map<String, List<DayModel>> hari;
 
   ScheduleModel({
     required this.kelas,
-    required this.hariSenin,
-    required this.hariSelasa,
-    required this.hariRabu,
-    required this.hariKamis,
-    required this.hariJumat,
+    required this.hari,
     required this.degree,
     required this.order,
   });
@@ -29,44 +21,26 @@ class ScheduleModel {
       "kelas": kelas,
       "degree": degree,
       "order": order,
-      "Senin": hariSenin.map((e) => e.toMap()).toList(),
-      'Selasa': hariSelasa.map((e) => e.toMap()).toList(),
-      'Rabu': hariRabu.map((e) => e.toMap()).toList(),
-      'Kamis': hariKamis.map((e) => e.toMap()).toList(),
-      'Jumat': hariJumat.map((e) => e.toMap()).toList(),
+      ...hari.map(
+        (key, value) => MapEntry(key, value.map((e) => e.toMap()).toList()),
+      )
     };
   }
 
   factory ScheduleModel.fromMap(Map<String, dynamic> map) {
+    final hariKeys = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
+    final parsedHari = <String, List<DayModel>>{};
+
+    for (final key in hariKeys) {
+      final data = map[key] as List<dynamic>? ?? [];
+      parsedHari[key] = data.map((e) => DayModel.fromMap(e)).toList();
+    }
+
     return ScheduleModel(
-      kelas: map['kelas'] as String,
-      degree: map['degree'] as int,
-      order: map['order'] as int,
-      hariSenin: List<DayModel>.from(
-        map['Senin'].map(
-          (e) => DayModel.fromMap(e),
-        ),
-      ),
-      hariSelasa: List<DayModel>.from(
-        map['Selasa'].map(
-          (e) => DayModel.fromMap(e),
-        ),
-      ),
-      hariRabu: List<DayModel>.from(
-        map['Rabu'].map(
-          (e) => DayModel.fromMap(e),
-        ),
-      ),
-      hariKamis: List<DayModel>.from(
-        map['Kamis'].map(
-          (e) => DayModel.fromMap(e),
-        ),
-      ),
-      hariJumat: List<DayModel>.from(
-        map['Jumat'].map(
-          (e) => DayModel.fromMap(e),
-        ),
-      ),
+      kelas: map["kelas"] as String,
+      degree: map["degree"] as int,
+      order: map["order"] as int,
+      hari: parsedHari,
     );
   }
 
@@ -82,11 +56,9 @@ extension ScheduleXModel on ScheduleModel {
       kelas: kelas,
       degree: degree,
       order: order,
-      hariSenin: hariSenin.map((e) => e.toEntity()).toList(),
-      hariSelasa: hariSelasa.map((e) => e.toEntity()).toList(),
-      hariRabu: hariRabu.map((e) => e.toEntity()).toList(),
-      hariKamis: hariKamis.map((e) => e.toEntity()).toList(),
-      hariJumat: hariJumat.map((e) => e.toEntity()).toList(),
+      hari: hari.map(
+        (key, value) => MapEntry(key, value.map((e) => e.toEntity()).toList()),
+      ),
     );
   }
 }
@@ -97,11 +69,10 @@ extension ScheduleXEntity on ScheduleEntity {
       kelas: kelas,
       degree: degree,
       order: order,
-      hariSenin: hariSenin.map((e) => e.fromEntity()).toList(),
-      hariSelasa: hariSelasa.map((e) => e.fromEntity()).toList(),
-      hariRabu: hariRabu.map((e) => e.fromEntity()).toList(),
-      hariKamis: hariKamis.map((e) => e.fromEntity()).toList(),
-      hariJumat: hariJumat.map((e) => e.fromEntity()).toList(),
+      hari: hari.map(
+        (key, value) =>
+            MapEntry(key, value.map((e) => e.fromEntity()).toList()),
+      ),
     );
   }
 }

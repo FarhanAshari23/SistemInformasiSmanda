@@ -4,20 +4,12 @@ class ScheduleEntity {
   final String kelas;
   final int order;
   final int degree;
-  final List<DayEntity> hariSenin;
-  final List<DayEntity> hariSelasa;
-  final List<DayEntity> hariRabu;
-  final List<DayEntity> hariKamis;
-  final List<DayEntity> hariJumat;
+  final Map<String, List<DayEntity>> hari;
 
   ScheduleEntity({
     required this.kelas,
     required this.degree,
     required this.order,
-    required this.hariSenin,
-    required this.hariSelasa,
-    required this.hariRabu,
-    required this.hariKamis,
-    required this.hariJumat,
+    required this.hari,
   });
 }

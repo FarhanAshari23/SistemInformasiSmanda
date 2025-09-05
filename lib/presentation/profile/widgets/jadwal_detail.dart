@@ -3,10 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/jadwal_display_cubit.dart';
 import '../bloc/jadwal_display_state.dart';
-import '../widgets/card_jadwal.dart';
+import 'card_jadwal.dart';
 
-class JadwalKamis extends StatelessWidget {
-  const JadwalKamis({super.key});
+class JadwalDetail extends StatelessWidget {
+  final String hari;
+  const JadwalDetail({
+    super.key,
+    required this.hari,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +25,23 @@ class JadwalKamis extends StatelessWidget {
             );
           }
           if (state is JadwalDisplayLoaded) {
+            final jadwal = state.jadwals[0];
+            final listKegiatan = jadwal.hari[hari] ?? [];
             return ListView.separated(
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index) {
+                final item = listKegiatan[index];
                 return CardJadwal(
-                  jam: state.jadwals[0].hariKamis[index].jam,
-                  kegiatan: state.jadwals[0].hariKamis[index].kegiatan,
-                  pelaksana: state.jadwals[0].hariKamis[index].pelaksana,
+                  jam: item.jam,
+                  kegiatan: item.kegiatan,
+                  pelaksana: item.pelaksana,
                   urutan: index + 1,
                 );
               },
               separatorBuilder: (context, index) => SizedBox(
                 height: height * 0.01,
               ),
-              itemCount: state.jadwals[0].hariKamis.length,
+              itemCount: listKegiatan.length,
             );
           }
           return Container();
