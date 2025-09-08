@@ -1,5 +1,4 @@
 import 'package:new_sistem_informasi_smanda/data/models/schedule/day.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
 
 class CreateScheduleState {
   final Map<String, List<DayModel>> schedules;

@@ -6,7 +6,6 @@ import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.da
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/data/models/schedule/schedule.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/kelas/kelas.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/schedule/schedule.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_state.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/durasi_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_activities_cubit.dart';
@@ -203,8 +202,9 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                       await context.read<ButtonStateCubit>().execute(
                           usecase: CreateScheduleUsecase(),
                           params: ScheduleModel(
-                              kelas: _kelasC.text,
-                              hari: cubit.state.schedules));
+                            kelas: _kelasC.text,
+                            hari: cubit.state.schedules,
+                          ));
                       var snackbar = SnackBar(
                         content: Text(
                           'Berhasil menambahkan jadwal untuk kelas ${_kelasC.text}',

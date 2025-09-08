@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
 
 import '../../../domain/entities/kelas/kelas.dart';
 import '../../../domain/repository/schedule/schedule.dart';

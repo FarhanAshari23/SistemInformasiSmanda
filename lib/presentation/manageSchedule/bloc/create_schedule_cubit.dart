@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/data/models/schedule/day.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
 
 import 'create_schedule_state.dart';
 

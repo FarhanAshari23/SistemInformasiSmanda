@@ -5,8 +5,8 @@ import 'package:new_sistem_informasi_smanda/domain/entities/schedule/schedule.da
 
 class ScheduleModel {
   final String kelas;
-  final int? order;
-  final int? degree;
+  int? order;
+  int? degree;
   final Map<String, List<DayModel>> hari;
 
   ScheduleModel({
