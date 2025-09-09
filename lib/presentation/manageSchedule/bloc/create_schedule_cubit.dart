@@ -18,10 +18,6 @@ class CreateScheduleCubit extends Cubit<CreateScheduleState> {
           ),
         );
 
-  void initSchedule(Map<String, List<DayEntity>> schedules) {
-    emit(state.copyWith(schedules: schedules));
-  }
-
   void addSchedule(
     String day,
     String pelaksana,
