@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
@@ -9,6 +8,7 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/schedule/schedule.dart';
 import '../bloc/class_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
 import '../bloc/create_schedule_state.dart';
@@ -19,7 +19,7 @@ import 'card_schedule.dart';
 
 class EditScheduleDetail extends StatefulWidget {
   final String kelas;
-  final Map<String, List<DayEntity>> schedule;
+  final ScheduleEntity schedule;
   const EditScheduleDetail({
     super.key,
     required this.kelas,
@@ -56,7 +56,8 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
           create: (context) => ButtonStateCubit(),
         ),
         BlocProvider(
-          create: (context) => CreateScheduleCubit(),
+          create: (context) =>
+              CreateScheduleCubit(initialSchedules: widget.schedule.hari),
         ),
         BlocProvider(
           create: (context) => TeacherCubit()..displayTeacher(),
@@ -150,7 +151,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
                       builder: (context, state) {
                         return Expanded(
                           child: ListView(
-                            children: widget.schedule.keys.map((day) {
+                            children: state.schedules.keys.map((day) {
                               return Card(
                                 margin: const EdgeInsets.all(8),
                                 child: Padding(
@@ -178,7 +179,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
                                               day: day,
                                               index: i,
                                               schedule:
-                                                  widget.schedule[day]![i],
+                                                  state.schedules[day]![i],
                                             ),
 
                                           // Tombol tambah

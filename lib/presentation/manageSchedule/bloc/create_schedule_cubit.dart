@@ -4,18 +4,23 @@ import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
 import 'create_schedule_state.dart';
 
 class CreateScheduleCubit extends Cubit<CreateScheduleState> {
-  CreateScheduleCubit()
+  CreateScheduleCubit({Map<String, List<DayEntity>>? initialSchedules})
       : super(
           CreateScheduleState(
-            schedules: {
-              "Senin": [],
-              "Selasa": [],
-              "Rabu": [],
-              "Kamis": [],
-              "Jumat": [],
-            },
+            schedules: initialSchedules ??
+                {
+                  "Senin": [],
+                  "Selasa": [],
+                  "Rabu": [],
+                  "Kamis": [],
+                  "Jumat": [],
+                },
           ),
         );
+
+  void initSchedule(Map<String, List<DayEntity>> schedules) {
+    emit(state.copyWith(schedules: schedules));
+  }
 
   void addSchedule(
     String day,

@@ -63,7 +63,7 @@ class EditScheduleView extends StatelessWidget {
                               context,
                               EditScheduleDetail(
                                 kelas: schedule.kelas,
-                                schedule: schedule.hari,
+                                schedule: schedule,
                               ),
                             ),
                             child: Center(
