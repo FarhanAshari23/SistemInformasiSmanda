@@ -71,4 +71,9 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
   Future<Either> createJadwal(ScheduleEntity scheduleReq) async {
     return await sl<ScheduleFirebaseService>().createSchedule(scheduleReq);
   }
+
+  @override
+  Future<Either> updateJadwal(ScheduleEntity scheduleReq) async {
+    return await sl<ScheduleFirebaseService>().updateJadwal(scheduleReq);
+  }
 }

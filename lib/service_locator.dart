@@ -62,6 +62,7 @@ import 'domain/usecases/schedule/create_class_usecase.dart';
 import 'domain/usecases/schedule/create_schedule_usecase.dart';
 import 'domain/usecases/schedule/get_activities_usecase.dart';
 import 'domain/usecases/schedule/get_jadwal.dart';
+import 'domain/usecases/schedule/update_schedule_usecase.dart';
 import 'domain/usecases/students/delete_student.dart';
 
 final sl = GetIt.instance;
@@ -256,5 +257,8 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<CreateScheduleUsecase>(
     CreateScheduleUsecase(),
+  );
+  sl.registerSingleton<UpdateScheduleUsecase>(
+    UpdateScheduleUsecase(),
   );
 }

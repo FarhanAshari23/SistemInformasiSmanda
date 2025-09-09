@@ -13,6 +13,7 @@ abstract class ScheduleFirebaseService {
   Future<Either> getActivities();
   Future<Either> createClass(KelasEntity kelasReq);
   Future<Either> createSchedule(ScheduleEntity scheduleReq);
+  Future<Either> updateJadwal(ScheduleEntity scheduleReq);
 }
 
 class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
@@ -125,6 +126,29 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
       return const Right("Success add schedule data");
     } catch (e) {
       return Left('Something error: $e');
+    }
+  }
+
+  @override
+  Future<Either> updateJadwal(ScheduleEntity scheduleReq) async {
+    try {
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Jadwals');
+      QuerySnapshot querySnapshot =
+          await users.where('kelas', isEqualTo: scheduleReq.kelas).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        String docId = querySnapshot.docs[0].id;
+        await users.doc(docId).update({
+          "kelas": scheduleReq.kelas,
+          ...scheduleReq.hari.map(
+            (key, value) => MapEntry(key, value.map((e) => e.toMap()).toList()),
+          )
+        });
+        return right('Update Data Schedule Success');
+      }
+      return const Right('Update Data Schedule Success');
+    } catch (e) {
+      return Left(e.toString());
     }
   }
 }

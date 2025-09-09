@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/update_schedule_usecase.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
@@ -9,6 +10,7 @@ import '../../../common/widget/button/basic_button.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/schedule/schedule.dart';
+import '../../../service_locator.dart';
 import '../bloc/class_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
 import '../bloc/create_schedule_state.dart';
@@ -198,16 +200,53 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
                   },
                 ),
                 Builder(builder: (context) {
+                  final cubit = context.read<CreateScheduleCubit>();
                   return BasicButton(
                     onPressed: () async {
-                      var snackbar = SnackBar(
-                        content: Text(
-                          'Berhasil menambahkan jadwal untuk kelas ${_kelasC.text}',
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                      Navigator.pop(context);
+                      if (_kelasC.text.isEmpty ||
+                          cubit.state.schedules ==
+                              {
+                                "Senin": [],
+                                "Selasa": [],
+                                "Rabu": [],
+                                "Kamis": [],
+                                "Jumat": [],
+                              }) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              'Tolong isi semua kolom yang sudah tersedia',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        var result = await sl<UpdateScheduleUsecase>().call(
+                          params: ScheduleEntity(
+                            kelas: _kelasC.text,
+                            hari: cubit.state.schedules,
+                          ),
+                        );
+                        result.fold((error) {
+                          var snackbar = const SnackBar(
+                            content: Text("Gagal Mengubah Data"),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                        }, (r) {
+                          FocusScope.of(context).unfocus();
+                          var snackbar = SnackBar(
+                            content: Text(
+                              'Berhasil menambahkan jadwal untuk kelas ${_kelasC.text}',
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                          Navigator.pop(context);
+                        });
+                      }
                     },
                     title: 'Tambah Jadwal',
                   );
