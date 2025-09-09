@@ -5,14 +5,14 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../domain/entities/kelas/kelas.dart';
-import '../../models/schedule/schedule.dart';
+import '../../../domain/entities/schedule/schedule.dart';
 
 abstract class ScheduleFirebaseService {
   Future<Either> getJadwal();
   Future<Either> getAllJadwal();
   Future<Either> getActivities();
   Future<Either> createClass(KelasEntity kelasReq);
-  Future<Either> createSchedule(ScheduleModel scheduleReq);
+  Future<Either> createSchedule(ScheduleEntity scheduleReq);
 }
 
 class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
@@ -94,7 +94,7 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   }
 
   @override
-  Future<Either> createSchedule(ScheduleModel scheduleReq) async {
+  Future<Either> createSchedule(ScheduleEntity scheduleReq) async {
     try {
       final scheduleRef = FirebaseFirestore.instance.collection('Jadwals');
       final firstPart = scheduleReq.kelas.trim().split(' ').first;
@@ -114,12 +114,14 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
       if (snapshot.docs.isNotEmpty) {
         lastUrutan = snapshot.docs.first['order'] as int;
       }
-
-      scheduleReq.degree = tingkat;
-      scheduleReq.order = lastUrutan + 1;
-      await FirebaseFirestore.instance
-          .collection('Jadwals')
-          .add(scheduleReq.toMap());
+      await FirebaseFirestore.instance.collection('Jadwals').add({
+        "kelas": scheduleReq.kelas,
+        "degree": tingkat,
+        "order": lastUrutan + 1,
+        ...scheduleReq.hari.map(
+          (key, value) => MapEntry(key, value.map((e) => e.toMap()).toList()),
+        )
+      });
       return const Right("Success add schedule data");
     } catch (e) {
       return Left('Something error: $e');

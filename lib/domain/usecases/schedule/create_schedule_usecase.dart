@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/schedule/schedule.dart';
 import 'package:new_sistem_informasi_smanda/domain/repository/schedule/schedule.dart';
 
 import '../../../core/usecase/usecase.dart';
-import '../../../data/models/schedule/schedule.dart';
 import '../../../service_locator.dart';
 
-class CreateScheduleUsecase implements Usecase<Either, ScheduleModel> {
+class CreateScheduleUsecase implements Usecase<Either, ScheduleEntity> {
   @override
-  Future<Either> call({ScheduleModel? params}) async {
+  Future<Either> call({ScheduleEntity? params}) async {
     return await sl<ScheduleRepository>().createJadwal(params!);
   }
 }

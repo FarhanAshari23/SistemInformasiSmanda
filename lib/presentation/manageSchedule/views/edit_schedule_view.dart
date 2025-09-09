@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_all_jadwal_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_all_jadwal_state.dart';
+import 'package:stacked_listview/stacked_listview.dart';
 
+import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../widgets/edit_schedule_detail.dart';
 
 class EditScheduleView extends StatelessWidget {
   const EditScheduleView({super.key});
@@ -17,10 +21,22 @@ class EditScheduleView extends StatelessWidget {
         child: BlocProvider(
           create: (context) => GetAllJadwalCubit()..displayAllJadwal(),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const BasicAppbar(
                 isBackViewed: true,
                 isProfileViewed: false,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 18),
+                child: Text(
+                  'Silakan pilih kelas:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.secondary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
               BlocBuilder<GetAllJadwalCubit, GetAllJadwalState>(
                 builder: (context, state) {
@@ -29,28 +45,54 @@ class EditScheduleView extends StatelessWidget {
                   }
                   if (state is GetAllJadwalLoaded) {
                     return Expanded(
-                      child: ListView.separated(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+                      child: StackedListView(
+                        itemExtent: 200,
+                        padding: const EdgeInsets.only(
+                          top: 16,
+                          bottom: 300,
+                          left: 16,
+                          right: 16,
                         ),
-                        itemBuilder: (context, index) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
+                        scrollDirection: Axis.horizontal,
+                        builder: (context, index) {
+                          final schedule = state.jadwals[index];
+                          return CustomInkWell(
+                            borderRadius: 0,
+                            defaultColor: Colors.white,
+                            onTap: () => AppNavigator.push(
+                              context,
+                              EditScheduleDetail(
+                                kelas: schedule.kelas,
+                                schedule: schedule.hari,
+                              ),
                             ),
-                            color: AppColors.primary,
-                            child: Text(
-                              state.jadwals[index].kelas,
-                              style: const TextStyle(
-                                color: Colors.white,
+                            child: Center(
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  children: [
+                                    const TextSpan(
+                                      text: 'Kelas\n',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: schedule.kelas,
+                                      style: const TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.primary,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           );
                         },
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 8),
                         itemCount: state.jadwals.length,
                       ),
                     );

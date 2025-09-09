@@ -1,39 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/kelas/kelas.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/schedule/schedule.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_state.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/durasi_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_activities_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/add_schedule_button.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/card_schedule.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
 
+import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
+import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/button/basic_button.dart';
+import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/usecases/schedule/create_class_usecase.dart';
-import '../../../domain/usecases/schedule/create_schedule_usecase.dart';
 import '../bloc/class_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
+import '../bloc/create_schedule_state.dart';
+import '../bloc/durasi_cubit.dart';
+import '../bloc/get_activities_cubit.dart';
+import 'add_schedule_button.dart';
+import 'card_schedule.dart';
 
-class AddScheduleView extends StatefulWidget {
-  const AddScheduleView({super.key});
+class EditScheduleDetail extends StatefulWidget {
+  final String kelas;
+  final Map<String, List<DayEntity>> schedule;
+  const EditScheduleDetail({
+    super.key,
+    required this.kelas,
+    required this.schedule,
+  });
 
   @override
-  State<AddScheduleView> createState() => _AddScheduleViewState();
+  State<EditScheduleDetail> createState() => _EditScheduleDetailState();
 }
 
-class _AddScheduleViewState extends State<AddScheduleView> {
-  final TextEditingController _kelasC = TextEditingController();
+class _EditScheduleDetailState extends State<EditScheduleDetail> {
+  late TextEditingController _kelasC;
+
+  @override
+  void initState() {
+    super.initState();
+    _kelasC = TextEditingController(text: widget.kelas);
+  }
 
   @override
   void dispose() {
-    _kelasC.dispose();
     super.dispose();
+    _kelasC.dispose();
   }
 
   @override
@@ -41,7 +50,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ClassFieldCubit(),
+          create: (context) => ClassFieldCubit()..updateText(widget.kelas),
         ),
         BlocProvider(
           create: (context) => ButtonStateCubit(),
@@ -141,7 +150,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                       builder: (context, state) {
                         return Expanded(
                           child: ListView(
-                            children: state.schedules.keys.map((day) {
+                            children: widget.schedule.keys.map((day) {
                               return Card(
                                 margin: const EdgeInsets.all(8),
                                 child: Padding(
@@ -169,7 +178,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                                               day: day,
                                               index: i,
                                               schedule:
-                                                  state.schedules[day]![i],
+                                                  widget.schedule[day]![i],
                                             ),
 
                                           // Tombol tambah
@@ -190,21 +199,6 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                 Builder(builder: (context) {
                   return BasicButton(
                     onPressed: () async {
-                      final cubit = context.read<CreateScheduleCubit>();
-                      await context.read<ButtonStateCubit>().execute(
-                            usecase: CreateClassUsecase(),
-                            params: KelasEntity(
-                              kelas: _kelasC.text,
-                              order: 0,
-                              degree: 0,
-                            ),
-                          );
-                      await context.read<ButtonStateCubit>().execute(
-                          usecase: CreateScheduleUsecase(),
-                          params: ScheduleEntity(
-                            kelas: _kelasC.text,
-                            hari: cubit.state.schedules,
-                          ));
                       var snackbar = SnackBar(
                         content: Text(
                           'Berhasil menambahkan jadwal untuk kelas ${_kelasC.text}',

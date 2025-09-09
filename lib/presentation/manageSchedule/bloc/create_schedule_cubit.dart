@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/data/models/schedule/day.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
 
 import 'create_schedule_state.dart';
 
@@ -23,10 +23,10 @@ class CreateScheduleCubit extends Cubit<CreateScheduleState> {
     String kegiatan,
     String durasi,
   ) {
-    final updated = Map<String, List<DayModel>>.from(state.schedules);
+    final updated = Map<String, List<DayEntity>>.from(state.schedules);
     updated[day] = [
       ...updated[day]!,
-      DayModel(jam: durasi, kegiatan: kegiatan, pelaksana: pelaksana)
+      DayEntity(jam: durasi, kegiatan: kegiatan, pelaksana: pelaksana)
     ];
     emit(state.copyWith(schedules: updated));
   }
@@ -38,9 +38,9 @@ class CreateScheduleCubit extends Cubit<CreateScheduleState> {
     String kegiatan,
     String durasi,
   ) {
-    final updated = Map<String, List<DayModel>>.from(state.schedules);
-    final schedules = List<DayModel>.from(updated[day]!);
-    schedules[index] = DayModel(
+    final updated = Map<String, List<DayEntity>>.from(state.schedules);
+    final schedules = List<DayEntity>.from(updated[day]!);
+    schedules[index] = DayEntity(
         jam: durasi,
         kegiatan: kegiatan,
         pelaksana: pelaksana); // ganti dengan nama baru

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../domain/entities/kelas/kelas.dart';
+import '../../../domain/entities/schedule/schedule.dart';
 import '../../../domain/repository/schedule/schedule.dart';
 import '../../../service_locator.dart';
 import '../../models/schedule/activity.dart';
@@ -67,7 +68,7 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
   }
 
   @override
-  Future<Either> createJadwal(ScheduleModel scheduleReq) async {
+  Future<Either> createJadwal(ScheduleEntity scheduleReq) async {
     return await sl<ScheduleFirebaseService>().createSchedule(scheduleReq);
   }
 }

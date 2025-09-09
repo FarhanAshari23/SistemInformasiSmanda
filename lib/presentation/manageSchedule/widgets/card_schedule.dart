@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/data/models/schedule/day.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_cubit.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
@@ -8,7 +8,7 @@ import '../../../core/configs/theme/app_colors.dart';
 class CardSchedule extends StatefulWidget {
   final String day;
   final int index;
-  final DayModel schedule;
+  final DayEntity schedule;
   const CardSchedule({
     super.key,
     required this.day,
