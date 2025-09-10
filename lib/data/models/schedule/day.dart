@@ -15,17 +15,17 @@ class DayModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'Jam': jam,
-      'Kegiatan': kegiatan,
-      'Pelaksana': pelaksana,
+      'jam': jam,
+      'kegiatan': kegiatan,
+      'pelaksana': pelaksana,
     };
   }
 
   factory DayModel.fromMap(Map<String, dynamic> map) {
     return DayModel(
-      jam: map['Jam'] ?? '',
-      kegiatan: map['Kegiatan'] ?? '',
-      pelaksana: map['Pelaksana'] ?? '',
+      jam: map['jam'] ?? '',
+      kegiatan: map['kegiatan'] ?? '',
+      pelaksana: map['pelaksana'] ?? '',
     );
   }
 

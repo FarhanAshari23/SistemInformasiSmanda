@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/update_schedule_usecase.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_all_jadwal_cubit.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
@@ -236,10 +237,10 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackbar);
                         }, (r) {
-                          FocusScope.of(context).unfocus();
+                          context.read<GetAllJadwalCubit>().displayAllJadwal();
                           var snackbar = SnackBar(
                             content: Text(
-                              'Berhasil menambahkan jadwal untuk kelas ${_kelasC.text}',
+                              'Berhasil mengubah jadwal untuk kelas ${_kelasC.text}',
                             ),
                             behavior: SnackBarBehavior.floating,
                           );
@@ -248,7 +249,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
                         });
                       }
                     },
-                    title: 'Tambah Jadwal',
+                    title: 'Ubah Jadwal',
                   );
                 }),
               ],

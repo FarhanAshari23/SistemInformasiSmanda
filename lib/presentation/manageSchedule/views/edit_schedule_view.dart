@@ -61,9 +61,12 @@ class EditScheduleView extends StatelessWidget {
                             defaultColor: Colors.white,
                             onTap: () => AppNavigator.push(
                               context,
-                              EditScheduleDetail(
-                                kelas: schedule.kelas,
-                                schedule: schedule,
+                              BlocProvider.value(
+                                value: context.read<GetAllJadwalCubit>(),
+                                child: EditScheduleDetail(
+                                  kelas: schedule.kelas,
+                                  schedule: schedule,
+                                ),
                               ),
                             ),
                             child: Container(
