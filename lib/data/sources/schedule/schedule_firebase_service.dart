@@ -14,6 +14,7 @@ abstract class ScheduleFirebaseService {
   Future<Either> createClass(KelasEntity kelasReq);
   Future<Either> createSchedule(ScheduleEntity scheduleReq);
   Future<Either> updateJadwal(ScheduleEntity scheduleReq);
+  Future<Either> deleteJadwal(String kelas);
 }
 
 class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
@@ -147,6 +148,22 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
         return right('Update Data Schedule Success');
       }
       return const Right('Update Data Schedule Success');
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> deleteJadwal(String kelas) async {
+    try {
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Jadwals');
+      QuerySnapshot querySnapshot =
+          await users.where('kelas', isEqualTo: kelas).get();
+      for (var doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
+      return const Right('Delete Data Schedule Success');
     } catch (e) {
       return Left(e.toString());
     }
