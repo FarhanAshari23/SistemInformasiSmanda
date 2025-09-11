@@ -108,6 +108,7 @@ class CardEditUser extends StatelessWidget {
                         child: EditStudentDetail(user: student),
                       ));
                 } else if (value == 'Hapus') {
+                  final outerContext = context;
                   showDialog(
                     context: context,
                     builder: (context) {
@@ -161,7 +162,7 @@ class CardEditUser extends StatelessWidget {
                                       );
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackbar);
-                                      context
+                                      outerContext
                                           .read<StudentsDisplayCubit>()
                                           .displayStudents(
                                               params: student.kelas);
