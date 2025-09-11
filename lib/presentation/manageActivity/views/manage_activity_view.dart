@@ -2,16 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/activities/get_activities_state.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/create_activity_usecase.dart';
 
 import '../../../common/bloc/activities/get_activities_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../service_locator.dart';
 
-class ManageActivityView extends StatelessWidget {
+class ManageActivityView extends StatefulWidget {
   const ManageActivityView({super.key});
 
   @override
+  State<ManageActivityView> createState() => _ManageActivityViewState();
+}
+
+class _ManageActivityViewState extends State<ManageActivityView> {
+  final TextEditingController _kegiatanC = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _kegiatanC.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: BlocProvider(
         create: (context) => GetActivitiesCubit()..displayActivites(),
@@ -54,7 +71,132 @@ class ManageActivityView extends StatelessWidget {
                               child: CustomInkWell(
                                 borderRadius: 16,
                                 defaultColor: AppColors.primary,
-                                onTap: () {},
+                                onTap: () {
+                                  final outerContext = context;
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        backgroundColor:
+                                            AppColors.inversePrimary,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        child: SingleChildScrollView(
+                                          child: SizedBox(
+                                            height: height * 0.25,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                vertical: 20,
+                                                horizontal: 16,
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Center(
+                                                    child: Text(
+                                                      'Tambah kegiatan',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                        color:
+                                                            AppColors.primary,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      height: height * 0.02),
+                                                  TextField(
+                                                    controller: _kegiatanC,
+                                                    autocorrect: false,
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      hintText: 'Nama kegiatan',
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      height: height * 0.02),
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      var result = await sl<
+                                                              CreateActivityUsecase>()
+                                                          .call(
+                                                              params: _kegiatanC
+                                                                  .text);
+                                                      result.fold(
+                                                        (error) {
+                                                          var snackbar =
+                                                              SnackBar(
+                                                            content: Text(
+                                                                "Gagal Mengubah Data: $error"),
+                                                          );
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  snackbar);
+                                                        },
+                                                        (r) {
+                                                          outerContext
+                                                              .read<
+                                                                  GetActivitiesCubit>()
+                                                              .displayActivites();
+                                                          var snackbar =
+                                                              const SnackBar(
+                                                            content: Text(
+                                                                "Kegiatan baru berhasil ditambah"),
+                                                          );
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  snackbar);
+                                                          Navigator.of(context,
+                                                                  rootNavigator:
+                                                                      true)
+                                                              .pop();
+                                                        },
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      margin: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 16),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              16),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        color:
+                                                            AppColors.secondary,
+                                                      ),
+                                                      child: const Center(
+                                                        child: Text(
+                                                          'Tambah',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w800,
+                                                            color: AppColors
+                                                                .inversePrimary,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
                                 child: Container(
                                   padding: const EdgeInsets.all(16),
                                   child: const Icon(
