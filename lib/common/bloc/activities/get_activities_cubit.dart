@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/get_activities_usecase.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_activities_state.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/activities/get_activities_state.dart';
 
 import '../../../service_locator.dart';
 

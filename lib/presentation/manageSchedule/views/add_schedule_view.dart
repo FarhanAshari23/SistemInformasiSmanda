@@ -8,7 +8,7 @@ import 'package:new_sistem_informasi_smanda/domain/entities/kelas/kelas.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/schedule/schedule.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_state.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/durasi_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_activities_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/activities/get_activities_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/add_schedule_button.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/card_schedule.dart';
 

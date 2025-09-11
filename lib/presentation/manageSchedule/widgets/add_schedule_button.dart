@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/durasi_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_activities_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_activities_state.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/activities/get_activities_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/activities/get_activities_state.dart';
 
 import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/bloc/teacher/teacher_state.dart';

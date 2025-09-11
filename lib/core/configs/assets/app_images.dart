@@ -36,4 +36,5 @@ class AppImages {
   static const String splashEkskul = "${basePath}splashEkskul.jpg";
   static const String testFoto = "${basePath}test_foto.JPG";
   static const String emptyRegistrationChara = "${basePath}chibi_sma.png";
+  static const String subjectsIcon = "${basePath}books.png";
 }

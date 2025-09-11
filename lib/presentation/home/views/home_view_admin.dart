@@ -19,6 +19,7 @@ import '../../../domain/usecases/attendance/create_attendance.dart';
 import '../../../domain/usecases/auth/logout.dart';
 import '../../../service_locator.dart';
 import '../../auth/views/login_view.dart';
+import '../../manageActivity/views/manage_activity_view.dart';
 import '../../manageAttendance/bloc/check_press_state.dart';
 import '../../manageAttendance/screens/succes_add_date.dart';
 import '../../manageAttendance/views/scan_barcode_view.dart';
@@ -48,6 +49,7 @@ class HomeViewAdmin extends StatelessWidget {
       'Edit data ekskul',
       'Tambah data jadwal',
       'Edit data jadwal',
+      'Daftar kegiatan',
     ];
     List<String> images = [
       AppImages.camera,
@@ -63,6 +65,7 @@ class HomeViewAdmin extends StatelessWidget {
       AppImages.eskul,
       AppImages.calendar,
       AppImages.calendar,
+      AppImages.subjectsIcon,
     ];
     List<Widget> pages = [
       const ScanBarcodeView(),
@@ -78,6 +81,7 @@ class HomeViewAdmin extends StatelessWidget {
       const EditDataEkskulView(),
       const AddScheduleView(),
       const EditScheduleView(),
+      const ManageActivityView(),
     ];
     return Scaffold(
       body: BlocProvider(

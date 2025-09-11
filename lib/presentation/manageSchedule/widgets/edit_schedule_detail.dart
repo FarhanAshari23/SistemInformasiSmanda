@@ -16,7 +16,7 @@ import '../bloc/class_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
 import '../bloc/create_schedule_state.dart';
 import '../bloc/durasi_cubit.dart';
-import '../bloc/get_activities_cubit.dart';
+import '../../../common/bloc/activities/get_activities_cubit.dart';
 import 'add_schedule_button.dart';
 import 'card_schedule.dart';
 
