@@ -11,4 +11,6 @@ abstract class ScheduleRepository {
   Future<Either> createJadwal(ScheduleEntity scheduleReq);
   Future<Either> updateJadwal(ScheduleEntity scheduleReq);
   Future<Either> deleteJadwal(String kelas);
+  Future<Either> deleteKelas(String kelas);
+  Future<Either> createActivities(String kegiatan);
 }

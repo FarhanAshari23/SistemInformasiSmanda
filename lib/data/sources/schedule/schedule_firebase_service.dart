@@ -13,8 +13,10 @@ abstract class ScheduleFirebaseService {
   Future<Either> getActivities();
   Future<Either> createClass(KelasEntity kelasReq);
   Future<Either> createSchedule(ScheduleEntity scheduleReq);
+  Future<Either> createActivities(String kegiatan);
   Future<Either> updateJadwal(ScheduleEntity scheduleReq);
   Future<Either> deleteJadwal(String kelas);
+  Future<Either> deleteKelas(String kelas);
 }
 
 class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
@@ -164,6 +166,36 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
         await doc.reference.delete();
       }
       return const Right('Delete Data Schedule Success');
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> createActivities(String kegiatan) async {
+    try {
+      final kelasRef = FirebaseFirestore.instance.collection('Activities');
+      await kelasRef.add({
+        'kegiatan': kegiatan,
+      });
+
+      return const Right('Data kegiatan berhasil ditambahkan');
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> deleteKelas(String kelas) async {
+    try {
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Kelas');
+      QuerySnapshot querySnapshot =
+          await users.where('kelas', isEqualTo: kelas).get();
+      for (var doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
+      return const Right('Delete Data kelas Success');
     } catch (e) {
       return Left(e.toString());
     }

@@ -32,6 +32,7 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/delete_ekskul
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/update_ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/news/delete_news.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/news/update_news.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/create_activity_usecase.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/get_all_jadwal.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/accept_student_register_usecase.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_student_by_class.dart';
@@ -61,6 +62,7 @@ import 'domain/usecases/news/create_news.dart';
 import 'domain/usecases/schedule/create_class_usecase.dart';
 import 'domain/usecases/schedule/create_schedule_usecase.dart';
 import 'domain/usecases/schedule/delete_jadwal_usecase.dart';
+import 'domain/usecases/schedule/delete_kelas_usecase.dart';
 import 'domain/usecases/schedule/get_activities_usecase.dart';
 import 'domain/usecases/schedule/get_jadwal.dart';
 import 'domain/usecases/schedule/update_schedule_usecase.dart';
@@ -253,16 +255,22 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<CreateClassUsecase>(
     CreateClassUsecase(),
   );
-  sl.registerSingleton<GetActivitiesUsecase>(
-    GetActivitiesUsecase(),
+  sl.registerSingleton<CreateActivityUsecase>(
+    CreateActivityUsecase(),
   );
   sl.registerSingleton<CreateScheduleUsecase>(
     CreateScheduleUsecase(),
+  );
+  sl.registerSingleton<GetActivitiesUsecase>(
+    GetActivitiesUsecase(),
   );
   sl.registerSingleton<UpdateScheduleUsecase>(
     UpdateScheduleUsecase(),
   );
   sl.registerSingleton<DeleteJadwalUsecase>(
     DeleteJadwalUsecase(),
+  );
+  sl.registerSingleton<DeleteKelasUsecase>(
+    DeleteKelasUsecase(),
   );
 }
