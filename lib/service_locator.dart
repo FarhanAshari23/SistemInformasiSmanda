@@ -61,6 +61,7 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teach
 import 'domain/usecases/news/create_news.dart';
 import 'domain/usecases/schedule/create_class_usecase.dart';
 import 'domain/usecases/schedule/create_schedule_usecase.dart';
+import 'domain/usecases/schedule/delete_activity_usecase.dart';
 import 'domain/usecases/schedule/delete_jadwal_usecase.dart';
 import 'domain/usecases/schedule/delete_kelas_usecase.dart';
 import 'domain/usecases/schedule/get_activities_usecase.dart';
@@ -272,5 +273,8 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<DeleteKelasUsecase>(
     DeleteKelasUsecase(),
+  );
+  sl.registerSingleton<DeleteActivityUsecase>(
+    DeleteActivityUsecase(),
   );
 }

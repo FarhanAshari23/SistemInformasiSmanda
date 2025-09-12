@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/activities/get_activities_state.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/create_activity_usecase.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/delete_activity_usecase.dart';
 
 import '../../../common/bloc/activities/get_activities_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
@@ -28,7 +29,6 @@ class _ManageActivityViewState extends State<ManageActivityView> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: BlocProvider(
         create: (context) => GetActivitiesCubit()..displayActivites(),
@@ -217,14 +217,70 @@ class _ManageActivityViewState extends State<ManageActivityView> {
                               vertical: 4,
                               horizontal: 16,
                             ),
-                            padding: const EdgeInsets.all(16),
-                            child: Text(
-                              activity.name,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.inversePrimary,
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Text(
+                                    activity.name,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.inversePrimary,
+                                    ),
+                                  ),
+                                ),
+                                Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      var delete =
+                                          await sl<DeleteActivityUsecase>()
+                                              .call(params: activity.name);
+                                      return delete.fold(
+                                        (error) {
+                                          var snackbar = const SnackBar(
+                                            content: Text(
+                                                "Gagal Menghapus kegiatan, Coba Lagi"),
+                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackbar);
+                                        },
+                                        (r) {
+                                          var snackbar = const SnackBar(
+                                            content:
+                                                Text("Data Berhasil Dihapus"),
+                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackbar);
+                                          context
+                                              .read<GetActivitiesCubit>()
+                                              .displayActivites();
+                                        },
+                                      );
+                                    },
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(16),
+                                      bottomRight: Radius.circular(16),
+                                    ),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(16),
+                                          bottomRight: Radius.circular(16),
+                                        ),
+                                      ),
+                                      child: const Icon(
+                                        Icons.delete,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                           );
                         },
