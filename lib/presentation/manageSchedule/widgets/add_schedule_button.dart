@@ -56,6 +56,8 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
               if (state is TeacherLoaded) {
                 return DropdownMenu<String>(
                   width: width * 0.92,
+                  enableFilter: true,
+                  requestFocusOnTap: true,
                   inputDecorationTheme: const InputDecorationTheme(
                     fillColor: AppColors.tertiary,
                     filled: true,
@@ -77,6 +79,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                   onSelected: (value) {
                     context.read<TeacherCubit>().selectItem(value);
                     _pelaksanaC.text = value!;
+                    FocusScope.of(context).unfocus();
                   },
                 );
               }
@@ -98,6 +101,8 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
               if (state is GetActivitiesLoaded) {
                 return DropdownMenu<String>(
                   width: width * 0.92,
+                  enableFilter: true,
+                  requestFocusOnTap: true,
                   inputDecorationTheme: const InputDecorationTheme(
                     fillColor: AppColors.tertiary,
                     filled: true,
@@ -119,6 +124,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                   onSelected: (value) {
                     context.read<GetActivitiesCubit>().selectItem(value);
                     _kegiatanC.text = value!;
+                    FocusScope.of(context).unfocus();
                   },
                 );
               }

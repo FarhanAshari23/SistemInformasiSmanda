@@ -247,6 +247,7 @@ class HomeViewAdmin extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
               Expanded(
                 child: GridView.builder(
                   padding: const EdgeInsets.all(12),

@@ -91,7 +91,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
                   isBackViewed: true,
                   isProfileViewed: false,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 8),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
