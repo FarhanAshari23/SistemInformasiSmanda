@@ -1,34 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/data/models/ekskul/ekskul.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/ack_ekskul_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/list_teacher_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/search_students_view.dart';
 
+import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/button/basic_button.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/ekskul/ekskul.dart';
+import '../../../domain/usecases/ekskul/update_ekskul.dart';
+import '../../../service_locator.dart';
+import 'list_teacher_view.dart';
+import 'search_students_view.dart';
 
-class AddDataEkskulView extends StatefulWidget {
-  const AddDataEkskulView({super.key});
+class EditEkskulDetail extends StatefulWidget {
+  final EkskulEntity ekskul;
+  const EditEkskulDetail({
+    super.key,
+    required this.ekskul,
+  });
 
   @override
-  State<AddDataEkskulView> createState() => _AddDataEkskulViewState();
+  State<EditEkskulDetail> createState() => _EditEkskulDetailState();
 }
 
-class _AddDataEkskulViewState extends State<AddDataEkskulView> {
-  final TextEditingController _namaEkskulC = TextEditingController();
-  final TextEditingController _namePembinaC = TextEditingController();
-  final TextEditingController _nameKetuaC = TextEditingController();
-  final TextEditingController _nameWakilC = TextEditingController();
-  final TextEditingController _nameSekretarisC = TextEditingController();
-  final TextEditingController _nameBendaharaC = TextEditingController();
-  final TextEditingController _deskripsiC = TextEditingController();
+class _EditEkskulDetailState extends State<EditEkskulDetail> {
+  late TextEditingController _nameEkskulC;
+  late TextEditingController _namePembinaC;
+  late TextEditingController _nameKetuaC;
+  late TextEditingController _nameWakilC;
+  late TextEditingController _nameSekretarisC;
+  late TextEditingController _nameBendaharaC;
+  late TextEditingController _deskripsiC;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameEkskulC = TextEditingController(text: widget.ekskul.namaEkskul);
+    _namePembinaC = TextEditingController(text: widget.ekskul.namaPembina);
+    _nameKetuaC = TextEditingController(text: widget.ekskul.namaKetua);
+    _nameWakilC = TextEditingController(text: widget.ekskul.namaWakilKetua);
+    _nameSekretarisC =
+        TextEditingController(text: widget.ekskul.namaSekretaris);
+    _nameBendaharaC = TextEditingController(text: widget.ekskul.namaBendahara);
+    _deskripsiC = TextEditingController(text: widget.ekskul.deskripsi);
+  }
 
   @override
   void dispose() {
     super.dispose();
-    _namaEkskulC.dispose();
+    _nameEkskulC.dispose();
     _namePembinaC.dispose();
     _nameKetuaC.dispose();
     _nameWakilC.dispose();
@@ -40,9 +57,8 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-
     List<TextEditingController> listC = [
-      _namaEkskulC,
+      _nameEkskulC,
       _namePembinaC,
       _nameKetuaC,
       _nameWakilC,
@@ -73,17 +89,15 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
         child: Column(
           children: [
             const BasicAppbar(isBackViewed: true, isProfileViewed: false),
-            SizedBox(height: height * 0.01),
             const Text(
-              'TAMBAH EKSKUL',
+              'Data mana yang ingin anda ubah?',
               style: TextStyle(
                 fontWeight: FontWeight.w800,
-                fontSize: 24,
                 color: AppColors.primary,
+                fontSize: 16,
               ),
-              textAlign: TextAlign.center,
             ),
-            SizedBox(height: height * 0.02),
+            SizedBox(height: height * 0.03),
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -141,7 +155,7 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
               ),
             ),
             BasicButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_namePembinaC.text.isEmpty ||
                     _nameKetuaC.text.isEmpty ||
                     _nameWakilC.text.isEmpty ||
@@ -160,24 +174,35 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                     ),
                   );
                 } else {
-                  AppNavigator.push(
-                    context,
-                    AckEkskulView(
-                      ekskulCreateReq: EkskulModel(
-                        namaEkskul: _namaEkskulC.text,
-                        namaPembina: _namePembinaC.text,
-                        namaKetua: _nameKetuaC.text,
-                        namaWakilKetua: _nameWakilC.text,
-                        namaSekretaris: _nameSekretarisC.text,
-                        namaBendahara: _nameBendaharaC.text,
-                        deskripsi: _deskripsiC.text,
-                      ),
-                    ),
+                  var result = await sl<UpdateEkskulUsecase>().call(
+                      params: EkskulEntity(
+                    namaEkskul: _nameEkskulC.text,
+                    namaPembina: _namePembinaC.text,
+                    namaKetua: _nameKetuaC.text,
+                    namaWakilKetua: _nameWakilC.text,
+                    namaSekretaris: _nameSekretarisC.text,
+                    namaBendahara: _nameBendaharaC.text,
+                    deskripsi: _deskripsiC.text,
+                  ));
+                  result.fold(
+                    (error) {
+                      var snackbar = const SnackBar(
+                        content: Text("Gagal Mengubah Data"),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                    },
+                    (r) {
+                      var snackbar = const SnackBar(
+                        content: Text("Data Berhasil Diubah"),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                      Navigator.pop(context);
+                    },
                   );
                 }
               },
-              title: 'Lanjut',
-            )
+              title: 'Ubah',
+            ),
           ],
         ),
       ),

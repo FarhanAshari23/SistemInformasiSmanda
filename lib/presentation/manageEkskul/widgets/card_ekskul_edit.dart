@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/delete_ekskul.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/update_ekskul.dart';
 
+import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../service_locator.dart';
+import '../views/edit_ekskul_detail.dart';
 
 class CardEkskulEdit extends StatelessWidget {
   final EkskulEntity ekskul;
@@ -19,47 +20,6 @@ class CardEkskulEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameC =
-        TextEditingController(text: ekskul.namaEkskul);
-    TextEditingController ketuaC =
-        TextEditingController(text: ekskul.namaKetua);
-    TextEditingController pembinaC =
-        TextEditingController(text: ekskul.namaPembina);
-    TextEditingController wakilC =
-        TextEditingController(text: ekskul.namaWakilKetua);
-    TextEditingController sekretarisC =
-        TextEditingController(text: ekskul.namaSekretaris);
-    TextEditingController bendaharaC =
-        TextEditingController(text: ekskul.namaBendahara);
-    TextEditingController deskripsiC =
-        TextEditingController(text: ekskul.deskripsi);
-    List<String> hintText = [
-      "Nama Ekskul",
-      "Nama Pembina",
-      "Nama Ketua",
-      "Nama Wakil Ketua",
-      "Nama Sekretaris",
-      "Nama Bendahara",
-      "Deskripsi",
-    ];
-    List<TextEditingController> controllers = [
-      nameC,
-      pembinaC,
-      ketuaC,
-      wakilC,
-      sekretarisC,
-      bendaharaC,
-      deskripsiC,
-    ];
-    List<int> maxLines = [
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      4,
-    ];
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
@@ -97,113 +57,11 @@ class CardEkskulEdit extends StatelessWidget {
             child: PopupMenuButton(
               onSelected: (String value) {
                 if (value == 'Edit') {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        backgroundColor: AppColors.inversePrimary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: SingleChildScrollView(
-                          child: SizedBox(
-                            height: height * 0.7,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 20,
-                                horizontal: 16,
-                              ),
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    'Ubah Data Ekskul',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                  SizedBox(height: height * 0.02),
-                                  SizedBox(
-                                    width: width * 0.6,
-                                    height: height * 0.5,
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.vertical,
-                                      itemBuilder: (context, index) {
-                                        return TextField(
-                                          maxLines: maxLines[index],
-                                          controller: controllers[index],
-                                          autocorrect: false,
-                                          decoration: InputDecoration(
-                                            hintText: hintText[index],
-                                          ),
-                                        );
-                                      },
-                                      separatorBuilder: (context, index) =>
-                                          SizedBox(
-                                        height: height * 0.01,
-                                      ),
-                                      itemCount: hintText.length,
-                                    ),
-                                  ),
-                                  SizedBox(height: height * 0.02),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      var result =
-                                          await sl<UpdateEkskulUsecase>().call(
-                                              params: EkskulEntity(
-                                        namaEkskul: nameC.text,
-                                        namaPembina: pembinaC.text,
-                                        namaKetua: ketuaC.text,
-                                        namaWakilKetua: wakilC.text,
-                                        namaSekretaris: sekretarisC.text,
-                                        namaBendahara: bendaharaC.text,
-                                        deskripsi: deskripsiC.text,
-                                      ));
-                                      result.fold(
-                                        (error) {
-                                          var snackbar = const SnackBar(
-                                            content:
-                                                Text("Gagal Mengubah Data"),
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackbar);
-                                        },
-                                        (r) {
-                                          var snackbar = const SnackBar(
-                                            content:
-                                                Text("Data Berhasil Diubah"),
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackbar);
-                                          Navigator.pop(context);
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      width: width * 0.3,
-                                      height: height * 0.08,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: AppColors.secondary,
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'Ubah',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w800,
-                                            color: AppColors.inversePrimary,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+                  AppNavigator.push(
+                    context,
+                    EditEkskulDetail(
+                      ekskul: ekskul,
+                    ),
                   );
                 } else if (value == 'Hapus') {
                   showDialog(
