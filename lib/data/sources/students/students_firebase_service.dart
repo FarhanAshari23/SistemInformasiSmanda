@@ -9,6 +9,7 @@ abstract class StudentsFirebaseService {
   Future<Either> getStudent();
   Future<Either> getStudentsByClass(String kelas);
   Future<Either> acceptStudentAccount(String nisn);
+  Future<Either> acceptAllStudentAccount();
   Future<Either> getAllKelas();
   Future<Either> getStudentByRegister();
   Future<Either> updateStudent(UpdateUserReq updateUserReq);
@@ -185,6 +186,35 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
       return const Left('Please try again');
+    }
+  }
+
+  @override
+  Future<Either> acceptAllStudentAccount() async {
+    try {
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Students');
+
+      // Ambil semua student dengan is_register == false
+      QuerySnapshot querySnapshot =
+          await users.where('is_register', isEqualTo: false).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        WriteBatch batch = FirebaseFirestore.instance.batch();
+
+        for (var doc in querySnapshot.docs) {
+          batch.update(doc.reference, {"is_register": true});
+        }
+
+        // Jalankan batch update
+        await batch.commit();
+
+        return right('Update All Unregistered Students Success');
+      }
+
+      return right('No Students Found to Update');
+    } catch (e) {
+      return Left('Something Wrong: $e');
     }
   }
 }

@@ -133,4 +133,9 @@ class StudentsRepositoryImpl extends StudentRepository {
       },
     );
   }
+
+  @override
+  Future<Either> acceptAllStudentAccount() async {
+    return await sl<StudentsFirebaseService>().acceptAllStudentAccount();
+  }
 }

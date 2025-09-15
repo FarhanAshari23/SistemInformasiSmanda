@@ -5,6 +5,7 @@ import '../../../data/models/auth/update_user.dart';
 abstract class StudentRepository {
   Future<Either> updateStudent(UpdateUserReq updateUserReq);
   Future<Either> acceptStudentAccount(String nisn);
+  Future<Either> acceptAllStudentAccount();
   Future<Either> deleteStudent(String nisnStudent);
   Future<Either> getAllKelas();
   Future<Either> searchStudentByNISN(String nisnStudent);
