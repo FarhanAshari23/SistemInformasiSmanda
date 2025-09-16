@@ -103,6 +103,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           'keywords': keywords,
         },
       );
+      await FirebaseAuth.instance.signOut();
       return const Right('Signup was succesfull');
     } on FirebaseAuthException catch (e) {
       String message = '';
