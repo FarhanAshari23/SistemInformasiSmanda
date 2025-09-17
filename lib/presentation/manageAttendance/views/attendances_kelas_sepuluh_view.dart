@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/widgets/card_user_attendance.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../common/widget/landing/classroom.dart';
+import '../../../domain/entities/attandance/param_attendance.dart';
 import '../../../domain/usecases/attendance/get_attendance_students.dart';
 import '../bloc/attendance_student_cubit.dart';
 import '../bloc/attendance_student_state.dart';
@@ -22,57 +22,60 @@ class AttendancesKelasSepuluhView extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: BlocProvider(
         create: (context) =>
-            AttendanceStudentCubit(usecase: GetAttendanceStudentsUsecase()),
+            AttendanceStudentCubit(usecase: GetAttendanceStudentsUsecase())
+              ..displayAttendanceStudent(
+                params: ParamAttendanceEntity(
+                  date: date,
+                  kelas: '10 1',
+                ),
+              ),
         child: SafeArea(
           child: Column(
             children: [
               const BasicAppbar(isBackViewed: true, isProfileViewed: false),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ListKelasSepuluhAttendances(date: date),
-                    SizedBox(height: height * 0.04),
-                    SizedBox(
-                      width: double.infinity,
-                      height: height * 0.65,
-                      child: BlocBuilder<AttendanceStudentCubit,
-                          AttendanceStudentState>(
-                        builder: (context, state) {
-                          if (state is AttendanceStudentLoading) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          if (state is AttendanceStudentLoaded) {
-                            return state.students.isNotEmpty
-                                ? ListView.separated(
-                                    itemBuilder: (context, index) {
-                                      return CardUserAttendance(
-                                        student: state.students[index],
-                                      );
-                                    },
-                                    separatorBuilder: (context, index) =>
-                                        SizedBox(height: height * 0.02),
-                                    itemCount: state.students.length,
-                                  )
-                                : const Center(
-                                    child: Text('Belum ada data yang terekam'),
-                                  );
-                          }
-                          if (state is AttendanceStudentFailure) {
-                            return const Center(
-                              child: Text('Something wrongs'),
-                            );
-                          }
-                          return const SplashClassroom();
-                        },
-                      ),
-                    )
-                  ],
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListKelasSepuluhAttendances(date: date),
+              ),
+              SizedBox(height: height * 0.04),
+              BlocBuilder<AttendanceStudentCubit, AttendanceStudentState>(
+                builder: (context, state) {
+                  if (state is AttendanceStudentLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (state is AttendanceStudentLoaded) {
+                    return state.students.isNotEmpty
+                        ? Expanded(
+                            child: ListView.separated(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              itemBuilder: (context, index) {
+                                return CardUserAttendance(
+                                  student: state.students[index],
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: height * 0.02),
+                              itemCount: state.students.length,
+                            ),
+                          )
+                        : Padding(
+                            padding: EdgeInsets.only(top: height * 0.25),
+                            child: const Center(
+                              child: Text('Belum ada data yang terekam'),
+                            ),
+                          );
+                  }
+                  if (state is AttendanceStudentFailure) {
+                    return const Center(
+                      child: Text('Something wrongs'),
+                    );
+                  }
+                  return Container();
+                },
               ),
             ],
           ),
