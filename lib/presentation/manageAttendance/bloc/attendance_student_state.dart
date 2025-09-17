@@ -11,4 +11,8 @@ class AttendanceStudentLoaded extends AttendanceStudentState {
   AttendanceStudentLoaded({required this.students});
 }
 
-class AttendanceStudentFailure extends AttendanceStudentState {}
+class AttendanceStudentFailure extends AttendanceStudentState {
+  final String errorMessage;
+
+  AttendanceStudentFailure({required this.errorMessage});
+}

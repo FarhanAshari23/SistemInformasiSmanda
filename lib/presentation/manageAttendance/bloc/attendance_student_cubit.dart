@@ -15,7 +15,7 @@ class AttendanceStudentCubit extends Cubit<AttendanceStudentState> {
     );
     returnedData.fold(
       (error) {
-        emit(AttendanceStudentFailure());
+        emit(AttendanceStudentFailure(errorMessage: error.toString()));
       },
       (data) {
         emit(AttendanceStudentLoaded(students: data));

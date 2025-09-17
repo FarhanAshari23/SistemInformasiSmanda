@@ -19,7 +19,6 @@ class SelectClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    // double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -37,9 +36,10 @@ class SelectClass extends StatelessWidget {
                   const Text(
                     'Silakan Pilih Kelas:',
                     style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primary),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary,
+                    ),
                   ),
                   SizedBox(height: height * 0.05),
                   Row(
@@ -50,8 +50,9 @@ class SelectClass extends StatelessWidget {
                         nextPage: AttendancesKelasSepuluhView(date: date),
                       ),
                       CardKelas(
-                          title: 'Kelas\n11',
-                          nextPage: AttendancesKelasSebelasView(date: date))
+                        title: 'Kelas\n11',
+                        nextPage: AttendancesKelasSebelasView(date: date),
+                      )
                     ],
                   ),
                   SizedBox(height: height * 0.03),
