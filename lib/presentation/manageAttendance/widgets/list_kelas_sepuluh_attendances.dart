@@ -18,72 +18,69 @@ class ListKelasSepuluhAttendances extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    return BlocProvider(
-      create: (context) => GetAllKelasCubit()..displayAll(),
-      child: SizedBox(
-        width: double.infinity,
-        height: height * 0.05,
-        child: BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
-          builder: (context, state) {
-            if (state is KelasDisplayLoading) {
-              return const ListKelasLoading();
-            }
-            if (state is KelasDisplayLoaded) {
-              final kelas =
-                  state.kelas.where((element) => element.degree == 10).toList();
-              return BlocProvider(
-                create: (context) => KelasNavigationCubit(),
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        context.read<KelasNavigationCubit>().changeColor(index);
-                        context
-                            .read<AttendanceStudentCubit>()
-                            .displayAttendanceStudent(
-                              params: ParamAttendanceEntity(
-                                date: date,
-                                kelas: kelas[index].kelas,
-                              ),
-                            );
-                      },
-                      child: Container(
-                        width: width * 0.2,
-                        height: height * 0.035,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: context.watch<KelasNavigationCubit>().state ==
-                                  index
-                              ? AppColors.primary
-                              : AppColors.tertiary,
-                        ),
-                        child: Center(
-                          child: Text(
-                            kelas[index].kelas,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color:
-                                  context.watch<KelasNavigationCubit>().state ==
-                                          index
-                                      ? AppColors.tertiary
-                                      : AppColors.primary,
+    return SizedBox(
+      width: double.infinity,
+      height: height * 0.05,
+      child: BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
+        builder: (context, state) {
+          if (state is KelasDisplayLoading) {
+            return const ListKelasLoading();
+          }
+          if (state is KelasDisplayLoaded) {
+            final kelas =
+                state.kelas.where((element) => element.degree == 10).toList();
+            return BlocProvider(
+              create: (context) => KelasNavigationCubit(),
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      context.read<KelasNavigationCubit>().changeColor(index);
+                      context
+                          .read<AttendanceStudentCubit>()
+                          .displayAttendanceStudent(
+                            params: ParamAttendanceEntity(
+                              date: date,
+                              kelas: kelas[index].kelas,
                             ),
+                          );
+                    },
+                    child: Container(
+                      width: width * 0.2,
+                      height: height * 0.035,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color:
+                            context.watch<KelasNavigationCubit>().state == index
+                                ? AppColors.primary
+                                : AppColors.tertiary,
+                      ),
+                      child: Center(
+                        child: Text(
+                          kelas[index].kelas,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color:
+                                context.watch<KelasNavigationCubit>().state ==
+                                        index
+                                    ? AppColors.tertiary
+                                    : AppColors.primary,
                           ),
                         ),
                       ),
-                    );
-                  },
-                  separatorBuilder: (context, index) =>
-                      SizedBox(width: width * 0.01),
-                  itemCount: kelas.length,
-                ),
-              );
-            }
-            return Container();
-          },
-        ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) =>
+                    SizedBox(width: width * 0.01),
+                itemCount: kelas.length,
+              ),
+            );
+          }
+          return Container();
+        },
       ),
     );
   }
