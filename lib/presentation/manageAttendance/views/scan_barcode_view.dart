@@ -35,7 +35,8 @@ class ScanBarcodeView extends StatelessWidget {
           listener: (context, state) {
             if (state is ButtonFailureState) {
               var snackbar = SnackBar(
-                content: Text(state.errorMessage),
+                content: Text(
+                    'Something error: ${state.errorMessage}, please add date first'),
                 behavior: SnackBarBehavior.floating,
               );
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
@@ -56,102 +57,70 @@ class ScanBarcodeView extends StatelessWidget {
                       ),
                       SizedBox(height: height * 0.02),
                       Container(
-                        width: double.infinity,
-                        height: height * 0.35,
-                        color: AppColors.inversePrimary,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child:
-                              BlocBuilder<StudentsNISNCubit, StudentsNISNState>(
-                            builder: (context, state) {
-                              if (state is StudentsNISNLoading) {
-                                return const Row(
-                                  children: [
-                                    Text('Tunggu Sebentar...'),
-                                    CircularProgressIndicator(),
-                                  ],
-                                );
-                              }
-                              if (state is StudentsNISNLoaded) {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Center(
-                                      child: Text(
-                                        'Data Siswa Berhasil Didapatkan!',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w800,
-                                          color: AppColors.primary,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: height * 0.02),
-                                    Text(
-                                      'Nama: ${state.student.nama}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-                                    Text(
-                                      'NISN: ${state.student.nisn}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Kelas: ${state.student.kelas}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-                                    SizedBox(height: height * 0.02),
-                                    Center(
-                                      child: Builder(builder: (context) {
-                                        return BasicButton(
-                                          onPressed: () {
-                                            context
-                                                .read<ButtonStateCubit>()
-                                                .execute(
-                                                    usecase:
-                                                        AddStudentAttendanceUseCase(),
-                                                    params: state.student);
-                                            AppNavigator.push(
-                                              context,
-                                              SuccesAddAttandance(
-                                                userEntity: state.student,
-                                              ),
-                                            );
-                                          },
-                                          title: 'Tambah',
-                                        );
-                                      }),
-                                    )
-                                  ],
-                                );
-                              }
-                              if (state is StudentsNISNFailure) {
-                                return const Center(
-                                  child: Text(
-                                    'Data Tidak Ditemukan',
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: AppColors.inversePrimary,
+                        ),
+                        child:
+                            BlocBuilder<StudentsNISNCubit, StudentsNISNState>(
+                          builder: (context, state) {
+                            if (state is StudentsNISNLoading) {
+                              return const Row(
+                                children: [
+                                  Text('Tunggu Sebentar...'),
+                                  CircularProgressIndicator(),
+                                ],
+                              );
+                            }
+                            if (state is StudentsNISNLoaded) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Absen berhasil dilakukan!',
                                     style: TextStyle(
-                                      fontSize: 32,
-                                      color: AppColors.primary,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w800,
+                                      color: AppColors.primary,
                                     ),
-                                    textAlign: TextAlign.center,
                                   ),
-                                );
-                              }
+                                  SizedBox(height: height * 0.02),
+                                  Text(
+                                    'Nama: ${state.student.nama}',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    'NISN: ${state.student.nisn}',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Kelas: ${state.student.kelas}',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                            if (state is StudentsNISNFailure) {
                               return const Center(
                                 child: Text(
-                                  'Arahkan Kamera ke Barcode Siswa',
+                                  'Data Tidak Ditemukan',
                                   style: TextStyle(
                                     fontSize: 32,
                                     color: AppColors.primary,
@@ -160,8 +129,19 @@ class ScanBarcodeView extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                 ),
                               );
-                            },
-                          ),
+                            }
+                            return const Center(
+                              child: Text(
+                                'Arahkan Kamera ke Barcode Siswa',
+                                style: TextStyle(
+                                  fontSize: 32,
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          },
                         ),
                       )
                     ],
