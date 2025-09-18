@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/bloc/check_press_cubit.dart';
@@ -72,7 +73,10 @@ class HomeViewAdmin extends StatelessWidget {
       Container(),
       const SeeDataAttandance(),
       const RegisterStudentView(),
-      const EditStudentView(),
+      BlocProvider(
+        create: (context) => GetAllKelasCubit()..displayAll(),
+        child: const EditStudentView(),
+      ),
       AddTeacherView(),
       const EditTeacherView(),
       AddNewsView(),

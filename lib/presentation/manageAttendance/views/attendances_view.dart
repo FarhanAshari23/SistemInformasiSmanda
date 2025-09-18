@@ -12,10 +12,10 @@ import '../bloc/attendance_student_cubit.dart';
 import '../bloc/attendance_student_state.dart';
 import '../widgets/list_kelas_sepuluh_attendances.dart';
 
-class AttendancesKelasSepuluhView extends StatelessWidget {
+class AttendancesView extends StatelessWidget {
   final int kelas;
   final String date;
-  const AttendancesKelasSepuluhView({
+  const AttendancesView({
     super.key,
     required this.date,
     required this.kelas,

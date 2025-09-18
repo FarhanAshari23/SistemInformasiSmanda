@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageStudent/views/edit_duabelas_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageStudent/views/edit_sebelas_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageStudent/views/edit_sepuluh_view.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageStudent/views/edit_student_detail_class_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/views/search_student_edit.dart';
 
+import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/widget/card/card_kelas.dart';
 import '../../../common/widget/card/card_search.dart';
 
@@ -15,7 +15,6 @@ class EditStudentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    // double width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -37,28 +36,43 @@ class EditStudentView extends StatelessWidget {
                         color: AppColors.primary),
                   ),
                   SizedBox(height: height * 0.05),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CardKelas(
                         title: 'Kelas\n10',
-                        nextPage: EditSepuluhView(),
+                        nextPage: BlocProvider.value(
+                          value: context.read<GetAllKelasCubit>(),
+                          child: const EditStudentDetailClassView(
+                            kelas: 10,
+                          ),
+                        ),
                       ),
                       CardKelas(
                         title: 'Kelas\n11',
-                        nextPage: EditSebelasView(),
+                        nextPage: BlocProvider.value(
+                          value: context.read<GetAllKelasCubit>(),
+                          child: const EditStudentDetailClassView(
+                            kelas: 11,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                   SizedBox(height: height * 0.03),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CardKelas(
                         title: 'Kelas\n12',
-                        nextPage: EditDuabelasView(),
+                        nextPage: BlocProvider.value(
+                          value: context.read<GetAllKelasCubit>(),
+                          child: const EditStudentDetailClassView(
+                            kelas: 12,
+                          ),
+                        ),
                       ),
-                      CardSearch(
+                      const CardSearch(
                         nextPage: SearchStudentEdit(),
                       ),
                     ],
