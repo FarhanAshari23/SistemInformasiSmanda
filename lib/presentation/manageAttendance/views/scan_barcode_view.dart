@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/button/button_state.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/attendance/add_student_attendance.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/search_student_by_nisn.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/bloc/student_nisn_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/bloc/student_nisn_state.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/screens/succes_add_attandance.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/widgets/scan_qr.dart';
 
 class ScanBarcodeView extends StatelessWidget {

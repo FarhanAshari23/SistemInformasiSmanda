@@ -53,24 +53,38 @@ class RegisterStudentView extends StatelessWidget {
                   }
                   if (state is StudentsRegistrationLoaded) {
                     if (state.students.isEmpty) {
-                      return Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: height * 0.05),
-                            Image.asset(
-                              AppImages.emptyRegistrationChara,
-                              width: height * 0.2,
-                              height: height * 0.2,
+                      return Expanded(
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            context
+                                .read<GetStudentRegistrationCubit>()
+                                .displayStudentRegistration();
+                          },
+                          child: ListView(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
                             ),
-                            const Text(
-                              'Tidak ada akun yang harus di konfirmasi',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.primary,
+                            children: [
+                              SizedBox(height: height * 0.15),
+                              Center(
+                                child: Image.asset(
+                                  AppImages.emptyRegistrationChara,
+                                  width: height * 0.2,
+                                  height: height * 0.2,
+                                ),
                               ),
-                            ),
-                          ],
+                              const Center(
+                                child: Text(
+                                  'Tidak ada akun yang harus di konfirmasi',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     }
