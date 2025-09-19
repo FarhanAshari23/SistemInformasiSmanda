@@ -7,7 +7,7 @@ import 'package:new_sistem_informasi_smanda/common/bloc/kelas/students_state.dar
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/stundets_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/card/card_user.dart';
 import 'package:new_sistem_informasi_smanda/presentation/students/views/murid_detail.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/list_view/list_kelas_sepuluh.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/list_view/list_kelas.dart';
 
 import '../../../common/helper/app_navigation.dart';
 
@@ -37,7 +37,7 @@ class KelasSepuluhView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const ListKelasSepuluh(),
+                    const ListKelas(kelas: 10),
                     SizedBox(height: height * 0.04),
                     SizedBox(
                       width: double.infinity,

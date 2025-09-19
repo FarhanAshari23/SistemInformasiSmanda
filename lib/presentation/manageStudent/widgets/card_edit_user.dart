@@ -157,6 +157,7 @@ class CardEditUser extends StatelessWidget {
                                           .showSnackBar(snackbar);
                                     },
                                     (r) {
+                                      Navigator.pop(context);
                                       var snackbar = const SnackBar(
                                         content: Text("Data Berhasil Dihapus"),
                                       );
