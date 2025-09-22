@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/news/news.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/news/delete_news.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/news/update_news.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageNews/views/edit_news_view.dart';
 
 import '../../../common/widget/button/basic_button.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../service_locator.dart';
+import '../../home/bloc/news_cubit.dart';
+import '../views/edit_news_view_detail.dart';
 
 class CardNewsEdit extends StatelessWidget {
   final NewsEntity news;
@@ -24,28 +25,6 @@ class CardNewsEdit extends StatelessWidget {
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
-    TextEditingController fromC = TextEditingController(text: news.from);
-    TextEditingController toC = TextEditingController(text: news.to);
-    TextEditingController titleC = TextEditingController(text: news.title);
-    TextEditingController contentC = TextEditingController(text: news.content);
-    List<String> namaHint = [
-      'Dari: ',
-      'Ke: ',
-      'Judul: ',
-      'Isi: ',
-    ];
-    List<TextEditingController> listController = [
-      fromC,
-      toC,
-      titleC,
-      contentC,
-    ];
-    List<int> maxLines = [
-      1,
-      1,
-      1,
-      5,
-    ];
     return Container(
       width: double.infinity,
       height: bodyHeight * 0.15,
@@ -90,111 +69,14 @@ class CardNewsEdit extends StatelessWidget {
             child: PopupMenuButton(
               onSelected: (String value) {
                 if (value == 'Edit') {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        backgroundColor: AppColors.inversePrimary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: SingleChildScrollView(
-                          child: SizedBox(
-                            height: bodyHeight * 0.6,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 20,
-                                horizontal: 16,
-                              ),
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    'Ubah Data Siswa',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                  SizedBox(height: bodyHeight * 0.02),
-                                  SizedBox(
-                                    width: width * 0.7,
-                                    height: bodyHeight * 0.415,
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.vertical,
-                                      itemBuilder: (context, index) {
-                                        return TextField(
-                                          maxLines: maxLines[index],
-                                          controller: listController[index],
-                                          autocorrect: false,
-                                          decoration: InputDecoration(
-                                            hintText: namaHint[index],
-                                          ),
-                                        );
-                                      },
-                                      separatorBuilder: (context, index) =>
-                                          SizedBox(
-                                        height: bodyHeight * 0.01,
-                                      ),
-                                      itemCount: namaHint.length,
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      var result =
-                                          await sl<UpdateNewsUsecase>().call(
-                                        params: NewsEntity(
-                                          title: titleC.text,
-                                          content: contentC.text,
-                                          from: fromC.text,
-                                          to: toC.text,
-                                        ),
-                                      );
-                                      result.fold(
-                                        (error) {
-                                          var snackbar = const SnackBar(
-                                            content:
-                                                Text("Gagal Mengubah Data"),
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackbar);
-                                        },
-                                        (r) {
-                                          var snackbar = const SnackBar(
-                                            content:
-                                                Text("Data Berhasil Diubah"),
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackbar);
-                                          AppNavigator.push(
-                                              context, const EditNewsView());
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      width: width * 0.3,
-                                      height: bodyHeight * 0.08,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: AppColors.secondary,
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'Ubah',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w800,
-                                            color: AppColors.inversePrimary,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+                  AppNavigator.push(
+                    context,
+                    BlocProvider.value(
+                      value: context.read<NewsCubit>(),
+                      child: EditNewsViewDetail(
+                        news: news,
+                      ),
+                    ),
                   );
                 } else if (value == 'Hapus') {
                   showDialog(

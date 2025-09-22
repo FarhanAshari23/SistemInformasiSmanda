@@ -101,131 +101,124 @@ class EditStudentDetailClassView extends StatelessWidget {
                                               : kelasDuabelas[selectedIndex]
                                                   .kelas;
                                       if (index == 0) {
-                                        return Padding(
-                                          padding: EdgeInsets.only(
-                                            left: height * 0.25,
-                                          ),
-                                          child: CustomInkWell(
-                                            borderRadius: 16,
-                                            defaultColor: AppColors.primary,
-                                            onTap: () {
-                                              final outerContext = context;
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return Dialog(
-                                                    backgroundColor: AppColors
-                                                        .inversePrimary,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                    ),
-                                                    insetPadding:
-                                                        EdgeInsets.symmetric(
-                                                      vertical: height * 0.2,
-                                                      horizontal: 16,
-                                                    ),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Container(
-                                                          width: width * 0.6,
-                                                          height: height * 0.3,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            image:
-                                                                DecorationImage(
-                                                              image: AssetImage(
-                                                                  AppImages
-                                                                      .splashDelete),
-                                                              fit: BoxFit.fill,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          'Apakah anda yakin ingin menghapus seluruh data siswa dari kelas $currentClass?',
-                                                          style:
-                                                              const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w800,
-                                                            color: AppColors
-                                                                .primary,
-                                                          ),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                        SizedBox(
-                                                            height:
-                                                                height * 0.02),
-                                                        BasicButton(
-                                                          onPressed: () async {
-                                                            var delete = await sl<
-                                                                    DeleteStudentByClassUsecase>()
-                                                                .call(
-                                                                    params:
-                                                                        currentClass);
-                                                            return delete.fold(
-                                                              (error) {
-                                                                var snackbar =
-                                                                    SnackBar(
-                                                                  content: Text(
-                                                                      "Gagal Menghapus Murid, Coba Lagi: $error"),
-                                                                );
-                                                                ScaffoldMessenger.of(
-                                                                        context)
-                                                                    .showSnackBar(
-                                                                        snackbar);
-                                                              },
-                                                              (r) {
-                                                                Navigator.pop(
-                                                                    context);
-                                                                var snackbar =
-                                                                    const SnackBar(
-                                                                  content: Text(
-                                                                      "Data Berhasil Dihapus"),
-                                                                );
-                                                                ScaffoldMessenger.of(
-                                                                        context)
-                                                                    .showSnackBar(
-                                                                        snackbar);
-                                                                outerContext
-                                                                    .read<
-                                                                        StudentsDisplayCubit>()
-                                                                    .displayStudents(
-                                                                        params:
-                                                                            currentClass);
-                                                              },
-                                                            );
-                                                          },
-                                                          title: 'Hapus',
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                vertical: 16,
-                                                horizontal: 4,
-                                              ),
-                                              child: const Center(
-                                                child: Text(
-                                                  'Hapus Semua',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white,
+                                        return CustomInkWell(
+                                          borderRadius: 16,
+                                          defaultColor: AppColors.primary,
+                                          onTap: () {
+                                            final outerContext = context;
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return Dialog(
+                                                  backgroundColor:
+                                                      AppColors.inversePrimary,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
                                                   ),
+                                                  insetPadding:
+                                                      EdgeInsets.symmetric(
+                                                    vertical: height * 0.2,
+                                                    horizontal: 16,
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Container(
+                                                        width: width * 0.6,
+                                                        height: height * 0.3,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          image:
+                                                              DecorationImage(
+                                                            image: AssetImage(
+                                                                AppImages
+                                                                    .splashDelete),
+                                                            fit: BoxFit.fill,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        'Apakah anda yakin ingin menghapus seluruh data siswa dari kelas $currentClass?',
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          color:
+                                                              AppColors.primary,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      SizedBox(
+                                                          height:
+                                                              height * 0.02),
+                                                      BasicButton(
+                                                        onPressed: () async {
+                                                          var delete = await sl<
+                                                                  DeleteStudentByClassUsecase>()
+                                                              .call(
+                                                                  params:
+                                                                      currentClass);
+                                                          return delete.fold(
+                                                            (error) {
+                                                              var snackbar =
+                                                                  SnackBar(
+                                                                content: Text(
+                                                                    "Gagal Menghapus Murid, Coba Lagi: $error"),
+                                                              );
+                                                              ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                      snackbar);
+                                                            },
+                                                            (r) {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              var snackbar =
+                                                                  const SnackBar(
+                                                                content: Text(
+                                                                    "Data Berhasil Dihapus"),
+                                                              );
+                                                              ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                      snackbar);
+                                                              outerContext
+                                                                  .read<
+                                                                      StudentsDisplayCubit>()
+                                                                  .displayStudents(
+                                                                      params:
+                                                                          currentClass);
+                                                            },
+                                                          );
+                                                        },
+                                                        title: 'Hapus',
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 16,
+                                            ),
+                                            child: const Center(
+                                              child: Text(
+                                                'Hapus Semua',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
                                                 ),
                                               ),
                                             ),

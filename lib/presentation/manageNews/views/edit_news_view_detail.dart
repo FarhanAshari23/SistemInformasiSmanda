@@ -1,26 +1,40 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/data/models/news/news.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageNews/views/ack_news_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageNews/widgets/field_news.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/presentation/home/bloc/news_cubit.dart';
 
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/button/basic_button.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/news/news.dart';
+import '../../../domain/usecases/news/update_news.dart';
+import '../../../service_locator.dart';
+import '../widgets/field_news.dart';
 
-class AddNewsView extends StatefulWidget {
-  const AddNewsView({super.key});
+class EditNewsViewDetail extends StatefulWidget {
+  final NewsEntity news;
+  const EditNewsViewDetail({
+    super.key,
+    required this.news,
+  });
 
   @override
-  State<AddNewsView> createState() => _AddNewsViewState();
+  State<EditNewsViewDetail> createState() => _EditNewsViewDetailState();
 }
 
-class _AddNewsViewState extends State<AddNewsView> {
-  final TextEditingController _titleC = TextEditingController();
-  final TextEditingController _fromC = TextEditingController();
-  final TextEditingController _contentC = TextEditingController();
-  final TextEditingController _toC = TextEditingController();
+class _EditNewsViewDetailState extends State<EditNewsViewDetail> {
+  late TextEditingController _titleC;
+  late TextEditingController _fromC;
+  late TextEditingController _contentC;
+  late TextEditingController _toC;
+
+  @override
+  void initState() {
+    _titleC = TextEditingController(text: widget.news.title);
+    _fromC = TextEditingController(text: widget.news.from);
+    _contentC = TextEditingController(text: widget.news.content);
+    _toC = TextEditingController(text: widget.news.to);
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -35,7 +49,6 @@ class _AddNewsViewState extends State<AddNewsView> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    Timestamp now = Timestamp.now();
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -45,7 +58,7 @@ class _AddNewsViewState extends State<AddNewsView> {
               isProfileViewed: false,
             ),
             const Text(
-              'BUAT PENGUMUMAN',
+              'EDIT PENGUMUMAN',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w900,
@@ -105,7 +118,7 @@ class _AddNewsViewState extends State<AddNewsView> {
             ),
             SizedBox(height: height * 0.04),
             BasicButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_titleC.text.isEmpty ||
                     _contentC.text.isEmpty ||
                     _fromC.text.isEmpty ||
@@ -122,21 +135,33 @@ class _AddNewsViewState extends State<AddNewsView> {
                     ),
                   );
                 } else {
-                  AppNavigator.push(
-                    context,
-                    AckNewsView(
-                      createNewsReq: NewsModel(
-                        title: _titleC.text,
-                        content: _contentC.text,
-                        from: _fromC.text,
-                        to: _toC.text,
-                        createdAt: now,
-                      ),
+                  var result = await sl<UpdateNewsUsecase>().call(
+                    params: NewsEntity(
+                      title: _titleC.text,
+                      content: _contentC.text,
+                      from: _fromC.text,
+                      to: _toC.text,
                     ),
+                  );
+                  result.fold(
+                    (error) {
+                      var snackbar = const SnackBar(
+                        content: Text("Gagal Mengubah Data"),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                    },
+                    (r) {
+                      context.read<NewsCubit>().displayNews();
+                      var snackbar = const SnackBar(
+                        content: Text("Data Berhasil Diubah"),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                      Navigator.pop(context);
+                    },
                   );
                 }
               },
-              title: 'Lanjut',
+              title: 'Ubah',
             )
           ],
         ),

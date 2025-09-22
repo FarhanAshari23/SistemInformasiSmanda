@@ -79,7 +79,7 @@ class HomeViewAdmin extends StatelessWidget {
       ),
       AddTeacherView(),
       const EditTeacherView(),
-      AddNewsView(),
+      const AddNewsView(),
       const EditNewsView(),
       const AddDataEkskulView(),
       const EditDataEkskulView(),
@@ -228,7 +228,6 @@ class HomeViewAdmin extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: height * 0.0095),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
