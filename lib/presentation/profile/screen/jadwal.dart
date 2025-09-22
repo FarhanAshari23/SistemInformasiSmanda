@@ -22,6 +22,7 @@ class JadwalScreen extends StatelessWidget {
       'Jumat',
     ];
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Text(
           'Jadwal Pelajaran',
@@ -38,6 +39,7 @@ class JadwalScreen extends StatelessWidget {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: dayName.length,
+            padding: EdgeInsets.symmetric(horizontal: width * 0.035),
             itemBuilder: (context, index) => CustomInkWell(
               onTap: () {
                 context.read<BarDaysCubit>().changeColor(index);
@@ -68,14 +70,12 @@ class JadwalScreen extends StatelessWidget {
           ),
         ),
         SizedBox(height: height * 0.02),
-        SizedBox(
-          width: double.infinity,
-          height: height * 0.4,
-          child: Builder(builder: (context) {
-            final selectedDay = dayName[context.watch<BarDaysCubit>().state];
-            return JadwalDetail(hari: selectedDay);
-          }),
-        ),
+        Builder(builder: (context) {
+          final selectedDay = dayName[context.watch<BarDaysCubit>().state];
+          return Expanded(
+            child: JadwalDetail(hari: selectedDay),
+          );
+        }),
       ],
     );
   }

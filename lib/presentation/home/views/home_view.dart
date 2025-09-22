@@ -8,6 +8,7 @@ import 'package:new_sistem_informasi_smanda/presentation/home/screens/pengumuman
 import 'package:new_sistem_informasi_smanda/presentation/home/screens/siswa_screen.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/screens/teacher_screen.dart';
 
+import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 
@@ -32,7 +33,10 @@ class HomeView extends StatelessWidget {
     ];
     List<Widget> page = [
       const PengumumanScreen(),
-      const SiswaScreen(),
+      BlocProvider(
+        create: (context) => GetAllKelasCubit()..displayAll(),
+        child: const SiswaScreen(),
+      ),
       const TeacherScreen(),
       const EkskulScreen(),
     ];

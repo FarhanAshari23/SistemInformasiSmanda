@@ -23,6 +23,10 @@ class CardJadwal extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: height * 0.15,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 16,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: AppColors.background,
@@ -31,42 +35,32 @@ class CardJadwal extends StatelessWidget {
           color: AppColors.primary,
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8,
-          vertical: 17,
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: width * 0.185,
-              height: height * 0.9,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.secondary,
-              ),
-              child: Center(
-                child: Text(
-                  urutan.toString(),
-                  style: const TextStyle(
-                    color: AppColors.inversePrimary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w900,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.secondary,
+                ),
+                child: Center(
+                  child: Text(
+                    urutan.toString(),
+                    style: const TextStyle(
+                      color: AppColors.inversePrimary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(width: width * 0.02),
-            Container(
-              width: 3,
-              height: height * 0.08,
-              color: AppColors.primary,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: SizedBox(
-                width: width * 0.45,
-                height: height * 0.2,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -110,31 +104,20 @@ class CardJadwal extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-            SizedBox(width: width * 0.01),
-            Container(
-              width: 3,
-              height: height * 0.08,
-              color: AppColors.primary,
-            ),
-            SizedBox(width: width * 0.01),
-            SizedBox(
-              width: width * 0.165,
-              height: height * 0.075,
-              child: Center(
-                child: Text(
-                  pelaksana,
-                  style: const TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w900,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+            ],
+          ),
+          Center(
+            child: Text(
+              pelaksana,
+              style: const TextStyle(
+                color: AppColors.primary,
+                fontSize: 14,
+                fontWeight: FontWeight.w900,
               ),
-            )
-          ],
-        ),
+              textAlign: TextAlign.center,
+            ),
+          )
+        ],
       ),
     );
   }

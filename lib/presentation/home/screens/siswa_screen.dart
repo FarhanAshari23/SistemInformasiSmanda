@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/card/card_search.dart';
-import 'package:new_sistem_informasi_smanda/presentation/students/views/kelas_duabelas_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/students/views/kelas_sebelas_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/students/views/kelas_sepuluh_view.dart';
+import 'package:new_sistem_informasi_smanda/presentation/students/views/kelas_detail_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/students/views/search_screen_student.dart';
 
+import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/widget/card/card_kelas.dart';
 
 class SiswaScreen extends StatelessWidget {
@@ -21,28 +21,43 @@ class SiswaScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CardKelas(
                   title: 'Kelas\n10',
-                  nextPage: KelasSepuluhView(),
+                  nextPage: BlocProvider.value(
+                    value: context.read<GetAllKelasCubit>(),
+                    child: const KelasDetailView(
+                      kelas: 10,
+                    ),
+                  ),
                 ),
                 CardKelas(
                   title: 'Kelas\n11',
-                  nextPage: KelasSebelasView(),
+                  nextPage: BlocProvider.value(
+                    value: context.read<GetAllKelasCubit>(),
+                    child: const KelasDetailView(
+                      kelas: 11,
+                    ),
+                  ),
                 ),
               ],
             ),
             SizedBox(height: height * 0.03),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CardKelas(
                   title: 'Kelas\n12',
-                  nextPage: KelasDuabelasView(),
+                  nextPage: BlocProvider.value(
+                    value: context.read<GetAllKelasCubit>(),
+                    child: const KelasDetailView(
+                      kelas: 12,
+                    ),
+                  ),
                 ),
-                CardSearch(
+                const CardSearch(
                   nextPage: SearchScreenStudent(),
                 ),
               ],
