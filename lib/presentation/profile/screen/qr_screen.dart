@@ -14,16 +14,15 @@ class QrScreen extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          SizedBox(height: height * 0.05),
+          SizedBox(height: height * 0.075),
           BarcodeWidget(
             barcode: Barcode.qrCode(),
             data: qrCodeData,
             width: 200,
             height: 200,
           ),
-          SizedBox(height: height * 0.01),
+          SizedBox(height: height * 0.025),
           const Text(
             'Silakan tunjukkan QR ini untuk melakukan absen',
             style: TextStyle(
