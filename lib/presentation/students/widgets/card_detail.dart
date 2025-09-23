@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
 
 class CardDetailSiswa extends StatelessWidget {
   final String title;
   final String content;
+  final Function()? onTap;
   const CardDetailSiswa({
     super.key,
     required this.title,
     required this.content,
+    this.onTap,
   });
 
   @override
@@ -17,23 +20,20 @@ class CardDetailSiswa extends StatelessWidget {
     final bodyHeight = mediaQueryHeight -
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
-    double width = MediaQuery.of(context).size.width;
-    return SizedBox(
-      width: width * 0.45,
-      height: bodyHeight * 0.295,
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
       child: Stack(
-        alignment: AlignmentDirectional.bottomCenter,
+        alignment: AlignmentDirectional.topCenter,
+        clipBehavior: Clip.none,
         children: [
-          Container(
-            width: width * 0.45,
-            height: bodyHeight * 0.25,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: AppColors.secondary,
-            ),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+          CustomInkWell(
+            defaultColor: AppColors.secondary,
+            pressedColor: Colors.black,
+            borderRadius: 8,
+            onTap: onTap,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Center(
                 child: Text(
                   content,
                   style: const TextStyle(
@@ -46,10 +46,9 @@ class CardDetailSiswa extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: bodyHeight * 0.215,
+            bottom: bodyHeight * 0.25,
             child: Container(
-              width: width * 0.25,
-              height: bodyHeight * 0.065,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 color: AppColors.tertiary,

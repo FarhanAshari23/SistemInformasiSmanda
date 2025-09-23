@@ -131,15 +131,20 @@ class MuridDetail extends StatelessWidget {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        CardDetailSiswa(
-                                          title: 'Tanggal\nLahir',
-                                          content: user.tanggalLahir!,
+                                        Expanded(
+                                          child: CardDetailSiswa(
+                                            title: 'Tanggal Lahir',
+                                            content: user.tanggalLahir!,
+                                          ),
                                         ),
-                                        CardDetailSiswa(
-                                          title: 'Alamat',
-                                          content: user.alamat!,
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: CardDetailSiswa(
+                                            title: 'Alamat',
+                                            content: user.alamat!,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -147,18 +152,22 @@ class MuridDetail extends StatelessWidget {
                                       padding: const EdgeInsets.only(left: 4),
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          CardDetailSiswa(
-                                            title: 'Agama',
-                                            content: user.agama!,
+                                          Expanded(
+                                            child: CardDetailSiswa(
+                                              title: 'Agama',
+                                              content: user.agama!,
+                                            ),
                                           ),
-                                          const SizedBox(width: 4),
-                                          CardDetailSiswa(
-                                            title: 'Jenis Kelamin',
-                                            content: user.gender! == 1
-                                                ? 'Laki-laki'
-                                                : 'Perempuan',
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: CardDetailSiswa(
+                                              title: 'Jenis Kelamin',
+                                              content: user.gender! == 1
+                                                  ? 'Laki-laki'
+                                                  : 'Perempuan',
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -167,16 +176,20 @@ class MuridDetail extends StatelessWidget {
                                       padding: const EdgeInsets.only(left: 4),
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          CardDetailSiswa(
-                                            title: 'No HP',
-                                            content: user.noHP!,
+                                          Expanded(
+                                            child: CardDetailSiswa(
+                                              title: 'No HP',
+                                              content: user.noHP!,
+                                            ),
                                           ),
-                                          const SizedBox(width: 4),
-                                          CardDetailSiswa(
-                                            title: 'Ekskul',
-                                            content: user.ekskul!,
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: CardDetailSiswa(
+                                              title: 'Ekskul',
+                                              content: user.ekskul!,
+                                            ),
                                           ),
                                         ],
                                       ),
