@@ -4,6 +4,7 @@ import '../../entities/ekskul/ekskul.dart';
 
 abstract class EkskulRepository {
   Future<Either> createEkskul(EkskulEntity ekskulCreationReq);
+  Future<Either> updateAnggota(String anggota, namaEkskul);
   Future<Either> getEkskul();
   Future<Either> updateEkskul(EkskulEntity ekskulUpdateReq);
   Future<Either> deleteEkskul(String nameEkskul);

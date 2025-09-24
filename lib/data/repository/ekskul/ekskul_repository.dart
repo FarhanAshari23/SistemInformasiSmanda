@@ -37,4 +37,9 @@ class EkskulRepositoryImpl extends EkskulRepository {
   Future<Either> updateEkskul(EkskulEntity ekskulUpdateReq) async {
     return await sl<EkskulFirebaseService>().updateEkskul(ekskulUpdateReq);
   }
+
+  @override
+  Future<Either> updateAnggota(String anggota, namaEkskul) async {
+    return await sl<EkskulFirebaseService>().updateAnggota(anggota, namaEkskul);
+  }
 }
