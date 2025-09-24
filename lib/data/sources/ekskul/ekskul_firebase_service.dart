@@ -2,13 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../domain/entities/ekskul/ekskul.dart';
+import '../../../domain/entities/ekskul/update_anggota_req.dart';
+import '../../models/ekskul/anggota.dart';
 
 abstract class EkskulFirebaseService {
   Future<Either> createEkskul(EkskulEntity ekskulCreationReq);
   Future<Either> getEkskul();
   Future<Either> updateEkskul(EkskulEntity ekskulUpdateReq);
   Future<Either> deleteEkskul(String nameEkskul);
-  Future<Either> updateAnggota(String anggota, namaEkskul);
+  Future<Either> addAnggota(UpdateAnggotaReq anggotaReq);
 }
 
 class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
@@ -88,20 +90,29 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
   }
 
   @override
-  Future<Either> updateAnggota(String anggota, namaEkskul) async {
+  Future<Either> addAnggota(UpdateAnggotaReq anggotaReq) async {
     try {
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Ekskuls');
-      QuerySnapshot querySnapshot =
-          await users.where('nama_ekskul', isEqualTo: namaEkskul).get();
-      if (querySnapshot.docs.isNotEmpty) {
-        String docId = querySnapshot.docs[0].id;
-        await users.doc(docId).update({
-          "anggota": FieldValue.arrayUnion([anggota]),
-        });
-        return right('Update Data Ekskul Success');
+      final anggotaModel = AnggotaModel(
+        nama: anggotaReq.anggota.nama,
+        nisn: anggotaReq.anggota.nisn,
+      );
+
+      final batch = FirebaseFirestore.instance.batch();
+
+      for (final ekskulNama in anggotaReq.namaEkskul) {
+        final query = await FirebaseFirestore.instance
+            .collection("Ekskuls")
+            .where("nama_ekskul", isEqualTo: ekskulNama)
+            .get();
+
+        for (var doc in query.docs) {
+          batch.update(doc.reference, {
+            'anggota': FieldValue.arrayUnion([anggotaModel.toMap()]),
+          });
+        }
       }
-      return const Right('Failed Update Data Ekskul');
+      await batch.commit();
+      return const Right('Success Update Data Ekskul');
     } catch (e) {
       return Left('Something Wrong: $e');
     }

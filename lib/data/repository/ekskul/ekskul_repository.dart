@@ -5,6 +5,8 @@ import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/repository/ekskul/ekskul.dart';
 import 'package:new_sistem_informasi_smanda/service_locator.dart';
 
+import '../../../domain/entities/ekskul/update_anggota_req.dart';
+
 class EkskulRepositoryImpl extends EkskulRepository {
   @override
   Future<Either> createEkskul(EkskulEntity ekskulCreationReq) async {
@@ -39,7 +41,7 @@ class EkskulRepositoryImpl extends EkskulRepository {
   }
 
   @override
-  Future<Either> updateAnggota(String anggota, namaEkskul) async {
-    return await sl<EkskulFirebaseService>().updateAnggota(anggota, namaEkskul);
+  Future<Either> addAnggota(UpdateAnggotaReq anggotaReq) async {
+    return await sl<EkskulFirebaseService>().addAnggota(anggotaReq);
   }
 }
