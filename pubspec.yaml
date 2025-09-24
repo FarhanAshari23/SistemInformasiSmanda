@@ -16,6 +16,8 @@ dependencies:
   cached_network_image: ^3.4.1
   cloud_firestore: ^5.6.1
   cupertino_icons: ^1.0.6
+  add_2_calendar: ^3.0.1
+  url_launcher: ^6.3.2
   dartz: ^0.10.1
   file_picker: ^8.0.7
   firebase_auth: ^5.4.0

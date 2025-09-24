@@ -1,10 +1,13 @@
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 import 'package:new_sistem_informasi_smanda/presentation/students/widgets/card_detail.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/helper/display_image.dart';
 
@@ -23,6 +26,49 @@ class MuridDetail extends StatelessWidget {
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
+
+    Event buildEvent() {
+      DateFormat format = DateFormat("d MMMM yyyy", "id_ID");
+      DateTime parsedDate = format.parse(user.tanggalLahir!);
+      int currentYear = DateTime.now().year;
+      DateTime finalDate =
+          DateTime(currentYear, parsedDate.month, parsedDate.day);
+      return Event(
+        title: 'Ulang tahun ${user.nama}',
+        description: 'Mari rayakan ulang tahun teman kamu!',
+        location: 'SMA N 2 METRO',
+        startDate: finalDate,
+        endDate: finalDate.add(const Duration(hours: 23)),
+        allDay: false,
+      );
+    }
+
+    Future<void> openMapWithAddress(String address) async {
+      final Uri uri = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(address)}',
+      );
+
+      try {
+        final bool launched =
+            await launchUrl(uri, mode: LaunchMode.externalApplication);
+
+        if (!launched) {
+          await launchUrl(uri, mode: LaunchMode.platformDefault);
+        }
+      } catch (e) {
+        debugPrint("Gagal membuka Maps: $e");
+      }
+    }
+
+    Future<void> openAddContact(String phone) async {
+      final Uri uri = Uri(
+        scheme: 'tel',
+        path: phone,
+      );
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      }
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -136,6 +182,9 @@ class MuridDetail extends StatelessWidget {
                                         Expanded(
                                           child: CardDetailSiswa(
                                             title: 'Tanggal Lahir',
+                                            onTap: () =>
+                                                Add2Calendar.addEvent2Cal(
+                                                    buildEvent()),
                                             content: user.tanggalLahir!,
                                           ),
                                         ),
@@ -144,6 +193,8 @@ class MuridDetail extends StatelessWidget {
                                           child: CardDetailSiswa(
                                             title: 'Alamat',
                                             content: user.alamat!,
+                                            onTap: () => openMapWithAddress(
+                                                user.alamat!),
                                           ),
                                         ),
                                       ],
@@ -182,6 +233,8 @@ class MuridDetail extends StatelessWidget {
                                             child: CardDetailSiswa(
                                               title: 'No HP',
                                               content: user.noHP!,
+                                              onTap: () =>
+                                                  openAddContact(user.noHP!),
                                             ),
                                           ),
                                           const SizedBox(width: 8),
