@@ -183,6 +183,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                     namaSekretaris: _nameSekretarisC.text,
                     namaBendahara: _nameBendaharaC.text,
                     deskripsi: _deskripsiC.text,
+                    anggota: [],
                   ));
                   result.fold(
                     (error) {

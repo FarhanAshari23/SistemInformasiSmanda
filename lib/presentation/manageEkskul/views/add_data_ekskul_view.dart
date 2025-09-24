@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/data/models/ekskul/ekskul.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/ack_ekskul_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/list_teacher_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/search_students_view.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/ekskul/ekskul.dart';
 
 class AddDataEkskulView extends StatefulWidget {
   const AddDataEkskulView({super.key});
@@ -163,15 +163,15 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                   AppNavigator.push(
                     context,
                     AckEkskulView(
-                      ekskulCreateReq: EkskulModel(
-                        namaEkskul: _namaEkskulC.text,
-                        namaPembina: _namePembinaC.text,
-                        namaKetua: _nameKetuaC.text,
-                        namaWakilKetua: _nameWakilC.text,
-                        namaSekretaris: _nameSekretarisC.text,
-                        namaBendahara: _nameBendaharaC.text,
-                        deskripsi: _deskripsiC.text,
-                      ),
+                      ekskulCreateReq: EkskulEntity(
+                          namaEkskul: _namaEkskulC.text,
+                          namaPembina: _namePembinaC.text,
+                          namaKetua: _nameKetuaC.text,
+                          namaWakilKetua: _nameWakilC.text,
+                          namaSekretaris: _nameSekretarisC.text,
+                          namaBendahara: _nameBendaharaC.text,
+                          deskripsi: _deskripsiC.text,
+                          anggota: []),
                     ),
                   );
                 }

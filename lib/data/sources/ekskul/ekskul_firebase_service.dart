@@ -2,18 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../domain/entities/ekskul/ekskul.dart';
-import '../../models/ekskul/ekskul.dart';
 
 abstract class EkskulFirebaseService {
-  Future<Either> createEkskul(EkskulModel ekskulCreationReq);
+  Future<Either> createEkskul(EkskulEntity ekskulCreationReq);
   Future<Either> getEkskul();
   Future<Either> updateEkskul(EkskulEntity ekskulUpdateReq);
   Future<Either> deleteEkskul(String nameEkskul);
+  Future<Either> updateAnggota(String anggota, namaEkskul);
 }
 
 class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
   @override
-  Future<Either> createEkskul(EkskulModel ekskulCreationReq) async {
+  Future<Either> createEkskul(EkskulEntity ekskulCreationReq) async {
     try {
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
       await firebaseFirestore.collection("Ekskuls").add(
@@ -25,6 +25,7 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
           "nama_sekretaris": ekskulCreationReq.namaSekretaris,
           "nama_bendahara": ekskulCreationReq.namaBendahara,
           "deskripsi": ekskulCreationReq.deskripsi,
+          "anggota": ekskulCreationReq.anggota,
         },
       );
       return const Right("Upload ekskul was succesfull");
@@ -83,6 +84,26 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
       return const Right('Update Data Ekskul Success');
     } catch (e) {
       return const Left('Something Wrong');
+    }
+  }
+
+  @override
+  Future<Either> updateAnggota(String anggota, namaEkskul) async {
+    try {
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Ekskuls');
+      QuerySnapshot querySnapshot =
+          await users.where('nama_ekskul', isEqualTo: namaEkskul).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        String docId = querySnapshot.docs[0].id;
+        await users.doc(docId).update({
+          "anggota": FieldValue.arrayUnion([anggota]),
+        });
+        return right('Update Data Ekskul Success');
+      }
+      return const Right('Failed Update Data Ekskul');
+    } catch (e) {
+      return Left('Something Wrong: $e');
     }
   }
 }

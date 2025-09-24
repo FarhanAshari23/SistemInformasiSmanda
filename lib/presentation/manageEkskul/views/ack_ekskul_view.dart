@@ -4,7 +4,7 @@ import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/landing/succes.dart';
-import 'package:new_sistem_informasi_smanda/data/models/ekskul/ekskul.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/create_ekskul.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_admin.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/card/card_anggota_ekskul.dart';
@@ -14,7 +14,7 @@ import '../../../common/bloc/button/button_state.dart';
 import '../../../core/configs/theme/app_colors.dart';
 
 class AckEkskulView extends StatelessWidget {
-  final EkskulModel ekskulCreateReq;
+  final EkskulEntity ekskulCreateReq;
   const AckEkskulView({
     super.key,
     required this.ekskulCreateReq,

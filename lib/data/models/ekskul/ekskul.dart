@@ -10,6 +10,7 @@ class EkskulModel {
   final String namaSekretaris;
   final String namaBendahara;
   final String deskripsi;
+  final List<String> anggota;
 
   EkskulModel({
     required this.namaEkskul,
@@ -19,6 +20,7 @@ class EkskulModel {
     required this.namaSekretaris,
     required this.namaBendahara,
     required this.deskripsi,
+    required this.anggota,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,19 +32,20 @@ class EkskulModel {
       'nama_sekretaris': namaSekretaris,
       'nama_bendahara': namaBendahara,
       'deskripsi': deskripsi,
+      'anggota': anggota
     };
   }
 
   factory EkskulModel.fromMap(Map<String, dynamic> map) {
     return EkskulModel(
-      namaEkskul: map['nama_ekskul'] ?? '',
-      namaPembina: map["nama_pembina"] ?? '',
-      namaKetua: map["nama_ketua"] ?? '',
-      namaWakilKetua: map["nama_wakil"] ?? '',
-      namaSekretaris: map["nama_sekretaris"] ?? '',
-      namaBendahara: map["nama_bendahara"] ?? '',
-      deskripsi: map["deskripsi"] ?? '',
-    );
+        namaEkskul: map['nama_ekskul'] ?? '',
+        namaPembina: map["nama_pembina"] ?? '',
+        namaKetua: map["nama_ketua"] ?? '',
+        namaWakilKetua: map["nama_wakil"] ?? '',
+        namaSekretaris: map["nama_sekretaris"] ?? '',
+        namaBendahara: map["nama_bendahara"] ?? '',
+        deskripsi: map["deskripsi"] ?? '',
+        anggota: map['anggota'] ?? '');
   }
 
   String toJson() => json.encode(toMap());
@@ -61,6 +64,7 @@ extension EkskulModelX on EkskulModel {
       namaSekretaris: namaSekretaris,
       namaBendahara: namaBendahara,
       deskripsi: deskripsi,
+      anggota: anggota,
     );
   }
 }

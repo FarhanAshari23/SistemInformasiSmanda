@@ -7,7 +7,7 @@ import 'package:new_sistem_informasi_smanda/service_locator.dart';
 
 class EkskulRepositoryImpl extends EkskulRepository {
   @override
-  Future<Either> createEkskul(EkskulModel ekskulCreationReq) async {
+  Future<Either> createEkskul(EkskulEntity ekskulCreationReq) async {
     return await sl<EkskulFirebaseService>().createEkskul(ekskulCreationReq);
   }
 
