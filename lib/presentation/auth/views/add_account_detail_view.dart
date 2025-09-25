@@ -14,6 +14,7 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/widget/card/box_gender.dart';
+import 'ekskul_selection_view.dart';
 
 class AddStudentDetailView extends StatefulWidget {
   final UserCreationReq userCreationReq;
@@ -294,9 +295,23 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                     SizedBox(height: height * 0.01),
                     TextField(
                       controller: _ekskulC,
+                      readOnly: true,
                       maxLines: 4,
+                      onTap: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EkskulSelectionView(),
+                          ),
+                        );
+                        if (result != null) {
+                          String hasil = result.join(", ");
+                          _ekskulC.text = hasil;
+                        }
+                      },
                       decoration: const InputDecoration(
-                          hintText: 'Tuliskan ekskul disini...'),
+                        hintText: 'Tuliskan ekskul disini...',
+                      ),
                     ),
                     SizedBox(height: height * 0.02),
                     Row(

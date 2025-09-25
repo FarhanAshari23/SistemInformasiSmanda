@@ -19,4 +19,6 @@ class AnggotaModel extends AnggotaEntity {
       'nisn': nisn,
     };
   }
+
+  AnggotaEntity toEntity() => AnggotaEntity(nama: nama, nisn: nisn);
 }

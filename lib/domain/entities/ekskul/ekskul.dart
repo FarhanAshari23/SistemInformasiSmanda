@@ -1,3 +1,5 @@
+import 'anggota.dart';
+
 class EkskulEntity {
   final String namaEkskul;
   final String namaPembina;
@@ -6,7 +8,7 @@ class EkskulEntity {
   final String namaSekretaris;
   final String namaBendahara;
   final String deskripsi;
-  final List<String> anggota;
+  final List<AnggotaEntity> anggota;
 
   EkskulEntity({
     required this.namaEkskul,

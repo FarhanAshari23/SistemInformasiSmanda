@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 
+import 'anggota.dart';
+
 class EkskulModel {
   final String namaEkskul;
   final String namaPembina;
@@ -10,7 +12,7 @@ class EkskulModel {
   final String namaSekretaris;
   final String namaBendahara;
   final String deskripsi;
-  final List<String> anggota;
+  final List<AnggotaModel> anggota;
 
   EkskulModel({
     required this.namaEkskul,
@@ -38,14 +40,19 @@ class EkskulModel {
 
   factory EkskulModel.fromMap(Map<String, dynamic> map) {
     return EkskulModel(
-        namaEkskul: map['nama_ekskul'] ?? '',
-        namaPembina: map["nama_pembina"] ?? '',
-        namaKetua: map["nama_ketua"] ?? '',
-        namaWakilKetua: map["nama_wakil"] ?? '',
-        namaSekretaris: map["nama_sekretaris"] ?? '',
-        namaBendahara: map["nama_bendahara"] ?? '',
-        deskripsi: map["deskripsi"] ?? '',
-        anggota: map['anggota'] ?? '');
+      namaEkskul: map['nama_ekskul'] ?? '',
+      namaPembina: map["nama_pembina"] ?? '',
+      namaKetua: map["nama_ketua"] ?? '',
+      namaWakilKetua: map["nama_wakil"] ?? '',
+      namaSekretaris: map["nama_sekretaris"] ?? '',
+      namaBendahara: map["nama_bendahara"] ?? '',
+      deskripsi: map["deskripsi"] ?? '',
+      anggota: map['anggota'] != null
+          ? List<AnggotaModel>.from(
+              (map['anggota'] as List).map((x) => AnggotaModel.fromMap(x)),
+            )
+          : [],
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -64,7 +71,7 @@ extension EkskulModelX on EkskulModel {
       namaSekretaris: namaSekretaris,
       namaBendahara: namaBendahara,
       deskripsi: deskripsi,
-      anggota: anggota,
+      anggota: anggota.map((e) => e.toEntity()).toList(),
     );
   }
 }

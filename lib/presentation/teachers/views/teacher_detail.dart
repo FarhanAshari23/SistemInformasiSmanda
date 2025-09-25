@@ -123,15 +123,20 @@ class TeacherDetail extends StatelessWidget {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        CardDetailSiswa(
-                                          title: 'Tanggal Lahir',
-                                          content: teachers.tanggalLahir,
+                                        Expanded(
+                                          child: CardDetailSiswa(
+                                            title: 'Tanggal Lahir',
+                                            content: teachers.tanggalLahir,
+                                          ),
                                         ),
-                                        CardDetailSiswa(
-                                          title: 'Mengajar',
-                                          content: teachers.mengajar,
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: CardDetailSiswa(
+                                            title: 'Mengajar',
+                                            content: teachers.mengajar,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -139,15 +144,20 @@ class TeacherDetail extends StatelessWidget {
                                       padding: const EdgeInsets.only(left: 4),
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          CardDetailSiswa(
-                                            title: 'Wali\nKelas',
-                                            content: teachers.waliKelas,
+                                          Expanded(
+                                            child: CardDetailSiswa(
+                                              title: 'Wali Kelas',
+                                              content: teachers.waliKelas,
+                                            ),
                                           ),
-                                          CardDetailSiswa(
-                                            title: 'Tanggal Jabatan',
-                                            content: teachers.jabatan,
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: CardDetailSiswa(
+                                              title: 'Jabatan tambahan',
+                                              content: teachers.jabatan,
+                                            ),
                                           ),
                                         ],
                                       ),

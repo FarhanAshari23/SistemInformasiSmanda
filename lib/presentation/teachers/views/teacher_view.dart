@@ -23,64 +23,55 @@ class TeacherView extends StatelessWidget {
           child: Column(
             children: [
               const BasicAppbar(isBackViewed: true, isProfileViewed: true),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    const Text(
-                      "Daftar Guru SMAN 2 METRO",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    SizedBox(height: height * 0.03),
-                    BlocBuilder<TeacherCubit, TeacherState>(
-                      builder: (context, state) {
-                        if (state is TeacherLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        if (state is TeacherLoaded) {
-                          return SizedBox(
-                            width: double.infinity,
-                            height: height * 0.7,
-                            child: GridView.builder(
-                              itemCount: state.teacher.length,
-                              scrollDirection: Axis.vertical,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 12.0,
-                                mainAxisSpacing: 12.0,
-                                mainAxisExtent: height * 0.25,
+              const Text(
+                "Daftar Guru SMAN 2 METRO",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.primary,
+                ),
+              ),
+              SizedBox(height: height * 0.03),
+              BlocBuilder<TeacherCubit, TeacherState>(
+                builder: (context, state) {
+                  if (state is TeacherLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (state is TeacherLoaded) {
+                    return Expanded(
+                      child: GridView.builder(
+                        itemCount: state.teacher.length,
+                        scrollDirection: Axis.vertical,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12.0,
+                          mainAxisSpacing: 12.0,
+                          mainAxisExtent: height * 0.25,
+                        ),
+                        itemBuilder: (context, index) {
+                          return CustomInkWell(
+                            onTap: () => AppNavigator.push(
+                              context,
+                              TeacherDetail(
+                                teachers: state.teacher[index],
                               ),
-                              itemBuilder: (context, index) {
-                                return CustomInkWell(
-                                  onTap: () => AppNavigator.push(
-                                    context,
-                                    TeacherDetail(
-                                      teachers: state.teacher[index],
-                                    ),
-                                  ),
-                                  borderRadius: 8,
-                                  defaultColor: AppColors.secondary,
-                                  child: CardGuru(
-                                    nip: state.teacher[index].nip,
-                                    title: state.teacher[index].nama,
-                                  ),
-                                );
-                              },
+                            ),
+                            borderRadius: 8,
+                            defaultColor: AppColors.secondary,
+                            child: CardGuru(
+                              nip: state.teacher[index].nip,
+                              title: state.teacher[index].nama,
                             ),
                           );
-                        }
-                        return Container();
-                      },
-                    )
-                  ],
-                ),
+                        },
+                      ),
+                    );
+                  }
+                  return Container();
+                },
               )
             ],
           ),
