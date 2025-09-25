@@ -160,6 +160,7 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                     ),
                   );
                 } else {
+                  FocusScope.of(context).unfocus();
                   AppNavigator.push(
                     context,
                     AckEkskulView(

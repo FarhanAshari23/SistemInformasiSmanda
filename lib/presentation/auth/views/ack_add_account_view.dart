@@ -118,7 +118,8 @@ class AckAddStudentView extends StatelessWidget {
                             context.read<ButtonStateCubit>().execute(
                                   usecase: AddAnggotaUsecase(),
                                   params: UpdateAnggotaReq(
-                                    namaEkskul: [userCreationReq.ekskul!],
+                                    namaEkskul:
+                                        userCreationReq.ekskul!.split(", "),
                                     anggota: AnggotaEntity(
                                       nama: userCreationReq.nama!,
                                       nisn: userCreationReq.nisn!,
