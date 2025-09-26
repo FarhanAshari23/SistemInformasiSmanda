@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/landing/succes.dart';
+import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/create_ekskul.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_admin.dart';
@@ -54,7 +56,7 @@ class AckEkskulView extends StatelessWidget {
               children: [
                 const BasicAppbar(isBackViewed: true, isProfileViewed: false),
                 const Text(
-                  'Apakah data yang ditambahkan\nsudah sesuai?',
+                  'Apakah data yang ditambahkan sudah sesuai?',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -74,6 +76,71 @@ class AckEkskulView extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  ekskulCreateReq.namaEkskul,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w900,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                                CustomInkWell(
+                                  borderRadius: 8,
+                                  defaultColor: AppColors.primary,
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(16),
+                                        ),
+                                      ),
+                                      builder: (context) {
+                                        return Container(
+                                          padding: const EdgeInsets.all(16),
+                                          width: double.infinity,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Deskripsi:",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w900,
+                                                ),
+                                              ),
+                                              Text(
+                                                ekskulCreateReq.deskripsi,
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    margin: const EdgeInsets.all(8),
+                                    child: const Icon(
+                                      Icons.info,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
                             Center(
                               child: CardAnggotaEkskul(
                                 namaEkskul: ekskulCreateReq.namaEkskul,
@@ -99,40 +166,32 @@ class AckEkskulView extends StatelessWidget {
                                 itemCount: namaCard.length,
                               ),
                             ),
-                            Text(
-                              'Deskripsi Ekskul ${ekskulCreateReq.namaEkskul}:',
-                              style: const TextStyle(
+                            const Text(
+                              'Anggota:',
+                              style: TextStyle(
                                 fontWeight: FontWeight.w800,
                                 fontSize: 16,
                                 color: AppColors.primary,
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(height: height * 0.02),
-                            Container(
-                              width: double.infinity,
-                              height: height * 0.25,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: AppColors.secondary,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    ekskulCreateReq.deskripsi,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 16,
-                                      color: AppColors.inversePrimary,
-                                    ),
-                                    textAlign: TextAlign.justify,
-                                  ),
-                                ),
+                            const SizedBox(height: 12),
+                            Center(
+                              child: Image.asset(
+                                AppImages.emptyRegistrationChara,
+                                width: 180,
+                                height: 180,
                               ),
                             ),
-                            SizedBox(height: height * 0.02),
+                            const Text(
+                              'Belum ada anggota, tunggu pengguna menambahkan ekskul nya sendiri secara mandiri.',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 16,
+                                color: AppColors.primary,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                             Center(
                               child: Builder(builder: (context) {
                                 return BasicButton(

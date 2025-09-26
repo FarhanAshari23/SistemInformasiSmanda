@@ -39,10 +39,11 @@ class BasicAppbar extends StatelessWidget {
     }
     return BlocProvider(
       create: (context) => ProfileInfoCubit()..getUser(),
-      child: SizedBox(
-        width: double.infinity,
-        height: height * 0.155,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 48),
         child: Stack(
+          alignment: AlignmentDirectional.topCenter,
+          clipBehavior: Clip.none,
           children: [
             Container(
               width: double.infinity,

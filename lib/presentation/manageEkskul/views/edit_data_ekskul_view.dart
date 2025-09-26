@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/bloc/ekskul_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/bloc/ekskul_state.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_state.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/widgets/card_ekskul_edit.dart';
 
 class EditDataEkskulView extends StatelessWidget {

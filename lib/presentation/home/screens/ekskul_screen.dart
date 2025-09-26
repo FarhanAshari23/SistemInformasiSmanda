@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/presentation/ekskul/views/ekskul_detail.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/bloc/ekskul_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/bloc/ekskul_state.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_state.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/widgets/card_ekskul.dart';
 import 'package:stacked_listview/stacked_listview.dart';
 

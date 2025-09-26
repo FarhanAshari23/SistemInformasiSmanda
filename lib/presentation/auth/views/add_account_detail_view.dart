@@ -14,7 +14,7 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/widget/card/box_gender.dart';
-import 'ekskul_selection_view.dart';
+import '../../../common/widget/select_ekskul/ekskul_selection_view.dart';
 
 class AddStudentDetailView extends StatefulWidget {
   final UserCreationReq userCreationReq;
