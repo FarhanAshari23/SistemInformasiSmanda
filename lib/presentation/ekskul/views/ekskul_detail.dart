@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/card/card_anggota_ekskul.dart';
@@ -5,6 +6,7 @@ import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart'
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 
+import '../../../common/helper/display_image.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 
 class EkskulDetail extends StatelessWidget {
@@ -163,11 +165,59 @@ class EkskulDetail extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final anggota = ekskul.anggota[index];
                             return Container(
-                              width: 20,
-                              height: 20,
-                              color: Colors.white,
-                              child: Text(anggota.nama),
-                            );
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: AppColors.primary,
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: 80,
+                                      height: 80,
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            DisplayImage.displayImageStudent(
+                                                anggota.nama, anggota.nisn),
+                                        placeholder: (context, url) =>
+                                            const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            Image.asset(AppImages.tendik),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          anggota.nama,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w900,
+                                            color: AppColors.inversePrimary,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          anggota.nisn,
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.inversePrimary,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ));
                           },
                           separatorBuilder: (context, index) =>
                               const SizedBox(height: 8),
