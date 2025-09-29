@@ -4,7 +4,7 @@ import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.da
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/ack_ekskul_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/list_teacher_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/search_students_view.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_students_view.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';

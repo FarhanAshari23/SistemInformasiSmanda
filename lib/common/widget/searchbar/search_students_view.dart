@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../common/bloc/kelas/students_state.dart';
-import '../../../common/bloc/kelas/stundets_cubit.dart';
-import '../../../common/widget/card/card_user.dart';
-import '../../../common/widget/landing/not_found.dart';
+import '../../bloc/kelas/students_state.dart';
+import '../../bloc/kelas/stundets_cubit.dart';
+import '../card/card_user.dart';
+import '../landing/not_found.dart';
 import '../../../domain/entities/auth/user.dart';
 import '../../../domain/usecases/students/get_student_by_name.dart';
-import '../../../common/widget/searchbar/search_student_appbar.dart';
+import 'search_student_appbar.dart';
 
 class SearchStudentsView extends StatelessWidget {
   const SearchStudentsView({super.key});

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_students_view.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_teachers_views.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../common/widget/button/basic_button.dart';
+import '../../../common/widget/card/card_anggota.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
 import '../../../domain/usecases/ekskul/update_ekskul.dart';
 import '../../../service_locator.dart';
-import 'list_teacher_view.dart';
-import 'search_students_view.dart';
 
 class EditEkskulDetail extends StatefulWidget {
   final EkskulEntity ekskul;
@@ -57,103 +61,244 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    List<TextEditingController> listC = [
-      _nameEkskulC,
-      _namePembinaC,
+    List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
+    List<TextEditingController> nama = [
       _nameKetuaC,
       _nameWakilC,
       _nameSekretarisC,
       _nameBendaharaC,
-      _deskripsiC,
-    ];
-    List<String> hintText = [
-      'Nama Ekstrakulikuler:',
-      'Nama Pembina:',
-      'Nama Ketua',
-      'Nama Wakil Ketua',
-      'Nama Sekretaris',
-      'Nama Bendahara',
-      'Deskripsi:'
-    ];
-    List<int> maxLines = [
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      5,
     ];
     return Scaffold(
       body: SafeArea(
-        child: Column(
+        child: ListView(
           children: [
             const BasicAppbar(isBackViewed: true, isProfileViewed: false),
-            const Text(
-              'Data mana yang ingin anda ubah?',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                color: AppColors.primary,
-                fontSize: 16,
-              ),
-            ),
-            SizedBox(height: height * 0.03),
-            Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemBuilder: (context, index) {
-                  if (index == 0 || index == 6) {
-                    return TextField(
-                      controller: listC[index],
-                      maxLines: maxLines[index],
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                        labelText: hintText[index],
-                        labelStyle: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: CustomInkWell(
+                        borderRadius: 8,
+                        defaultColor: AppColors.primary,
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(16),
+                              ),
+                            ),
+                            builder: (context) {
+                              return Container(
+                                padding: const EdgeInsets.all(16),
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Deskripsi:",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                    Text(
+                                      widget.ekskul.deskripsi,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          margin: const EdgeInsets.all(8),
+                          child: const Icon(
+                            Icons.info,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    );
-                  }
-                  return TextField(
-                    readOnly: true,
-                    controller: listC[index],
-                    maxLines: maxLines[index],
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      labelText: hintText[index],
-                      labelStyle: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          widget.ekskul.namaEkskul,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        CustomInkWell(
+                          borderRadius: 999,
+                          defaultColor: AppColors.primary,
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(16),
+                                ),
+                              ),
+                              builder: (context) {
+                                return Container(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
+                                  width: double.infinity,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 16),
+                                      const Text(
+                                        "Nama ekskul:",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      TextField(
+                                        autocorrect: false,
+                                        controller: _nameEkskulC,
+                                      ),
+                                      BasicButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        title: 'Ubah',
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(4.0),
+                            child: Icon(
+                              Icons.edit,
+                              color: AppColors.inversePrimary,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: height * 0.02),
+                  CardAnggota(
+                    title: _namePembinaC.text,
+                    desc: "Pembina",
                     onTap: () async {
-                      final route = (index == 1)
-                          ? MaterialPageRoute(
-                              builder: (_) => const ListTeacherView())
-                          : MaterialPageRoute(
-                              builder: (_) => const SearchStudentsView());
-
-                      final result = await Navigator.push(context, route);
-
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SearchTeachersViews(),
+                        ),
+                      );
                       if (result != null) {
                         setState(() {
-                          // isi textfield sesuai item yang ditekan
-                          listC[index].text = result.toString();
+                          _namePembinaC.text = result;
                         });
                       }
                     },
-                  );
-                },
-                separatorBuilder: (context, index) => SizedBox(
-                  height: height * 0.01,
-                ),
-                itemCount: listC.length,
+                  ),
+                  SizedBox(height: height * 0.01),
+                  ...List.generate(jabatan.length, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: CardAnggota(
+                        onTap: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SearchStudentsView(),
+                            ),
+                          );
+                          if (result != null) {
+                            setState(() {
+                              nama[index].text = result;
+                            });
+                          }
+                        },
+                        title: nama[index].text,
+                        desc: jabatan[index],
+                      ),
+                    );
+                  }),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 4),
+                    child: Text(
+                      'Anggota:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  widget.ekskul.anggota.isEmpty
+                      ? Center(
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                AppImages.emptyRegistrationChara,
+                                width: 120,
+                                height: 120,
+                              ),
+                              const Text(
+                                'Belum ada anggota',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 16,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final anggota = widget.ekskul.anggota[index];
+                            return CardAnggota(
+                              onTap: () {},
+                              title: anggota.nama,
+                              desc: anggota.nisn,
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 8),
+                          itemCount: widget.ekskul.anggota.length,
+                        ),
+                ],
               ),
             ),
+            const SizedBox(height: 12),
             BasicButton(
               onPressed: () async {
                 if (_namePembinaC.text.isEmpty ||
@@ -197,12 +342,13 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                         content: Text("Data Berhasil Diubah"),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                      context.read<EkskulCubit>().displayEkskul();
                       Navigator.pop(context);
                     },
                   );
                 }
               },
-              title: 'Ubah',
+              title: "Ubah",
             ),
           ],
         ),

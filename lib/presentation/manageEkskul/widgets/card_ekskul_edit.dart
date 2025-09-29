@@ -23,37 +23,45 @@ class CardEkskulEdit extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width * 0.4,
-      height: height * 0.275,
-      color: AppColors.secondary,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: AppColors.secondary,
+      ),
+      child: Stack(
         children: [
-          SizedBox(
-            width: double.infinity,
-            height: height * 0.19,
-            child: CachedNetworkImage(
-              imageUrl: DisplayImage.displayImageEkskul(ekskul.namaEkskul),
-              placeholder: (context, url) => const Center(
-                child: CircularProgressIndicator(),
+          Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                height: height * 0.19,
+                child: CachedNetworkImage(
+                  imageUrl: DisplayImage.displayImageEkskul(ekskul.namaEkskul),
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) =>
+                      Image.asset(AppImages.splashEkskul),
+                  fit: BoxFit.fill,
+                ),
               ),
-              errorWidget: (context, url, error) =>
-                  Image.asset(AppImages.splashEkskul),
-              fit: BoxFit.fill,
-            ),
+              SizedBox(height: height * 0.01),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  ekskul.namaEkskul,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.inversePrimary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: height * 0.01),
-          Text(
-            ekskul.namaEkskul,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: AppColors.inversePrimary,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
+          Positioned(
+            bottom: -(height * 0.0085),
+            right: -(width * 0.0165),
             child: PopupMenuButton(
               onSelected: (String value) {
                 if (value == 'Edit') {
@@ -155,14 +163,19 @@ class CardEkskulEdit extends StatelessWidget {
                   ),
                 ];
               },
-              child: Container(
-                width: width * 0.085,
-                height: height * 0.04,
-                color: AppColors.primary,
+              icon: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(12),
+                  ),
+                  color: AppColors.primary,
+                ),
                 child: const Center(
                   child: Icon(
                     Icons.more_vert_rounded,
                     color: AppColors.inversePrimary,
+                    size: 24,
                   ),
                 ),
               ),

@@ -102,34 +102,35 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                             },
                           ),
                           Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 16),
-                                child: CustomInkWell(
-                                  borderRadius: 8,
-                                  defaultColor: AppColors.primary,
-                                  onTap: () {
-                                    Navigator.pop(
-                                      context,
-                                      context.read<SelectEkskulCubit>().state,
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 32,
-                                      vertical: 24,
-                                    ),
-                                    child: const Text(
-                                      'Pilih',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: AppColors.inversePrimary,
-                                      ),
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: CustomInkWell(
+                                borderRadius: 8,
+                                defaultColor: AppColors.primary,
+                                onTap: () {
+                                  Navigator.pop(
+                                    context,
+                                    context.read<SelectEkskulCubit>().state,
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 32,
+                                    vertical: 24,
+                                  ),
+                                  child: const Text(
+                                    'Pilih',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: AppColors.inversePrimary,
                                     ),
                                   ),
                                 ),
-                              ))
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     );
