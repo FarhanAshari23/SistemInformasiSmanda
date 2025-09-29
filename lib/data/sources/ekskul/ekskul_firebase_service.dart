@@ -10,6 +10,7 @@ abstract class EkskulFirebaseService {
   Future<Either> getEkskul();
   Future<Either> updateEkskul(EkskulEntity ekskulUpdateReq);
   Future<Either> deleteEkskul(String nameEkskul);
+  Future<Either> updateAnggota(UpdateAnggotaReq anggotaReq);
   Future<Either> addAnggota(UpdateAnggotaReq anggotaReq);
 }
 
@@ -112,7 +113,40 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
         }
       }
       await batch.commit();
-      return const Right('Success Update Data Ekskul');
+      return const Right('Success Add Anggota');
+    } catch (e) {
+      return Left('Something Wrong: $e');
+    }
+  }
+
+  @override
+  Future<Either> updateAnggota(UpdateAnggotaReq anggotaReq) async {
+    try {
+      final anggotaModel = AnggotaModel(
+        nama: anggotaReq.anggota.nama,
+        nisn: anggotaReq.anggota.nisn,
+      ).toMap();
+
+      final batch = FirebaseFirestore.instance.batch();
+
+      final query =
+          await FirebaseFirestore.instance.collection("Ekskuls").get();
+
+      for (var doc in query.docs) {
+        final namaEkskul = doc['nama_ekskul'] as String;
+
+        if (anggotaReq.namaEkskul.contains(namaEkskul)) {
+          batch.update(doc.reference, {
+            "anggota": FieldValue.arrayUnion([anggotaModel])
+          });
+        } else {
+          batch.update(doc.reference, {
+            "anggota": FieldValue.arrayRemove([anggotaModel])
+          });
+        }
+      }
+      await batch.commit();
+      return const Right('Success Add Anggota');
     } catch (e) {
       return Left('Something Wrong: $e');
     }

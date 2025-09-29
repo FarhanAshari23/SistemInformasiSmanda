@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/anggota.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/update_anggota_req.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/update_anggota_usecase.dart';
 
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
@@ -388,19 +391,39 @@ class _EditProfileViewState extends State<EditProfileView> {
                         ),
                       );
                       result.fold((error) {
-                        var snackbar = const SnackBar(
-                          content: Text("Gagal Mengubah Data"),
+                        var snackbar = SnackBar(
+                          content: Text("Gagal Mengubah Data: $error"),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                      }, (r) {
-                        context.read<ProfileInfoCubit>().getUser();
-                        FocusScope.of(context).unfocus();
-                        var snackbar = const SnackBar(
-                          content: Text("Data Berhasil Diubah"),
+                      }, (r) async {
+                        var resultAnggota =
+                            await sl<UpdateAnggotaUsecase>().call(
+                          params: UpdateAnggotaReq(
+                            namaEkskul: _ekskulC.text.split(', '),
+                            anggota: AnggotaEntity(
+                                nama: _namaC.text, nisn: _nisnC.text),
+                          ),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                        resultAnggota.fold(
+                          (error) {
+                            var snackbar = SnackBar(
+                              content: Text("Gagal Mengubah Data: $error"),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                          },
+                          (r) {
+                            context.read<ProfileInfoCubit>().getUser();
+                            FocusScope.of(context).unfocus();
+                            var snackbar = const SnackBar(
+                              content: Text("Data Berhasil Diubah"),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
 
-                        Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        );
                       });
                     }
                   },

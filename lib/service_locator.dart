@@ -59,6 +59,7 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_waka.dar
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teacher.dart';
 
 import 'domain/usecases/ekskul/add_anggota_usecase.dart';
+import 'domain/usecases/ekskul/update_anggota_usecase.dart';
 import 'domain/usecases/news/create_news.dart';
 import 'domain/usecases/schedule/create_class_usecase.dart';
 import 'domain/usecases/schedule/create_schedule_usecase.dart';
@@ -235,6 +236,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<AddAnggotaUsecase>(
     AddAnggotaUsecase(),
+  );
+  sl.registerSingleton<UpdateAnggotaUsecase>(
+    UpdateAnggotaUsecase(),
   );
 
   //attendances
