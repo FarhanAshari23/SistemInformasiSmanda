@@ -9,6 +9,7 @@ class EkskulEntity {
   final String namaBendahara;
   final String deskripsi;
   final List<AnggotaEntity> anggota;
+  final String? oldNamaEkskul;
 
   EkskulEntity({
     required this.namaEkskul,
@@ -19,5 +20,6 @@ class EkskulEntity {
     required this.namaBendahara,
     required this.deskripsi,
     required this.anggota,
+    this.oldNamaEkskul,
   });
 }

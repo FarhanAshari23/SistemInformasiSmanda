@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/delete_ekskul.dart';
 
-import '../../../common/helper/app_navigation.dart';
+import '../../../common/bloc/ekskul/ekskul_cubit.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -65,10 +66,14 @@ class CardEkskulEdit extends StatelessWidget {
             child: PopupMenuButton(
               onSelected: (String value) {
                 if (value == 'Edit') {
-                  AppNavigator.push(
+                  final ekskulCubit = context.read<EkskulCubit>();
+                  Navigator.push(
                     context,
-                    EditEkskulDetail(
-                      ekskul: ekskul,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: ekskulCubit, // pastikan ambil cubit dari parent
+                        child: EditEkskulDetail(ekskul: ekskul),
+                      ),
                     ),
                   );
                 } else if (value == 'Hapus') {

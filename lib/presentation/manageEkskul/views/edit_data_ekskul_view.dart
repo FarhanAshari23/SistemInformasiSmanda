@@ -51,11 +51,8 @@ class EditDataEkskulView extends StatelessWidget {
                             mainAxisSpacing: 12.0,
                             mainAxisExtent: height * 0.315,
                           ),
-                          itemBuilder: (context, index) => BlocProvider.value(
-                            value: context.read<EkskulCubit>(),
-                            child: CardEkskulEdit(
-                              ekskul: state.ekskul[index],
-                            ),
+                          itemBuilder: (context, index) => CardEkskulEdit(
+                            ekskul: state.ekskul[index],
                           ),
                         ),
                       );

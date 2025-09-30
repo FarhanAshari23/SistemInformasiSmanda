@@ -88,34 +88,48 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                         onTap: () {
                           showModalBottomSheet(
                             context: context,
+                            isScrollControlled: true,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(16),
                               ),
                             ),
-                            builder: (context) {
+                            builder: (_) {
                               return Container(
-                                padding: const EdgeInsets.all(16),
+                                padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom,
+                                ),
                                 width: double.infinity,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      "Deskripsi:",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w900,
+                                    const SizedBox(height: 16),
+                                    const Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: Text(
+                                        "Deskripsi:",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
                                     ),
-                                    Text(
-                                      widget.ekskul.deskripsi,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
                                       ),
+                                      child: TextField(
+                                        autocorrect: false,
+                                        maxLines: 7,
+                                        controller: _deskripsiC,
+                                      ),
+                                    ),
+                                    BasicButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      title: 'Simpan',
                                     ),
                                   ],
                                 ),
@@ -139,7 +153,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                     child: Row(
                       children: [
                         Text(
-                          widget.ekskul.namaEkskul,
+                          _nameEkskulC.text,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
@@ -159,7 +173,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                   top: Radius.circular(16),
                                 ),
                               ),
-                              builder: (context) {
+                              builder: (_) {
                                 return Container(
                                   padding: EdgeInsets.only(
                                     bottom: MediaQuery.of(context)
@@ -173,17 +187,25 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(height: 16),
-                                      const Text(
-                                        "Nama ekskul:",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w900,
+                                      const Padding(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: Text(
+                                          "Nama ekskul:",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w900,
+                                          ),
                                         ),
                                       ),
-                                      TextField(
-                                        autocorrect: false,
-                                        controller: _nameEkskulC,
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                        ),
+                                        child: TextField(
+                                          autocorrect: false,
+                                          controller: _nameEkskulC,
+                                        ),
                                       ),
                                       BasicButton(
                                         onPressed: () => Navigator.pop(context),
@@ -196,7 +218,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                             );
                           },
                           child: const Padding(
-                            padding: EdgeInsets.all(4.0),
+                            padding: EdgeInsets.all(6.0),
                             child: Icon(
                               Icons.edit,
                               color: AppColors.inversePrimary,
@@ -321,6 +343,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                 } else {
                   var result = await sl<UpdateEkskulUsecase>().call(
                       params: EkskulEntity(
+                    oldNamaEkskul: widget.ekskul.namaEkskul,
                     namaEkskul: _nameEkskulC.text,
                     namaPembina: _namePembinaC.text,
                     namaKetua: _nameKetuaC.text,
@@ -338,11 +361,11 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                       ScaffoldMessenger.of(context).showSnackBar(snackbar);
                     },
                     (r) {
+                      context.read<EkskulCubit>().displayEkskul();
                       var snackbar = const SnackBar(
                         content: Text("Data Berhasil Diubah"),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                      context.read<EkskulCubit>().displayEkskul();
                       Navigator.pop(context);
                     },
                   );

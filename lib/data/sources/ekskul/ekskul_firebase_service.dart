@@ -70,12 +70,13 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
       CollectionReference users =
           FirebaseFirestore.instance.collection('Ekskuls');
       QuerySnapshot querySnapshot = await users
-          .where('nama_ekskul', isEqualTo: ekskulUpdateReq.namaEkskul)
+          .where('nama_ekskul', isEqualTo: ekskulUpdateReq.oldNamaEkskul)
           .get();
       if (querySnapshot.docs.isNotEmpty) {
         String docId = querySnapshot.docs[0].id;
         await users.doc(docId).update({
           "nama_pembina": ekskulUpdateReq.namaPembina,
+          "nama_ekskul": ekskulUpdateReq.namaEkskul,
           "nama_ketua": ekskulUpdateReq.namaKetua,
           "nama_wakil": ekskulUpdateReq.namaWakilKetua,
           "nama_sekretaris": ekskulUpdateReq.namaSekretaris,
