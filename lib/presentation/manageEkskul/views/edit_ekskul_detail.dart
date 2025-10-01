@@ -308,7 +308,56 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                           itemBuilder: (context, index) {
                             final anggota = widget.ekskul.anggota[index];
                             return CardAnggota(
-                              onTap: () {},
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Dialog(
+                                      backgroundColor: AppColors.secondary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                      insetPadding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            AppImages.notfound,
+                                            width: 200,
+                                            height: 200,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Text(
+                                              'Apakah anda yakin ingin mengeluarkan ${anggota.nama} dari ekskul ${widget.ekskul.namaEkskul}?',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w800,
+                                                color: AppColors.inversePrimary,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          BasicButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                widget.ekskul.anggota
+                                                    .removeWhere((element) =>
+                                                        element.nisn ==
+                                                        anggota.nisn);
+                                              });
+                                              Navigator.pop(context);
+                                            },
+                                            title: 'Hapus',
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
                               title: anggota.nama,
                               desc: anggota.nisn,
                             );
@@ -351,7 +400,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                     namaSekretaris: _nameSekretarisC.text,
                     namaBendahara: _nameBendaharaC.text,
                     deskripsi: _deskripsiC.text,
-                    anggota: [],
+                    anggota: widget.ekskul.anggota,
                   ));
                   result.fold(
                     (error) {

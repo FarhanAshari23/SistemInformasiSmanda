@@ -82,6 +82,7 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
           "nama_sekretaris": ekskulUpdateReq.namaSekretaris,
           "nama_bendahara": ekskulUpdateReq.namaBendahara,
           "deskripsi": ekskulUpdateReq.deskripsi,
+          "anggota": ekskulUpdateReq.anggota,
         });
         return right('Update Data Ekskul Success');
       }
