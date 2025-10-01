@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:intl/intl.dart';
 
+import '../../../common/helper/generate_keyword.dart';
 import '../../../domain/entities/auth/teacher.dart';
 import '../../models/teacher/teacher.dart';
 
@@ -60,6 +61,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   @override
   Future<Either> createTeacher(TeacherModel teacherCreationReq) async {
     try {
+      final keywords = generateKeywords(teacherCreationReq.nama);
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
       await firebaseFirestore.collection("Teachers").add(
         {
@@ -69,6 +71,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
           "tanggal_lahir": teacherCreationReq.tanggalLahir,
           "wali_kelas": teacherCreationReq.waliKelas,
           "jabatan_tambahan": teacherCreationReq.jabatan,
+          "keywords": keywords,
         },
       );
       return const Right("Upload Teacher was succesfull");
