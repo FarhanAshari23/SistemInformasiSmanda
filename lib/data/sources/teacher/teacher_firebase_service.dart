@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:intl/intl.dart';
 
 import '../../../common/helper/generate_keyword.dart';
 import '../../../domain/entities/auth/teacher.dart';
@@ -124,11 +123,9 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   @override
   Future<Either> getTeacherByName(String name) async {
     try {
-      String nameCapital = toBeginningOfSentenceCase(name);
       var returnedData = await FirebaseFirestore.instance
           .collection("Teachers")
-          .where("nama", isGreaterThanOrEqualTo: nameCapital)
-          .where('nama', isLessThan: '${nameCapital}z')
+          .where("keywords", arrayContains: name)
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {

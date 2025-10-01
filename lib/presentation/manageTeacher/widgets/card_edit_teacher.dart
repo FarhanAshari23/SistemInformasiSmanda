@@ -103,7 +103,7 @@ class CardEditTeacher extends StatelessWidget {
                 } else if (value == 'Hapus') {
                   showDialog(
                     context: context,
-                    builder: (context) {
+                    builder: (_) {
                       return Dialog(
                         backgroundColor: AppColors.inversePrimary,
                         shape: RoundedRectangleBorder(
@@ -152,6 +152,9 @@ class CardEditTeacher extends StatelessWidget {
                                       var snackbar = const SnackBar(
                                         content: Text("Data Berhasil Dihapus"),
                                       );
+                                      context
+                                          .read<TeacherCubit>()
+                                          .displayTeacher();
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackbar);
                                       Navigator.pop(context);

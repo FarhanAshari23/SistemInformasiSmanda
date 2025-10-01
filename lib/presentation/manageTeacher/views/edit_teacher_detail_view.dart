@@ -81,7 +81,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
           BlocProvider(
             create: (context) {
               final cubit = GenderSelectionCubit();
-              cubit.selectGender(widget.teacher.gender);
+              cubit.selectGender(widget.teacher.gender ?? 0);
               return cubit;
             },
           ),

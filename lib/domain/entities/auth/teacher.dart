@@ -5,7 +5,7 @@ class TeacherEntity {
   final String tanggalLahir;
   final String waliKelas;
   final String jabatan;
-  final int gender;
+  final int? gender;
 
   TeacherEntity({
     required this.nama,

@@ -24,47 +24,43 @@ class EditTeacherView extends StatelessWidget {
                 isBackViewed: true,
                 isProfileViewed: false,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    const Text(
-                      "Daftar Guru SMAN 2 METRO",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    SizedBox(height: height * 0.03),
-                    BlocBuilder<TeacherCubit, TeacherState>(
-                      builder: (context, state) {
-                        if (state is TeacherLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        if (state is TeacherLoaded) {
-                          return SizedBox(
-                            width: double.infinity,
-                            height: height * 0.7,
-                            child: ListView.separated(
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                return CardEditTeacher(
-                                    teacher: state.teacher[index]);
-                              },
-                              separatorBuilder: (context, index) =>
-                                  SizedBox(height: height * 0.02),
-                              itemCount: state.teacher.length,
-                            ),
-                          );
-                        }
-                        return Container();
-                      },
-                    )
-                  ],
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  "Daftar Guru SMAN 2 METRO",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.primary,
+                  ),
                 ),
+              ),
+              SizedBox(height: height * 0.03),
+              BlocBuilder<TeacherCubit, TeacherState>(
+                builder: (context, state) {
+                  if (state is TeacherLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (state is TeacherLoaded) {
+                    return Expanded(
+                      child: ListView.separated(
+                        scrollDirection: Axis.vertical,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                        ),
+                        itemBuilder: (context, index) {
+                          return CardEditTeacher(teacher: state.teacher[index]);
+                        },
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: height * 0.02),
+                        itemCount: state.teacher.length,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
               ),
             ],
           ),

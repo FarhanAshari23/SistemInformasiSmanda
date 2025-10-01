@@ -9,7 +9,7 @@ class TeacherModel {
   final String tanggalLahir;
   final String waliKelas;
   final String jabatan;
-  final int gender;
+  final int? gender;
 
   TeacherModel({
     required this.nama,

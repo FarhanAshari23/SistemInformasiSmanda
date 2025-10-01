@@ -154,6 +154,7 @@ class _ManageActivityViewState extends State<ManageActivityView> {
                                                                   context)
                                                               .showSnackBar(
                                                                   snackbar);
+                                                          _kegiatanC.clear();
                                                           Navigator.of(context,
                                                                   rootNavigator:
                                                                       true)
