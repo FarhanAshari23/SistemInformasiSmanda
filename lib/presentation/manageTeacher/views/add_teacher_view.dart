@@ -14,6 +14,7 @@ import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/box_gender.dart';
+import '../../../common/widget/dropdown/app_dropdown_field.dart';
 import '../../../core/configs/theme/app_colors.dart';
 
 class AddTeacherView extends StatelessWidget {
@@ -87,203 +88,22 @@ class AddTeacherView extends StatelessWidget {
               ),
               SizedBox(height: height * 0.02),
               Expanded(
-                child: ListView(
+                child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  children: [
-                    ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        if (index == 3) {
-                          return BlocBuilder<GetAllKelasCubit,
-                              KelasDisplayState>(
-                            builder: (context, state) {
-                              if (state is KelasDisplayLoading) {
-                                return TextField(
-                                  controller: _waliKelasC,
-                                  autocorrect: false,
-                                  decoration: const InputDecoration(
-                                    hintText: 'Wali Kelas:',
-                                  ),
-                                );
-                              }
-                              if (state is KelasDisplayLoaded) {
-                                return DropdownMenu<String>(
-                                  width: width * 0.92,
-                                  inputDecorationTheme:
-                                      const InputDecorationTheme(
-                                    fillColor: AppColors.tertiary,
-                                    filled: true,
-                                    hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.black, // <-- warna hint
-                                    ),
-                                  ),
-                                  menuHeight: 200,
-                                  hintText: 'Wali Kelas:',
-                                  dropdownMenuEntries: state.kelas.map((doc) {
-                                    final kelas = doc.kelas;
-                                    return DropdownMenuEntry(
-                                      value: kelas,
-                                      label: kelas,
-                                    );
-                                  }).toList(),
-                                  onSelected: (value) {
-                                    context
-                                        .read<GetAllKelasCubit>()
-                                        .selectItem(value);
-                                  },
-                                );
-                              }
-                              return const SizedBox();
-                            },
-                          );
-                        } else if (index == 1) {
-                          return BlocBuilder<GetActivitiesCubit,
-                              GetActivitiesState>(
-                            builder: (context, state) {
-                              if (state is GetActivitiesLoading) {
-                                return TextField(
-                                  controller: _mengajarC,
-                                  autocorrect: false,
-                                  decoration: const InputDecoration(
-                                    hintText: 'Kegiatan:',
-                                  ),
-                                );
-                              }
-                              if (state is GetActivitiesLoaded) {
-                                return DropdownMenu<String>(
-                                  width: width * 0.92,
-                                  enableFilter: true,
-                                  requestFocusOnTap: true,
-                                  initialSelection: _mengajarC.text,
-                                  inputDecorationTheme:
-                                      const InputDecorationTheme(
-                                    fillColor: AppColors.tertiary,
-                                    filled: true,
-                                    hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.black, // <-- warna hint
-                                    ),
-                                  ),
-                                  menuHeight: 200,
-                                  hintText: 'Mengajar:',
-                                  dropdownMenuEntries:
-                                      state.activities.map((doc) {
-                                    final nama = doc.name;
-                                    return DropdownMenuEntry(
-                                      value: nama,
-                                      label: nama,
-                                    );
-                                  }).toList(),
-                                  onSelected: (value) {
-                                    context
-                                        .read<GetActivitiesCubit>()
-                                        .selectItem(value);
-                                    _mengajarC.text = value!;
-                                    FocusScope.of(context).unfocus();
-                                  },
-                                );
-                              }
-                              return const SizedBox();
-                            },
-                          );
-                        } else if (index == 4) {
-                          return TextField(
-                            controller: _tanggalC,
-                            readOnly: true,
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime.now(),
-                                initialDate: DateTime.now(),
-                                locale: const Locale('id', 'ID'),
-                                confirmText: "Oke",
-                                cancelText: "Keluar",
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: Theme.of(context).copyWith(
-                                      inputDecorationTheme:
-                                          InputDecorationTheme(
-                                        filled: true,
-                                        fillColor: AppColors
-                                            .inversePrimary, // warna background field input tanggal
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                    ),
-                                    child: child!,
-                                  );
-                                },
-                              );
-                              _tanggalC.text = DateFormat("d MMMM y", "id_ID")
-                                  .format(pickedDate ?? DateTime.now());
-                            },
-                            autocorrect: false,
-                            decoration: const InputDecoration(
-                              hintText: 'Tanggal Lahir:',
-                            ),
-                          );
-                        } else if (index == 6) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 4,
-                                  vertical: 8,
-                                ),
-                                child: Text(
-                                  'Jenis Kelamin: ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 16,
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                              ),
-                              BlocBuilder<GenderSelectionCubit, int>(
-                                builder: (context, state) {
-                                  return Row(
-                                    children: [
-                                      BoxGender(
-                                        gender: 'Laki-laki',
-                                        context: context,
-                                        genderIndex: 1,
-                                      ),
-                                      SizedBox(width: width * 0.01),
-                                      BoxGender(
-                                        gender: 'Perempuan',
-                                        context: context,
-                                        genderIndex: 2,
-                                      )
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        } else {
-                          return TextField(
-                            controller: controller[index],
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              hintText: hinttext[index],
-                            ),
-                          );
-                        }
-                      },
-                      separatorBuilder: (context, index) => SizedBox(
-                        height: height * 0.01,
-                      ),
-                      itemCount: 7,
-                    ),
-                  ],
+                  child: Column(
+                    children: List.generate(7, (index) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: height * 0.01),
+                        child: _buildFieldByIndex(
+                          context: context,
+                          index: index,
+                          width: width,
+                          hinttext: hinttext,
+                          controller: controller,
+                        ),
+                      );
+                    }),
+                  ),
                 ),
               ),
               Builder(builder: (context) {
@@ -334,6 +154,110 @@ class AddTeacherView extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildFieldByIndex({
+    required BuildContext context,
+    required int index,
+    required double width,
+    required List<String> hinttext,
+    required List<TextEditingController> controller,
+  }) {
+    if (index == 3) {
+      // Dropdown Wali Kelas
+      return BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
+        builder: (context, state) {
+          if (state is KelasDisplayLoaded) {
+            return AppDropdownField(
+              width: width * 0.92,
+              hint: 'Wali Kelas:',
+              items: state.kelas.map((doc) {
+                return DropdownMenuEntry(value: doc.kelas, label: doc.kelas);
+              }).toList(),
+              onSelected: (value) =>
+                  context.read<GetAllKelasCubit>().selectItem(value),
+            );
+          }
+          return TextField(
+              controller: controller[index],
+              decoration: InputDecoration(hintText: hinttext[index]));
+        },
+      );
+    } else if (index == 1) {
+      // Dropdown Mengajar
+      return BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
+        builder: (context, state) {
+          if (state is GetActivitiesLoaded) {
+            return AppDropdownField(
+              width: width * 0.92,
+              hint: 'Mengajar:',
+              items: state.activities
+                  .map((doc) => DropdownMenuEntry(
+                        value: doc.name,
+                        label: doc.name,
+                      ))
+                  .toList(),
+              onSelected: (value) {
+                controller[index].text = value ?? '';
+              },
+            );
+          }
+          return TextField(
+              controller: controller[index],
+              decoration: InputDecoration(hintText: hinttext[index]));
+        },
+      );
+    } else if (index == 4) {
+      // Tanggal Picker
+      return TextField(
+        controller: controller[index],
+        readOnly: true,
+        onTap: () async {
+          DateTime? picked = await showDatePicker(
+            context: context,
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now(),
+            initialDate: DateTime.now(),
+            locale: const Locale('id', 'ID'),
+          );
+          if (picked != null) {
+            controller[index].text =
+                DateFormat("d MMMM y", "id_ID").format(picked);
+          }
+        },
+        decoration: InputDecoration(hintText: hinttext[index]),
+      );
+    } else if (index == 6) {
+      // Gender Selection
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Jenis Kelamin:',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          BlocBuilder<GenderSelectionCubit, int>(
+            builder: (context, state) {
+              return Row(
+                children: [
+                  BoxGender(
+                      gender: 'Laki-laki', context: context, genderIndex: 1),
+                  SizedBox(width: width * 0.02),
+                  BoxGender(
+                      gender: 'Perempuan', context: context, genderIndex: 2),
+                ],
+              );
+            },
+          ),
+        ],
+      );
+    }
+
+    // Default TextField
+    return TextField(
+      controller: controller[index],
+      decoration: InputDecoration(
+        hintText: hinttext[index],
       ),
     );
   }
