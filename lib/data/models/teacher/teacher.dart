@@ -9,6 +9,7 @@ class TeacherModel {
   final String tanggalLahir;
   final String waliKelas;
   final String jabatan;
+  final int gender;
 
   TeacherModel({
     required this.nama,
@@ -17,6 +18,7 @@ class TeacherModel {
     required this.tanggalLahir,
     required this.waliKelas,
     required this.jabatan,
+    required this.gender,
   });
 
   Map<String, dynamic> toMap() {
@@ -27,6 +29,7 @@ class TeacherModel {
       'tanggal_lahir': tanggalLahir,
       'wali_kelas': waliKelas,
       'jabatan_tambahan': jabatan,
+      "gender": gender,
     };
   }
 
@@ -38,6 +41,7 @@ class TeacherModel {
       tanggalLahir: map["tanggal_lahir"] ?? '',
       waliKelas: map["wali_kelas"] ?? '',
       jabatan: map["jabatan_tambahan"] ?? '',
+      gender: map["gender"],
     );
   }
 
@@ -56,6 +60,7 @@ extension TeacherModelX on TeacherModel {
       tanggalLahir: tanggalLahir,
       waliKelas: waliKelas,
       jabatan: jabatan,
+      gender: gender,
     );
   }
 }

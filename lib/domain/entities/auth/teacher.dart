@@ -5,6 +5,7 @@ class TeacherEntity {
   final String tanggalLahir;
   final String waliKelas;
   final String jabatan;
+  final int gender;
 
   TeacherEntity({
     required this.nama,
@@ -13,5 +14,6 @@ class TeacherEntity {
     required this.tanggalLahir,
     required this.waliKelas,
     required this.jabatan,
+    required this.gender,
   });
 }

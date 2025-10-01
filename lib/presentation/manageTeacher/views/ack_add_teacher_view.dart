@@ -31,6 +31,7 @@ class AckAddTeacherView extends StatelessWidget {
       "Tanggal Lahir",
       "Wali Kelas",
       'Jabatan',
+      "Gender",
     ];
     List<String> contentList = [
       teacherCreationReq.nama,
@@ -39,6 +40,7 @@ class AckAddTeacherView extends StatelessWidget {
       teacherCreationReq.tanggalLahir,
       teacherCreationReq.waliKelas,
       teacherCreationReq.jabatan,
+      teacherCreationReq.gender == 1 ? 'Laki-Laki' : 'Perempuan',
     ];
     return Scaffold(
       body: BlocProvider(
@@ -83,6 +85,7 @@ class AckAddTeacherView extends StatelessWidget {
                   height: height * 0.4,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     itemBuilder: (context, index) {
                       return CardAck(
                         title: titleList[index],

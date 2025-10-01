@@ -4,10 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
 
+import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
+import '../../../common/widget/card/box_gender.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/teacher/update_teacher.dart';
 import '../../../service_locator.dart';
@@ -71,8 +73,19 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => GetAllKelasCubit()..displayAll(),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => GetAllKelasCubit()..displayAll(),
+          ),
+          BlocProvider(
+            create: (context) {
+              final cubit = GenderSelectionCubit();
+              cubit.selectGender(widget.teacher.gender);
+              return cubit;
+            },
+          ),
+        ],
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,6 +217,45 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                               hintText: 'Tanggal Lahir:',
                             ),
                           );
+                        } else if (index == 6) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                  vertical: 8,
+                                ),
+                                child: Text(
+                                  'Jenis Kelamin: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                              BlocBuilder<GenderSelectionCubit, int>(
+                                builder: (context, state) {
+                                  return Row(
+                                    children: [
+                                      BoxGender(
+                                        gender: 'Laki-laki',
+                                        context: context,
+                                        genderIndex: 1,
+                                      ),
+                                      SizedBox(width: width * 0.01),
+                                      BoxGender(
+                                        gender: 'Perempuan',
+                                        context: context,
+                                        genderIndex: 2,
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          );
                         } else {
                           return TextField(
                             controller: controller[index],
@@ -217,7 +269,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                       separatorBuilder: (context, index) => SizedBox(
                         height: height * 0.01,
                       ),
-                      itemCount: 6,
+                      itemCount: 7,
                     ),
                   ],
                 ),
@@ -253,6 +305,9 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                               ? '-'
                               : (cubit as KelasDisplayLoaded).selected!,
                           jabatan: _jabatanC.text,
+                          gender: context
+                              .read<GenderSelectionCubit>()
+                              .selectedIndex,
                         ),
                       );
                       result.fold(
