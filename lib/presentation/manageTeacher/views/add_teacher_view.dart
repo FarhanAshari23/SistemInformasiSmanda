@@ -109,10 +109,7 @@ class AddTeacherView extends StatelessWidget {
               Builder(builder: (context) {
                 return BasicButton(
                   onPressed: () {
-                    if (_namaC.text.isEmpty ||
-                        _nipC.text.isEmpty ||
-                        _mengajarC.text.isEmpty ||
-                        _tanggalC.text.isEmpty) {
+                    if (_namaC.text.isEmpty || _tanggalC.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           backgroundColor: Colors.red,
@@ -131,8 +128,9 @@ class AddTeacherView extends StatelessWidget {
                         AckAddTeacherView(
                           teacherCreationReq: TeacherModel(
                             nama: _namaC.text,
-                            mengajar: _mengajarC.text,
-                            nip: _nipC.text,
+                            mengajar:
+                                _mengajarC.text.isEmpty ? '-' : _mengajarC.text,
+                            nip: _nipC.text.isEmpty ? '-' : _nipC.text,
                             tanggalLahir: _tanggalC.text,
                             waliKelas: cubit is KelasDisplayLoaded &&
                                     cubit.selected == null
@@ -170,12 +168,23 @@ class AddTeacherView extends StatelessWidget {
       return BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
         builder: (context, state) {
           if (state is KelasDisplayLoaded) {
+            final entries = state.kelas.map((doc) {
+              final kelas = doc.kelas;
+              return DropdownMenuEntry(
+                value: kelas,
+                label: kelas,
+              );
+            }).toList();
+            entries.add(
+              const DropdownMenuEntry<String>(
+                value: "-", // ini yang nanti ke-save
+                label: "Bukan Wali Kelas",
+              ),
+            );
             return AppDropdownField(
                 width: width * 0.92,
                 hint: 'Wali Kelas:',
-                items: state.kelas.map((doc) {
-                  return DropdownMenuEntry(value: doc.kelas, label: doc.kelas);
-                }).toList(),
+                items: entries,
                 onSelected: (value) {
                   context.read<GetAllKelasCubit>().selectItem(value);
                   FocusScope.of(context).unfocus();
