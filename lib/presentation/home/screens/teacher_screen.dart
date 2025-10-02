@@ -13,11 +13,10 @@ class TeacherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    // double width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
           children: [
             const Row(
@@ -25,12 +24,12 @@ class TeacherScreen extends StatelessWidget {
               children: [
                 CardTeacherRole(
                   image: AppImages.structural,
-                  title: 'Dewan\nPimpinan\nSekolah',
+                  title: 'Dewan Pimpinan Sekolah',
                   nextPage: OrganizationView(),
                 ),
                 CardTeacherRole(
                   image: AppImages.teaching,
-                  title: 'Daftar\nTenaga\nPengajar',
+                  title: 'Daftar Tenaga Pengajar',
                   nextPage: TeacherView(),
                 ),
               ],
@@ -41,7 +40,7 @@ class TeacherScreen extends StatelessWidget {
               children: [
                 CardTeacherRole(
                   image: AppImages.staff,
-                  title: 'Daftar\nStaff\nSekolah',
+                  title: 'Daftar Staff Sekolah',
                   nextPage: ListStaffView(),
                 ),
                 CardSearch(

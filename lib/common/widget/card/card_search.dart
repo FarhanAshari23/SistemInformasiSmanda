@@ -14,27 +14,24 @@ class CardSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return CustomInkWell(
       borderRadius: 16,
       onTap: () => AppNavigator.push(context, nextPage),
       defaultColor: AppColors.secondary,
       child: SizedBox(
-        width: width * 0.435,
-        height: height * 0.25,
+        width: width * 0.45,
+        height: width * 0.45,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 32,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: Container(
                   width: width * 0.2,
-                  height: height * 0.095,
+                  height: width * 0.2,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(AppImages.search),
@@ -43,11 +40,10 @@ class CardSearch extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: height * 0.02),
               const Text(
                 'Cari Berdasarkan Nama',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.w800,
                   color: AppColors.inversePrimary,
                 ),

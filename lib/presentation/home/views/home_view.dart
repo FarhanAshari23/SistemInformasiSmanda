@@ -17,7 +17,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     List<String> iconImage = [
       AppImages.information,
@@ -52,69 +51,67 @@ class HomeView extends StatelessWidget {
                 isProfileViewed: true,
               ),
               SizedBox(height: height * 0.0095),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    Builder(
-                      builder: (context) {
-                        return Text(
-                          title[context.watch<BarNavigationCubit>().state],
-                          style: const TextStyle(
-                            color: AppColors.primary,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
+              Builder(
+                builder: (context) {
+                  return Text(
+                    title[context.watch<BarNavigationCubit>().state],
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: height * 0.02),
+              Builder(
+                builder: (context) {
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      child: page[context.watch<BarNavigationCubit>().state],
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: height * 0.01),
+              Builder(builder: (context) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(
+                      4,
+                      (index) {
+                        return CustomInkWell(
+                          onTap: () {
+                            context
+                                .read<BarNavigationCubit>()
+                                .changeColor(index);
+                          },
+                          defaultColor:
+                              context.watch<BarNavigationCubit>().state == index
+                                  ? AppColors.primary
+                                  : AppColors.tertiary,
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            child: Center(
+                              child: Image.asset(
+                                iconImage[index],
+                                width: 40,
+                                height: 40,
+                              ),
+                            ),
                           ),
                         );
                       },
                     ),
-                    SizedBox(height: height * 0.02),
-                    Builder(
-                      builder: (context) {
-                        return SizedBox(
-                          width: double.infinity,
-                          height: height * 0.59,
-                          child:
-                              page[context.watch<BarNavigationCubit>().state],
-                        );
-                      },
-                    ),
-                    SizedBox(height: height * 0.01),
-                    SizedBox(
-                      width: width * 0.8,
-                      height: height * 0.1,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: iconImage.length,
-                        itemBuilder: (context, index) {
-                          return CustomInkWell(
-                            onTap: () {
-                              context
-                                  .read<BarNavigationCubit>()
-                                  .changeColor(index);
-                            },
-                            defaultColor:
-                                context.watch<BarNavigationCubit>().state ==
-                                        index
-                                    ? AppColors.primary
-                                    : AppColors.tertiary,
-                            child: SizedBox(
-                              width: width * 0.2,
-                              height: height * 0.1,
-                              child: Center(
-                                child: Image.asset(
-                                  iconImage[index],
-                                  width: width * 0.15,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              })
             ],
           ),
         ),

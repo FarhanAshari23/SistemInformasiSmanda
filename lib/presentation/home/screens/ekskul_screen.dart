@@ -12,7 +12,6 @@ class EkskulScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: BlocProvider(
@@ -27,11 +26,9 @@ class EkskulScreen extends StatelessWidget {
                 );
               }
               if (state is EkskulLoaded) {
-                return SizedBox(
-                  width: double.infinity,
-                  height: height * 0.55,
+                return Expanded(
                   child: StackedListView(
-                    padding: const EdgeInsets.symmetric(vertical: 56),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     itemExtent: width * 0.475,
                     itemCount: state.ekskul.length,
                     scrollDirection: Axis.horizontal,
@@ -44,6 +41,7 @@ class EkskulScreen extends StatelessWidget {
                           ),
                         ),
                         child: CardEkskul(
+                          key: ValueKey(state.ekskul[index].namaEkskul),
                           title: state.ekskul[index].namaEkskul,
                         ),
                       );

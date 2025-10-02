@@ -15,22 +15,25 @@ class QrScreen extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          SizedBox(height: height * 0.075),
+          SizedBox(height: height * 0.05),
           BarcodeWidget(
             barcode: Barcode.qrCode(),
             data: qrCodeData,
             width: 200,
             height: 200,
           ),
-          SizedBox(height: height * 0.025),
-          const Text(
-            'Silakan tunjukkan QR ini untuk melakukan absen',
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-              color: AppColors.primary,
-              fontSize: 24,
+          SizedBox(height: height * 0.03),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Silakan tunjukkan QR ini untuk melakukan absen',
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                color: AppColors.primary,
+                fontSize: 24,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           )
         ],
       ),
