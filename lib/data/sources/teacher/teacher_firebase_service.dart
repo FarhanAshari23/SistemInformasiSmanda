@@ -70,6 +70,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
           "tanggal_lahir": teacherCreationReq.tanggalLahir,
           "wali_kelas": teacherCreationReq.waliKelas,
           "jabatan_tambahan": teacherCreationReq.jabatan,
+          "gender": teacherCreationReq.gender,
           "keywords": keywords,
         },
       );

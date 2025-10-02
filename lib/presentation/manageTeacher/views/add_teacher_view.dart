@@ -171,18 +171,22 @@ class AddTeacherView extends StatelessWidget {
         builder: (context, state) {
           if (state is KelasDisplayLoaded) {
             return AppDropdownField(
-              width: width * 0.92,
-              hint: 'Wali Kelas:',
-              items: state.kelas.map((doc) {
-                return DropdownMenuEntry(value: doc.kelas, label: doc.kelas);
-              }).toList(),
-              onSelected: (value) =>
-                  context.read<GetAllKelasCubit>().selectItem(value),
-            );
+                width: width * 0.92,
+                hint: 'Wali Kelas:',
+                items: state.kelas.map((doc) {
+                  return DropdownMenuEntry(value: doc.kelas, label: doc.kelas);
+                }).toList(),
+                onSelected: (value) {
+                  context.read<GetAllKelasCubit>().selectItem(value);
+                  FocusScope.of(context).unfocus();
+                });
           }
           return TextField(
-              controller: controller[index],
-              decoration: InputDecoration(hintText: hinttext[index]));
+            controller: controller[index],
+            decoration: InputDecoration(
+              hintText: hinttext[index],
+            ),
+          );
         },
       );
     } else if (index == 1) {
@@ -201,6 +205,7 @@ class AddTeacherView extends StatelessWidget {
                   .toList(),
               onSelected: (value) {
                 controller[index].text = value ?? '';
+                FocusScope.of(context).unfocus();
               },
             );
           }

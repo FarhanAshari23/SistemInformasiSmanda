@@ -4,12 +4,15 @@ import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
 
+import '../../../common/bloc/activities/get_activities_cubit.dart';
+import '../../../common/bloc/activities/get_activities_state.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/card/box_gender.dart';
+import '../../../common/widget/dropdown/app_dropdown_field.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/teacher/update_teacher.dart';
 import '../../../service_locator.dart';
@@ -85,6 +88,9 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
               return cubit;
             },
           ),
+          BlocProvider(
+            create: (context) => GetActivitiesCubit()..displayActivites(),
+          ),
         ],
         child: SafeArea(
           child: Column(
@@ -119,159 +125,24 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
               ),
               SizedBox(height: height * 0.02),
               Expanded(
-                child: ListView(
+                child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  children: [
-                    ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        if (index == 3) {
-                          return BlocBuilder<GetAllKelasCubit,
-                              KelasDisplayState>(
-                            builder: (context, state) {
-                              if (state is KelasDisplayLoading) {
-                                return TextField(
-                                  controller: _waliKelasC,
-                                  autocorrect: false,
-                                  decoration: const InputDecoration(
-                                    hintText: 'kelas:',
-                                  ),
-                                );
-                              }
-                              if (state is KelasDisplayLoaded) {
-                                final entries = state.kelas.map((doc) {
-                                  final kelas = doc.kelas;
-                                  return DropdownMenuEntry(
-                                    value: kelas,
-                                    label: kelas,
-                                  );
-                                }).toList();
-                                entries.add(
-                                  const DropdownMenuEntry<String>(
-                                    value: "-", // ini yang nanti ke-save
-                                    label: "Bukan Wali Kelas",
-                                  ),
-                                );
-                                return DropdownMenu<String>(
-                                  width: width * 0.92,
-                                  inputDecorationTheme:
-                                      const InputDecorationTheme(
-                                    fillColor: AppColors.tertiary,
-                                    filled: true,
-                                    hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.black, // <-- warna hint
-                                    ),
-                                  ),
-                                  menuHeight: 200,
-                                  hintText: widget.teacher.waliKelas,
-                                  dropdownMenuEntries: entries,
-                                  onSelected: (value) {
-                                    context
-                                        .read<GetAllKelasCubit>()
-                                        .selectItem(value);
-                                  },
-                                );
-                              }
-                              return const SizedBox();
-                            },
-                          );
-                        } else if (index == 4) {
-                          return TextField(
-                            controller: _tanggalC,
-                            readOnly: true,
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime.now(),
-                                initialDate: DateTime.now(),
-                                locale: const Locale('id', 'ID'),
-                                confirmText: "Oke",
-                                cancelText: "Keluar",
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: Theme.of(context).copyWith(
-                                      inputDecorationTheme:
-                                          InputDecorationTheme(
-                                        filled: true,
-                                        fillColor: AppColors
-                                            .inversePrimary, // warna background field input tanggal
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                    ),
-                                    child: child!,
-                                  );
-                                },
-                              );
-                              _tanggalC.text = DateFormat("d MMMM y", "id_ID")
-                                  .format(pickedDate ?? DateTime.now());
-                            },
-                            autocorrect: false,
-                            decoration: const InputDecoration(
-                              hintText: 'Tanggal Lahir:',
-                            ),
-                          );
-                        } else if (index == 6) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 4,
-                                  vertical: 8,
-                                ),
-                                child: Text(
-                                  'Jenis Kelamin: ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 16,
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                              ),
-                              BlocBuilder<GenderSelectionCubit, int>(
-                                builder: (context, state) {
-                                  return Row(
-                                    children: [
-                                      BoxGender(
-                                        gender: 'Laki-laki',
-                                        context: context,
-                                        genderIndex: 1,
-                                      ),
-                                      SizedBox(width: width * 0.01),
-                                      BoxGender(
-                                        gender: 'Perempuan',
-                                        context: context,
-                                        genderIndex: 2,
-                                      )
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        } else {
-                          return TextField(
-                            controller: controller[index],
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              hintText: hinttext[index],
-                            ),
-                          );
-                        }
-                      },
-                      separatorBuilder: (context, index) => SizedBox(
-                        height: height * 0.01,
-                      ),
-                      itemCount: 7,
-                    ),
-                  ],
+                  child: Column(
+                    children: List.generate(7, (index) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: height * 0.01),
+                        child: _buildFieldByIndex(
+                          context: context,
+                          index: index,
+                          width: width,
+                          hinttext: hinttext,
+                          initMengajar: _mengajarC.text,
+                          initWaliKelas: _waliKelasC.text,
+                          controller: controller,
+                        ),
+                      );
+                    }),
+                  ),
                 ),
               ),
               Builder(builder: (context) {
@@ -334,6 +205,169 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildFieldByIndex({
+    required BuildContext context,
+    required int index,
+    required double width,
+    required List<String> hinttext,
+    required List<TextEditingController> controller,
+    required String initWaliKelas,
+    required String initMengajar,
+  }) {
+    if (index == 3) {
+      // Dropdown Wali Kelas
+      return BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
+        builder: (context, state) {
+          if (state is KelasDisplayLoading) {
+            return TextField(
+              controller: _waliKelasC,
+              autocorrect: false,
+              decoration: const InputDecoration(
+                hintText: 'kelas:',
+              ),
+            );
+          }
+          if (state is KelasDisplayLoaded) {
+            final entries = state.kelas.map((doc) {
+              final kelas = doc.kelas;
+              return DropdownMenuEntry(
+                value: kelas,
+                label: kelas,
+              );
+            }).toList();
+            entries.add(
+              const DropdownMenuEntry<String>(
+                value: "-", // ini yang nanti ke-save
+                label: "Bukan Wali Kelas",
+              ),
+            );
+            return AppDropdownField(
+              width: width * 0.92,
+              hint: widget.teacher.waliKelas,
+              items: entries,
+              initSelection: initWaliKelas,
+              onSelected: (value) {
+                context.read<GetAllKelasCubit>().selectItem(value);
+              },
+            );
+          }
+          return const SizedBox();
+        },
+      );
+    } else if (index == 1) {
+      // Dropdown Mengajar
+      return BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
+        builder: (context, state) {
+          if (state is GetActivitiesLoaded) {
+            final entries = state.activities.map((doc) {
+              final mengajar = doc.name;
+              return DropdownMenuEntry(
+                value: mengajar,
+                label: mengajar,
+              );
+            }).toList();
+
+            return AppDropdownField(
+              width: width * 0.92,
+              hint: 'Mengajar:',
+              initSelection: initMengajar,
+              items: entries,
+              onSelected: (value) {
+                controller[index].text = value ?? '';
+                FocusScope.of(context).unfocus();
+              },
+            );
+          }
+          return TextField(
+            controller: controller[index],
+            decoration: InputDecoration(
+              hintText: hinttext[index],
+            ),
+          );
+        },
+      );
+    } else if (index == 4) {
+      // Tanggal Picker
+      return TextField(
+        controller: _tanggalC,
+        readOnly: true,
+        onTap: () async {
+          DateTime? pickedDate = await showDatePicker(
+            context: context,
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now(),
+            initialDate: DateTime.now(),
+            locale: const Locale('id', 'ID'),
+            confirmText: "Oke",
+            cancelText: "Keluar",
+            builder: (context, child) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  inputDecorationTheme: InputDecorationTheme(
+                    filled: true,
+                    fillColor: AppColors
+                        .inversePrimary, // warna background field input tanggal
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                child: child!,
+              );
+            },
+          );
+          _tanggalC.text = DateFormat("d MMMM y", "id_ID")
+              .format(pickedDate ?? DateTime.now());
+        },
+        autocorrect: false,
+        decoration: const InputDecoration(
+          hintText: 'Tanggal Lahir:',
+        ),
+      );
+    } else if (index == 6) {
+      // Gender Selection
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Jenis Kelamin:',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          BlocBuilder<GenderSelectionCubit, int>(
+            builder: (context, state) {
+              return Row(
+                children: [
+                  BoxGender(
+                    gender: 'Laki-laki',
+                    context: context,
+                    genderIndex: 1,
+                  ),
+                  SizedBox(width: width * 0.02),
+                  BoxGender(
+                    gender: 'Perempuan',
+                    context: context,
+                    genderIndex: 2,
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      );
+    }
+
+    // Default TextField
+    return TextField(
+      controller: controller[index],
+      decoration: InputDecoration(
+        hintText: hinttext[index],
       ),
     );
   }

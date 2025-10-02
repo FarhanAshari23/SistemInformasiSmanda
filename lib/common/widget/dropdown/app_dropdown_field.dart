@@ -5,6 +5,7 @@ class AppDropdownField extends StatelessWidget {
   final double width;
   final List<DropdownMenuEntry<String>> items;
   final ValueChanged<String?> onSelected;
+  final String? initSelection;
 
   const AppDropdownField({
     super.key,
@@ -12,6 +13,7 @@ class AppDropdownField extends StatelessWidget {
     required this.width,
     required this.items,
     required this.onSelected,
+    this.initSelection,
   });
 
   @override
@@ -21,7 +23,10 @@ class AppDropdownField extends StatelessWidget {
     return DropdownMenu<String>(
       width: width,
       hintText: hint,
+      enableSearch: true,
       menuHeight: 200,
+      requestFocusOnTap: true,
+      initialSelection: initSelection,
       inputDecorationTheme: theme.inputDecorationTheme,
       dropdownMenuEntries: items,
       onSelected: onSelected,
