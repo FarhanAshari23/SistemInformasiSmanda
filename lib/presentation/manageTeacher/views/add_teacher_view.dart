@@ -203,15 +203,24 @@ class AddTeacherView extends StatelessWidget {
       return BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
         builder: (context, state) {
           if (state is GetActivitiesLoaded) {
+            state.activities.removeWhere(
+              (element) =>
+                  element.name == "Upacara Bendera" ||
+                  element.name == 'Program Jumat' ||
+                  element.name == 'Istirahat',
+            );
+            final newList = state.activities;
+            final entries = newList.map((doc) {
+              final activity = doc.name;
+              return DropdownMenuEntry(
+                value: activity,
+                label: activity,
+              );
+            }).toList();
             return AppDropdownField(
               width: width * 0.92,
               hint: 'Mengajar:',
-              items: state.activities
-                  .map((doc) => DropdownMenuEntry(
-                        value: doc.name,
-                        label: doc.name,
-                      ))
-                  .toList(),
+              items: entries,
               onSelected: (value) {
                 controller[index].text = value ?? '';
                 FocusScope.of(context).unfocus();

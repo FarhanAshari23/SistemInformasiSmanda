@@ -263,14 +263,20 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
       return BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
         builder: (context, state) {
           if (state is GetActivitiesLoaded) {
-            final entries = state.activities.map((doc) {
-              final mengajar = doc.name;
+            state.activities.removeWhere(
+              (element) =>
+                  element.name == "Upacara Bendera" ||
+                  element.name == 'Program Jumat' ||
+                  element.name == 'Istirahat',
+            );
+            final newList = state.activities;
+            final entries = newList.map((doc) {
+              final activity = doc.name;
               return DropdownMenuEntry(
-                value: mengajar,
-                label: mengajar,
+                value: activity,
+                label: activity,
               );
             }).toList();
-
             return AppDropdownField(
               width: width * 0.92,
               hint: 'Mengajar:',
