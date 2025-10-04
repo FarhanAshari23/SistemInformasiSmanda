@@ -31,35 +31,33 @@ class EditDataEkskulView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: height * 0.03),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: BlocBuilder<EkskulCubit, EkskulState>(
-                  builder: (context, state) {
-                    if (state is EkskulLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (state is EkskulLoaded) {
-                      return SizedBox(
-                        width: double.infinity,
-                        height: height * 0.7,
-                        child: GridView.builder(
-                          itemCount: state.ekskul.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: width * 0.025,
-                            mainAxisSpacing: 12.0,
-                            mainAxisExtent: height * 0.315,
-                          ),
-                          itemBuilder: (context, index) => CardEkskulEdit(
-                            ekskul: state.ekskul[index],
-                          ),
+              BlocBuilder<EkskulCubit, EkskulState>(
+                builder: (context, state) {
+                  if (state is EkskulLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (state is EkskulLoaded) {
+                    return Expanded(
+                      child: GridView.builder(
+                        itemCount: state.ekskul.length,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
                         ),
-                      );
-                    }
-                    return Container();
-                  },
-                ),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: width * 0.025,
+                          mainAxisSpacing: 12.0,
+                          mainAxisExtent: height * 0.315,
+                        ),
+                        itemBuilder: (context, index) => CardEkskulEdit(
+                          ekskul: state.ekskul[index],
+                        ),
+                      ),
+                    );
+                  }
+                  return Container();
+                },
               )
             ],
           ),

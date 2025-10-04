@@ -59,61 +59,56 @@ class KelasDetailView extends StatelessWidget {
                 child: Column(
                   children: [
                     const BasicAppbar(
-                        isBackViewed: true, isProfileViewed: true),
+                      isBackViewed: true,
+                      isProfileViewed: true,
+                    ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ListKelas(kelas: kelas),
-                          SizedBox(height: height * 0.04),
-                          SizedBox(
-                            width: double.infinity,
-                            height: height * 0.65,
-                            child: BlocBuilder<StudentsDisplayCubit,
-                                StudentsDisplayState>(
-                              builder: (context, state) {
-                                if (state is StudentsDisplayLoading) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: ListKelas(kelas: kelas),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: BlocBuilder<StudentsDisplayCubit,
+                          StudentsDisplayState>(
+                        builder: (context, state) {
+                          if (state is StudentsDisplayLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          if (state is StudentsDisplayLoaded) {
+                            return state.students.isNotEmpty
+                                ? ListView.separated(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    itemBuilder: (context, index) {
+                                      return CardUser(
+                                        onTap: () => AppNavigator.push(
+                                          context,
+                                          MuridDetail(
+                                            user: state.students[index],
+                                          ),
+                                        ),
+                                        name: state.students[index].nama!,
+                                        nisn: state.students[index].nisn!,
+                                        gender: state.students[index].gender!,
+                                      );
+                                    },
+                                    separatorBuilder: (context, index) =>
+                                        SizedBox(height: height * 0.02),
+                                    itemCount: state.students.length,
+                                  )
+                                : const Center(
+                                    child: Text('Belum ada data'),
                                   );
-                                }
-                                if (state is StudentsDisplayLoaded) {
-                                  return state.students.isNotEmpty
-                                      ? ListView.separated(
-                                          itemBuilder: (context, index) {
-                                            return CardUser(
-                                              onTap: () => AppNavigator.push(
-                                                context,
-                                                MuridDetail(
-                                                  user: state.students[index],
-                                                ),
-                                              ),
-                                              name: state.students[index].nama!,
-                                              nisn: state.students[index].nisn!,
-                                              gender:
-                                                  state.students[index].gender!,
-                                            );
-                                          },
-                                          separatorBuilder: (context, index) =>
-                                              SizedBox(height: height * 0.02),
-                                          itemCount: state.students.length,
-                                        )
-                                      : const Center(
-                                          child: Text('Belum ada data'),
-                                        );
-                                }
-                                if (state is StudentsDisplayFailure) {
-                                  return const Center(
-                                    child: Text('Something wrongs'),
-                                  );
-                                }
-                                return Container();
-                              },
-                            ),
-                          )
-                        ],
+                          }
+                          if (state is StudentsDisplayFailure) {
+                            return const Center(
+                              child: Text('Something wrongs'),
+                            );
+                          }
+                          return Container();
+                        },
                       ),
                     ),
                   ],
