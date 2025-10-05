@@ -35,7 +35,8 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
     try {
       var returnedData = await FirebaseFirestore.instance
           .collection("Teachers")
-          .where("jabatan_tambahan", isGreaterThanOrEqualTo: 'Waka')
+          .where("jabatan_tambahan",
+              isGreaterThanOrEqualTo: 'Wakil Kepala Sekolah')
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
@@ -48,7 +49,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
     try {
       var returnedData = await FirebaseFirestore.instance
           .collection("Teachers")
-          .where('jabatan_tambahan', isNotEqualTo: 'Tenaga Kependidikan')
+          .where('mengajar', isNotEqualTo: 'Tenaga Kependidikan')
           .orderBy('nama')
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
@@ -139,7 +140,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
     try {
       var returnedData = await FirebaseFirestore.instance
           .collection("Teachers")
-          .where("jabatan_tambahan", isEqualTo: 'Tenaga Kependidikan')
+          .where("mengajar", isEqualTo: 'Tenaga Kependidikan')
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
