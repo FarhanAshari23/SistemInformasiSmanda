@@ -19,7 +19,7 @@ class CardDetailSiswa extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 16),
+      padding: EdgeInsets.only(top: height * 0.0375),
       child: Stack(
         alignment: AlignmentDirectional.topCenter,
         clipBehavior: Clip.none,

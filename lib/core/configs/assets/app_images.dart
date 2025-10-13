@@ -31,7 +31,8 @@ class AppImages {
   static const String notfound = "${basePath}notfound.png";
   static const String girlStudent = "${basePath}girl-student.png";
   static const String boyStudent = "${basePath}boy-student.png";
-  static const String guru = "${basePath}guru.png";
+  static const String guruLaki = "${basePath}guru_male.png";
+  static const String guruPerempuan = "${basePath}guru_female.png";
   static const String tendik = "${basePath}tendik.png";
   static const String splashEkskul = "${basePath}splashEkskul.jpg";
   static const String testFoto = "${basePath}test_foto.JPG";

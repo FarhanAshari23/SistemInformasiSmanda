@@ -32,102 +32,109 @@ class OrganizationView extends StatelessWidget {
       child: Scaffold(
         body: SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const BasicAppbar(isBackViewed: true, isProfileViewed: true),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Text(
-                        'Kepala Sekolah:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.primary,
-                        ),
+              const Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Text(
+                  'Kepala Sekolah:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+              SizedBox(height: height * 0.02),
+              BlocBuilder<KepalaSekolahCubit, KepalaSekolahState>(
+                builder: (context, state) {
+                  if (state is KepalaSekolahLoading) {
+                    return const CardKepsekLoading();
+                  }
+                  if (state is KepalaSekolahLoaded) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: CardKepalaSekolah(
+                        nisn: state.teacher[0].nip,
+                        title: state.teacher[0].nama,
+                        gender: state.teacher[0].gender ?? 0,
+                        page: TeacherDetail(teachers: state.teacher[0]),
                       ),
-                    ),
-                    SizedBox(height: height * 0.02),
-                    BlocBuilder<KepalaSekolahCubit, KepalaSekolahState>(
-                      builder: (context, state) {
-                        if (state is KepalaSekolahLoading) {
-                          return const CardKepsekLoading();
-                        }
-                        if (state is KepalaSekolahLoaded) {
-                          return CardKepalaSekolah(
-                            nisn: state.teacher[0].nip,
-                            title: state.teacher[0].nama,
-                            page: TeacherDetail(teachers: state.teacher[0]),
-                          );
-                        }
-                        return Container();
-                      },
-                    ),
-                    SizedBox(height: height * 0.02),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Text(
-                        'Wakil Kepala Sekolah:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.primary,
+                    );
+                  }
+                  return Container();
+                },
+              ),
+              SizedBox(height: height * 0.02),
+              const Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Text(
+                  'Wakil Kepala Sekolah:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+              SizedBox(height: height * 0.02),
+              Expanded(
+                child: BlocBuilder<WakaCubit, WakaState>(
+                  builder: (context, state) {
+                    if (state is WakaLoading) {
+                      return GridView.builder(
+                        itemCount: 4,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
                         ),
-                      ),
-                    ),
-                    SizedBox(height: height * 0.02),
-                    SizedBox(
-                      width: double.infinity,
-                      height: height * 0.45,
-                      child: BlocBuilder<WakaCubit, WakaState>(
-                        builder: (context, state) {
-                          if (state is WakaLoading) {
-                            return GridView.builder(
-                              itemCount: 4,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 12.0,
-                                mainAxisSpacing: 12.0,
-                                mainAxisExtent: height * 0.25,
-                              ),
-                              itemBuilder: (context, index) {
-                                return const CardGuruLoading();
-                              },
-                            );
-                          }
-                          if (state is WakaLoaded) {
-                            return GridView.builder(
-                              itemCount: 4,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 12.0,
-                                mainAxisSpacing: 12.0,
-                                mainAxisExtent: height * 0.25,
-                              ),
-                              itemBuilder: (context, index) {
-                                String jabatan = state.teacher[index].jabatan;
-                                List<String> kata = jabatan.split(",");
-                                String mainJabatan = kata[0];
-                                return CardStaff(
-                                  title: state.teacher[index].nama,
-                                  content: mainJabatan,
-                                  page: TeacherDetail(
-                                    teachers: state.teacher[index],
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                          return Container();
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12.0,
+                          mainAxisSpacing: 12.0,
+                          mainAxisExtent: height * 0.25,
+                        ),
+                        itemBuilder: (context, index) {
+                          return const CardGuruLoading();
                         },
-                      ),
-                    )
-                  ],
+                      );
+                    }
+                    if (state is WakaLoaded) {
+                      return GridView.builder(
+                        itemCount: 4,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12.0,
+                          mainAxisSpacing: 12.0,
+                          mainAxisExtent: height * 0.25,
+                        ),
+                        itemBuilder: (context, index) {
+                          String jabatan = state.teacher[index].jabatan;
+                          List<String> kata = jabatan.split(",");
+                          String mainJabatan = kata.firstWhere(
+                            (e) => e
+                                .trim()
+                                .toLowerCase()
+                                .contains("wakil kepala sekolah".toLowerCase()),
+                            orElse: () => "",
+                          );
+                          return CardStaff(
+                            title: state.teacher[index].nama,
+                            content: mainJabatan,
+                            page: TeacherDetail(
+                              teachers: state.teacher[index],
+                            ),
+                          );
+                        },
+                      );
+                    }
+                    return Container();
+                  },
                 ),
               ),
             ],

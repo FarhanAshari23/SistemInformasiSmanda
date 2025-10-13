@@ -8,10 +8,12 @@ import '../../../core/configs/theme/app_colors.dart';
 class CardGuru extends StatelessWidget {
   final String title;
   final String nip;
+  final int gender;
   const CardGuru({
     super.key,
     required this.title,
     required this.nip,
+    required this.gender,
   });
 
   @override
@@ -34,8 +36,9 @@ class CardGuru extends StatelessWidget {
                 placeholder: (context, url) => const Center(
                   child: CircularProgressIndicator(),
                 ),
-                errorWidget: (context, url, error) =>
-                    Image.asset(AppImages.guru),
+                errorWidget: (context, url, error) => gender == 1
+                    ? Image.asset(AppImages.guruLaki)
+                    : Image.asset(AppImages.guruPerempuan),
                 fit: BoxFit.fill,
               ),
             ),

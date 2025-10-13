@@ -37,10 +37,12 @@ class TeacherDetail extends StatelessWidget {
                     Container(
                       width: double.infinity,
                       height: bodyHeight * 0.51,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(
-                            AppImages.guru,
+                            teachers.gender == 1
+                                ? AppImages.guruLaki
+                                : AppImages.guruPerempuan,
                           ),
                           fit: BoxFit.fill,
                         ),
@@ -53,8 +55,10 @@ class TeacherDetail extends StatelessWidget {
                         placeholder: (context, url) => const Center(
                           child: CircularProgressIndicator(),
                         ),
-                        errorWidget: (context, url, error) =>
-                            Image.asset(AppImages.guru),
+                        errorWidget: (context, url, error) => Image.asset(
+                            teachers.gender == 1
+                                ? AppImages.guruLaki
+                                : AppImages.guruPerempuan),
                         fit: BoxFit.fill,
                       ),
                     ),

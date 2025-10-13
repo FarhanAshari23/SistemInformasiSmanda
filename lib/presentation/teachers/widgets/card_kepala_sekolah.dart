@@ -10,12 +10,14 @@ import '../../../core/configs/theme/app_colors.dart';
 class CardKepalaSekolah extends StatelessWidget {
   final String title;
   final String nisn;
+  final int gender;
   final Widget page;
   const CardKepalaSekolah({
     super.key,
     required this.title,
     required this.nisn,
     required this.page,
+    required this.gender,
   });
 
   @override
@@ -42,8 +44,9 @@ class CardKepalaSekolah extends StatelessWidget {
                   placeholder: (context, url) => const Center(
                     child: CircularProgressIndicator(),
                   ),
-                  errorWidget: (context, url, error) =>
-                      Image.asset(AppImages.guru),
+                  errorWidget: (context, url, error) => Image.asset(gender == 1
+                      ? AppImages.guruLaki
+                      : AppImages.guruPerempuan),
                   fit: BoxFit.fill,
                 ),
               ),

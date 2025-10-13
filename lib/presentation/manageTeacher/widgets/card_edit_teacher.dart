@@ -46,8 +46,10 @@ class CardEditTeacher extends StatelessWidget {
                   height: bodyHeight * 0.12,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    image: const DecorationImage(
-                      image: AssetImage(AppImages.guru),
+                    image: DecorationImage(
+                      image: AssetImage(teacher.gender == 1
+                          ? AppImages.guruLaki
+                          : AppImages.guruPerempuan),
                       fit: BoxFit.fill,
                     ),
                   ),

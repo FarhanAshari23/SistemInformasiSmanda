@@ -50,93 +50,96 @@ class SeeDataAttandance extends StatelessWidget {
                         .map((a) => format.parse(a.createdAt))
                         .toList();
                     return Expanded(
-                      child: CalendarCarousel<Event>(
-                        onDayPressed: (date, events) {
-                          bool isHighlighted = highlightedDates.any(
-                            (element) => isSameDate(element, date),
-                          );
-                          if (isHighlighted) {
-                            String formatted =
-                                DateFormat('dd-M-yyyy').format(date);
-                            AppNavigator.push(
-                              context,
-                              BlocProvider.value(
-                                value: GetAllKelasCubit(),
-                                child: SelectClass(date: formatted),
-                              ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: CalendarCarousel<Event>(
+                          onDayPressed: (date, events) {
+                            bool isHighlighted = highlightedDates.any(
+                              (element) => isSameDate(element, date),
                             );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    "Tanggal ini belum dibuat list absensinya, silakan buat terlebih dahulu."),
-                              ),
-                            );
-                          }
-                        },
-                        headerTextStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.secondary,
-                          fontSize: 20,
-                        ),
-                        iconColor: AppColors.primary,
-                        weekendTextStyle: const TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        weekdayTextStyle: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        isScrollable: false,
-                        todayButtonColor: AppColors.secondary,
-                        daysTextStyle: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        nextDaysTextStyle: const TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        prevDaysTextStyle: const TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        customDayBuilder: (
-                          bool isSelectable,
-                          int index,
-                          bool isSelectedDay,
-                          bool isToday,
-                          bool isPrevMonthDay,
-                          TextStyle textStyle,
-                          bool isNextMonthDay,
-                          bool isThisMonthDay,
-                          DateTime date,
-                        ) {
-                          if (highlightedDates.any((d) =>
-                              d.day == date.day &&
-                              d.month == date.month &&
-                              d.year == date.year)) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: Colors
-                                    .green, // sama seperti selectedDayButtonColor
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '${date.day}',
-                                  style: const TextStyle(
-                                    color:
-                                        Colors.white, // teks putih biar kontras
-                                    fontWeight: FontWeight.bold,
+                            if (isHighlighted) {
+                              String formatted =
+                                  DateFormat('dd-M-yyyy').format(date);
+                              AppNavigator.push(
+                                context,
+                                BlocProvider.value(
+                                  value: GetAllKelasCubit(),
+                                  child: SelectClass(date: formatted),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      "Tanggal ini belum dibuat list absensinya, silakan buat terlebih dahulu."),
+                                ),
+                              );
+                            }
+                          },
+                          headerTextStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.secondary,
+                            fontSize: 20,
+                          ),
+                          iconColor: AppColors.primary,
+                          weekendTextStyle: const TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          weekdayTextStyle: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          isScrollable: false,
+                          todayButtonColor: AppColors.secondary,
+                          daysTextStyle: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          nextDaysTextStyle: const TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          prevDaysTextStyle: const TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          customDayBuilder: (
+                            bool isSelectable,
+                            int index,
+                            bool isSelectedDay,
+                            bool isToday,
+                            bool isPrevMonthDay,
+                            TextStyle textStyle,
+                            bool isNextMonthDay,
+                            bool isThisMonthDay,
+                            DateTime date,
+                          ) {
+                            if (highlightedDates.any((d) =>
+                                d.day == date.day &&
+                                d.month == date.month &&
+                                d.year == date.year)) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: Colors
+                                      .green, // sama seperti selectedDayButtonColor
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${date.day}',
+                                    style: const TextStyle(
+                                      color: Colors
+                                          .white, // teks putih biar kontras
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                          return null; // default style
-                        },
+                              );
+                            }
+                            return null; // default style
+                          },
+                        ),
                       ),
                     );
                   }

@@ -257,17 +257,29 @@ class AddTeacherView extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Jenis Kelamin:',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const Text(
+            'Jenis Kelamin:',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 8),
           BlocBuilder<GenderSelectionCubit, int>(
             builder: (context, state) {
               return Row(
                 children: [
                   BoxGender(
-                      gender: 'Laki-laki', context: context, genderIndex: 1),
+                    gender: 'Laki-laki',
+                    context: context,
+                    genderIndex: 1,
+                  ),
                   SizedBox(width: width * 0.02),
                   BoxGender(
-                      gender: 'Perempuan', context: context, genderIndex: 2),
+                    gender: 'Perempuan',
+                    context: context,
+                    genderIndex: 2,
+                  ),
                 ],
               );
             },

@@ -64,6 +64,7 @@ class TeacherView extends StatelessWidget {
                             child: CardGuru(
                               nip: state.teacher[index].nip,
                               title: state.teacher[index].nama,
+                              gender: state.teacher[index].gender ?? 0,
                             ),
                           );
                         },

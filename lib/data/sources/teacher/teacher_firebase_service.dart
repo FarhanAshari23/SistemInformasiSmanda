@@ -33,12 +33,17 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   @override
   Future<Either> getWaka() async {
     try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Teachers")
-          .where("jabatan_tambahan",
-              isGreaterThanOrEqualTo: 'Wakil Kepala Sekolah')
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
+      var returnedData =
+          await FirebaseFirestore.instance.collection("Teachers").get();
+
+      final result = returnedData.docs
+          .where((doc) {
+            final jabatan = (doc.data()["jabatan_tambahan"] ?? "").toString();
+            return jabatan.contains("Wakil Kepala Sekolah");
+          })
+          .map((doc) => doc.data())
+          .toList();
+      return Right(result);
     } catch (e) {
       return const Left("Error get data, please try again later");
     }
