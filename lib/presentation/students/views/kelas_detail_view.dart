@@ -91,6 +91,7 @@ class KelasDetailView extends StatelessWidget {
                                         ),
                                         name: state.students[index].nama!,
                                         nisn: state.students[index].nisn!,
+                                        agama: state.students[index].agama!,
                                         gender: state.students[index].gender!,
                                       );
                                     },

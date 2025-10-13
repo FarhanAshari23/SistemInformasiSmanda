@@ -61,6 +61,7 @@ class SearchStudentsView extends StatelessWidget {
           onTap: () => Navigator.pop(context, students[index].nama),
           name: students[index].nama!,
           nisn: students[index].nisn!,
+          agama: students[index].agama!,
           gender: students[index].gender!,
         );
       },

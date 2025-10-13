@@ -66,6 +66,7 @@ class SearchScreenStudent extends StatelessWidget {
               user: students[index],
             ),
           ),
+          agama: students[index].agama!,
           name: students[index].nama!,
           nisn: students[index].nisn!,
           gender: students[index].gender!,

@@ -10,6 +10,7 @@ class CardUser extends StatelessWidget {
   final String name;
   final String nisn;
   final int gender;
+  final String agama;
   final VoidCallback? onTap;
   const CardUser({
     super.key,
@@ -17,6 +18,7 @@ class CardUser extends StatelessWidget {
     required this.nisn,
     required this.onTap,
     required this.gender,
+    required this.agama,
   });
 
   @override
@@ -51,7 +53,9 @@ class CardUser extends StatelessWidget {
                       errorWidget: (context, url, error) => Image.asset(
                         gender == 1
                             ? AppImages.boyStudent
-                            : AppImages.girlStudent,
+                            : agama == "Islam"
+                                ? AppImages.girlStudent
+                                : AppImages.girlNonStudent,
                       ),
                       fit: BoxFit.fill,
                     ),

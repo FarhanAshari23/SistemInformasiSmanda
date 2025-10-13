@@ -125,6 +125,7 @@ class OrganizationView extends StatelessWidget {
                           );
                           return CardStaff(
                             title: state.teacher[index].nama,
+                            gender: state.teacher[index].gender ?? 0,
                             content: mainJabatan,
                             page: TeacherDetail(
                               teachers: state.teacher[index],

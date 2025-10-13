@@ -42,8 +42,10 @@ class StaffDetail extends StatelessWidget {
                         placeholder: (context, url) => const Center(
                           child: CircularProgressIndicator(),
                         ),
-                        errorWidget: (context, url, error) =>
-                            Image.asset(AppImages.tendik),
+                        errorWidget: (context, url, error) => Image.asset(
+                            teachers.gender == 1
+                                ? AppImages.tendikLaki
+                                : AppImages.tendikPerempuan),
                         fit: BoxFit.fill,
                       ),
                     ),

@@ -40,7 +40,7 @@ class CardAnggota extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 ),
                 errorWidget: (context, url, error) =>
-                    Image.asset(AppImages.tendik),
+                    Image.asset(AppImages.tendikLaki),
                 fit: BoxFit.fill,
               ),
             ),
