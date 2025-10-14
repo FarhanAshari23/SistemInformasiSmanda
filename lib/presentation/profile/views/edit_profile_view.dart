@@ -315,37 +315,33 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ),
                     ),
                     SizedBox(height: height * 0.02),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Jenis Kelamin: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                        BlocBuilder<GenderSelectionCubit, int>(
-                          builder: (context, state) {
-                            return Row(
-                              children: [
-                                BoxGender(
-                                  gender: 'Laki-laki',
-                                  context: context,
-                                  genderIndex: 1,
-                                ),
-                                SizedBox(width: width * 0.01),
-                                BoxGender(
-                                  gender: 'Perempuan',
-                                  context: context,
-                                  genderIndex: 2,
-                                )
-                              ],
-                            );
-                          },
-                        ),
-                      ],
+                    const Text(
+                      'Jenis Kelamin: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    BlocBuilder<GenderSelectionCubit, int>(
+                      builder: (context, state) {
+                        return Row(
+                          children: [
+                            BoxGender(
+                              gender: 'Laki-laki',
+                              context: context,
+                              genderIndex: 1,
+                            ),
+                            SizedBox(width: width * 0.01),
+                            BoxGender(
+                              gender: 'Perempuan',
+                              context: context,
+                              genderIndex: 2,
+                            )
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),

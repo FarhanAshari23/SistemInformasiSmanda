@@ -30,10 +30,9 @@ class EkskulDetail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const BasicAppbar(isBackViewed: true, isProfileViewed: true),
-            SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 children: [
                   Align(
                     alignment: Alignment.topRight,
@@ -50,6 +49,7 @@ class EkskulDetail extends StatelessWidget {
                                 top: Radius.circular(16),
                               ),
                             ),
+                            isScrollControlled: true,
                             builder: (context) {
                               return Container(
                                 padding: const EdgeInsets.all(16),
