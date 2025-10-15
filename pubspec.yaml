@@ -40,6 +40,7 @@ dependencies:
   smooth_page_indicator: ^1.2.0+3
   stacked_listview: ^1.0.4
   flutter_gen: ^5.11.0
+  dropdown_button2: ^2.3.9
   flutter_calendar_carousel: ^2.5.4
 
 dev_dependencies:

@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -17,16 +18,33 @@ import '../../../common/widget/card/box_gender.dart';
 import '../../../common/widget/dropdown/app_dropdown_field.dart';
 import '../../../core/configs/theme/app_colors.dart';
 
-class AddTeacherView extends StatelessWidget {
-  AddTeacherView({
+class AddTeacherView extends StatefulWidget {
+  const AddTeacherView({
     super.key,
   });
+
+  @override
+  State<AddTeacherView> createState() => _AddTeacherViewState();
+}
+
+class _AddTeacherViewState extends State<AddTeacherView> {
   final TextEditingController _namaC = TextEditingController();
   final TextEditingController _mengajarC = TextEditingController();
   final TextEditingController _nipC = TextEditingController();
   final TextEditingController _waliKelasC = TextEditingController();
   final TextEditingController _tanggalC = TextEditingController();
   final TextEditingController _jabatanC = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _namaC.dispose();
+    _mengajarC.dispose();
+    _nipC.dispose();
+    _waliKelasC.dispose();
+    _tanggalC.dispose();
+    _jabatanC.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -212,24 +230,52 @@ class AddTeacherView extends StatelessWidget {
             final newList = state.activities;
             final entries = newList.map((doc) {
               final activity = doc.name;
-              return DropdownMenuEntry(
+              return DropdownMenuItem(
                 value: activity,
-                label: activity,
+                child: Text(activity),
               );
             }).toList();
-            return AppDropdownField(
-              width: width * 0.92,
-              hint: 'Mengajar:',
+            return DropdownButton2<String>(
+              isExpanded: true,
+              underline: const SizedBox(),
+              hint: Text(controller[index].text.isEmpty
+                  ? 'Mengajar:'
+                  : controller[index].text),
               items: entries,
-              onSelected: (value) {
-                controller[index].text = value ?? '';
+              onChanged: (value) {
+                if (value != null) {
+                  final currentText = controller[index].text.trim();
+                  if (currentText.isEmpty) {
+                    controller[index].text = value;
+                  } else {
+                    controller[index].text = '$currentText, $value';
+                  }
+                }
                 FocusScope.of(context).unfocus();
               },
+              alignment: Alignment.centerLeft,
+              buttonStyleData: ButtonStyleData(
+                  decoration: BoxDecoration(
+                color: AppColors.tertiary,
+                borderRadius: BorderRadius.circular(12),
+              )),
+              dropdownStyleData: DropdownStyleData(
+                maxHeight: 300, // ✅ agar tidak penuh layar
+                offset: const Offset(
+                    0, 0), // ✅ dropdown mulai tepat dari bawah tombol
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
             );
           }
           return TextField(
-              controller: controller[index],
-              decoration: InputDecoration(hintText: hinttext[index]));
+            controller: controller[index],
+            decoration: InputDecoration(
+              hintText: hinttext[index],
+            ),
+          );
         },
       );
     } else if (index == 4) {

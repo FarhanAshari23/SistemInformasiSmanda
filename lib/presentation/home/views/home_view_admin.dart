@@ -77,7 +77,7 @@ class HomeViewAdmin extends StatelessWidget {
         create: (context) => GetAllKelasCubit()..displayAll(),
         child: const EditStudentView(),
       ),
-      AddTeacherView(),
+      const AddTeacherView(),
       const EditTeacherView(),
       const AddNewsView(),
       const EditNewsView(),
