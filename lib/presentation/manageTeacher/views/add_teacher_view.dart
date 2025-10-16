@@ -238,9 +238,18 @@ class _AddTeacherViewState extends State<AddTeacherView> {
             return DropdownButton2<String>(
               isExpanded: true,
               underline: const SizedBox(),
-              hint: Text(controller[index].text.isEmpty
-                  ? 'Mengajar:'
-                  : controller[index].text),
+              hint: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  controller[index].text.isEmpty
+                      ? 'Mengajar:'
+                      : controller[index].text,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),
               items: entries,
               onChanged: (value) {
                 if (value != null) {
@@ -255,14 +264,19 @@ class _AddTeacherViewState extends State<AddTeacherView> {
               },
               alignment: Alignment.centerLeft,
               buttonStyleData: ButtonStyleData(
-                  decoration: BoxDecoration(
-                color: AppColors.tertiary,
-                borderRadius: BorderRadius.circular(12),
-              )),
+                padding: const EdgeInsets.only(right: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.tertiary,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
               dropdownStyleData: DropdownStyleData(
-                maxHeight: 300, // ✅ agar tidak penuh layar
+                maxHeight: 300,
                 offset: const Offset(
-                    0, 0), // ✅ dropdown mulai tepat dari bawah tombol
+                  0,
+                  0,
+                ),
+                padding: EdgeInsets.zero,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
@@ -270,12 +284,15 @@ class _AddTeacherViewState extends State<AddTeacherView> {
               ),
             );
           }
-          return TextField(
-            controller: controller[index],
-            decoration: InputDecoration(
-              hintText: hinttext[index],
-            ),
-          );
+          if (state is GetActivitiesLoading) {
+            return TextField(
+              controller: controller[index],
+              decoration: InputDecoration(
+                hintText: hinttext[index],
+              ),
+            );
+          }
+          return const SizedBox();
         },
       );
     } else if (index == 4) {
