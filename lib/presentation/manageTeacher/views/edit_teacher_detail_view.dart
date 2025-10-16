@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -272,28 +273,122 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
             final newList = state.activities;
             final entries = newList.map((doc) {
               final activity = doc.name;
-              return DropdownMenuEntry(
+              return DropdownMenuItem(
                 value: activity,
-                label: activity,
+                child: Text(activity),
               );
             }).toList();
-            return AppDropdownField(
-              width: width * 0.92,
-              hint: 'Mengajar:',
-              initSelection: initMengajar,
+            return DropdownButton2<String>(
+              isExpanded: true,
+              underline: const SizedBox(),
+              hint: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  controller[index].text.isEmpty
+                      ? 'Mengajar:'
+                      : controller[index].text,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),
               items: entries,
-              onSelected: (value) {
-                controller[index].text = value ?? '';
+              onChanged: (value) {
+                if (value != null) {
+                  final currentText = controller[index].text.trim();
+                  if (currentText.isEmpty) {
+                    controller[index].text = value;
+                  } else {
+                    controller[index].text = '$currentText, $value';
+                  }
+                }
                 FocusScope.of(context).unfocus();
               },
+              alignment: Alignment.centerLeft,
+              buttonStyleData: ButtonStyleData(
+                padding: const EdgeInsets.only(right: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.tertiary,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              dropdownStyleData: DropdownStyleData(
+                maxHeight: 300,
+                offset: const Offset(
+                  0,
+                  0,
+                ),
+                padding: EdgeInsets.zero,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
             );
           }
-          return TextField(
-            controller: controller[index],
-            decoration: InputDecoration(
-              hintText: hinttext[index],
-            ),
-          );
+          if (state is GetActivitiesLoading) {
+            final List<String> loading = [
+              'Tunggu sebentar...',
+              'Tunggu sebentar...',
+              'Tunggu sebentar...',
+            ];
+            final List<DropdownMenuItem<String>> entries = loading.map((item) {
+              return DropdownMenuItem(
+                value: item,
+                child: Text(item),
+              );
+            }).toList();
+            return DropdownButton2<String>(
+              isExpanded: true,
+              underline: const SizedBox(),
+              hint: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  controller[index].text.isEmpty
+                      ? 'Mengajar:'
+                      : controller[index].text,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),
+              items: entries,
+              onChanged: (value) {
+                if (value != null) {
+                  final currentText = controller[index].text.trim();
+                  if (currentText.isEmpty) {
+                    controller[index].text = value;
+                  } else {
+                    controller[index].text = '$currentText, $value';
+                  }
+                }
+                FocusScope.of(context).unfocus();
+              },
+              alignment: Alignment.centerLeft,
+              buttonStyleData: ButtonStyleData(
+                padding: const EdgeInsets.only(right: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.tertiary,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              dropdownStyleData: DropdownStyleData(
+                maxHeight: 300,
+                offset: const Offset(
+                  0,
+                  0,
+                ),
+                padding: EdgeInsets.zero,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            );
+          }
+          return const SizedBox();
         },
       );
     } else if (index == 4) {
