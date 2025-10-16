@@ -285,10 +285,63 @@ class _AddTeacherViewState extends State<AddTeacherView> {
             );
           }
           if (state is GetActivitiesLoading) {
-            return TextField(
-              controller: controller[index],
-              decoration: InputDecoration(
-                hintText: hinttext[index],
+            final List<String> loading = [
+              'Tunggu sebentar...',
+              'Tunggu sebentar...',
+              'Tunggu sebentar...',
+            ];
+            final List<DropdownMenuItem<String>> entries = loading.map((item) {
+              return DropdownMenuItem(
+                value: item,
+                child: Text(item),
+              );
+            }).toList();
+            return DropdownButton2<String>(
+              isExpanded: true,
+              underline: const SizedBox(),
+              hint: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  controller[index].text.isEmpty
+                      ? 'Mengajar:'
+                      : controller[index].text,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),
+              items: entries,
+              onChanged: (value) {
+                if (value != null) {
+                  final currentText = controller[index].text.trim();
+                  if (currentText.isEmpty) {
+                    controller[index].text = value;
+                  } else {
+                    controller[index].text = '$currentText, $value';
+                  }
+                }
+                FocusScope.of(context).unfocus();
+              },
+              alignment: Alignment.centerLeft,
+              buttonStyleData: ButtonStyleData(
+                padding: const EdgeInsets.only(right: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.tertiary,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              dropdownStyleData: DropdownStyleData(
+                maxHeight: 300,
+                offset: const Offset(
+                  0,
+                  0,
+                ),
+                padding: EdgeInsets.zero,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             );
           }
