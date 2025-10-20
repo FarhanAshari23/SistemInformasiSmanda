@@ -64,8 +64,8 @@ class TeacherRepositoryImpl extends TeacherRepository {
   }
 
   @override
-  Future<Either> deleteTeacher(String nipTeacher) async {
-    return await sl<TeacherFirebaseService>().deleteTeacher(nipTeacher);
+  Future<Either> deleteTeacher(TeacherEntity teacherReq) async {
+    return await sl<TeacherFirebaseService>().deleteTeacher(teacherReq);
   }
 
   @override

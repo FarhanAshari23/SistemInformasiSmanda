@@ -12,7 +12,7 @@ abstract class TeacherFirebaseService {
   Future<Either> getTeacher();
   Future<Either> getTeacherByName(String name);
   Future<Either> updateTeacher(TeacherEntity teacherReq);
-  Future<Either> deleteTeacher(String nipTeacher);
+  Future<Either> deleteTeacher(TeacherEntity teacherReq);
   Future<Either> getHonor();
 }
 
@@ -87,12 +87,16 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   }
 
   @override
-  Future<Either> deleteTeacher(String nipTeacher) async {
+  Future<Either> deleteTeacher(TeacherEntity teacherReq) async {
     try {
       CollectionReference users =
           FirebaseFirestore.instance.collection('Teachers');
-      QuerySnapshot querySnapshot =
-          await users.where('NIP', isEqualTo: nipTeacher).get();
+      QuerySnapshot querySnapshot = await users
+          .where(
+            teacherReq.nip == '-' ? "nama" : "NIP",
+            isEqualTo: teacherReq.nip == '-' ? teacherReq.nama : teacherReq.nip,
+          )
+          .get();
       for (var doc in querySnapshot.docs) {
         await doc.reference.delete();
       }
@@ -107,8 +111,12 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
     try {
       CollectionReference users =
           FirebaseFirestore.instance.collection('Teachers');
-      QuerySnapshot querySnapshot =
-          await users.where('NIP', isEqualTo: teacherReq.nip).get();
+      QuerySnapshot querySnapshot = await users
+          .where(
+            teacherReq.nip == '-' ? "nama" : "NIP",
+            isEqualTo: teacherReq.nip == '-' ? teacherReq.nama : teacherReq.nip,
+          )
+          .get();
       if (querySnapshot.docs.isNotEmpty) {
         String docId = querySnapshot.docs[0].id;
         await users.doc(docId).update({

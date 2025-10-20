@@ -85,11 +85,14 @@ class TeacherDetail extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: bodyHeight * 0.45,
+                    Align(
+                      alignment: Alignment.bottomCenter,
                       child: Container(
                         width: width,
-                        height: bodyHeight * 0.6,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 24,
+                        ),
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(16),
@@ -97,89 +100,88 @@ class TeacherDetail extends StatelessWidget {
                           ),
                           color: AppColors.inversePrimary,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 32),
-                          child: Column(
-                            children: [
-                              Text(
-                                teachers.nama,
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.primary,
-                                ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              teachers.nama,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.primary,
                               ),
-                              Text(
-                                teachers.nip,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primary,
-                                ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              teachers.nip,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
                               ),
-                              SizedBox(height: bodyHeight * 0.02),
-                              SizedBox(
-                                width: double.infinity,
-                                height: bodyHeight * 0.3,
-                                child: PageView(
-                                  controller: pagecontroller,
-                                  children: [
-                                    Row(
+                            ),
+                            SizedBox(height: bodyHeight * 0.02),
+                            SizedBox(
+                              width: double.infinity,
+                              height: bodyHeight * 0.3,
+                              child: PageView(
+                                controller: pagecontroller,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Expanded(
+                                        child: CardDetailSiswa(
+                                          title: 'Tanggal Lahir',
+                                          content: teachers.tanggalLahir,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: CardDetailSiswa(
+                                          title: 'Mengajar',
+                                          content: teachers.mengajar,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 4),
+                                    child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Expanded(
                                           child: CardDetailSiswa(
-                                            title: 'Tanggal Lahir',
-                                            content: teachers.tanggalLahir,
+                                            title: 'Wali Kelas',
+                                            content: teachers.waliKelas,
                                           ),
                                         ),
                                         const SizedBox(width: 8),
                                         Expanded(
                                           child: CardDetailSiswa(
-                                            title: 'Mengajar',
-                                            content: teachers.mengajar,
+                                            title: 'Jabatan tambahan',
+                                            content: teachers.jabatan,
                                           ),
                                         ),
                                       ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Expanded(
-                                            child: CardDetailSiswa(
-                                              title: 'Wali Kelas',
-                                              content: teachers.waliKelas,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: CardDetailSiswa(
-                                              title: 'Jabatan tambahan',
-                                              content: teachers.jabatan,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: bodyHeight * 0.03),
-                              SmoothPageIndicator(
-                                controller: pagecontroller,
-                                count: 2,
-                                effect: const ExpandingDotsEffect(
-                                  activeDotColor: AppColors.primary,
-                                  dotColor: AppColors.secondary,
-                                ),
-                              )
-                            ],
-                          ),
+                            ),
+                            SizedBox(height: bodyHeight * 0.03),
+                            SmoothPageIndicator(
+                              controller: pagecontroller,
+                              count: 2,
+                              effect: const ExpandingDotsEffect(
+                                activeDotColor: AppColors.primary,
+                                dotColor: AppColors.secondary,
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),

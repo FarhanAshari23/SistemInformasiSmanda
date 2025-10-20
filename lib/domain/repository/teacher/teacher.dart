@@ -6,7 +6,7 @@ import '../../../data/models/teacher/teacher.dart';
 abstract class TeacherRepository {
   Future<Either> createTeacher(TeacherModel teacherCreationReq);
   Future<Either> updateTeacher(TeacherEntity teacherReq);
-  Future<Either> deleteTeacher(String nipTeacher);
+  Future<Either> deleteTeacher(TeacherEntity teacherReq);
   Future<Either> getTeacher();
   Future<Either> getTeacherByName(String name);
   Future<Either> getKepalaSekolah();

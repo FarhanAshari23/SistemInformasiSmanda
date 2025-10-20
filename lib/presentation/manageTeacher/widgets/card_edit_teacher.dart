@@ -140,7 +140,7 @@ class CardEditTeacher extends StatelessWidget {
                               BasicButton(
                                 onPressed: () async {
                                   var delete = await sl<DeleteTeacherUsecase>()
-                                      .call(params: teacher.nip);
+                                      .call(params: teacher);
                                   return delete.fold(
                                     (error) {
                                       var snackbar = const SnackBar(
