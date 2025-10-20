@@ -1,4 +1,3 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +6,7 @@ import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/data/models/teacher/teacher.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/views/ack_add_teacher_view.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/views/select_mengajar_view.dart';
 
 import '../../../common/bloc/activities/get_activities_cubit.dart';
 import '../../../common/bloc/activities/get_activities_state.dart';
@@ -208,141 +208,72 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                   FocusScope.of(context).unfocus();
                 });
           }
-          return TextField(
-            controller: controller[index],
-            decoration: InputDecoration(
-              hintText: hinttext[index],
-            ),
-          );
+          if (state is KelasDisplayLoading) {
+            return TextField(
+              controller: controller[index],
+              decoration: InputDecoration(
+                hintText: hinttext[index],
+              ),
+            );
+          }
+          return const SizedBox();
         },
       );
     } else if (index == 1) {
       // Dropdown Mengajar
       return BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
         builder: (context, state) {
-          if (state is GetActivitiesLoaded) {
-            state.activities.removeWhere(
-              (element) =>
-                  element.name == "Upacara Bendera" ||
-                  element.name == 'Program Jumat' ||
-                  element.name == 'Istirahat',
-            );
-            final newList = state.activities;
-            final entries = newList.map((doc) {
-              final activity = doc.name;
-              return DropdownMenuItem(
-                value: activity,
-                child: Text(activity),
-              );
-            }).toList();
-            return DropdownButton2<String>(
-              isExpanded: true,
-              underline: const SizedBox(),
-              hint: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  controller[index].text.isEmpty
-                      ? 'Mengajar:'
-                      : controller[index].text,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
+          if (state is GetActivitiesLoading) {
+            return TextField(
+              controller: controller[index],
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: hinttext[index],
+                suffixIcon: Visibility(
+                  visible: controller[index].text.isNotEmpty,
+                  child: IconButton(
+                    onPressed: () {
+                      controller[index].text = '';
+                    },
+                    icon: const Icon(
+                      Icons.delete_forever_rounded,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-              items: entries,
-              onChanged: (value) {
-                if (value != null) {
-                  final currentText = controller[index].text.trim();
-                  if (currentText.isEmpty) {
-                    controller[index].text = value;
-                  } else {
-                    controller[index].text = '$currentText, $value';
-                  }
-                }
-                FocusScope.of(context).unfocus();
-              },
-              alignment: Alignment.centerLeft,
-              buttonStyleData: ButtonStyleData(
-                padding: const EdgeInsets.only(right: 16),
-                decoration: BoxDecoration(
-                  color: AppColors.tertiary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              dropdownStyleData: DropdownStyleData(
-                maxHeight: 300,
-                offset: const Offset(
-                  0,
-                  0,
-                ),
-                padding: EdgeInsets.zero,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+              onTap: () {},
             );
           }
-          if (state is GetActivitiesLoading) {
-            final List<String> loading = [
-              'Tunggu sebentar...',
-              'Tunggu sebentar...',
-              'Tunggu sebentar...',
-            ];
-            final List<DropdownMenuItem<String>> entries = loading.map((item) {
-              return DropdownMenuItem(
-                value: item,
-                child: Text(item),
-              );
-            }).toList();
-            return DropdownButton2<String>(
-              isExpanded: true,
-              underline: const SizedBox(),
-              hint: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  controller[index].text.isEmpty
-                      ? 'Mengajar:'
-                      : controller[index].text,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
+          if (state is GetActivitiesLoaded) {
+            return TextField(
+              controller: controller[index],
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: hinttext[index],
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    controller[index].text = '';
+                  },
+                  icon: const Icon(
+                    Icons.delete_forever_rounded,
+                    color: Colors.white,
                   ),
                 ),
               ),
-              items: entries,
-              onChanged: (value) {
-                if (value != null) {
-                  final currentText = controller[index].text.trim();
-                  if (currentText.isEmpty) {
-                    controller[index].text = value;
-                  } else {
-                    controller[index].text = '$currentText, $value';
-                  }
+              onTap: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        SelectMengajarView(activities: state.activities),
+                  ),
+                );
+                if (result != null) {
+                  String hasil = result.join(", ");
+                  controller[index].text = hasil;
                 }
-                FocusScope.of(context).unfocus();
               },
-              alignment: Alignment.centerLeft,
-              buttonStyleData: ButtonStyleData(
-                padding: const EdgeInsets.only(right: 16),
-                decoration: BoxDecoration(
-                  color: AppColors.tertiary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              dropdownStyleData: DropdownStyleData(
-                maxHeight: 300,
-                offset: const Offset(
-                  0,
-                  0,
-                ),
-                padding: EdgeInsets.zero,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
             );
           }
           return const SizedBox();

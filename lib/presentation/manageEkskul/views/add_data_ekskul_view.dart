@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_teachers_views.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/ack_ekskul_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/list_teacher_view.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_students_view.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
@@ -119,7 +119,7 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                     onTap: () async {
                       final route = (index == 1)
                           ? MaterialPageRoute(
-                              builder: (_) => const ListTeacherView())
+                              builder: (_) => const SearchTeachersViews())
                           : MaterialPageRoute(
                               builder: (_) => const SearchStudentsView());
 
