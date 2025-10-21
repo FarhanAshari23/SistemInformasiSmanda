@@ -9,6 +9,8 @@ import '../../../common/widget/card/card_anggota.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/auth/user.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
 import '../../../domain/usecases/ekskul/update_ekskul.dart';
 import '../../../service_locator.dart';
@@ -32,18 +34,28 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
   late TextEditingController _nameSekretarisC;
   late TextEditingController _nameBendaharaC;
   late TextEditingController _deskripsiC;
+  late TeacherEntity selectedPembina;
+  late UserEntity selectedKetua;
+  late UserEntity selectedWakil;
+  late UserEntity selectedSekretaris;
+  late UserEntity selectedBendahara;
 
   @override
   void initState() {
     super.initState();
     _nameEkskulC = TextEditingController(text: widget.ekskul.namaEkskul);
-    _namePembinaC = TextEditingController(text: widget.ekskul.namaPembina);
-    _nameKetuaC = TextEditingController(text: widget.ekskul.namaKetua);
-    _nameWakilC = TextEditingController(text: widget.ekskul.namaWakilKetua);
+    _namePembinaC = TextEditingController(text: widget.ekskul.pembina.nama);
+    _nameKetuaC = TextEditingController(text: widget.ekskul.ketua.nama);
+    _nameWakilC = TextEditingController(text: widget.ekskul.wakilKetua.nama);
     _nameSekretarisC =
-        TextEditingController(text: widget.ekskul.namaSekretaris);
-    _nameBendaharaC = TextEditingController(text: widget.ekskul.namaBendahara);
+        TextEditingController(text: widget.ekskul.sekretaris.nama);
+    _nameBendaharaC = TextEditingController(text: widget.ekskul.bendahara.nama);
     _deskripsiC = TextEditingController(text: widget.ekskul.deskripsi);
+    selectedPembina = widget.ekskul.pembina;
+    selectedKetua = widget.ekskul.ketua;
+    selectedWakil = widget.ekskul.wakilKetua;
+    selectedSekretaris = widget.ekskul.sekretaris;
+    selectedBendahara = widget.ekskul.bendahara;
   }
 
   @override
@@ -242,7 +254,8 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                       );
                       if (result != null) {
                         setState(() {
-                          _namePembinaC.text = result;
+                          selectedPembina = result;
+                          _namePembinaC.text = result.nama;
                         });
                       }
                     },
@@ -261,7 +274,24 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                           );
                           if (result != null) {
                             setState(() {
-                              nama[index].text = result;
+                              switch (index) {
+                                case 0:
+                                  selectedKetua = result;
+                                  _nameKetuaC.text = result.nama ?? '';
+                                  break;
+                                case 1:
+                                  selectedWakil = result;
+                                  _nameWakilC.text = result.nama ?? '';
+                                  break;
+                                case 2:
+                                  selectedSekretaris = result;
+                                  _nameSekretarisC.text = result.nama ?? '';
+                                  break;
+                                case 3:
+                                  selectedBendahara = result;
+                                  _nameBendaharaC.text = result.nama ?? '';
+                                  break;
+                              }
                             });
                           }
                         },
@@ -372,12 +402,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
             const SizedBox(height: 12),
             BasicButton(
               onPressed: () async {
-                if (_namePembinaC.text.isEmpty ||
-                    _nameKetuaC.text.isEmpty ||
-                    _nameWakilC.text.isEmpty ||
-                    _nameSekretarisC.text.isEmpty ||
-                    _nameBendaharaC.text.isEmpty ||
-                    _deskripsiC.text.isEmpty) {
+                if (_nameEkskulC.text.isEmpty || _deskripsiC.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       backgroundColor: Colors.red,
@@ -394,11 +419,11 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                       params: EkskulEntity(
                     oldNamaEkskul: widget.ekskul.namaEkskul,
                     namaEkskul: _nameEkskulC.text,
-                    namaPembina: _namePembinaC.text,
-                    namaKetua: _nameKetuaC.text,
-                    namaWakilKetua: _nameWakilC.text,
-                    namaSekretaris: _nameSekretarisC.text,
-                    namaBendahara: _nameBendaharaC.text,
+                    pembina: selectedPembina,
+                    ketua: selectedKetua,
+                    wakilKetua: selectedWakil,
+                    sekretaris: selectedSekretaris,
+                    bendahara: selectedBendahara,
                     deskripsi: _deskripsiC.text,
                     anggota: widget.ekskul.anggota,
                   ));

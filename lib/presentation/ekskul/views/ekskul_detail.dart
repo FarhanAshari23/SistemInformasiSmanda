@@ -17,10 +17,10 @@ class EkskulDetail extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
     List<String> nama = [
-      ekskul.namaKetua,
-      ekskul.namaWakilKetua,
-      ekskul.namaSekretaris,
-      ekskul.namaBendahara,
+      ekskul.ketua.nama!,
+      ekskul.wakilKetua.nama!,
+      ekskul.sekretaris.nama!,
+      ekskul.bendahara.nama!,
     ];
     return Scaffold(
       body: SafeArea(
@@ -103,7 +103,7 @@ class EkskulDetail extends StatelessWidget {
                   SizedBox(height: height * 0.01),
                   Center(
                     child: CardAnggotaEkskul(
-                      name: ekskul.namaPembina,
+                      name: ekskul.pembina.nama,
                       jabatan: 'Pembina',
                       namaEkskul: ekskul.namaEkskul,
                     ),

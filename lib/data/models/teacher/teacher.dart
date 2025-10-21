@@ -63,4 +63,16 @@ extension TeacherModelX on TeacherModel {
       gender: gender,
     );
   }
+
+  static TeacherModel fromEntity(TeacherEntity entity) {
+    return TeacherModel(
+      nama: entity.nama,
+      mengajar: entity.mengajar,
+      nip: entity.nip,
+      tanggalLahir: entity.tanggalLahir,
+      waliKelas: entity.waliKelas,
+      jabatan: entity.jabatan,
+      gender: entity.gender,
+    );
+  }
 }

@@ -13,6 +13,13 @@ class AnggotaModel extends AnggotaEntity {
     );
   }
 
+  factory AnggotaModel.fromEntity(AnggotaEntity entity) {
+    return AnggotaModel(
+      nama: entity.nama,
+      nisn: entity.nisn,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'nama': nama,

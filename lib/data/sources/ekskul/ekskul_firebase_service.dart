@@ -3,7 +3,10 @@ import 'package:dartz/dartz.dart';
 
 import '../../../domain/entities/ekskul/ekskul.dart';
 import '../../../domain/entities/ekskul/update_anggota_req.dart';
+import '../../models/auth/user.dart';
 import '../../models/ekskul/anggota.dart';
+import '../../models/ekskul/ekskul.dart';
+import '../../models/teacher/teacher.dart';
 
 abstract class EkskulFirebaseService {
   Future<Either> createEkskul(EkskulEntity ekskulCreationReq);
@@ -19,18 +22,19 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
   Future<Either> createEkskul(EkskulEntity ekskulCreationReq) async {
     try {
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-      await firebaseFirestore.collection("Ekskuls").add(
-        {
-          "nama_ekskul": ekskulCreationReq.namaEkskul,
-          "nama_pembina": ekskulCreationReq.namaPembina,
-          "nama_ketua": ekskulCreationReq.namaKetua,
-          "nama_wakil": ekskulCreationReq.namaWakilKetua,
-          "nama_sekretaris": ekskulCreationReq.namaSekretaris,
-          "nama_bendahara": ekskulCreationReq.namaBendahara,
-          "deskripsi": ekskulCreationReq.deskripsi,
-          "anggota": ekskulCreationReq.anggota,
-        },
+      final model = EkskulModel(
+        namaEkskul: ekskulCreationReq.namaEkskul,
+        pembina: TeacherModelX.fromEntity(ekskulCreationReq.pembina),
+        ketua: UserModelX.fromEntity(ekskulCreationReq.ketua),
+        wakilKetua: UserModelX.fromEntity(ekskulCreationReq.wakilKetua),
+        sekretaris: UserModelX.fromEntity(ekskulCreationReq.sekretaris),
+        bendahara: UserModelX.fromEntity(ekskulCreationReq.bendahara),
+        deskripsi: ekskulCreationReq.deskripsi,
+        anggota: ekskulCreationReq.anggota
+            .map((a) => AnggotaModel.fromEntity(a))
+            .toList(),
       );
+      await firebaseFirestore.collection("Ekskuls").add(model.toMap());
       return const Right("Upload ekskul was succesfull");
     } catch (e) {
       return Left(e);
@@ -74,16 +78,19 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
           .get();
       if (querySnapshot.docs.isNotEmpty) {
         String docId = querySnapshot.docs[0].id;
-        await users.doc(docId).update({
-          "nama_pembina": ekskulUpdateReq.namaPembina,
-          "nama_ekskul": ekskulUpdateReq.namaEkskul,
-          "nama_ketua": ekskulUpdateReq.namaKetua,
-          "nama_wakil": ekskulUpdateReq.namaWakilKetua,
-          "nama_sekretaris": ekskulUpdateReq.namaSekretaris,
-          "nama_bendahara": ekskulUpdateReq.namaBendahara,
-          "deskripsi": ekskulUpdateReq.deskripsi,
-          "anggota": ekskulUpdateReq.anggota,
-        });
+        final model = EkskulModel(
+          namaEkskul: ekskulUpdateReq.namaEkskul,
+          pembina: TeacherModelX.fromEntity(ekskulUpdateReq.pembina),
+          ketua: UserModelX.fromEntity(ekskulUpdateReq.ketua),
+          wakilKetua: UserModelX.fromEntity(ekskulUpdateReq.wakilKetua),
+          sekretaris: UserModelX.fromEntity(ekskulUpdateReq.sekretaris),
+          bendahara: UserModelX.fromEntity(ekskulUpdateReq.bendahara),
+          deskripsi: ekskulUpdateReq.deskripsi,
+          anggota: ekskulUpdateReq.anggota
+              .map((a) => AnggotaModel.fromEntity(a))
+              .toList(),
+        );
+        await users.doc(docId).update(model.toMap());
         return right('Update Data Ekskul Success');
       }
       return const Right('Update Data Ekskul Success');

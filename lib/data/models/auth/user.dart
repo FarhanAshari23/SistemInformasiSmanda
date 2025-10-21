@@ -100,4 +100,23 @@ extension UserModelX on UserModel {
       keyword: keywords,
     );
   }
+
+  static UserModel fromEntity(UserEntity entity) {
+    return UserModel(
+      email: entity.email ?? '',
+      nama: entity.nama ?? '',
+      kelas: entity.kelas ?? '',
+      nisn: entity.nisn ?? '',
+      tanggalLahir: entity.tanggalLahir ?? '',
+      noHp: entity.noHP ?? '',
+      alamat: entity.alamat ?? '',
+      ekskul: entity.ekskul ?? '',
+      gender: entity.gender ?? 0,
+      isAdmin: entity.isAdmin ?? false,
+      agama: entity.agama ?? '',
+      isRegister: entity.isRegister ?? false,
+      keywords: entity.keyword,
+      timeIn: entity.timeIn,
+    );
+  }
 }

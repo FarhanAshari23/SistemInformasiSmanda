@@ -58,7 +58,7 @@ class SearchStudentsView extends StatelessWidget {
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         return CardUser(
-          onTap: () => Navigator.pop(context, students[index].nama),
+          onTap: () => Navigator.pop(context, students[index]),
           name: students[index].nama!,
           nisn: students[index].nisn!,
           agama: students[index].agama!,

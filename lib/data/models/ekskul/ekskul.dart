@@ -2,25 +2,27 @@ import 'dart:convert';
 
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 
+import '../auth/user.dart';
+import '../teacher/teacher.dart';
 import 'anggota.dart';
 
 class EkskulModel {
   final String namaEkskul;
-  final String namaPembina;
-  final String namaKetua;
-  final String namaWakilKetua;
-  final String namaSekretaris;
-  final String namaBendahara;
+  final TeacherModel pembina;
+  final UserModel ketua;
+  final UserModel wakilKetua;
+  final UserModel sekretaris;
+  final UserModel bendahara;
   final String deskripsi;
   final List<AnggotaModel> anggota;
 
   EkskulModel({
     required this.namaEkskul,
-    required this.namaPembina,
-    required this.namaKetua,
-    required this.namaWakilKetua,
-    required this.namaSekretaris,
-    required this.namaBendahara,
+    required this.pembina,
+    required this.ketua,
+    required this.wakilKetua,
+    required this.sekretaris,
+    required this.bendahara,
     required this.deskripsi,
     required this.anggota,
   });
@@ -28,25 +30,25 @@ class EkskulModel {
   Map<String, dynamic> toMap() {
     return {
       'nama_ekskul': namaEkskul,
-      'nama_pembina': namaPembina,
-      'nama_ketua': namaKetua,
-      'nama_wakil': namaWakilKetua,
-      'nama_sekretaris': namaSekretaris,
-      'nama_bendahara': namaBendahara,
+      'pembina': pembina.toMap(),
+      'ketua': ketua.toMap(),
+      'wakil_ketua': wakilKetua.toMap(),
+      'sekretaris': sekretaris.toMap(),
+      'bendahara': bendahara.toMap(),
       'deskripsi': deskripsi,
-      'anggota': anggota
+      'anggota': anggota.map((x) => x.toMap()).toList(),
     };
   }
 
   factory EkskulModel.fromMap(Map<String, dynamic> map) {
     return EkskulModel(
       namaEkskul: map['nama_ekskul'] ?? '',
-      namaPembina: map["nama_pembina"] ?? '',
-      namaKetua: map["nama_ketua"] ?? '',
-      namaWakilKetua: map["nama_wakil"] ?? '',
-      namaSekretaris: map["nama_sekretaris"] ?? '',
-      namaBendahara: map["nama_bendahara"] ?? '',
-      deskripsi: map["deskripsi"] ?? '',
+      pembina: TeacherModel.fromMap(map['pembina']),
+      ketua: UserModel.fromMap(map['ketua']),
+      wakilKetua: UserModel.fromMap(map['wakil_ketua']),
+      sekretaris: UserModel.fromMap(map['sekretaris']),
+      bendahara: UserModel.fromMap(map['bendahara']),
+      deskripsi: map['deskripsi'] ?? '',
       anggota: map['anggota'] != null
           ? List<AnggotaModel>.from(
               (map['anggota'] as List).map((x) => AnggotaModel.fromMap(x)),
@@ -65,11 +67,11 @@ extension EkskulModelX on EkskulModel {
   EkskulEntity toEntity() {
     return EkskulEntity(
       namaEkskul: namaEkskul,
-      namaPembina: namaPembina,
-      namaKetua: namaKetua,
-      namaWakilKetua: namaWakilKetua,
-      namaSekretaris: namaSekretaris,
-      namaBendahara: namaBendahara,
+      pembina: pembina.toEntity(),
+      ketua: ketua.toEntity(),
+      wakilKetua: wakilKetua.toEntity(),
+      sekretaris: sekretaris.toEntity(),
+      bendahara: bendahara.toEntity(),
       deskripsi: deskripsi,
       anggota: anggota.map((e) => e.toEntity()).toList(),
     );

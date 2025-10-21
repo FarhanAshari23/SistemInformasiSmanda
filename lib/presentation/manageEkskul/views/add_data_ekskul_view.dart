@@ -7,6 +7,8 @@ import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/ack_
 import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_students_view.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/auth/user.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
 
 class AddDataEkskulView extends StatefulWidget {
@@ -24,6 +26,12 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
   final TextEditingController _nameSekretarisC = TextEditingController();
   final TextEditingController _nameBendaharaC = TextEditingController();
   final TextEditingController _deskripsiC = TextEditingController();
+
+  TeacherEntity? _selectedPembina;
+  UserEntity? _selectedKetua;
+  UserEntity? _selectedWakil;
+  UserEntity? _selectedSekretaris;
+  UserEntity? _selectedBendahara;
 
   @override
   void dispose() {
@@ -127,8 +135,29 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
 
                       if (result != null) {
                         setState(() {
-                          // isi textfield sesuai item yang ditekan
-                          listC[index].text = result.toString();
+                          if (index == 1 && result is TeacherEntity) {
+                            _selectedPembina = result;
+                            _namePembinaC.text = result.nama;
+                          } else if (result is UserEntity) {
+                            switch (index) {
+                              case 2:
+                                _selectedKetua = result;
+                                _nameKetuaC.text = result.nama ?? '';
+                                break;
+                              case 3:
+                                _selectedWakil = result;
+                                _nameWakilC.text = result.nama ?? '';
+                                break;
+                              case 4:
+                                _selectedSekretaris = result;
+                                _nameSekretarisC.text = result.nama ?? '';
+                                break;
+                              case 5:
+                                _selectedBendahara = result;
+                                _nameBendaharaC.text = result.nama ?? '';
+                                break;
+                            }
+                          }
                         });
                       }
                     },
@@ -142,11 +171,12 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
             ),
             BasicButton(
               onPressed: () {
-                if (_namePembinaC.text.isEmpty ||
-                    _nameKetuaC.text.isEmpty ||
-                    _nameWakilC.text.isEmpty ||
-                    _nameSekretarisC.text.isEmpty ||
-                    _nameBendaharaC.text.isEmpty ||
+                if (_namaEkskulC.text.isEmpty ||
+                    _selectedPembina == null ||
+                    _selectedKetua == null ||
+                    _selectedWakil == null ||
+                    _selectedSekretaris == null ||
+                    _selectedBendahara == null ||
                     _deskripsiC.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -165,14 +195,15 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                     context,
                     AckEkskulView(
                       ekskulCreateReq: EkskulEntity(
-                          namaEkskul: _namaEkskulC.text,
-                          namaPembina: _namePembinaC.text,
-                          namaKetua: _nameKetuaC.text,
-                          namaWakilKetua: _nameWakilC.text,
-                          namaSekretaris: _nameSekretarisC.text,
-                          namaBendahara: _nameBendaharaC.text,
-                          deskripsi: _deskripsiC.text,
-                          anggota: []),
+                        namaEkskul: _namaEkskulC.text,
+                        pembina: _selectedPembina!,
+                        ketua: _selectedKetua!,
+                        wakilKetua: _selectedWakil!,
+                        sekretaris: _selectedSekretaris!,
+                        bendahara: _selectedBendahara!,
+                        deskripsi: _deskripsiC.text,
+                        anggota: [],
+                      ),
                     ),
                   );
                 }

@@ -66,7 +66,7 @@ class SearchTeachersViews extends StatelessWidget {
       ),
       itemBuilder: (BuildContext context, int index) {
         return CustomInkWell(
-          onTap: () => Navigator.pop(context, teachers[index].nama),
+          onTap: () => Navigator.pop(context, teachers[index]),
           borderRadius: 8,
           defaultColor: AppColors.secondary,
           child: CardGuru(

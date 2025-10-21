@@ -27,10 +27,10 @@ class AckEkskulView extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     List<String> namaCard = [
-      ekskulCreateReq.namaKetua,
-      ekskulCreateReq.namaWakilKetua,
-      ekskulCreateReq.namaSekretaris,
-      ekskulCreateReq.namaBendahara,
+      ekskulCreateReq.ketua.nama!,
+      ekskulCreateReq.wakilKetua.nama!,
+      ekskulCreateReq.sekretaris.nama!,
+      ekskulCreateReq.bendahara.nama!,
     ];
     List<String> jabatanCard = [
       'Ketua',
@@ -144,7 +144,7 @@ class AckEkskulView extends StatelessWidget {
                             Center(
                               child: CardAnggotaEkskul(
                                 namaEkskul: ekskulCreateReq.namaEkskul,
-                                name: ekskulCreateReq.namaPembina,
+                                name: ekskulCreateReq.pembina.nama,
                                 jabatan: 'Pembina',
                               ),
                             ),
