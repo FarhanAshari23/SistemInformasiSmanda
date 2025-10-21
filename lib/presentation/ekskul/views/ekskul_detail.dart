@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/card/card_anggota_ekskul.dart';
@@ -6,7 +5,6 @@ import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart'
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 
-import '../../../common/helper/display_image.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 
 class EkskulDetail extends StatelessWidget {
@@ -28,6 +26,7 @@ class EkskulDetail extends StatelessWidget {
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             const BasicAppbar(isBackViewed: true, isProfileViewed: true),
             Expanded(
@@ -176,20 +175,15 @@ class EkskulDetail extends StatelessWidget {
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
+                                    Container(
                                       width: 80,
                                       height: 80,
-                                      child: CachedNetworkImage(
-                                        imageUrl:
-                                            DisplayImage.displayImageStudent(
-                                                anggota.nama, anggota.nisn),
-                                        placeholder: (context, url) =>
-                                            const Center(
-                                          child: CircularProgressIndicator(),
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image:
+                                              AssetImage(AppImages.tendikLaki),
+                                          fit: BoxFit.fill,
                                         ),
-                                        errorWidget: (context, url, error) =>
-                                            Image.asset(AppImages.tendikLaki),
-                                        fit: BoxFit.fill,
                                       ),
                                     ),
                                     const SizedBox(width: 12),

@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 
 import '../../../core/configs/assets/app_images.dart';
@@ -32,21 +30,18 @@ class StaffDetail extends StatelessWidget {
                 child: Stack(
                   alignment: AlignmentDirectional.topCenter,
                   children: [
-                    SizedBox(
+                    Container(
                       width: double.infinity,
                       height: bodyHeight * 0.49,
-                      child: CachedNetworkImage(
-                        width: double.infinity,
-                        height: bodyHeight,
-                        imageUrl: DisplayImage.displayImageStaff(teachers.nama),
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) => Image.asset(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
                             teachers.gender == 1
                                 ? AppImages.tendikLaki
-                                : AppImages.tendikPerempuan),
-                        fit: BoxFit.fill,
+                                : AppImages.tendikPerempuan,
+                          ),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                     Align(

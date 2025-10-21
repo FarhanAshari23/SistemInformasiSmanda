@@ -50,10 +50,10 @@ class EditScheduleView extends StatelessWidget {
                   if (state is GetAllJadwalLoaded) {
                     return Expanded(
                       child: StackedListView(
-                        itemExtent: 200,
-                        padding: const EdgeInsets.only(
+                        itemExtent: width * 0.55,
+                        padding: EdgeInsets.only(
                           top: 16,
-                          bottom: 300,
+                          bottom: height * 0.2,
                           left: 16,
                           right: 16,
                         ),
@@ -67,11 +67,9 @@ class EditScheduleView extends StatelessWidget {
                                 color: Colors.black,
                               ),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Stack(
                               children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: height * 0.165),
+                                Center(
                                   child: RichText(
                                     textAlign: TextAlign.center,
                                     text: TextSpan(
@@ -96,8 +94,9 @@ class EditScheduleView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Align(
-                                  alignment: Alignment.bottomRight,
+                                Positioned(
+                                  right: 0,
+                                  bottom: 0,
                                   child: PopupMenuButton(
                                     onSelected: (String value) {
                                       if (value == 'Edit') {

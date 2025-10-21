@@ -47,8 +47,10 @@ class EditTeacherView extends StatelessWidget {
                     return Expanded(
                       child: ListView.separated(
                         scrollDirection: Axis.vertical,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
+                        padding: const EdgeInsets.only(
+                          left: 12,
+                          right: 12,
+                          bottom: 8,
                         ),
                         itemBuilder: (context, index) {
                           return CardEditTeacher(teacher: state.teacher[index]);

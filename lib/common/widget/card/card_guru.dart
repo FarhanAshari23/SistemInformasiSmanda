@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -28,18 +26,16 @@ class CardGuru extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            Container(
               width: width * 0.285,
               height: height * 0.135,
-              child: CachedNetworkImage(
-                imageUrl: DisplayImage.displayImageTeacher(title, nip),
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(gender == 1
+                      ? AppImages.guruLaki
+                      : AppImages.guruPerempuan),
+                  fit: BoxFit.fill,
                 ),
-                errorWidget: (context, url, error) => gender == 1
-                    ? Image.asset(AppImages.guruLaki)
-                    : Image.asset(AppImages.guruPerempuan),
-                fit: BoxFit.fill,
               ),
             ),
             SizedBox(height: height * 0.01),

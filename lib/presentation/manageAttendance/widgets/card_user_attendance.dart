@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../common/helper/display_image.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/auth/user.dart';
@@ -54,23 +52,18 @@ class CardUserAttendance extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15),
             child: Row(
               children: [
-                SizedBox(
+                Container(
                   width: width * 0.235,
                   height: bodyHeight * 0.14,
-                  child: CachedNetworkImage(
-                    imageUrl: DisplayImage.displayImageStudent(
-                      student.nama!,
-                      student.nisn!,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        student.gender == 1
+                            ? AppImages.boyStudent
+                            : AppImages.girlStudent,
+                      ),
+                      fit: BoxFit.fill,
                     ),
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    errorWidget: (context, url, error) => Image.asset(
-                      student.gender == 1
-                          ? AppImages.boyStudent
-                          : AppImages.girlStudent,
-                    ),
-                    fit: BoxFit.fill,
                   ),
                 ),
                 SizedBox(width: width * 0.05),

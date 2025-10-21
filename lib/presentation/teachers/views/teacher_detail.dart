@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -46,20 +44,6 @@ class TeacherDetail extends StatelessWidget {
                           ),
                           fit: BoxFit.fill,
                         ),
-                      ),
-                      child: CachedNetworkImage(
-                        width: double.infinity,
-                        height: bodyHeight,
-                        imageUrl: DisplayImage.displayImageTeacher(
-                            teachers.nama, teachers.nip),
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) => Image.asset(
-                            teachers.gender == 1
-                                ? AppImages.guruLaki
-                                : AppImages.guruPerempuan),
-                        fit: BoxFit.fill,
                       ),
                     ),
                     Align(

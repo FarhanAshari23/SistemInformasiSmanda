@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/assets/app_images.dart';
@@ -36,18 +34,18 @@ class CardStaff extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
+              Container(
                 width: width * 0.24,
                 height: height * 0.115,
-                child: CachedNetworkImage(
-                  imageUrl: DisplayImage.displayImageStaff(title),
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(
+                      gender == 1
+                          ? AppImages.tendikLaki
+                          : AppImages.tendikPerempuan,
+                    ),
+                    fit: BoxFit.fill,
                   ),
-                  errorWidget: (context, url, error) => Image.asset(gender == 1
-                      ? AppImages.tendikLaki
-                      : AppImages.tendikPerempuan),
-                  fit: BoxFit.fill,
                 ),
               ),
               SizedBox(height: height * 0.01),

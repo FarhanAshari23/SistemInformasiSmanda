@@ -23,9 +23,9 @@ class AppDropdownField extends StatelessWidget {
     return DropdownMenu<String>(
       width: width,
       hintText: hint,
-      enableSearch: true,
+      enableSearch: false,
       menuHeight: 200,
-      requestFocusOnTap: true,
+      requestFocusOnTap: false,
       initialSelection: initSelection,
       inputDecorationTheme: theme.inputDecorationTheme,
       dropdownMenuEntries: items,

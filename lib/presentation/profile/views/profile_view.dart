@@ -254,8 +254,8 @@ class ProfileView extends StatelessWidget {
                                                 width: state ==
                                                         TwoContainersState
                                                             .containerOneSelected
-                                                    ? width * 0.135
-                                                    : width * 0.1,
+                                                    ? width * 0.125
+                                                    : width * 0.09,
                                                 height: height * 0.055,
                                                 decoration: BoxDecoration(
                                                   borderRadius:
@@ -307,8 +307,8 @@ class ProfileView extends StatelessWidget {
                                                 width: state ==
                                                         TwoContainersState
                                                             .containerTwoSelected
-                                                    ? width * 0.135
-                                                    : width * 0.1,
+                                                    ? width * 0.125
+                                                    : width * 0.09,
                                                 height: height * 0.055,
                                                 decoration: BoxDecoration(
                                                   borderRadius:

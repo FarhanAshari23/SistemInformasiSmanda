@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../helper/display_image.dart';
 
 class CardAnggota extends StatelessWidget {
   final String title;
@@ -31,17 +29,14 @@ class CardAnggota extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            Container(
               width: 80,
               height: 80,
-              child: CachedNetworkImage(
-                imageUrl: DisplayImage.displayImageStudent(title, desc),
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(AppImages.tendikLaki),
+                  fit: BoxFit.fill,
                 ),
-                errorWidget: (context, url, error) =>
-                    Image.asset(AppImages.tendikLaki),
-                fit: BoxFit.fill,
               ),
             ),
             const SizedBox(width: 12),

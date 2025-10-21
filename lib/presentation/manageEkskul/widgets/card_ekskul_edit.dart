@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/delete_ekskul.dart';
 
@@ -32,17 +30,14 @@ class CardEkskulEdit extends StatelessWidget {
         children: [
           Column(
             children: [
-              SizedBox(
+              Container(
                 width: double.infinity,
                 height: height * 0.19,
-                child: CachedNetworkImage(
-                  imageUrl: DisplayImage.displayImageEkskul(ekskul.namaEkskul),
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(AppImages.splashEkskul),
+                    fit: BoxFit.fill,
                   ),
-                  errorWidget: (context, url, error) =>
-                      Image.asset(AppImages.splashEkskul),
-                  fit: BoxFit.fill,
                 ),
               ),
               SizedBox(height: height * 0.01),

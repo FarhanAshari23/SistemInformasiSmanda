@@ -44,7 +44,11 @@ class TeacherView extends StatelessWidget {
                       child: GridView.builder(
                         itemCount: state.teacher.length,
                         scrollDirection: Axis.vertical,
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        padding: const EdgeInsets.only(
+                          left: 8,
+                          right: 8,
+                          bottom: 8,
+                        ),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 12.0,

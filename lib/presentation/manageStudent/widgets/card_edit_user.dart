@@ -1,6 +1,4 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/stundets_cubit.dart';
@@ -9,7 +7,6 @@ import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.da
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_student.dart';
 
-import '../../../common/helper/display_image.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../service_locator.dart';
@@ -44,23 +41,18 @@ class CardEditUser extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15),
             child: Row(
               children: [
-                SizedBox(
+                Container(
                   width: width * 0.235,
                   height: bodyHeight * 0.14,
-                  child: CachedNetworkImage(
-                    imageUrl: DisplayImage.displayImageStudent(
-                      student.nama!,
-                      student.nisn!,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        student.gender == 1
+                            ? AppImages.boyStudent
+                            : AppImages.girlStudent,
+                      ),
+                      fit: BoxFit.fill,
                     ),
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    errorWidget: (context, url, error) => Image.asset(
-                      student.gender == 1
-                          ? AppImages.boyStudent
-                          : AppImages.girlStudent,
-                    ),
-                    fit: BoxFit.fill,
                   ),
                 ),
                 SizedBox(width: width * 0.05),

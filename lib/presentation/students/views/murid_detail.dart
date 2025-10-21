@@ -1,5 +1,4 @@
 import 'package:add_2_calendar/add_2_calendar.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
@@ -8,8 +7,6 @@ import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 import 'package:new_sistem_informasi_smanda/presentation/students/widgets/card_detail.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../common/helper/display_image.dart';
 
 class MuridDetail extends StatelessWidget {
   final UserEntity user;
@@ -90,25 +87,16 @@ class MuridDetail extends StatelessWidget {
                           Container(
                             width: double.infinity,
                             height: bodyHeight,
-                            color: const Color(0xff2D66BD),
-                            child: CachedNetworkImage(
-                              width: double.infinity,
-                              height: bodyHeight,
-                              imageUrl: DisplayImage.displayImageStudent(
-                                user.nama!,
-                                user.nisn!,
+                            decoration: BoxDecoration(
+                              color: const Color(0xff2D66BD),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  user.gender == 1
+                                      ? AppImages.boyStudent
+                                      : AppImages.girlStudent,
+                                ),
+                                fit: BoxFit.fill,
                               ),
-                              placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              errorWidget: (context, url, error) => Image.asset(
-                                user.gender == 1
-                                    ? AppImages.boyStudent
-                                    : user.agama == "Islam"
-                                        ? AppImages.girlStudent
-                                        : AppImages.girlNonStudent,
-                              ),
-                              fit: BoxFit.fill,
                             ),
                           ),
                           Align(
@@ -274,14 +262,5 @@ class MuridDetail extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  ImageProvider getImageProvider(String imageUrl, String assetPath) {
-    try {
-      Uri.parse(imageUrl); // Cek apakah URL valid
-      return CachedNetworkImageProvider(imageUrl);
-    } catch (e) {
-      return AssetImage(assetPath);
-    }
   }
 }

@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../helper/display_image.dart';
 
 class CardUser extends StatelessWidget {
   final String name;
@@ -42,22 +40,20 @@ class CardUser extends StatelessWidget {
               padding: const EdgeInsets.only(left: 15),
               child: Row(
                 children: [
-                  SizedBox(
+                  Container(
                     width: width * 0.235,
                     height: bodyHeight * 0.14,
-                    child: CachedNetworkImage(
-                      imageUrl: DisplayImage.displayImageStudent(name, nisn),
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          gender == 1
+                              ? AppImages.boyStudent
+                              : agama == "Islam"
+                                  ? AppImages.girlStudent
+                                  : AppImages.girlNonStudent,
+                        ),
+                        fit: BoxFit.fill,
                       ),
-                      errorWidget: (context, url, error) => Image.asset(
-                        gender == 1
-                            ? AppImages.boyStudent
-                            : agama == "Islam"
-                                ? AppImages.girlStudent
-                                : AppImages.girlNonStudent,
-                      ),
-                      fit: BoxFit.fill,
                     ),
                   ),
                   SizedBox(width: width * 0.05),
