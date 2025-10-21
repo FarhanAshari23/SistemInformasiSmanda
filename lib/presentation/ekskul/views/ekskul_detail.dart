@@ -6,6 +6,7 @@ import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 
 import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../domain/entities/auth/user.dart';
 
 class EkskulDetail extends StatelessWidget {
   final EkskulEntity ekskul;
@@ -16,11 +17,11 @@ class EkskulDetail extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
-    List<String> nama = [
-      ekskul.ketua.nama!,
-      ekskul.wakilKetua.nama!,
-      ekskul.sekretaris.nama!,
-      ekskul.bendahara.nama!,
+    List<UserEntity> anggota = [
+      ekskul.ketua,
+      ekskul.wakilKetua,
+      ekskul.sekretaris,
+      ekskul.bendahara,
     ];
     return Scaffold(
       body: SafeArea(
@@ -103,9 +104,8 @@ class EkskulDetail extends StatelessWidget {
                   SizedBox(height: height * 0.01),
                   Center(
                     child: CardAnggotaEkskul(
-                      name: ekskul.pembina.nama,
+                      pembina: ekskul.pembina,
                       jabatan: 'Pembina',
-                      namaEkskul: ekskul.namaEkskul,
                     ),
                   ),
                   SizedBox(height: height * 0.02),
@@ -115,8 +115,7 @@ class EkskulDetail extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         return CardAnggotaEkskul(
-                          namaEkskul: ekskul.namaEkskul,
-                          name: nama[index],
+                          murid: anggota[index],
                           jabatan: jabatan[index],
                         );
                       },

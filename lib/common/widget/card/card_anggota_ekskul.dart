@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
+import 'package:new_sistem_informasi_smanda/presentation/students/views/murid_detail.dart';
+import 'package:new_sistem_informasi_smanda/presentation/teachers/views/teacher_detail.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/auth/user.dart';
 
 class CardAnggotaEkskul extends StatelessWidget {
-  final String name;
+  final UserEntity? murid;
+  final TeacherEntity? pembina;
   final String jabatan;
-  final String namaEkskul;
   const CardAnggotaEkskul({
     super.key,
-    required this.name,
+    this.murid,
+    this.pembina,
     required this.jabatan,
-    required this.namaEkskul,
   });
 
   @override
@@ -19,22 +25,39 @@ class CardAnggotaEkskul extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          width: height * 0.125,
-          height: height * 0.125,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: AppColors.secondary,
-          ),
-          child: Center(
-            child: Container(
-              padding: EdgeInsets.all(height * 0.06),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                image: const DecorationImage(
-                  image: AssetImage(AppImages.tendikLaki),
-                  fit: BoxFit.fill,
+        CustomInkWell(
+          borderRadius: 16,
+          defaultColor: AppColors.secondary,
+          onTap: () {
+            if (pembina != null) {
+              AppNavigator.push(context, TeacherDetail(teachers: pembina!));
+            } else {
+              AppNavigator.push(context, MuridDetail(user: murid!));
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            width: height * 0.125,
+            height: height * 0.125,
+            child: Center(
+              child: Container(
+                padding: EdgeInsets.all(height * 0.06),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    image: AssetImage(
+                      murid != null
+                          ? murid!.gender == 1
+                              ? AppImages.boyStudent
+                              : murid!.agama == "Islam"
+                                  ? AppImages.girlStudent
+                                  : AppImages.girlNonStudent
+                          : pembina!.gender == 1
+                              ? AppImages.guruLaki
+                              : AppImages.guruPerempuan,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -42,7 +65,7 @@ class CardAnggotaEkskul extends StatelessWidget {
         ),
         SizedBox(height: height * 0.01),
         Text(
-          name,
+          pembina != null ? pembina?.nama ?? '' : murid?.nama ?? '',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,

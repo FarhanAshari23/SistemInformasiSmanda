@@ -6,6 +6,7 @@ import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.da
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/landing/succes.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/create_ekskul.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_admin.dart';
@@ -26,11 +27,11 @@ class AckEkskulView extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    List<String> namaCard = [
-      ekskulCreateReq.ketua.nama!,
-      ekskulCreateReq.wakilKetua.nama!,
-      ekskulCreateReq.sekretaris.nama!,
-      ekskulCreateReq.bendahara.nama!,
+    List<UserEntity> anggota = [
+      ekskulCreateReq.ketua,
+      ekskulCreateReq.wakilKetua,
+      ekskulCreateReq.sekretaris,
+      ekskulCreateReq.bendahara,
     ];
     List<String> jabatanCard = [
       'Ketua',
@@ -143,8 +144,7 @@ class AckEkskulView extends StatelessWidget {
                             const SizedBox(height: 16),
                             Center(
                               child: CardAnggotaEkskul(
-                                namaEkskul: ekskulCreateReq.namaEkskul,
-                                name: ekskulCreateReq.pembina.nama,
+                                pembina: ekskulCreateReq.pembina,
                                 jabatan: 'Pembina',
                               ),
                             ),
@@ -156,14 +156,13 @@ class AckEkskulView extends StatelessWidget {
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (context, index) {
                                   return CardAnggotaEkskul(
-                                    namaEkskul: ekskulCreateReq.namaEkskul,
-                                    name: namaCard[index],
+                                    murid: anggota[index],
                                     jabatan: jabatanCard[index],
                                   );
                                 },
                                 separatorBuilder: (context, index) =>
                                     SizedBox(width: width * 0.03),
-                                itemCount: namaCard.length,
+                                itemCount: anggota.length,
                               ),
                             ),
                             const Text(
