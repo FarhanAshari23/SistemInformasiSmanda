@@ -285,7 +285,6 @@ class RegisterStudentView extends StatelessWidget {
                                               .call(params: students);
                                           result.fold(
                                             (error) {
-                                              print(error);
                                               var snackbar = SnackBar(
                                                 content: Text(
                                                     "Gagal Mengubah Data: $error"),

@@ -5,8 +5,6 @@ import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell
 import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_cubit.dart';
 
-import '../../../common/bloc/activities/get_activities_cubit.dart';
-import '../../../common/bloc/activities/get_activities_state.dart';
 import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/bloc/teacher/teacher_state.dart';
 import '../../../core/configs/theme/app_colors.dart';
