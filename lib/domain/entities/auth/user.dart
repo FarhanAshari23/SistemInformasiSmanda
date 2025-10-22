@@ -5,6 +5,7 @@ class UserEntity {
   String? nama;
   String? kelas;
   String? nisn;
+  String? password;
   String? tanggalLahir;
   String? noHP;
   String? alamat;
@@ -29,6 +30,7 @@ class UserEntity {
     required this.isAdmin,
     required this.agama,
     required this.isRegister,
+    this.password,
     this.keyword,
     this.timeIn,
   });

@@ -19,6 +19,7 @@ class UserModel {
   final String agama;
   Timestamp? timeIn;
   List<dynamic>? keywords;
+  String? password;
 
   UserModel({
     required this.email,
@@ -35,6 +36,7 @@ class UserModel {
     required this.isRegister,
     this.timeIn,
     this.keywords,
+    this.password,
   });
 
   Map<String, dynamic> toMap() {
@@ -53,6 +55,7 @@ class UserModel {
       'is_register': isRegister,
       'jam_masuk': timeIn,
       'keywords': keywords,
+      'password': password,
     };
   }
 
@@ -72,6 +75,7 @@ class UserModel {
       keywords: map['keywords'] ?? [],
       isRegister: map['is_register'] ?? false,
       agama: map['agama'] ?? '',
+      password: map['password'] ?? '',
     );
   }
 
@@ -98,6 +102,7 @@ extension UserModelX on UserModel {
       timeIn: timeIn,
       isRegister: isRegister,
       keyword: keywords,
+      password: password,
     );
   }
 
@@ -117,6 +122,7 @@ extension UserModelX on UserModel {
       isRegister: entity.isRegister ?? false,
       keywords: entity.keyword,
       timeIn: entity.timeIn,
+      password: entity.password,
     );
   }
 }

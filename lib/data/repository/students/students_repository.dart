@@ -4,6 +4,7 @@ import 'package:new_sistem_informasi_smanda/data/models/auth/user.dart';
 import 'package:new_sistem_informasi_smanda/data/sources/students/students_firebase_service.dart';
 import 'package:new_sistem_informasi_smanda/domain/repository/students/students.dart';
 
+import '../../../domain/entities/auth/user.dart';
 import '../../../service_locator.dart';
 import '../../models/kelas/class.dart';
 
@@ -111,8 +112,8 @@ class StudentsRepositoryImpl extends StudentRepository {
   }
 
   @override
-  Future<Either> acceptStudentAccount(String nisn) async {
-    return await sl<StudentsFirebaseService>().acceptStudentAccount(nisn);
+  Future<Either> acceptStudentAccount(UserEntity student) async {
+    return await sl<StudentsFirebaseService>().acceptStudentAccount(student);
   }
 
   @override

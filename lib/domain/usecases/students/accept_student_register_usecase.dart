@@ -2,11 +2,12 @@ import 'package:dartz/dartz.dart';
 
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
+import '../../entities/auth/user.dart';
 import '../../repository/students/students.dart';
 
-class UpdateStudentRegisterUsecase implements Usecase<Either, String> {
+class UpdateStudentRegisterUsecase implements Usecase<Either, UserEntity> {
   @override
-  Future<Either> call({String? params}) async {
+  Future<Either> call({UserEntity? params}) async {
     return await sl<StudentRepository>().acceptStudentAccount(params!);
   }
 }

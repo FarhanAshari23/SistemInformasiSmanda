@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
+import '../../../domain/entities/auth/user.dart';
 import '../../models/auth/update_user.dart';
 
 abstract class StudentsFirebaseService {
   Future<Either> getStudent();
   Future<Either> getStudentsByClass(String kelas);
-  Future<Either> acceptStudentAccount(String nisn);
+  Future<Either> acceptStudentAccount(UserEntity student);
   Future<Either> acceptAllStudentAccount();
   Future<Either> getAllKelas();
   Future<Either> getStudentByRegister();
@@ -156,22 +159,58 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   }
 
   @override
-  Future<Either> acceptStudentAccount(String nisn) async {
+  Future<Either> acceptStudentAccount(UserEntity student) async {
     try {
       CollectionReference users =
           FirebaseFirestore.instance.collection('Students');
       QuerySnapshot querySnapshot =
-          await users.where('nisn', isEqualTo: nisn).get();
-      if (querySnapshot.docs.isNotEmpty) {
-        String docId = querySnapshot.docs[0].id;
-        await users.doc(docId).update({
-          "is_register": true,
-        });
-        return right('Update Student Account Success');
+          await users.where('nisn', isEqualTo: student.nisn).get();
+      if (querySnapshot.docs.isEmpty) {
+        return const Left('Student not found');
       }
+      final doc = querySnapshot.docs.first;
+      final data = doc.data() as Map<String, dynamic>;
+
+      final key = encrypt.Key.fromUtf8(
+          '1234567890123456'); // sama dengan key di signUp()
+      final iv = encrypt.IV.fromBase64(data['iv']);
+      final encrypter = encrypt.Encrypter(encrypt.AES(key));
+      final decryptedPassword = encrypter.decrypt64(data['password'], iv: iv);
+
+      final FirebaseApp secondaryApp = await Firebase.initializeApp(
+        name: 'SecondaryApp',
+        options: Firebase.app().options,
+      );
+
+      final FirebaseAuth secondaryAuth =
+          FirebaseAuth.instanceFor(app: secondaryApp);
+
+      await secondaryAuth.createUserWithEmailAndPassword(
+        email: data['email'],
+        password: decryptedPassword,
+      );
+
+      await users.doc(doc.id).update({
+        "is_register": true,
+        'password': FieldValue.delete(),
+        'iv': FieldValue.delete(),
+      });
+
+      await secondaryApp.delete();
+
       return right('Update Student Account Success');
+    } on FirebaseAuthException catch (e) {
+      String message = '';
+      if (e.code == "weak-password") {
+        message = "Password is too weak";
+      } else if (e.code == 'email-already-in-use') {
+        message = "Email already in use";
+      } else {
+        message = "Firebase Auth Error: ${e.message}";
+      }
+      return Left(message);
     } catch (e) {
-      return const Left('Something Wrong');
+      return Left('Something Wrong: $e');
     }
   }
 

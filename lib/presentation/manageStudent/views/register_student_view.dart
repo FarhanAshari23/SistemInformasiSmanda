@@ -282,12 +282,13 @@ class RegisterStudentView extends StatelessWidget {
                                         onTap: () async {
                                           var result = await sl<
                                                   UpdateStudentRegisterUsecase>()
-                                              .call(params: students.nisn);
+                                              .call(params: students);
                                           result.fold(
                                             (error) {
-                                              var snackbar = const SnackBar(
-                                                content:
-                                                    Text("Gagal Mengubah Data"),
+                                              print(error);
+                                              var snackbar = SnackBar(
+                                                content: Text(
+                                                    "Gagal Mengubah Data: $error"),
                                               );
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(snackbar);

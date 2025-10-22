@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/signin_user_req.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 import '../../../common/helper/generate_keyword.dart';
 import '../../models/auth/user_creation_req.dart';
@@ -78,15 +79,11 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   Future<Either> signUp(UserCreationReq murid) async {
     final keywords = generateKeywords(murid.nama ?? '');
     try {
-      var returnedData =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: murid.email!,
-        password: murid.password!,
-      );
-      await FirebaseFirestore.instance
-          .collection('Students')
-          .doc(returnedData.user!.uid)
-          .set(
+      final key = encrypt.Key.fromUtf8('1234567890123456');
+      final iv = encrypt.IV.fromSecureRandom(16);
+      final encrypter = encrypt.Encrypter(encrypt.AES(key));
+      final encryptedPassword = encrypter.encrypt(murid.password!, iv: iv);
+      await FirebaseFirestore.instance.collection('Students').add(
         {
           'email': murid.email,
           'nama': murid.nama,
@@ -99,20 +96,15 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           'gender': murid.gender,
           'isAdmin': murid.isAdmin,
           'agama': murid.agama,
+          'password': encryptedPassword.base64,
           'is_register': murid.isRegister,
           'keywords': keywords,
+          'iv': iv.base64,
         },
       );
-      await FirebaseAuth.instance.signOut();
       return const Right('Signup was succesfull');
-    } on FirebaseAuthException catch (e) {
-      String message = '';
-      if (e.code == "weak-password") {
-        message = "Your password is to weak";
-      } else if (e.code == 'email-already-in-use') {
-        message = "This email already used";
-      }
-      return Left(message);
+    } catch (e) {
+      return Left("Something Error: $e");
     }
   }
 
