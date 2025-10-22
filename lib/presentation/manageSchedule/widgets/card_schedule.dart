@@ -108,9 +108,9 @@ class _CardScheduleState extends State<CardSchedule> {
             },
           ),
           const SizedBox(height: 4),
-          BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
+          BlocBuilder<TeacherCubit, TeacherState>(
             builder: (context, state) {
-              if (state is GetActivitiesLoading) {
+              if (state is TeacherLoading) {
                 return TextField(
                   controller: _kegiatanC,
                   autocorrect: false,
@@ -119,11 +119,22 @@ class _CardScheduleState extends State<CardSchedule> {
                   ),
                 );
               }
-              if (state is GetActivitiesLoaded) {
+              if (state is TeacherLoaded) {
+                final activities = state.selectedActivities;
+
+                final entries = activities.isEmpty
+                    ? [
+                        const DropdownMenuEntry(
+                            value: '', label: 'Pilih guru terlebih dahulu')
+                      ]
+                    : activities
+                        .map((a) => DropdownMenuEntry(value: a, label: a))
+                        .toList();
+
                 return DropdownMenu<String>(
                   width: width * 0.92,
                   enableFilter: true,
-                  requestFocusOnTap: true,
+                  requestFocusOnTap: false,
                   initialSelection: _kegiatanC.text,
                   inputDecorationTheme: const InputDecorationTheme(
                     fillColor: AppColors.tertiary,
@@ -136,15 +147,8 @@ class _CardScheduleState extends State<CardSchedule> {
                   ),
                   menuHeight: 200,
                   hintText: 'Kegiatan:',
-                  dropdownMenuEntries: state.activities.map((doc) {
-                    final nama = doc.name;
-                    return DropdownMenuEntry(
-                      value: nama,
-                      label: nama,
-                    );
-                  }).toList(),
+                  dropdownMenuEntries: entries,
                   onSelected: (value) {
-                    context.read<GetActivitiesCubit>().selectItem(value);
                     _kegiatanC.text = value!;
                     FocusScope.of(context).unfocus();
                   },

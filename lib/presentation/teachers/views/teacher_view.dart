@@ -40,6 +40,8 @@ class TeacherView extends StatelessWidget {
                     );
                   }
                   if (state is TeacherLoaded) {
+                    state.teacher.removeWhere(
+                        (element) => element.nama == "Seluruh Siswa");
                     return Expanded(
                       child: GridView.builder(
                         itemCount: state.teacher.length,

@@ -16,12 +16,6 @@ class SelectMengajarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    activities.removeWhere(
-      (element) =>
-          element.name == "Upacara Bendera" ||
-          element.name == 'Program Jumat' ||
-          element.name == 'Istirahat',
-    );
     return Scaffold(
       body: BlocProvider(
         create: (context) => SelectSubjectCubit(),
