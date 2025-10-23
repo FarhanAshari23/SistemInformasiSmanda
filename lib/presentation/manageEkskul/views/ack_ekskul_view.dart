@@ -66,156 +66,152 @@ class AckEkskulView extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: height * 0.02),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: height * 0.7,
-                    child: ListView(
-                      scrollDirection: Axis.vertical,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  ekskulCreateReq.namaEkskul,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w900,
-                                    color: AppColors.primary,
-                                  ),
+                Expanded(
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                ekskulCreateReq.namaEkskul,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w900,
+                                  color: AppColors.primary,
                                 ),
-                                CustomInkWell(
-                                  borderRadius: 8,
-                                  defaultColor: AppColors.primary,
-                                  onTap: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(16),
-                                        ),
-                                      ),
-                                      builder: (context) {
-                                        return Container(
-                                          padding: const EdgeInsets.all(16),
-                                          width: double.infinity,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                "Deskripsi:",
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w900,
-                                                ),
-                                              ),
-                                              Text(
-                                                ekskulCreateReq.deskripsi,
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(4),
-                                    margin: const EdgeInsets.all(8),
-                                    child: const Icon(
-                                      Icons.info,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            Center(
-                              child: CardAnggotaEkskul(
-                                pembina: ekskulCreateReq.pembina,
-                                jabatan: 'Pembina',
                               ),
-                            ),
-                            SizedBox(height: height * 0.025),
-                            SizedBox(
-                              width: double.infinity,
-                              height: height * 0.25,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  return CardAnggotaEkskul(
-                                    murid: anggota[index],
-                                    jabatan: jabatanCard[index],
+                              CustomInkWell(
+                                borderRadius: 8,
+                                defaultColor: AppColors.primary,
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(16),
+                                      ),
+                                    ),
+                                    builder: (context) {
+                                      return Container(
+                                        padding: const EdgeInsets.all(16),
+                                        width: double.infinity,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "Deskripsi:",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w900,
+                                              ),
+                                            ),
+                                            Text(
+                                              ekskulCreateReq.deskripsi,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
-                                separatorBuilder: (context, index) =>
-                                    SizedBox(width: width * 0.03),
-                                itemCount: anggota.length,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  margin: const EdgeInsets.all(8),
+                                  child: const Icon(
+                                    Icons.info,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Center(
+                            child: CardAnggotaEkskul(
+                              pembina: ekskulCreateReq.pembina,
+                              jabatan: 'Pembina',
                             ),
-                            const Text(
-                              'Anggota:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 16,
-                                color: AppColors.primary,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 12),
-                            Center(
-                              child: Image.asset(
-                                AppImages.emptyRegistrationChara,
-                                width: 180,
-                                height: 180,
-                              ),
-                            ),
-                            const Text(
-                              'Belum ada anggota, tunggu pengguna menambahkan ekskul nya sendiri secara mandiri.',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 16,
-                                color: AppColors.primary,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            Center(
-                              child: Builder(builder: (context) {
-                                return BasicButton(
-                                  onPressed: () {
-                                    context.read<ButtonStateCubit>().execute(
-                                          usecase: CreateEkskulUseCase(),
-                                          params: ekskulCreateReq,
-                                        );
-                                    AppNavigator.push(
-                                      context,
-                                      const SuccesPage(
-                                        page: HomeViewAdmin(),
-                                        title:
-                                            'Data Ekskul\nBerhasil Ditambahkan',
-                                      ),
-                                    );
-                                  },
-                                  title: 'Simpan',
+                          ),
+                          SizedBox(height: height * 0.025),
+                          SizedBox(
+                            width: double.infinity,
+                            height: height * 0.25,
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return CardAnggotaEkskul(
+                                  murid: anggota[index],
+                                  jabatan: jabatanCard[index],
                                 );
-                              }),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
+                              },
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(width: width * 0.03),
+                              itemCount: anggota.length,
+                            ),
+                          ),
+                          const Text(
+                            'Anggota:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
+                              color: AppColors.primary,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 12),
+                          Center(
+                            child: Image.asset(
+                              AppImages.emptyRegistrationChara,
+                              width: 180,
+                              height: 180,
+                            ),
+                          ),
+                          const Text(
+                            'Belum ada anggota, tunggu pengguna menambahkan ekskul nya sendiri secara mandiri.',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
+                              color: AppColors.primary,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Center(
+                            child: Builder(builder: (context) {
+                              return BasicButton(
+                                onPressed: () {
+                                  context.read<ButtonStateCubit>().execute(
+                                        usecase: CreateEkskulUseCase(),
+                                        params: ekskulCreateReq,
+                                      );
+                                  AppNavigator.push(
+                                    context,
+                                    const SuccesPage(
+                                      page: HomeViewAdmin(),
+                                      title:
+                                          'Data Ekskul\nBerhasil Ditambahkan',
+                                    ),
+                                  );
+                                },
+                                title: 'Simpan',
+                              );
+                            }),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 )
               ],

@@ -35,6 +35,45 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
             .toList(),
       );
       await firebaseFirestore.collection("Ekskuls").add(model.toMap());
+
+      final namaPembina = ekskulCreationReq.pembina.nama.trim();
+      final nipPembina = ekskulCreationReq.pembina.nip.trim();
+      final namaEkskul = ekskulCreationReq.namaEkskul.trim();
+
+      if (namaPembina.isNotEmpty) {
+        final query = nipPembina != '-' && nipPembina.isNotEmpty
+            ? await FirebaseFirestore.instance
+                .collection("Teachers")
+                .where("NIP", isEqualTo: nipPembina)
+                .get()
+            : await FirebaseFirestore.instance
+                .collection("Teachers")
+                .where("nama", isEqualTo: namaPembina)
+                .get();
+        if (query.docs.isNotEmpty) {
+          final teacherDoc = query.docs.first;
+          final teacherRef = teacherDoc.reference;
+          final data = teacherDoc.data();
+          final existingJabatan = data['jabatan_tambahan'];
+
+          final current = (existingJabatan == null ||
+                  existingJabatan.toString().trim().isEmpty ||
+                  existingJabatan == '-')
+              ? ''
+              : existingJabatan.toString();
+
+          // Tambahkan jabatan baru tanpa duplikasi
+          final jabatanBaru = "Pembina Ekskul $namaEkskul";
+          final hasJabatan = current.contains(jabatanBaru);
+          final updateJabatan = hasJabatan
+              ? current
+              : (current.isEmpty ? jabatanBaru : "$current, $jabatanBaru");
+
+          await teacherRef.update({
+            "jabatan_tambahan": updateJabatan,
+          });
+        }
+      }
       return const Right("Upload ekskul was succesfull");
     } catch (e) {
       return Left(e);
