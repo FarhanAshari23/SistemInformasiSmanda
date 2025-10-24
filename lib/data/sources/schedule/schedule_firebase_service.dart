@@ -205,16 +205,16 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   @override
   Future<Either> deleteActivity(String activity) async {
     try {
-      CollectionReference users =
+      CollectionReference item =
           FirebaseFirestore.instance.collection('Activities');
       QuerySnapshot querySnapshot =
-          await users.where('kegiatan', isEqualTo: activity).get();
+          await item.where('kegiatan', isEqualTo: activity).get();
       for (var doc in querySnapshot.docs) {
         await doc.reference.delete();
       }
       return const Right('Delete Data Kegiatan Success');
     } catch (e) {
-      return Left(e.toString());
+      return Left('Something wrong: $e');
     }
   }
 }

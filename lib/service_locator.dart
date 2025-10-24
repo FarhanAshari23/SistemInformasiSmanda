@@ -50,6 +50,7 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/create_ekskul
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/get_ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/news/get_news.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_students_with_kelas.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/delete_role_usecase.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/delete_teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_honor.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_kepala_sekolah.dart';
@@ -71,6 +72,7 @@ import 'domain/usecases/schedule/get_jadwal.dart';
 import 'domain/usecases/schedule/update_schedule_usecase.dart';
 import 'domain/usecases/students/delete_student.dart';
 import 'domain/usecases/students/update_all_student_account_usecase.dart';
+import 'domain/usecases/teacher/create_roles_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -168,6 +170,12 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<GetTeacherByNameUsecase>(
     GetTeacherByNameUsecase(),
+  );
+  sl.registerSingleton<CreateRolesUsecase>(
+    CreateRolesUsecase(),
+  );
+  sl.registerSingleton<DeleteRoleUsecase>(
+    DeleteRoleUsecase(),
   );
 
   //news

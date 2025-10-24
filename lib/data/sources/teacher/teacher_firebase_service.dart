@@ -7,12 +7,14 @@ import '../../models/teacher/teacher.dart';
 
 abstract class TeacherFirebaseService {
   Future<Either> createTeacher(TeacherModel teacherCreationReq);
+  Future<Either> updateTeacher(TeacherEntity teacherReq);
+  Future<Either> deleteTeacher(TeacherEntity teacherReq);
+  Future<Either> getTeacherByName(String name);
+  Future<Either> createRoles(String role);
+  Future<Either> deleteRole(String role);
   Future<Either> getKepalaSekolah();
   Future<Either> getWaka();
   Future<Either> getTeacher();
-  Future<Either> getTeacherByName(String name);
-  Future<Either> updateTeacher(TeacherEntity teacherReq);
-  Future<Either> deleteTeacher(TeacherEntity teacherReq);
   Future<Either> getHonor();
 }
 
@@ -102,7 +104,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       }
       return const Right('Delete Data Teacher Success');
     } catch (e) {
-      return const Left('Something Wrong');
+      return Left('Something Wrong L $e');
     }
   }
 
@@ -158,6 +160,36 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
       return const Left("Error get data, please try again later");
+    }
+  }
+
+  @override
+  Future<Either> createRoles(String role) async {
+    try {
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      await firebaseFirestore.collection("Roles").add(
+        {
+          "role": role,
+        },
+      );
+      return const Right("Upload role was succesfull");
+    } catch (e) {
+      return Left('Something Wrong: $e');
+    }
+  }
+
+  @override
+  Future<Either> deleteRole(String role) async {
+    try {
+      CollectionReference item = FirebaseFirestore.instance.collection('Roles');
+      QuerySnapshot querySnapshot =
+          await item.where('role', isEqualTo: role).get();
+      for (var doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
+      return const Right('Delete Data Role Success');
+    } catch (e) {
+      return Left('Something wrong: $e');
     }
   }
 }

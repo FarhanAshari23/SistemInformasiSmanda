@@ -12,4 +12,5 @@ abstract class TeacherRepository {
   Future<Either> getKepalaSekolah();
   Future<Either> getWaka();
   Future<Either> getHonor();
+  Future<Either> createRoles(String role);
 }

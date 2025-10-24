@@ -109,4 +109,14 @@ class TeacherRepositoryImpl extends TeacherRepository {
       },
     );
   }
+
+  @override
+  Future<Either> createRoles(String role) async {
+    return await sl<TeacherFirebaseService>().createRoles(role);
+  }
+
+  @override
+  Future<Either> deleteRole(String role) async {
+    return await sl<TeacherFirebaseService>().deleteRole(role);
+  }
 }
