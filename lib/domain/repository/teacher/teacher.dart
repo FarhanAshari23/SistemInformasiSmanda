@@ -9,6 +9,7 @@ abstract class TeacherRepository {
   Future<Either> deleteTeacher(TeacherEntity teacherReq);
   Future<Either> getTeacherByName(String name);
   Future<Either> getTeacher();
+  Future<Either> getRoles();
   Future<Either> createRoles(String role);
   Future<Either> deleteRole(String role);
   Future<Either> getKepalaSekolah();

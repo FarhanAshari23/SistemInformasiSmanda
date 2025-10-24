@@ -5,6 +5,7 @@ import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/repository/teacher/teacher.dart';
 
 import '../../../service_locator.dart';
+import '../../models/teacher/role.dart';
 
 class TeacherRepositoryImpl extends TeacherRepository {
   @override
@@ -118,5 +119,20 @@ class TeacherRepositoryImpl extends TeacherRepository {
   @override
   Future<Either> deleteRole(String role) async {
     return await sl<TeacherFirebaseService>().deleteRole(role);
+  }
+
+  @override
+  Future<Either> getRoles() async {
+    var returnedData = await sl<TeacherFirebaseService>().getRoles();
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          List.from(data).map((e) => RoleModel.fromMap(e).toEntity()).toList(),
+        );
+      },
+    );
   }
 }

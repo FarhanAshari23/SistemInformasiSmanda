@@ -12,6 +12,7 @@ abstract class TeacherFirebaseService {
   Future<Either> getTeacherByName(String name);
   Future<Either> createRoles(String role);
   Future<Either> deleteRole(String role);
+  Future<Either> getRoles();
   Future<Either> getKepalaSekolah();
   Future<Either> getWaka();
   Future<Either> getTeacher();
@@ -190,6 +191,17 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       return const Right('Delete Data Role Success');
     } catch (e) {
       return Left('Something wrong: $e');
+    }
+  }
+
+  @override
+  Future<Either> getRoles() async {
+    try {
+      var returnedData =
+          await FirebaseFirestore.instance.collection('Roles').get();
+      return Right(returnedData.docs.map((e) => e.data()).toList());
+    } catch (e) {
+      return const Left('Please try again');
     }
   }
 }

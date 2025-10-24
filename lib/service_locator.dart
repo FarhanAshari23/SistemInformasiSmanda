@@ -73,6 +73,7 @@ import 'domain/usecases/schedule/update_schedule_usecase.dart';
 import 'domain/usecases/students/delete_student.dart';
 import 'domain/usecases/students/update_all_student_account_usecase.dart';
 import 'domain/usecases/teacher/create_roles_usecase.dart';
+import 'domain/usecases/teacher/get_roles_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -176,6 +177,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<DeleteRoleUsecase>(
     DeleteRoleUsecase(),
+  );
+  sl.registerSingleton<GetRolesUsecase>(
+    GetRolesUsecase(),
   );
 
   //news
