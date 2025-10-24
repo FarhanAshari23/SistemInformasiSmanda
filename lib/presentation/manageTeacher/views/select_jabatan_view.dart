@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/activities/get_activities_state.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/bloc/select_subject_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/roles/get_roles_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/roles/get_roles_state.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/bloc/select_jabatan_cubit.dart';
 
-import '../../../common/bloc/activities/get_activities_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
 
-class SelectMengajarView extends StatelessWidget {
-  const SelectMengajarView({
-    super.key,
-  });
+class SelectJabatanView extends StatelessWidget {
+  const SelectJabatanView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +17,14 @@ class SelectMengajarView extends StatelessWidget {
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => SelectSubjectCubit(),
+            create: (context) => SelectJabatanCubit(),
           ),
           BlocProvider(
-            create: (context) => GetActivitiesCubit()..displayActivites(),
+            create: (context) => GetRolesCubit()..displayRoles(),
           ),
         ],
-        child: BlocBuilder<SelectSubjectCubit, List<String>>(
-          builder: (context, selectedActivities) {
+        child: BlocBuilder<SelectJabatanCubit, List<String>>(
+          builder: (context, selectedRoles) {
             return SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,12 +49,12 @@ class SelectMengajarView extends StatelessWidget {
                         ),
                         CustomInkWell(
                           borderRadius: 12,
-                          defaultColor: selectedActivities.isEmpty
+                          defaultColor: selectedRoles.isEmpty
                               ? Colors.white24
                               : AppColors.primary,
                           onTap: () {
-                            if (selectedActivities.isEmpty) return;
-                            Navigator.pop(context, selectedActivities);
+                            if (selectedRoles.isEmpty) return;
+                            Navigator.pop(context, selectedRoles);
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
@@ -76,23 +74,23 @@ class SelectMengajarView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
+                  BlocBuilder<GetRolesCubit, GetRolesState>(
                     builder: (context, state) {
-                      if (state is GetActivitiesLoading) {
+                      if (state is GetRolesLoading) {
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
-                      if (state is GetActivitiesLoaded) {
+                      if (state is GetRolesLoaded) {
                         return Expanded(
                           child: ListView.builder(
-                            itemCount: state.activities.length,
+                            itemCount: state.roles.length,
                             scrollDirection: Axis.vertical,
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             itemBuilder: (context, index) {
-                              final activity = state.activities[index];
+                              final roles = state.roles[index];
                               final isSelected =
-                                  selectedActivities.contains(activity.name);
+                                  selectedRoles.contains(roles.name);
                               return Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 4),
@@ -103,13 +101,13 @@ class SelectMengajarView extends StatelessWidget {
                                       : AppColors.primary,
                                   onTap: () {
                                     context
-                                        .read<SelectSubjectCubit>()
-                                        .toggleSubject(activity.name);
+                                        .read<SelectJabatanCubit>()
+                                        .toggleJabatan(roles.name);
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(16),
                                     child: Text(
-                                      activity.name,
+                                      roles.name,
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,

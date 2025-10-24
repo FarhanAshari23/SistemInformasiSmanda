@@ -8,8 +8,6 @@ import 'package:new_sistem_informasi_smanda/data/models/teacher/teacher.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/views/ack_add_teacher_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/views/select_mengajar_view.dart';
 
-import '../../../common/bloc/activities/get_activities_cubit.dart';
-import '../../../common/bloc/activities/get_activities_state.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/bloc/kelas/kelas_display_state.dart';
@@ -17,6 +15,7 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/box_gender.dart';
 import '../../../common/widget/dropdown/app_dropdown_field.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import 'select_jabatan_view.dart';
 
 class AddTeacherView extends StatefulWidget {
   const AddTeacherView({
@@ -74,9 +73,6 @@ class _AddTeacherViewState extends State<AddTeacherView> {
           ),
           BlocProvider(
             create: (context) => GenderSelectionCubit(),
-          ),
-          BlocProvider(
-            create: (context) => GetActivitiesCubit()..displayActivites(),
           ),
         ],
         child: SafeArea(
@@ -221,62 +217,32 @@ class _AddTeacherViewState extends State<AddTeacherView> {
       );
     } else if (index == 1) {
       // Dropdown Mengajar
-      return BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
-        builder: (context, state) {
-          if (state is GetActivitiesLoading) {
-            return TextField(
-              controller: controller[index],
-              readOnly: true,
-              decoration: InputDecoration(
-                hintText: hinttext[index],
-                suffixIcon: Visibility(
-                  visible: controller[index].text.isNotEmpty,
-                  child: IconButton(
-                    onPressed: () {
-                      controller[index].text = '';
-                    },
-                    icon: const Icon(
-                      Icons.delete_forever_rounded,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              onTap: () {},
-            );
+      return TextField(
+        controller: controller[index],
+        readOnly: true,
+        decoration: InputDecoration(
+          hintText: hinttext[index],
+          suffixIcon: IconButton(
+            onPressed: () {
+              controller[index].text = '';
+            },
+            icon: const Icon(
+              Icons.delete_forever_rounded,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        onTap: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SelectMengajarView(),
+            ),
+          );
+          if (result != null) {
+            String hasil = result.join(", ");
+            controller[index].text = hasil;
           }
-          if (state is GetActivitiesLoaded) {
-            return TextField(
-              controller: controller[index],
-              readOnly: true,
-              decoration: InputDecoration(
-                hintText: hinttext[index],
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    controller[index].text = '';
-                  },
-                  icon: const Icon(
-                    Icons.delete_forever_rounded,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              onTap: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        SelectMengajarView(activities: state.activities),
-                  ),
-                );
-                if (result != null) {
-                  String hasil = result.join(", ");
-                  controller[index].text = hasil;
-                }
-              },
-            );
-          }
-          return const SizedBox();
         },
       );
     } else if (index == 4) {
@@ -332,6 +298,36 @@ class _AddTeacherViewState extends State<AddTeacherView> {
             },
           ),
         ],
+      );
+    } else if (index == 5) {
+      //jabatan_tambahan
+      return TextField(
+        controller: controller[index],
+        readOnly: true,
+        decoration: InputDecoration(
+          hintText: hinttext[index],
+          suffixIcon: IconButton(
+            onPressed: () {
+              controller[index].text = '';
+            },
+            icon: const Icon(
+              Icons.delete_forever_rounded,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        onTap: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SelectJabatanView(),
+            ),
+          );
+          if (result != null) {
+            String hasil = result.join(", ");
+            controller[index].text = hasil;
+          }
+        },
       );
     }
 

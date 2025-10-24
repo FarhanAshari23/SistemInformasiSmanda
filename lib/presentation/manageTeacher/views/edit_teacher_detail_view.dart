@@ -5,7 +5,6 @@ import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
 
 import '../../../common/bloc/activities/get_activities_cubit.dart';
-import '../../../common/bloc/activities/get_activities_state.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/bloc/kelas/kelas_display_state.dart';
@@ -16,6 +15,7 @@ import '../../../common/widget/dropdown/app_dropdown_field.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/teacher/update_teacher.dart';
 import '../../../service_locator.dart';
+import 'select_jabatan_view.dart';
 import 'select_mengajar_view.dart';
 
 class EditTeacherDetailView extends StatefulWidget {
@@ -261,62 +261,32 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
       );
     } else if (index == 1) {
       // Dropdown Mengajar
-      return BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
-        builder: (context, state) {
-          if (state is GetActivitiesLoading) {
-            return TextField(
-              controller: controller[index],
-              readOnly: true,
-              decoration: InputDecoration(
-                hintText: hinttext[index],
-                suffixIcon: Visibility(
-                  visible: controller[index].text.isNotEmpty,
-                  child: IconButton(
-                    onPressed: () {
-                      controller[index].text = '';
-                    },
-                    icon: const Icon(
-                      Icons.delete_forever_rounded,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              onTap: () {},
-            );
+      return TextField(
+        controller: controller[index],
+        readOnly: true,
+        decoration: InputDecoration(
+          hintText: hinttext[index],
+          suffixIcon: IconButton(
+            onPressed: () {
+              controller[index].text = '';
+            },
+            icon: const Icon(
+              Icons.delete_forever_rounded,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        onTap: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SelectMengajarView(),
+            ),
+          );
+          if (result != null) {
+            String hasil = result.join(", ");
+            controller[index].text = hasil;
           }
-          if (state is GetActivitiesLoaded) {
-            return TextField(
-              controller: controller[index],
-              readOnly: true,
-              decoration: InputDecoration(
-                hintText: hinttext[index],
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    controller[index].text = '';
-                  },
-                  icon: const Icon(
-                    Icons.delete_forever_rounded,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              onTap: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        SelectMengajarView(activities: state.activities),
-                  ),
-                );
-                if (result != null) {
-                  String hasil = result.join(", ");
-                  controller[index].text = hasil;
-                }
-              },
-            );
-          }
-          return const SizedBox();
         },
       );
     } else if (index == 4) {
@@ -356,6 +326,35 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
         decoration: const InputDecoration(
           hintText: 'Tanggal Lahir:',
         ),
+      );
+    } else if (index == 5) {
+      return TextField(
+        controller: controller[index],
+        readOnly: true,
+        decoration: InputDecoration(
+          hintText: hinttext[index],
+          suffixIcon: IconButton(
+            onPressed: () {
+              controller[index].text = '';
+            },
+            icon: const Icon(
+              Icons.delete_forever_rounded,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        onTap: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SelectJabatanView(),
+            ),
+          );
+          if (result != null) {
+            String hasil = result.join(", ");
+            controller[index].text = hasil;
+          }
+        },
       );
     } else if (index == 6) {
       // Gender Selection
