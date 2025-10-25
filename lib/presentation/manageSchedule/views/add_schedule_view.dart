@@ -17,6 +17,7 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/schedule/create_class_usecase.dart';
 import '../../../domain/usecases/schedule/create_schedule_usecase.dart';
+import '../bloc/add_schedule_cubit.dart';
 import '../bloc/class_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
 
@@ -57,6 +58,9 @@ class _AddScheduleViewState extends State<AddScheduleView> {
         ),
         BlocProvider(
           create: (context) => DurasiCubit(),
+        ),
+        BlocProvider(
+          create: (context) => AddScheduleCubit(),
         ),
       ],
       child: BlocListener<ButtonStateCubit, ButtonState>(
@@ -171,9 +175,9 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                                               schedule:
                                                   state.schedules[day]![i],
                                             ),
-
-                                          // Tombol tambah
-                                          AddScheduleButton(day: day),
+                                          AddScheduleButton(
+                                            day: day,
+                                          ),
                                         ],
                                       ),
                                     ],

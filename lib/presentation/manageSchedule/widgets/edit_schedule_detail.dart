@@ -184,9 +184,9 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
                                               schedule:
                                                   state.schedules[day]![i],
                                             ),
-
-                                          // Tombol tambah
-                                          AddScheduleButton(day: day),
+                                          AddScheduleButton(
+                                            day: day,
+                                          ),
                                         ],
                                       ),
                                     ],

@@ -282,20 +282,31 @@ class _CardScheduleState extends State<CardSchedule> {
         ],
       );
     }
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: CustomInkWell(
         onTap: () => setState(() => _isEditing = true),
         borderRadius: 12,
-        defaultColor: AppColors.inversePrimary,
+        defaultColor: AppColors.primary,
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(widget.schedule.kegiatan),
-              Text(widget.schedule.jam),
+              Text(
+                widget.schedule.kegiatan,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                ),
+              ),
+              Text(
+                widget.schedule.jam,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
             ],
           ),
         ),
