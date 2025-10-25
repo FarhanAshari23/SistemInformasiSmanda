@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/add_schedule_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_cubit.dart';
 
@@ -9,6 +7,7 @@ import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/bloc/teacher/teacher_state.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../bloc/add_schedule_state.dart';
+import 'duration_picker.dart';
 
 class AddScheduleButton extends StatefulWidget {
   final String day;
@@ -261,67 +260,34 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
               if (isPickerVisible)
                 Align(
                   alignment: Alignment.center,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: width * 0.8,
-                        height: height * 0.1,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.all(12),
-                        margin: const EdgeInsets.only(top: 24),
-                        child: CupertinoDatePicker(
-                          mode: CupertinoDatePickerMode.time,
-                          use24hFormat: true,
-                          initialDateTime: DateTime.now(),
-                          onDateTimeChanged: (DateTime newTime) {
-                            if (statePicker == 'start') {
-                              cubitAddSchedule.updateStartTempTime(
-                                  widget.day, newTime);
-                            } else {
-                              cubitAddSchedule.updateEndTempTime(
-                                  widget.day, newTime);
-                            }
-                          },
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: BasicButton(
-                              onPressed: () {
-                                final selectedTemp = statePicker == 'start'
-                                    ? selectedStartTimeTemp
-                                    : selectedEndTimeTemp;
+                  child: DurationPicker(
+                    height: height,
+                    width: width,
+                    onDateTimeChanged: (p0) {
+                      if (statePicker == 'start') {
+                        cubitAddSchedule.updateStartTempTime(widget.day, p0);
+                      } else {
+                        cubitAddSchedule.updateEndTempTime(widget.day, p0);
+                      }
+                    },
+                    simpan: () {
+                      final selectedTemp = statePicker == 'start'
+                          ? selectedStartTimeTemp
+                          : selectedEndTimeTemp;
 
-                                if (selectedTemp != null) {
-                                  final formattedTime =
-                                      '${selectedTemp.hour.toString().padLeft(2, '0')}:${selectedTemp.minute.toString().padLeft(2, '0')}';
+                      if (selectedTemp != null) {
+                        final formattedTime =
+                            '${selectedTemp.hour.toString().padLeft(2, '0')}:${selectedTemp.minute.toString().padLeft(2, '0')}';
 
-                                  if (statePicker == 'start') {
-                                    _durasiMulaiC.text = formattedTime;
-                                  } else {
-                                    _durasiSelesaiC.text = formattedTime;
-                                  }
-                                }
-                                cubitAddSchedule.hidePicker(widget.day);
-                              },
-                              title: 'Simpan',
-                            ),
-                          ),
-                          Expanded(
-                            child: BasicButton(
-                              onPressed: () =>
-                                  cubitAddSchedule.hidePicker(widget.day),
-                              title: 'Batal',
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+                        if (statePicker == 'start') {
+                          _durasiMulaiC.text = formattedTime;
+                        } else {
+                          _durasiSelesaiC.text = formattedTime;
+                        }
+                      }
+                      cubitAddSchedule.hidePicker(widget.day);
+                    },
+                    batal: () => cubitAddSchedule.hidePicker(widget.day),
                   ),
                 ),
             ],

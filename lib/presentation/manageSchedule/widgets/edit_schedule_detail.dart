@@ -12,10 +12,10 @@ import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/schedule/schedule.dart';
 import '../../../service_locator.dart';
+import '../bloc/add_schedule_cubit.dart';
 import '../bloc/class_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
 import '../bloc/create_schedule_state.dart';
-import '../bloc/durasi_cubit.dart';
 import '../../../common/bloc/activities/get_activities_cubit.dart';
 import 'add_schedule_button.dart';
 import 'card_schedule.dart';
@@ -69,7 +69,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
           create: (context) => GetActivitiesCubit()..displayActivites(),
         ),
         BlocProvider(
-          create: (context) => DurasiCubit(),
+          create: (context) => AddScheduleCubit(),
         ),
       ],
       child: BlocListener<ButtonStateCubit, ButtonState>(
