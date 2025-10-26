@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/divided_range_time.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_cubit.dart';
 
 import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/bloc/teacher/teacher_state.dart';
+import '../../../common/helper/divided_range_time.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../bloc/add_schedule_cubit.dart';
-import '../bloc/add_schedule_state.dart';
+import '../../../domain/entities/schedule/day.dart';
+import '../bloc/create_schedule_cubit.dart';
+import '../bloc/edit_schedule_cubit.dart';
+import '../bloc/edit_schedule_state.dart';
 import 'duration_picker.dart';
 
 class CardSchedule extends StatefulWidget {
@@ -56,18 +56,18 @@ class _CardScheduleState extends State<CardSchedule> {
   @override
   Widget build(BuildContext context) {
     final cubitCreateSchedule = context.read<CreateScheduleCubit>();
-    final cubitAddSchedule = context.read<AddScheduleCubit>();
+    final cubitEditSchedule = context.read<EditScheduleCubit>();
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return BlocBuilder<AddScheduleCubit, AddScheduleState>(
+    return BlocBuilder<EditScheduleCubit, EditScheduleState>(
       builder: (context, state) {
-        final cardState = state.getCardState(widget.day);
-        final isAdding = cardState.isAdding;
+        final cardState = state.getCardState(widget.index);
+        final isEdit = cardState.isAdding;
         final isPickerVisible = cardState.isPickerVisible;
         final selectedStartTimeTemp = cardState.selectedStartTimeTemp;
         final selectedEndTimeTemp = cardState.selectedEndTimeTemp;
 
-        if (isAdding) {
+        if (isEdit) {
           return Stack(
             children: [
               Column(
@@ -201,7 +201,7 @@ class _CardScheduleState extends State<CardSchedule> {
                             setState(() {
                               statePicker = 'start';
                             });
-                            cubitAddSchedule.showPicker(widget.day);
+                            cubitEditSchedule.showPicker(widget.index);
                           },
                         ),
                       ),
@@ -231,7 +231,7 @@ class _CardScheduleState extends State<CardSchedule> {
                             setState(() {
                               statePicker = 'end';
                             });
-                            cubitAddSchedule.showPicker(widget.day);
+                            cubitEditSchedule.showPicker(widget.index);
                           },
                         ),
                       ),
@@ -253,14 +253,14 @@ class _CardScheduleState extends State<CardSchedule> {
                                 _kegiatanC.text,
                                 '${_durasiMulaiC.text} - ${_durasiSelesaiC.text}');
                           }
-                          cubitAddSchedule.toggleAdding(widget.day);
+                          cubitEditSchedule.toggleEdit(widget.index);
                         },
                         child: const Text("Simpan"),
                       ),
                       const SizedBox(width: 8),
                       TextButton(
                         onPressed: () =>
-                            cubitAddSchedule.toggleAdding(widget.day),
+                            cubitEditSchedule.toggleEdit(widget.index),
                         child: const Text("Batal"),
                       )
                     ],
@@ -275,9 +275,9 @@ class _CardScheduleState extends State<CardSchedule> {
                     width: width,
                     onDateTimeChanged: (p0) {
                       if (statePicker == 'start') {
-                        cubitAddSchedule.updateStartTempTime(widget.day, p0);
+                        cubitEditSchedule.updateStartTempTime(widget.index, p0);
                       } else {
-                        cubitAddSchedule.updateEndTempTime(widget.day, p0);
+                        cubitEditSchedule.updateEndTempTime(widget.index, p0);
                       }
                     },
                     simpan: () {
@@ -295,9 +295,9 @@ class _CardScheduleState extends State<CardSchedule> {
                           _durasiSelesaiC.text = formattedTime;
                         }
                       }
-                      cubitAddSchedule.hidePicker(widget.day);
+                      cubitEditSchedule.hidePicker(widget.index);
                     },
-                    batal: () => cubitAddSchedule.hidePicker(widget.day),
+                    batal: () => cubitEditSchedule.hidePicker(widget.index),
                   ),
                 ),
             ],
@@ -306,7 +306,7 @@ class _CardScheduleState extends State<CardSchedule> {
         return Padding(
           padding: const EdgeInsets.only(bottom: 4),
           child: CustomInkWell(
-            onTap: () => cubitAddSchedule.toggleAdding(widget.day),
+            onTap: () => cubitEditSchedule.toggleEdit(widget.index),
             borderRadius: 12,
             defaultColor: AppColors.primary,
             child: Padding(

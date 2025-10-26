@@ -17,6 +17,7 @@ import '../bloc/class_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
 import '../bloc/create_schedule_state.dart';
 import '../../../common/bloc/activities/get_activities_cubit.dart';
+import '../bloc/edit_schedule_cubit.dart';
 import 'add_schedule_button.dart';
 import 'card_schedule.dart';
 
@@ -67,6 +68,9 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
         ),
         BlocProvider(
           create: (context) => GetActivitiesCubit()..displayActivites(),
+        ),
+        BlocProvider(
+          create: (context) => EditScheduleCubit(),
         ),
         BlocProvider(
           create: (context) => AddScheduleCubit(),
