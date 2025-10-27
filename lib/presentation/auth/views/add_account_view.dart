@@ -91,8 +91,7 @@ class AddStudentView extends StatelessWidget {
                         ),
                       ),
                     );
-                  }
-                  if (!checkEmail(_emailC.text)) {
+                  } else if (!checkEmail(_emailC.text)) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         backgroundColor: Colors.red,

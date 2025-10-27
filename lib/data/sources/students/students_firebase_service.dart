@@ -231,20 +231,63 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   @override
   Future<Either> acceptAllStudentAccount() async {
     try {
-      CollectionReference users =
+      final CollectionReference users =
           FirebaseFirestore.instance.collection('Students');
-      QuerySnapshot querySnapshot =
+      final QuerySnapshot querySnapshot =
           await users.where('is_register', isEqualTo: false).get();
 
-      if (querySnapshot.docs.isNotEmpty) {
-        WriteBatch batch = FirebaseFirestore.instance.batch();
-        for (var doc in querySnapshot.docs) {
-          batch.update(doc.reference, {"is_register": true});
-        }
-        await batch.commit();
-        return right('Update All Unregistered Students Success');
+      if (querySnapshot.docs.isEmpty) {
+        return const Right('No Students to Update');
       }
-      return right('No Students Found to Update');
+
+      final FirebaseApp secondaryApp = await Firebase.initializeApp(
+        name: 'SecondaryApp',
+        options: Firebase.app().options,
+      );
+
+      final FirebaseAuth secondaryAuth = FirebaseAuth.instanceFor(
+        app: secondaryApp,
+      );
+
+      final key = encrypt.Key.fromUtf8('1234567890123456');
+      final encrypter = encrypt.Encrypter(encrypt.AES(key));
+
+      for (final doc in querySnapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>;
+
+        try {
+          final iv = encrypt.IV.fromBase64(data['iv']);
+          final decryptedPassword = encrypter.decrypt64(
+            data['password'],
+            iv: iv,
+          );
+          await secondaryAuth.createUserWithEmailAndPassword(
+            email: data['email'],
+            password: decryptedPassword,
+          );
+          await users.doc(doc.id).update({
+            "is_register": true,
+            'password': FieldValue.delete(),
+            'iv': FieldValue.delete(),
+          });
+        } on FirebaseAuthException catch (e) {
+          String message = '';
+          if (e.code == "weak-password") {
+            message = "Password is too weak";
+          } else if (e.code == 'email-already-in-use') {
+            message = "Email already in use";
+          } else {
+            message = "Firebase Auth Error: ${e.message}";
+          }
+          return Left(
+            "Something error with register account ${data['email']}: $message",
+          );
+        } catch (e) {
+          return Left('Error on ${data['email']}: $e');
+        }
+      }
+      await secondaryApp.delete();
+      return right('Accept All Student Success');
     } catch (e) {
       return Left('Something Wrong: $e');
     }
