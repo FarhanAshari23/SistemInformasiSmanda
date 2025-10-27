@@ -5,15 +5,12 @@ import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/landing/succes.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/update_anggota_req.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/signup.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/widgets/card_ack.dart';
 
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/ekskul/anggota.dart';
-import '../../../domain/usecases/ekskul/add_anggota_usecase.dart';
 import 'login_view.dart';
 
 class AckAddStudentView extends StatelessWidget {
@@ -34,7 +31,6 @@ class AckAddStudentView extends StatelessWidget {
       'Tanggal Lahir',
       'No HP',
       'Alamat',
-      'Ekskul',
       'Gender',
       'Agama',
     ];
@@ -45,7 +41,6 @@ class AckAddStudentView extends StatelessWidget {
       userCreationReq.tanggalLahir,
       userCreationReq.noHP,
       userCreationReq.address,
-      userCreationReq.ekskul,
       userCreationReq.gender == 1 ? 'Laki-Laki' : 'Perempuan',
       userCreationReq.agama,
     ];
@@ -114,26 +109,12 @@ class AckAddStudentView extends StatelessWidget {
                                 usecase: SignUpUseCase(),
                                 params: userCreationReq,
                               );
-                          if (userCreationReq.ekskul != '') {
-                            context.read<ButtonStateCubit>().execute(
-                                  usecase: AddAnggotaUsecase(),
-                                  params: UpdateAnggotaReq(
-                                    namaEkskul:
-                                        userCreationReq.ekskul!.split(", "),
-                                    anggota: AnggotaEntity(
-                                      nama: userCreationReq.nama!,
-                                      nisn: userCreationReq.nisn!,
-                                    ),
-                                  ),
-                                );
-                          }
-
                           AppNavigator.push(
                             context,
                             SuccesPage(
                               page: LoginView(),
                               title:
-                                  "Akun berhasil dibuat\nTunggu admin menyetujui akun anda untuk bisa digunakan",
+                                  "Akun berhasil dibuat. Tunggu admin menyetujui akun anda untuk bisa digunakan dan jangan lupa update ekskul anda di halaman profile",
                             ),
                           );
                         },

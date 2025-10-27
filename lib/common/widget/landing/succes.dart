@@ -34,14 +34,17 @@ class SuccesPage extends StatelessWidget {
               child: Lottie.asset(AppLotties.success),
             ),
             SizedBox(height: height * 0.05),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 24,
-                color: AppColors.primary,
-                fontWeight: FontWeight.w900,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 24,
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w900,
+                ),
+                textAlign: TextAlign.justify,
               ),
-              textAlign: TextAlign.center,
             ),
             SizedBox(height: height * 0.06),
             GestureDetector(

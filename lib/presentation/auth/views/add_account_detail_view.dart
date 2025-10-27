@@ -14,7 +14,6 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/widget/card/box_gender.dart';
-import '../../../common/widget/select_ekskul/ekskul_selection_view.dart';
 
 class AddStudentDetailView extends StatefulWidget {
   final UserCreationReq userCreationReq;
@@ -31,7 +30,6 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
   final TextEditingController _tanggalC = TextEditingController();
   final TextEditingController _noHPC = TextEditingController();
   final TextEditingController _alamatC = TextEditingController();
-  final TextEditingController _ekskulC = TextEditingController();
 
   @override
   void dispose() {
@@ -42,7 +40,6 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
     _tanggalC.dispose();
     _noHPC.dispose();
     _alamatC.dispose();
-    _ekskulC.dispose();
   }
 
   @override
@@ -89,7 +86,7 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                       controller: _namaC,
                       autocorrect: false,
                       decoration: const InputDecoration(
-                        hintText: 'nama:',
+                        hintText: 'Nama:',
                       ),
                     ),
                     SizedBox(height: height * 0.01),
@@ -284,36 +281,6 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                           hintText: 'Tuliskan alamat disini...'),
                     ),
                     SizedBox(height: height * 0.02),
-                    const Text(
-                      'Masukkan Ekstrakulikuler:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    SizedBox(height: height * 0.01),
-                    TextField(
-                      controller: _ekskulC,
-                      readOnly: true,
-                      maxLines: 4,
-                      onTap: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const EkskulSelectionView(),
-                          ),
-                        );
-                        if (result != null) {
-                          String hasil = result.join(", ");
-                          _ekskulC.text = hasil;
-                        }
-                      },
-                      decoration: const InputDecoration(
-                        hintText: 'Tuliskan ekskul disini...',
-                      ),
-                    ),
-                    SizedBox(height: height * 0.02),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -384,7 +351,7 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                       widget.userCreationReq.tanggalLahir = _tanggalC.text;
                       widget.userCreationReq.noHP = _noHPC.text;
                       widget.userCreationReq.address = _alamatC.text;
-                      widget.userCreationReq.ekskul = _ekskulC.text;
+                      widget.userCreationReq.ekskul = '';
                       widget.userCreationReq.isAdmin = false;
                       widget.userCreationReq.agama =
                           context.read<ReligionCubit>().state;
