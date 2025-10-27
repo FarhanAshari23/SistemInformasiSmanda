@@ -37,7 +37,6 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/get_all_jad
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/accept_student_register_usecase.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_student_by_class.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_all_kelas_usecase.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_student.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_student_by_name.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_students_register.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/search_student_by_nisn.dart';
@@ -199,9 +198,6 @@ Future<void> initializeDependecies() async {
   //students
   sl.registerSingleton<GetStudentsWithKelas>(
     GetStudentsWithKelas(),
-  );
-  sl.registerSingleton<GetStudentUsecase>(
-    GetStudentUsecase(),
   );
   sl.registerSingleton<GetStudentsRegisterUsecase>(
     GetStudentsRegisterUsecase(),

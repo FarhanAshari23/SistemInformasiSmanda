@@ -9,7 +9,6 @@ import '../../../domain/entities/auth/user.dart';
 import '../../models/auth/update_user.dart';
 
 abstract class StudentsFirebaseService {
-  Future<Either> getStudent();
   Future<Either> getStudentsByClass(String kelas);
   Future<Either> acceptStudentAccount(UserEntity student);
   Future<Either> acceptAllStudentAccount();
@@ -34,21 +33,6 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
       return const Left("Error get data, please try again later");
-    }
-  }
-
-  @override
-  Future<Either> getStudent() async {
-    try {
-      var currentUser = FirebaseAuth.instance.currentUser;
-      var userData = await FirebaseFirestore.instance
-          .collection('Students')
-          .doc(currentUser?.uid)
-          .get()
-          .then((value) => value.data());
-      return Right(userData);
-    } catch (e) {
-      return const Left('Please Try Again');
     }
   }
 
@@ -185,13 +169,16 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       final FirebaseAuth secondaryAuth =
           FirebaseAuth.instanceFor(app: secondaryApp);
 
-      await secondaryAuth.createUserWithEmailAndPassword(
+      final userCredential = await secondaryAuth.createUserWithEmailAndPassword(
         email: data['email'],
         password: decryptedPassword,
       );
 
+      final newUid = userCredential.user?.uid;
+
       await users.doc(doc.id).update({
         "is_register": true,
+        "uid": newUid,
         'password': FieldValue.delete(),
         'iv': FieldValue.delete(),
       });
@@ -261,12 +248,15 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
             data['password'],
             iv: iv,
           );
-          await secondaryAuth.createUserWithEmailAndPassword(
+          final userCredential =
+              await secondaryAuth.createUserWithEmailAndPassword(
             email: data['email'],
             password: decryptedPassword,
           );
+          final newUid = userCredential.user?.uid;
           await users.doc(doc.id).update({
             "is_register": true,
+            'uid': newUid,
             'password': FieldValue.delete(),
             'iv': FieldValue.delete(),
           });

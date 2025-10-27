@@ -25,10 +25,15 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   Future<Either> getJadwal() async {
     try {
       var currentUser = FirebaseAuth.instance.currentUser;
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Students');
-      DocumentSnapshot snapshot = await users.doc(currentUser?.uid).get();
-      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('Students')
+          .where('uid', isEqualTo: currentUser?.uid)
+          .limit(1)
+          .get();
+      if (querySnapshot.docs.isEmpty) {
+        return const Left('User not found');
+      }
+      Map<String, dynamic> data = querySnapshot.docs.first.data();
       var returnedData = await FirebaseFirestore.instance
           .collection("Jadwals")
           .where("kelas", isEqualTo: data['kelas'])

@@ -47,13 +47,17 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       FirebaseAuth firebaseAuth = FirebaseAuth.instance;
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-      var user = await firebaseFirestore
+      final query = await firebaseFirestore
           .collection('Students')
-          .doc(firebaseAuth.currentUser?.uid)
+          .where('uid', isEqualTo: firebaseAuth.currentUser?.uid)
+          .limit(1)
           .get();
 
-      bool isAdmin = user.get('isAdmin');
-
+      if (query.docs.isEmpty) {
+        return const Left("User not found");
+      }
+      final userData = query.docs.first.data();
+      final isAdmin = userData['isAdmin'] ?? false;
       return right(isAdmin);
     } catch (e) {
       return left('An Error Occured');
@@ -66,9 +70,10 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       var currentUser = FirebaseAuth.instance.currentUser;
       var userData = await FirebaseFirestore.instance
           .collection('Students')
-          .doc(currentUser?.uid)
+          .where('uid', isEqualTo: currentUser?.uid)
+          .limit(1)
           .get()
-          .then((value) => value.data());
+          .then((value) => value.docs.first.data());
       return Right(userData);
     } catch (e) {
       return left('An Error Occured');
@@ -133,13 +138,17 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       FirebaseAuth firebaseAuth = FirebaseAuth.instance;
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-      var user = await firebaseFirestore
+      final query = await firebaseFirestore
           .collection('Students')
-          .doc(firebaseAuth.currentUser?.uid)
+          .where('uid', isEqualTo: firebaseAuth.currentUser?.uid)
+          .limit(1)
           .get();
 
-      bool isRegister = user.get('is_register');
-
+      if (query.docs.isEmpty) {
+        return const Left("User not found");
+      }
+      final userData = query.docs.first.data();
+      final isRegister = userData['is_register'] ?? false;
       return right(isRegister);
     } catch (e) {
       return left(

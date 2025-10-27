@@ -30,19 +30,6 @@ class StudentsRepositoryImpl extends StudentRepository {
   }
 
   @override
-  Future<Either> getStudent() async {
-    var user = await sl<StudentsFirebaseService>().getStudent();
-    return user.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(UserModel.fromMap(data).toEntity());
-      },
-    );
-  }
-
-  @override
   Future<Either> updateStudent(UpdateUserReq updateUserReq) async {
     return await sl<StudentsFirebaseService>().updateStudent(updateUserReq);
   }
