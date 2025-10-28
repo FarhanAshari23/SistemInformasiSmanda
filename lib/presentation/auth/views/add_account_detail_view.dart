@@ -281,37 +281,33 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                           hintText: 'Tuliskan alamat disini...'),
                     ),
                     SizedBox(height: height * 0.02),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Jenis Kelamin: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                        BlocBuilder<GenderSelectionCubit, int>(
-                          builder: (context, state) {
-                            return Row(
-                              children: [
-                                BoxGender(
-                                  gender: 'Laki-laki',
-                                  context: context,
-                                  genderIndex: 1,
-                                ),
-                                SizedBox(width: width * 0.01),
-                                BoxGender(
-                                  gender: 'Perempuan',
-                                  context: context,
-                                  genderIndex: 2,
-                                )
-                              ],
-                            );
-                          },
-                        ),
-                      ],
+                    const Text(
+                      'Jenis Kelamin: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    SizedBox(height: height * 0.01),
+                    BlocBuilder<GenderSelectionCubit, int>(
+                      builder: (context, state) {
+                        return Row(
+                          children: [
+                            BoxGender(
+                              gender: 'Laki-laki',
+                              context: context,
+                              genderIndex: 1,
+                            ),
+                            SizedBox(width: width * 0.01),
+                            BoxGender(
+                              gender: 'Perempuan',
+                              context: context,
+                              genderIndex: 2,
+                            )
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),

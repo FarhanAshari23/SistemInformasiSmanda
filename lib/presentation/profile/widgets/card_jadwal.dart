@@ -44,6 +44,7 @@ class CardJadwal extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(24),
+                margin: const EdgeInsets.only(right: 4),
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.secondary,
@@ -67,28 +68,28 @@ class CardJadwal extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Image.asset(
-                          AppImages.clock,
-                          width: width * 0.08,
-                          height: height * 0.02,
+                        const Icon(
+                          Icons.person_3,
+                          color: AppColors.primary,
+                          size: 20,
                         ),
                         SizedBox(width: width * 0.01),
                         Text(
-                          jam,
+                          pelaksana,
                           style: const TextStyle(
                             color: AppColors.primary,
                             fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w900,
                           ),
                         ),
                       ],
                     ),
                     Row(
                       children: [
-                        Image.asset(
-                          AppImages.task,
-                          width: width * 0.08,
-                          height: height * 0.02,
+                        const Icon(
+                          Icons.calendar_today,
+                          color: AppColors.primary,
+                          size: 20,
                         ),
                         SizedBox(width: width * 0.01),
                         Text(
@@ -108,11 +109,11 @@ class CardJadwal extends StatelessWidget {
           ),
           Center(
             child: Text(
-              pelaksana,
+              jam,
               style: const TextStyle(
                 color: AppColors.primary,
-                fontSize: 14,
-                fontWeight: FontWeight.w900,
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
             ),
