@@ -1,17 +1,19 @@
 import 'card_schedule_state.dart';
 
 class EditScheduleState {
-  final Map<int, CardScheduleState> cardStates;
+  final Map<String, Map<int, CardScheduleState>> cardStates;
 
   const EditScheduleState({this.cardStates = const {}});
 
-  EditScheduleState copyWith({Map<int, CardScheduleState>? cardStates}) {
+  EditScheduleState copyWith({
+    Map<String, Map<int, CardScheduleState>>? cardStates,
+  }) {
     return EditScheduleState(
       cardStates: cardStates ?? this.cardStates,
     );
   }
 
-  CardScheduleState getCardState(int index) {
-    return cardStates[index] ?? const CardScheduleState();
+  CardScheduleState getCardState(int index, String day) {
+    return cardStates[day]?[index] ?? const CardScheduleState();
   }
 }

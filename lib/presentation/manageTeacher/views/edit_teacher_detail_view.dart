@@ -136,6 +136,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                           context: context,
                           index: index,
                           width: width,
+                          height: height,
                           hinttext: hinttext,
                           initMengajar: _mengajarC.text,
                           initWaliKelas: _waliKelasC.text,
@@ -214,6 +215,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
     required BuildContext context,
     required int index,
     required double width,
+    required double height,
     required List<String> hinttext,
     required List<TextEditingController> controller,
     required String initWaliKelas,
@@ -361,13 +363,17 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Jenis Kelamin:',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+          const Padding(
+            padding: EdgeInsets.all(4),
+            child: Text(
+              'Jenis Kelamin:',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
             ),
           ),
+          SizedBox(height: height * 0.01),
           BlocBuilder<GenderSelectionCubit, int>(
             builder: (context, state) {
               return Row(

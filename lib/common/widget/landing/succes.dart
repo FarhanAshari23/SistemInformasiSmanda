@@ -39,7 +39,7 @@ class SuccesPage extends StatelessWidget {
               child: Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 16,
                   color: AppColors.primary,
                   fontWeight: FontWeight.w900,
                 ),

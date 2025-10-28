@@ -61,7 +61,7 @@ class _CardScheduleState extends State<CardSchedule> {
     final height = MediaQuery.of(context).size.height;
     return BlocBuilder<EditScheduleCubit, EditScheduleState>(
       builder: (context, state) {
-        final cardState = state.getCardState(widget.index);
+        final cardState = state.getCardState(widget.index, widget.day);
         final isEdit = cardState.isAdding;
         final isPickerVisible = cardState.isPickerVisible;
         final selectedStartTimeTemp = cardState.selectedStartTimeTemp;
@@ -201,7 +201,8 @@ class _CardScheduleState extends State<CardSchedule> {
                             setState(() {
                               statePicker = 'start';
                             });
-                            cubitEditSchedule.showPicker(widget.index);
+                            cubitEditSchedule.showPicker(
+                                widget.index, widget.day);
                           },
                         ),
                       ),
@@ -231,7 +232,8 @@ class _CardScheduleState extends State<CardSchedule> {
                             setState(() {
                               statePicker = 'end';
                             });
-                            cubitEditSchedule.showPicker(widget.index);
+                            cubitEditSchedule.showPicker(
+                                widget.index, widget.day);
                           },
                         ),
                       ),
@@ -253,14 +255,15 @@ class _CardScheduleState extends State<CardSchedule> {
                                 _kegiatanC.text,
                                 '${_durasiMulaiC.text} - ${_durasiSelesaiC.text}');
                           }
-                          cubitEditSchedule.toggleEdit(widget.index);
+                          cubitEditSchedule.toggleEdit(
+                              widget.index, widget.day);
                         },
                         child: const Text("Simpan"),
                       ),
                       const SizedBox(width: 8),
                       TextButton(
-                        onPressed: () =>
-                            cubitEditSchedule.toggleEdit(widget.index),
+                        onPressed: () => cubitEditSchedule.toggleEdit(
+                            widget.index, widget.day),
                         child: const Text("Batal"),
                       )
                     ],
@@ -275,9 +278,11 @@ class _CardScheduleState extends State<CardSchedule> {
                     width: width,
                     onDateTimeChanged: (p0) {
                       if (statePicker == 'start') {
-                        cubitEditSchedule.updateStartTempTime(widget.index, p0);
+                        cubitEditSchedule.updateStartTempTime(
+                            widget.index, widget.day, p0);
                       } else {
-                        cubitEditSchedule.updateEndTempTime(widget.index, p0);
+                        cubitEditSchedule.updateEndTempTime(
+                            widget.index, widget.day, p0);
                       }
                     },
                     simpan: () {
@@ -295,9 +300,10 @@ class _CardScheduleState extends State<CardSchedule> {
                           _durasiSelesaiC.text = formattedTime;
                         }
                       }
-                      cubitEditSchedule.hidePicker(widget.index);
+                      cubitEditSchedule.hidePicker(widget.index, widget.day);
                     },
-                    batal: () => cubitEditSchedule.hidePicker(widget.index),
+                    batal: () =>
+                        cubitEditSchedule.hidePicker(widget.index, widget.day),
                   ),
                 ),
             ],
@@ -306,7 +312,7 @@ class _CardScheduleState extends State<CardSchedule> {
         return Padding(
           padding: const EdgeInsets.only(bottom: 4),
           child: CustomInkWell(
-            onTap: () => cubitEditSchedule.toggleEdit(widget.index),
+            onTap: () => cubitEditSchedule.toggleEdit(widget.index, widget.day),
             borderRadius: 12,
             defaultColor: AppColors.primary,
             child: Padding(
