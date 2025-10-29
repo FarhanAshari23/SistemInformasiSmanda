@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 
 class CardJadwal extends StatelessWidget {
