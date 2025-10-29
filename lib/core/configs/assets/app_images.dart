@@ -9,16 +9,6 @@ class AppImages {
   static const String arrowRight = "${basePath}arrow_right.png";
   static const String megaphone = "${basePath}megaphone.png";
   static const String information = "${basePath}information.png";
-  static const String classroom = "${basePath}classroom.jpg";
-  static const String kir = "${basePath}KIR.png";
-  static const String marchingBand = "${basePath}marching_band.png";
-  static const String osis = "${basePath}OSIS.png";
-  static const String paskib = "${basePath}paskib.png";
-  static const String pmr = "${basePath}pmr.png";
-  static const String pramuka = "${basePath}pramuka.png";
-  static const String rohis = "${basePath}rohis.png";
-  static const String clock = "${basePath}clock.png";
-  static const String task = "${basePath}task.png";
   static const String splashLogout = "${basePath}splashLogout.png";
   static const String splashDelete = "${basePath}delete_splash.png";
   static const String verification = "${basePath}verification.png";
@@ -30,6 +20,7 @@ class AppImages {
   static const String staff = "${basePath}staff.png";
   static const String notfound = "${basePath}notfound.png";
   static const String girlStudent = "${basePath}girl-student.png";
+  static const String girlStudentSmile = "${basePath}girl_student_smile.png";
   static const String girlNonStudent = "${basePath}girl-nonmuslim-student.png";
   static const String boyStudent = "${basePath}boy-student.png";
   static const String guruLaki = "${basePath}guru_male.png";

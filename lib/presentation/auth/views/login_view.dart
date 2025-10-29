@@ -17,6 +17,7 @@ import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_ad
 import '../../../data/models/auth/signin_user_req.dart';
 import '../../../domain/usecases/auth/signin.dart';
 import '../../../service_locator.dart';
+import 'forget_password_view.dart';
 //import '../../home/views/home_view.dart';
 
 class LoginView extends StatelessWidget {
@@ -147,7 +148,23 @@ class LoginView extends StatelessWidget {
                       );
                     },
                   ),
-                  SizedBox(height: height * 0.095),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: TextButton(
+                      onPressed: () => AppNavigator.push(
+                        context,
+                        const ForgetPasswordView(),
+                      ),
+                      child: const Text(
+                        'Lupa Password?',
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.primary),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.07),
                   _continueButton(context),
                   SizedBox(height: height * 0.02),
                   Row(
