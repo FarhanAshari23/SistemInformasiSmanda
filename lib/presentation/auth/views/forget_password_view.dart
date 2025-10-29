@@ -10,7 +10,6 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/auth/forgot_password
 import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/button_role.dart';
 
 import '../../../common/helper/app_navigation.dart';
-import '../../../service_locator.dart';
 import 'login_view.dart';
 
 class ForgetPasswordView extends StatefulWidget {
