@@ -10,6 +10,7 @@ import '../../models/auth/user_creation_req.dart';
 abstract class AuthFirebaseService {
   Future<Either> signin(SignInUserReq signinUserReq);
   Future<Either> signUp(UserCreationReq murid);
+  Future<Either> forgotPassword(String email);
   Future<Either> logout();
   Future<bool> isLoggedIn();
   Future<Either> getUser();
@@ -150,6 +151,28 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       final userData = query.docs.first.data();
       final isRegister = userData['is_register'] ?? false;
       return right(isRegister);
+    } catch (e) {
+      return left(
+        'Akun anda belum terdaftar. Jika merasa sudah mendaftar, harap tunggu admin mengkonfirmasi pendaftaran anda.',
+      );
+    }
+  }
+
+  @override
+  Future<Either> forgotPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      return right("Forgot password success");
+    } on FirebaseAuthException catch (e) {
+      String message = '';
+      if (e.code == 'user-not-found') {
+        message = 'Tidak ada akun terdaftar dengan email tersebut.';
+      } else if (e.code == 'invalid-email') {
+        message = 'Format email tidak valid.';
+      } else {
+        message = 'Terjadi kesalahan: ${e.message}';
+      }
+      return Left(message);
     } catch (e) {
       return left(
         'Akun anda belum terdaftar. Jika merasa sudah mendaftar, harap tunggu admin mengkonfirmasi pendaftaran anda.',
