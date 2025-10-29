@@ -5,6 +5,7 @@ import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart'
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/accept_student_register_usecase.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_student.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/update_all_student_account_usecase.dart';
+import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/button_role.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/bloc/get_student_registration_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/bloc/get_student_registration_state.dart';
 
@@ -89,282 +90,291 @@ class RegisterStudentView extends StatelessWidget {
                       );
                     }
                     return Expanded(
-                      child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 16,
-                                  right: 16,
-                                  top: 20,
-                                ),
-                                child: CustomInkWell(
-                                  borderRadius: 12,
-                                  defaultColor: AppColors.inversePrimary,
-                                  onTap: () {
-                                    final parentContext = context;
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return Dialog(
-                                          backgroundColor: AppColors.secondary,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                          ),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              SizedBox(height: height * 0.02),
-                                              const Text(
-                                                'Apakah Anda Yakin Ingin Menyetujui seluruh data siswa?',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w800,
-                                                  color:
-                                                      AppColors.inversePrimary,
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          context
+                              .read<GetStudentRegistrationCubit>()
+                              .displayStudentRegistration();
+                        },
+                        child: ListView.separated(
+                          itemBuilder: (context, index) {
+                            if (index == 0) {
+                              return Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 16,
+                                    right: 16,
+                                    top: 20,
+                                  ),
+                                  child: CustomInkWell(
+                                    borderRadius: 12,
+                                    defaultColor: AppColors.inversePrimary,
+                                    onTap: () {
+                                      final parentContext = context;
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return Dialog(
+                                            backgroundColor:
+                                                AppColors.secondary,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                SizedBox(height: height * 0.02),
+                                                const Text(
+                                                  'Apakah Anda Yakin Ingin Menyetujui seluruh data siswa?',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w800,
+                                                    color: AppColors
+                                                        .inversePrimary,
+                                                  ),
+                                                  textAlign: TextAlign.center,
                                                 ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              SizedBox(height: height * 0.02),
-                                              BlocProvider(
-                                                create: (context) =>
-                                                    ButtonStateCubit(),
-                                                child: BlocListener<
-                                                    ButtonStateCubit,
-                                                    ButtonState>(
-                                                  listener: (context, state) {
-                                                    if (state
-                                                        is ButtonSuccessState) {}
-                                                    if (state
-                                                        is ButtonFailureState) {
-                                                      var snackbar = SnackBar(
-                                                        content: Text(
-                                                            state.errorMessage),
-                                                        behavior:
-                                                            SnackBarBehavior
-                                                                .floating,
-                                                      );
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              snackbar);
-                                                    }
-                                                  },
-                                                  child: Row(
-                                                    children: [
-                                                      Builder(
-                                                        builder: (context) {
-                                                          return Expanded(
-                                                            child: BasicButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                var result =
-                                                                    await sl<
-                                                                            UpdateAllStudentAccountUsecase>()
-                                                                        .call();
-                                                                result.fold(
-                                                                  (error) {
-                                                                    var snackbar =
-                                                                        SnackBar(
-                                                                      content: Text(
-                                                                          "Gagal Mengubah Data: $error"),
-                                                                    );
-                                                                    ScaffoldMessenger.of(
-                                                                            context)
-                                                                        .showSnackBar(
-                                                                            snackbar);
-                                                                  },
-                                                                  (r) {
-                                                                    parentContext
-                                                                        .read<
-                                                                            GetStudentRegistrationCubit>()
-                                                                        .displayStudentRegistration();
-                                                                    var snackbar =
-                                                                        const SnackBar(
-                                                                      content: Text(
-                                                                          "Data Berhasil Diubah"),
-                                                                    );
-                                                                    ScaffoldMessenger.of(
-                                                                            context)
-                                                                        .showSnackBar(
-                                                                            snackbar);
+                                                SizedBox(height: height * 0.02),
+                                                BlocProvider(
+                                                  create: (context) =>
+                                                      ButtonStateCubit(),
+                                                  child: BlocListener<
+                                                      ButtonStateCubit,
+                                                      ButtonState>(
+                                                    listener: (context, state) {
+                                                      if (state
+                                                          is ButtonSuccessState) {}
+                                                      if (state
+                                                          is ButtonFailureState) {
+                                                        var snackbar = SnackBar(
+                                                          content: Text(state
+                                                              .errorMessage),
+                                                          behavior:
+                                                              SnackBarBehavior
+                                                                  .floating,
+                                                        );
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                snackbar);
+                                                      }
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Builder(
+                                                          builder: (context) {
+                                                            return Expanded(
+                                                              child: ButtonRole(
+                                                                onPressed:
+                                                                    () async {
+                                                                  var result =
+                                                                      await sl<
+                                                                              UpdateAllStudentAccountUsecase>()
+                                                                          .call();
+                                                                  result.fold(
+                                                                    (error) {
+                                                                      var snackbar =
+                                                                          SnackBar(
+                                                                        content:
+                                                                            Text("Gagal Mengubah Data: $error"),
+                                                                      );
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                              snackbar);
+                                                                    },
+                                                                    (r) {
+                                                                      parentContext
+                                                                          .read<
+                                                                              GetStudentRegistrationCubit>()
+                                                                          .displayStudentRegistration();
+                                                                      var snackbar =
+                                                                          const SnackBar(
+                                                                        content:
+                                                                            Text("Data Berhasil Diubah"),
+                                                                      );
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                              snackbar);
 
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                );
-                                                              },
-                                                              title: 'Setuju',
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                      Expanded(
-                                                        child: BasicButton(
-                                                          onPressed: () =>
-                                                              Navigator.pop(
-                                                                  context),
-                                                          title: "Batal",
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  );
+                                                                },
+                                                                title: 'Setuju',
+                                                              ),
+                                                            );
+                                                          },
                                                         ),
-                                                      ),
-                                                    ],
+                                                        Expanded(
+                                                          child: BasicButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context),
+                                                            title: "Batal",
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(16),
-                                    child: Text(
-                                      'Setujui semua',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.primary,
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(16),
+                                      child: Text(
+                                        'Setujui semua',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.primary,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          } else {
-                            final dataIndex = index - 1;
-                            final students = state.students[dataIndex];
-                            return Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 16,
-                              ),
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: AppColors.secondary,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        students.nama ?? '',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          color: AppColors.inversePrimary,
-                                        ),
-                                      ),
-                                      Text(
-                                        students.nisn ?? '',
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColors.inversePrimary,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      CustomInkWell(
-                                        borderRadius: 999,
-                                        defaultColor: AppColors.primary,
-                                        onTap: () async {
-                                          var result = await sl<
-                                                  UpdateStudentRegisterUsecase>()
-                                              .call(params: students);
-                                          result.fold(
-                                            (error) {
-                                              var snackbar = SnackBar(
-                                                content: Text(
-                                                    "Gagal Mengubah Data: $error"),
-                                              );
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackbar);
-                                            },
-                                            (r) {
-                                              context
-                                                  .read<
-                                                      GetStudentRegistrationCubit>()
-                                                  .displayStudentRegistration();
-                                              var snackbar = const SnackBar(
-                                                content: Text(
-                                                    "Data Berhasil Diubah"),
-                                              );
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackbar);
-                                            },
-                                          );
-                                        },
-                                        child: const SizedBox(
-                                          width: 32,
-                                          height: 32,
-                                          child: Icon(
-                                            Icons.check,
-                                            color: Colors.white,
+                              );
+                            } else {
+                              final dataIndex = index - 1;
+                              final students = state.students[dataIndex];
+                              return Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 16,
+                                ),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: AppColors.secondary,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          students.nama ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.inversePrimary,
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      CustomInkWell(
-                                        borderRadius: 999,
-                                        defaultColor: Colors.red,
-                                        onTap: () async {
-                                          var result =
-                                              await sl<DeleteStudentUsecase>()
-                                                  .call(params: students.nisn);
-                                          result.fold(
-                                            (error) {
-                                              var snackbar = const SnackBar(
-                                                content:
-                                                    Text("Gagal Mengubah Data"),
-                                              );
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackbar);
-                                            },
-                                            (r) {
-                                              context
-                                                  .read<
-                                                      GetStudentRegistrationCubit>()
-                                                  .displayStudentRegistration();
-                                              var snackbar = const SnackBar(
-                                                content: Text(
-                                                    "Akun berhasil dihapus"),
-                                              );
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackbar);
-                                            },
-                                          );
-                                        },
-                                        child: const SizedBox(
-                                          width: 32,
-                                          height: 32,
-                                          child: Icon(
-                                            Icons.delete,
-                                            color: Colors.white,
+                                        Text(
+                                          students.nisn ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500,
+                                            color: AppColors.inversePrimary,
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: height * 0.01),
-                        itemCount: state.students.length + 1,
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        CustomInkWell(
+                                          borderRadius: 999,
+                                          defaultColor: AppColors.primary,
+                                          onTap: () async {
+                                            var result = await sl<
+                                                    UpdateStudentRegisterUsecase>()
+                                                .call(params: students);
+                                            result.fold(
+                                              (error) {
+                                                var snackbar = SnackBar(
+                                                  content: Text(
+                                                      "Gagal Mengubah Data: $error"),
+                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackbar);
+                                              },
+                                              (r) {
+                                                context
+                                                    .read<
+                                                        GetStudentRegistrationCubit>()
+                                                    .displayStudentRegistration();
+                                                var snackbar = const SnackBar(
+                                                  content: Text(
+                                                      "Data Berhasil Diubah"),
+                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackbar);
+                                              },
+                                            );
+                                          },
+                                          child: const SizedBox(
+                                            width: 32,
+                                            height: 32,
+                                            child: Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        CustomInkWell(
+                                          borderRadius: 999,
+                                          defaultColor: Colors.red,
+                                          onTap: () async {
+                                            var result =
+                                                await sl<DeleteStudentUsecase>()
+                                                    .call(
+                                                        params: students.nisn);
+                                            result.fold(
+                                              (error) {
+                                                var snackbar = const SnackBar(
+                                                  content: Text(
+                                                      "Gagal Mengubah Data"),
+                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackbar);
+                                              },
+                                              (r) {
+                                                context
+                                                    .read<
+                                                        GetStudentRegistrationCubit>()
+                                                    .displayStudentRegistration();
+                                                var snackbar = const SnackBar(
+                                                  content: Text(
+                                                      "Akun berhasil dihapus"),
+                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackbar);
+                                              },
+                                            );
+                                          },
+                                          child: const SizedBox(
+                                            width: 32,
+                                            height: 32,
+                                            child: Icon(
+                                              Icons.delete,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          },
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: height * 0.01),
+                          itemCount: state.students.length + 1,
+                        ),
                       ),
                     );
                   }

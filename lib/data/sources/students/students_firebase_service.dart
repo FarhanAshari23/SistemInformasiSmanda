@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:intl/intl.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
 import '../../../domain/entities/auth/user.dart';
@@ -99,12 +98,10 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   @override
   Future<Either> getStudentsByname(String name) async {
     try {
-      String nameCapital = toBeginningOfSentenceCase(name);
       var returnedData = await FirebaseFirestore.instance
           .collection("Students")
-          .where("nama", isGreaterThanOrEqualTo: nameCapital)
-          .where('isAdmin', isEqualTo: false)
-          .where('nama', isLessThan: '${nameCapital}z')
+          .where("isAdmin", isEqualTo: false)
+          .where("keywords", arrayContains: name)
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
