@@ -57,6 +57,16 @@ class AckAddStudentView extends StatelessWidget {
               );
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
+            if (state is ButtonSuccessState) {
+              AppNavigator.push(
+                context,
+                SuccesPage(
+                  page: LoginView(),
+                  title:
+                      "Akun berhasil dibuat. Tunggu admin menyetujui akun anda untuk bisa digunakan dan jangan lupa update ekskul anda di halaman profile",
+                ),
+              );
+            }
           },
           child: SafeArea(
             child: SingleChildScrollView(
@@ -109,14 +119,6 @@ class AckAddStudentView extends StatelessWidget {
                                 usecase: SignUpUseCase(),
                                 params: userCreationReq,
                               );
-                          AppNavigator.push(
-                            context,
-                            SuccesPage(
-                              page: LoginView(),
-                              title:
-                                  "Akun berhasil dibuat. Tunggu admin menyetujui akun anda untuk bisa digunakan dan jangan lupa update ekskul anda di halaman profile",
-                            ),
-                          );
                         },
                         title: 'Simpan',
                       );

@@ -16,9 +16,11 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/schedule/create_class_usecase.dart';
 import '../../../domain/usecases/schedule/create_schedule_usecase.dart';
+import '../../../service_locator.dart';
 import '../bloc/add_schedule_cubit.dart';
 import '../bloc/class_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
+import '../bloc/edit_schedule_cubit.dart';
 
 class AddScheduleView extends StatefulWidget {
   const AddScheduleView({super.key});
@@ -58,15 +60,43 @@ class _AddScheduleViewState extends State<AddScheduleView> {
         BlocProvider(
           create: (context) => AddScheduleCubit(),
         ),
+        BlocProvider(
+          create: (context) => EditScheduleCubit(),
+        ),
       ],
       child: BlocListener<ButtonStateCubit, ButtonState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is ButtonFailureState) {
             var snackbar = SnackBar(
               content: Text(state.errorMessage),
               behavior: SnackBarBehavior.floating,
             );
             ScaffoldMessenger.of(context).showSnackBar(snackbar);
+          }
+          if (state is ButtonSuccessState) {
+            final cubit = context.read<CreateScheduleCubit>();
+            var createSchedule = await sl<CreateScheduleUsecase>().call(
+              params: ScheduleEntity(
+                kelas: _kelasC.text,
+                hari: cubit.state.schedules,
+              ),
+            );
+            return createSchedule.fold(
+              (l) {
+                var snackbar = SnackBar(content: Text(l));
+                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              },
+              (r) {
+                var snackbar = SnackBar(
+                  content: Text(
+                    'Berhasil menambahkan jadwal untuk kelas ${_kelasC.text}',
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                Navigator.pop(context);
+              },
+            );
           }
         },
         child: Scaffold(
@@ -188,31 +218,34 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                   },
                 ),
                 Builder(builder: (context) {
+                  final cubit = context.read<CreateScheduleCubit>();
                   return BasicButton(
-                    onPressed: () async {
-                      final cubit = context.read<CreateScheduleCubit>();
-                      await context.read<ButtonStateCubit>().execute(
-                            usecase: CreateClassUsecase(),
-                            params: KelasEntity(
-                              kelas: _kelasC.text,
-                              order: 0,
-                              degree: 0,
-                            ),
-                          );
-                      await context.read<ButtonStateCubit>().execute(
-                          usecase: CreateScheduleUsecase(),
-                          params: ScheduleEntity(
-                            kelas: _kelasC.text,
-                            hari: cubit.state.schedules,
-                          ));
-                      var snackbar = SnackBar(
-                        content: Text(
-                          'Berhasil menambahkan jadwal untuk kelas ${_kelasC.text}',
-                        ),
-                        behavior: SnackBarBehavior.floating,
+                    onPressed: () {
+                      final allEmpty = cubit.state.schedules.values.every(
+                        (list) => list.isEmpty,
                       );
-                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                      Navigator.pop(context);
+                      if (allEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              'Tolong isi semua card jadwal yang sudah tersedia',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        context.read<ButtonStateCubit>().execute(
+                              usecase: CreateClassUsecase(),
+                              params: KelasEntity(
+                                kelas: _kelasC.text,
+                                order: 0,
+                                degree: 0,
+                              ),
+                            );
+                      }
                     },
                     title: 'Tambah Jadwal',
                   );

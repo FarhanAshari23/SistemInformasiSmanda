@@ -51,6 +51,15 @@ class AckEkskulView extends StatelessWidget {
               );
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
+            if (state is ButtonSuccessState) {
+              AppNavigator.push(
+                context,
+                const SuccesPage(
+                  page: HomeViewAdmin(),
+                  title: 'Data Ekskul\nBerhasil Ditambahkan',
+                ),
+              );
+            }
           },
           child: SafeArea(
             child: Column(
@@ -196,14 +205,6 @@ class AckEkskulView extends StatelessWidget {
                                         usecase: CreateEkskulUseCase(),
                                         params: ekskulCreateReq,
                                       );
-                                  AppNavigator.push(
-                                    context,
-                                    const SuccesPage(
-                                      page: HomeViewAdmin(),
-                                      title:
-                                          'Data Ekskul\nBerhasil Ditambahkan',
-                                    ),
-                                  );
                                 },
                                 title: 'Simpan',
                               );

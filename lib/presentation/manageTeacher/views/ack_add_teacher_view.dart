@@ -54,6 +54,15 @@ class AckAddTeacherView extends StatelessWidget {
               );
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
+            if (state is ButtonSuccessState) {
+              AppNavigator.push(
+                context,
+                const SuccesPage(
+                  page: HomeViewAdmin(),
+                  title: "Data Guru Berhasil Ditambahkan",
+                ),
+              );
+            }
           },
           child: SafeArea(
             child: Column(
@@ -106,13 +115,6 @@ class AckAddTeacherView extends StatelessWidget {
                               usecase: CreateTeacherUseCase(),
                               params: teacherCreationReq,
                             );
-                        AppNavigator.push(
-                          context,
-                          const SuccesPage(
-                            page: HomeViewAdmin(),
-                            title: "Data Guru Berhasil Ditambahkan",
-                          ),
-                        );
                       },
                       title: 'Simpan',
                     );
