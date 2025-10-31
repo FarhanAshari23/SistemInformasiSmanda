@@ -241,30 +241,57 @@ class _CardScheduleState extends State<CardSchedule> {
                   ),
                   const SizedBox(height: 8),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_kegiatanC.text.isNotEmpty &&
-                              _durasiMulaiC.text.isNotEmpty &&
-                              _durasiMulaiC.text.isNotEmpty &&
-                              _pelaksanaC.text.isNotEmpty) {
-                            cubitCreateSchedule.editActivity(
-                                widget.day,
-                                widget.index,
-                                _pelaksanaC.text,
-                                _kegiatanC.text,
-                                '${_durasiMulaiC.text} - ${_durasiSelesaiC.text}');
-                          }
-                          cubitEditSchedule.toggleEdit(
-                              widget.index, widget.day);
-                        },
-                        child: const Text("Simpan"),
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_kegiatanC.text.isNotEmpty &&
+                                  _durasiMulaiC.text.isNotEmpty &&
+                                  _durasiMulaiC.text.isNotEmpty &&
+                                  _pelaksanaC.text.isNotEmpty) {
+                                cubitCreateSchedule.editActivity(
+                                    widget.day,
+                                    widget.index,
+                                    _pelaksanaC.text,
+                                    _kegiatanC.text,
+                                    '${_durasiMulaiC.text} - ${_durasiSelesaiC.text}');
+                              }
+                              cubitEditSchedule.toggleEdit(
+                                  widget.index, widget.day);
+                            },
+                            child: const Text("Simpan"),
+                          ),
+                          const SizedBox(width: 8),
+                          TextButton(
+                            onPressed: () => cubitEditSchedule.toggleEdit(
+                                widget.index, widget.day),
+                            child: const Text("Batal"),
+                          )
+                        ],
                       ),
-                      const SizedBox(width: 8),
-                      TextButton(
-                        onPressed: () => cubitEditSchedule.toggleEdit(
-                            widget.index, widget.day),
-                        child: const Text("Batal"),
+                      CustomInkWell(
+                        borderRadius: 12,
+                        defaultColor: Colors.red,
+                        onTap: () => cubitCreateSchedule.deleteActivity(
+                            widget.day, widget.index),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Hapus',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w900,
+                                color: AppColors.inversePrimary,
+                              ),
+                            ),
+                          ),
+                        ),
                       )
                     ],
                   )

@@ -228,7 +228,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                               _durasiMulaiC.text.isNotEmpty &&
                               _durasiMulaiC.text.isNotEmpty &&
                               _pelaksanaC.text.isNotEmpty) {
-                            cubitCreateSchedule.addSchedule(
+                            cubitCreateSchedule.addActivity(
                                 widget.day,
                                 _pelaksanaC.text,
                                 _kegiatanC.text,
