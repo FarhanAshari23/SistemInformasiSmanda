@@ -13,11 +13,12 @@ class EkskulScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: BlocProvider(
         create: (context) => EkskulCubit()..displayEkskul(),
         child: Padding(
-          padding: const EdgeInsets.only(top: 8),
+          padding: EdgeInsets.only(top: height * 0.07),
           child: BlocBuilder<EkskulCubit, EkskulState>(
             builder: (context, state) {
               if (state is EkskulLoading) {
@@ -26,27 +27,32 @@ class EkskulScreen extends StatelessWidget {
                 );
               }
               if (state is EkskulLoaded) {
-                return Expanded(
-                  child: StackedListView(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    itemExtent: width * 0.475,
-                    itemCount: state.ekskul.length,
-                    scrollDirection: Axis.horizontal,
-                    builder: (context, index) {
-                      return GestureDetector(
-                        onTap: () => AppNavigator.push(
-                          context,
-                          EkskulDetail(
-                            ekskul: state.ekskul[index],
-                          ),
+                return StackedListView(
+                  padding: EdgeInsets.only(
+                    bottom: height * 0.15,
+                  ),
+                  itemExtent: width * 0.475,
+                  itemCount: state.ekskul.length,
+                  scrollDirection: Axis.horizontal,
+                  builder: (context, index) {
+                    return GestureDetector(
+                      onTap: () => AppNavigator.push(
+                        context,
+                        EkskulDetail(
+                          ekskul: state.ekskul[index],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: index == 0 ? 0 : 4,
+                          right: index == state.ekskul.length - 1 ? 0 : 4,
                         ),
                         child: CardEkskul(
-                          key: ValueKey(state.ekskul[index].namaEkskul),
-                          title: state.ekskul[index].namaEkskul,
+                          ekskul: state.ekskul[index],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 );
               }
               return Container();

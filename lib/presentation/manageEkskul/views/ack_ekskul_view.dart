@@ -56,7 +56,7 @@ class AckEkskulView extends StatelessWidget {
                 context,
                 const SuccesPage(
                   page: HomeViewAdmin(),
-                  title: 'Data Ekskul\nBerhasil Ditambahkan',
+                  title: 'Data Ekskul Berhasil Ditambahkan',
                 ),
               );
             }
