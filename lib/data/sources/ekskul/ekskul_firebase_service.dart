@@ -12,7 +12,7 @@ abstract class EkskulFirebaseService {
   Future<Either> createEkskul(EkskulEntity ekskulCreationReq);
   Future<Either> getEkskul();
   Future<Either> updateEkskul(EkskulEntity ekskulUpdateReq);
-  Future<Either> deleteEkskul(String nameEkskul);
+  Future<Either> deleteEkskul(EkskulEntity ekskul);
   Future<Either> updateAnggota(UpdateAnggotaReq anggotaReq);
   Future<Either> addAnggota(UpdateAnggotaReq anggotaReq);
 }
@@ -92,22 +92,6 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
   }
 
   @override
-  Future<Either> deleteEkskul(String nameEkskul) async {
-    try {
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Ekskuls');
-      QuerySnapshot querySnapshot =
-          await users.where('nama_ekskul', isEqualTo: nameEkskul).get();
-      for (var doc in querySnapshot.docs) {
-        await doc.reference.delete();
-      }
-      return const Right('Delete Data Ekskul Success');
-    } catch (e) {
-      return const Left('Something Wrong');
-    }
-  }
-
-  @override
   Future<Either> updateEkskul(EkskulEntity ekskulUpdateReq) async {
     try {
       CollectionReference users =
@@ -133,6 +117,22 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
         return right('Update Data Ekskul Success');
       }
       return const Right('Update Data Ekskul Success');
+    } catch (e) {
+      return const Left('Something Wrong');
+    }
+  }
+
+  @override
+  Future<Either> deleteEkskul(EkskulEntity ekskul) async {
+    try {
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Ekskuls');
+      QuerySnapshot querySnapshot =
+          await users.where('nama_ekskul', isEqualTo: ekskul.namaEkskul).get();
+      for (var doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
+      return const Right('Delete Data Ekskul Success');
     } catch (e) {
       return const Left('Something Wrong');
     }

@@ -31,8 +31,8 @@ class EkskulRepositoryImpl extends EkskulRepository {
   }
 
   @override
-  Future<Either> deleteEkskul(String nameEkskul) async {
-    return await sl<EkskulFirebaseService>().deleteEkskul(nameEkskul);
+  Future<Either> deleteEkskul(EkskulEntity ekskul) async {
+    return await sl<EkskulFirebaseService>().deleteEkskul(ekskul);
   }
 
   @override

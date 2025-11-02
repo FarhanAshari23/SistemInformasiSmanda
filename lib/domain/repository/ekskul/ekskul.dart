@@ -9,5 +9,5 @@ abstract class EkskulRepository {
   Future<Either> updateAnggota(UpdateAnggotaReq anggotaReq);
   Future<Either> getEkskul();
   Future<Either> updateEkskul(EkskulEntity ekskulUpdateReq);
-  Future<Either> deleteEkskul(String nameEkskul);
+  Future<Either> deleteEkskul(EkskulEntity ekskul);
 }

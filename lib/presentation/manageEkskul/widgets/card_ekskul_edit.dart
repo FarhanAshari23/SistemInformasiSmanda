@@ -109,7 +109,7 @@ class CardEkskulEdit extends StatelessWidget {
                               BasicButton(
                                 onPressed: () async {
                                   var delete = await sl<DeleteEkskulUsecase>()
-                                      .call(params: ekskul.namaEkskul);
+                                      .call(params: ekskul);
                                   return delete.fold(
                                     (error) {
                                       var snackbar = const SnackBar(
