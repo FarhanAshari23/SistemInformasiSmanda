@@ -49,4 +49,9 @@ class EkskulRepositoryImpl extends EkskulRepository {
   Future<Either> updateAnggota(UpdateAnggotaReq anggotaReq) async {
     return await sl<EkskulFirebaseService>().updateAnggota(anggotaReq);
   }
+
+  @override
+  Future<Either> deleteAnggota(UpdateAnggotaReq anggotaReq) async {
+    return await sl<EkskulFirebaseService>().deleteAnggota(anggotaReq);
+  }
 }

@@ -40,6 +40,7 @@ class ButtonRole extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: height * 0.085,
+      margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
       ),
@@ -70,20 +71,21 @@ class ButtonRole extends StatelessWidget {
 
   Widget _initial(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return CustomInkWell(
-      onTap: onPressed,
-      borderRadius: 12,
-      defaultColor: AppColors.primary,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: height * 0.025,
-        ),
-        child: Center(
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: AppColors.inversePrimary,
-              fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: CustomInkWell(
+        onTap: onPressed,
+        borderRadius: 12,
+        defaultColor: AppColors.primary,
+        child: SizedBox(
+          height: height * 0.085,
+          child: Center(
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: AppColors.inversePrimary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

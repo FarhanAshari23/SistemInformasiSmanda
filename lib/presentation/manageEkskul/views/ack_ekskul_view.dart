@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/landing/succes.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
@@ -15,6 +14,7 @@ import 'package:new_sistem_informasi_smanda/common/widget/card/card_anggota_eksk
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../auth/widgets/button_role.dart';
 
 class AckEkskulView extends StatelessWidget {
   final EkskulEntity ekskulCreateReq;
@@ -199,7 +199,7 @@ class AckEkskulView extends StatelessWidget {
                           ),
                           Center(
                             child: Builder(builder: (context) {
-                              return BasicButton(
+                              return ButtonRole(
                                 onPressed: () {
                                   context.read<ButtonStateCubit>().execute(
                                         usecase: CreateEkskulUseCase(),

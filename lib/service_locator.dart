@@ -56,10 +56,11 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_kepala_s
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_teacher_by_name.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_waka.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teacher.dart';
+import 'domain/usecases/teacher/update_teacher.dart';
 
 import 'domain/usecases/auth/forgot_password_usecase.dart';
 import 'domain/usecases/ekskul/add_anggota_usecase.dart';
+import 'domain/usecases/ekskul/delete_anggota_usecase.dart';
 import 'domain/usecases/ekskul/update_anggota_usecase.dart';
 import 'domain/usecases/news/create_news.dart';
 import 'domain/usecases/schedule/create_class_usecase.dart';
@@ -251,6 +252,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<UpdateAnggotaUsecase>(
     UpdateAnggotaUsecase(),
+  );
+  sl.registerSingleton<DeleteAnggotaUsecase>(
+    DeleteAnggotaUsecase(),
   );
 
   //attendances

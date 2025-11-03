@@ -72,6 +72,7 @@ class CardEkskulEdit extends StatelessWidget {
                     ),
                   );
                 } else if (value == 'Hapus') {
+                  final outerContext = context;
                   showDialog(
                     context: context,
                     builder: (context) {
@@ -106,31 +107,37 @@ class CardEkskulEdit extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               SizedBox(height: height * 0.02),
-                              BasicButton(
-                                onPressed: () async {
-                                  var delete = await sl<DeleteEkskulUsecase>()
-                                      .call(params: ekskul);
-                                  return delete.fold(
-                                    (error) {
-                                      var snackbar = const SnackBar(
-                                        content: Text(
-                                            "Gagal Menghapus Ekskul, Coba Lagi"),
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackbar);
-                                    },
-                                    (r) {
-                                      var snackbar = const SnackBar(
-                                        content: Text("Data Berhasil Dihapus"),
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackbar);
-                                      Navigator.pop(context);
-                                    },
-                                  );
-                                },
-                                title: 'Hapus',
-                              ),
+                              Builder(builder: (context) {
+                                return BasicButton(
+                                  onPressed: () async {
+                                    var delete = await sl<DeleteEkskulUsecase>()
+                                        .call(params: ekskul);
+                                    return delete.fold(
+                                      (error) {
+                                        var snackbar = const SnackBar(
+                                          content: Text(
+                                              "Gagal Menghapus Ekskul, Coba Lagi"),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackbar);
+                                      },
+                                      (r) {
+                                        var snackbar = const SnackBar(
+                                          content:
+                                              Text("Data Berhasil Dihapus"),
+                                        );
+                                        outerContext
+                                            .read<EkskulCubit>()
+                                            .displayEkskul();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackbar);
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  },
+                                  title: 'Hapus',
+                                );
+                              }),
                             ],
                           ),
                         ),

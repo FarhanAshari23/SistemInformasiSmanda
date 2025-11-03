@@ -3,16 +3,22 @@ import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/auth/user.dart';
 
 class CardAnggota extends StatelessWidget {
   final String title;
   final String desc;
+  final UserEntity? murid;
+  final TeacherEntity? pembina;
   final Function() onTap;
   const CardAnggota({
     super.key,
     required this.title,
     required this.desc,
     required this.onTap,
+    this.murid,
+    this.pembina,
   });
 
   @override
@@ -32,9 +38,19 @@ class CardAnggota extends StatelessWidget {
             Container(
               width: 80,
               height: 80,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(AppImages.tendikLaki),
+                  image: AssetImage(
+                    murid != null
+                        ? murid!.gender == 1
+                            ? AppImages.boyStudent
+                            : murid!.agama == "Islam"
+                                ? AppImages.girlStudent
+                                : AppImages.girlNonStudent
+                        : pembina!.gender == 1
+                            ? AppImages.guruLaki
+                            : AppImages.guruPerempuan,
+                  ),
                   fit: BoxFit.fill,
                 ),
               ),
