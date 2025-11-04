@@ -237,6 +237,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
                         context.read<ButtonStateCubit>().execute(
                               usecase: UpdateScheduleUsecase(),
                               params: ScheduleEntity(
+                                oldNamaKelas: widget.kelas,
                                 kelas: _kelasC.text,
                                 hari: cubit.state.schedules,
                               ),

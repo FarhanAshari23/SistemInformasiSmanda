@@ -141,21 +141,34 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   @override
   Future<Either> updateJadwal(ScheduleEntity scheduleReq) async {
     try {
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Jadwals');
-      QuerySnapshot querySnapshot =
-          await users.where('kelas', isEqualTo: scheduleReq.kelas).get();
-      if (querySnapshot.docs.isNotEmpty) {
-        String docId = querySnapshot.docs[0].id;
-        await users.doc(docId).update({
-          "kelas": scheduleReq.kelas,
+      final firestore = FirebaseFirestore.instance;
+      final kelasSnapshot = await firestore
+          .collection('Kelas')
+          .where('class', isEqualTo: scheduleReq.oldNamaKelas)
+          .get();
+      if (kelasSnapshot.docs.isNotEmpty) {
+        final docId = kelasSnapshot.docs.first.id;
+        await firestore.collection('Kelas').doc(docId).update({
+          'class': scheduleReq.kelas,
+        });
+      }
+      final jadwalSnapshot = await firestore
+          .collection('Jadwals')
+          .where('kelas', isEqualTo: scheduleReq.oldNamaKelas)
+          .get();
+      if (jadwalSnapshot.docs.isNotEmpty) {
+        final docId = jadwalSnapshot.docs.first.id;
+        await firestore.collection('Jadwals').doc(docId).update({
+          'kelas': scheduleReq.kelas,
           ...scheduleReq.hari.map(
             (key, value) => MapEntry(key, value.map((e) => e.toMap()).toList()),
-          )
+          ),
         });
-        return right('Update Data Schedule Success');
       }
-      return const Right('Update Data Schedule Success');
+      if (kelasSnapshot.docs.isEmpty && jadwalSnapshot.docs.isEmpty) {
+        return const Right('No matching data found');
+      }
+      return const Right('Update success');
     } catch (e) {
       return Left(e.toString());
     }
