@@ -29,18 +29,8 @@ class CardEkskulEdit extends StatelessWidget {
       child: Stack(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                height: height * 0.19,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(AppImages.splashEkskul),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-              SizedBox(height: height * 0.01),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -53,6 +43,73 @@ class CardEkskulEdit extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  crossAxisAlignment: ekskul.pembina.nama.length > 25
+                      ? CrossAxisAlignment.start
+                      : CrossAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.manage_accounts,
+                      color: AppColors.inversePrimary,
+                    ),
+                    const SizedBox(width: 3),
+                    const Text(
+                      ': ',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.inversePrimary,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                    Expanded(
+                      child: Text(
+                        ekskul.pembina.nama,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.inversePrimary,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.groups_2,
+                      color: AppColors.inversePrimary,
+                    ),
+                    const SizedBox(width: 3),
+                    const Text(
+                      ': ',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.inversePrimary,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                    Expanded(
+                      child: Text(
+                        '${ekskul.anggota.length} anggota',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.inversePrimary,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
           Positioned(

@@ -79,10 +79,10 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
     double height = MediaQuery.of(context).size.height;
     List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
     List<UserEntity> roleEntity = [
-      widget.ekskul.ketua,
-      widget.ekskul.wakilKetua,
-      widget.ekskul.sekretaris,
-      widget.ekskul.bendahara,
+      selectedKetua,
+      selectedWakil,
+      selectedSekretaris,
+      selectedBendahara,
     ];
     List<TextEditingController> nama = [
       _nameKetuaC,
@@ -289,7 +289,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                       ),
                       SizedBox(height: height * 0.02),
                       CardAnggota(
-                        pembina: widget.ekskul.pembina,
+                        pembina: selectedPembina,
                         title: _namePembinaC.text,
                         desc: "Pembina",
                         onTap: () async {
