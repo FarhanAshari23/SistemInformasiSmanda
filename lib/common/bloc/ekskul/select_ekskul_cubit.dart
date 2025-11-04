@@ -14,4 +14,8 @@ class SelectEkskulCubit extends Cubit<List<String>> {
 
     emit(current);
   }
+
+  void setInitialSelected(List<String> selectedEkskul) {
+    emit(List<String>.from(selectedEkskul));
+  }
 }

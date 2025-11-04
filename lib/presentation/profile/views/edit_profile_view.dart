@@ -13,7 +13,7 @@ import '../../../common/bloc/religion/religion_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/card/box_gender.dart';
-import '../../../common/widget/select_ekskul/ekskul_selection_view.dart';
+import 'ekskul_selection_view.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../data/models/auth/update_user.dart';
 import '../../../domain/usecases/students/update_user.dart';
@@ -299,10 +299,16 @@ class _EditProfileViewState extends State<EditProfileView> {
                       readOnly: true,
                       maxLines: 4,
                       onTap: () async {
+                        final existingEkskul = _ekskulC.text
+                            .split(',')
+                            .map((e) => e.trim())
+                            .toList();
                         final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const EkskulSelectionView(),
+                            builder: (context) => EkskulSelectionView(
+                              initialEkskul: existingEkskul,
+                            ),
                           ),
                         );
                         if (result != null) {
