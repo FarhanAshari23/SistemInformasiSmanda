@@ -80,7 +80,9 @@ class KelasDetailView extends StatelessWidget {
                             return state.students.isNotEmpty
                                 ? ListView.separated(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
                                     itemBuilder: (context, index) {
                                       return CardUser(
                                         onTap: () => AppNavigator.push(

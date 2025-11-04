@@ -16,10 +16,13 @@ class CardDetailSiswa extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
+    final mediaQueryHeight = MediaQuery.of(context).size.height;
+    final bodyHeight = mediaQueryHeight -
+        MediaQuery.of(context).padding.top -
+        MediaQuery.of(context).padding.bottom;
 
     return Padding(
-      padding: EdgeInsets.only(top: height * 0.0375),
+      padding: EdgeInsets.only(top: bodyHeight * 0.02),
       child: Stack(
         alignment: AlignmentDirectional.topCenter,
         clipBehavior: Clip.none,
@@ -44,7 +47,7 @@ class CardDetailSiswa extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: height * 0.23,
+            top: -(bodyHeight * 0.0125),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
