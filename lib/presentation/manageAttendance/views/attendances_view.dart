@@ -55,7 +55,9 @@ class AttendancesView extends StatelessWidget {
                 child: Column(
                   children: [
                     const BasicAppbar(
-                        isBackViewed: true, isProfileViewed: false),
+                      isBackViewed: true,
+                      isProfileViewed: false,
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: kelas == 10
@@ -97,8 +99,9 @@ class AttendancesView extends StatelessWidget {
                                 );
                         }
                         if (state is AttendanceStudentFailure) {
-                          return const Center(
-                            child: Text('Something wrongs'),
+                          return Center(
+                            child:
+                                Text('Something wrongs: ${state.errorMessage}'),
                           );
                         }
                         return Container();

@@ -93,7 +93,9 @@ class MuridDetail extends StatelessWidget {
                                 image: AssetImage(
                                   user.gender == 1
                                       ? AppImages.boyStudent
-                                      : AppImages.girlStudent,
+                                      : user.agama == "Islam"
+                                          ? AppImages.girlStudent
+                                          : AppImages.girlNonStudent,
                                 ),
                                 fit: BoxFit.fill,
                               ),

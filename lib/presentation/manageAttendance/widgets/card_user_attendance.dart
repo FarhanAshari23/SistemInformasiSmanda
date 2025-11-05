@@ -60,7 +60,9 @@ class CardUserAttendance extends StatelessWidget {
                       image: AssetImage(
                         student.gender == 1
                             ? AppImages.boyStudent
-                            : AppImages.girlStudent,
+                            : student.agama == "Islam"
+                                ? AppImages.girlStudent
+                                : AppImages.girlNonStudent,
                       ),
                       fit: BoxFit.fill,
                     ),
