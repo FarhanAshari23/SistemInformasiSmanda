@@ -83,6 +83,21 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                             ),
                           ),
                           menuHeight: 200,
+                          menuStyle: MenuStyle(
+                            padding: WidgetStateProperty.all(
+                              const EdgeInsets.symmetric(horizontal: 8),
+                            ),
+                            alignment: Alignment.bottomLeft,
+                            visualDensity: VisualDensity.compact,
+                            maximumSize: WidgetStateProperty.all(
+                              Size(width * 0.92, 200),
+                            ),
+                            shape: WidgetStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
                           hintText: 'Pelaksana:',
                           dropdownMenuEntries: state.teacher.map((doc) {
                             final nama = doc.nama;
@@ -119,12 +134,18 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                         final entries = activities.isEmpty
                             ? [
                                 const DropdownMenuEntry(
-                                    value: '',
-                                    label: 'Pilih guru terlebih dahulu')
+                                  value: '',
+                                  label: 'Pilih guru terlebih dahulu',
+                                  enabled: false,
+                                )
                               ]
                             : activities
-                                .map((a) =>
-                                    DropdownMenuEntry(value: a, label: a))
+                                .map(
+                                  (a) => DropdownMenuEntry(
+                                    value: a,
+                                    label: a,
+                                  ),
+                                )
                                 .toList();
 
                         return DropdownMenu<String>(
@@ -137,10 +158,25 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                             hintStyle: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w300,
-                              color: Colors.black, // <-- warna hint
+                              color: Colors.black,
                             ),
                           ),
                           menuHeight: 200,
+                          menuStyle: MenuStyle(
+                            padding: WidgetStateProperty.all(
+                              const EdgeInsets.symmetric(horizontal: 8),
+                            ),
+                            alignment: Alignment.bottomLeft,
+                            visualDensity: VisualDensity.compact,
+                            maximumSize: WidgetStateProperty.all(
+                              Size(width * 0.92, 200),
+                            ),
+                            shape: WidgetStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
                           hintText: 'Kegiatan:',
                           dropdownMenuEntries: entries,
                           onSelected: (value) {
@@ -224,21 +260,28 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          if (_kegiatanC.text.isNotEmpty &&
-                              _durasiMulaiC.text.isNotEmpty &&
-                              _durasiMulaiC.text.isNotEmpty &&
-                              _pelaksanaC.text.isNotEmpty) {
+                          if (_kegiatanC.text.isEmpty ||
+                              _durasiMulaiC.text.isEmpty ||
+                              _durasiMulaiC.text.isEmpty ||
+                              _pelaksanaC.text.isEmpty) {
+                            var snackbar = const SnackBar(
+                              content: Text("Tolong isi semua field yang ada"),
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                          } else {
                             cubitCreateSchedule.addActivity(
                                 widget.day,
                                 _pelaksanaC.text,
                                 _kegiatanC.text,
                                 '${_durasiMulaiC.text} - ${_durasiSelesaiC.text}');
+                            _kegiatanC.clear();
+                            _durasiMulaiC.clear();
+                            _durasiSelesaiC.clear();
+                            _pelaksanaC.clear();
+                            cubitAddSchedule.toggleAdding(widget.day);
                           }
-                          _kegiatanC.clear();
-                          _durasiMulaiC.clear();
-                          _durasiSelesaiC.clear();
-                          _pelaksanaC.clear();
-                          cubitAddSchedule.toggleAdding(widget.day);
                         },
                         child: const Text("OK"),
                       ),

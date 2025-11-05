@@ -142,6 +142,8 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   Future<Either> updateJadwal(ScheduleEntity scheduleReq) async {
     try {
       final firestore = FirebaseFirestore.instance;
+      final batch = firestore.batch();
+
       final kelasSnapshot = await firestore
           .collection('Kelas')
           .where('class', isEqualTo: scheduleReq.oldNamaKelas)
@@ -165,6 +167,14 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
           ),
         });
       }
+      final muridSnapshot = await firestore
+          .collection('Students')
+          .where('kelas', isEqualTo: scheduleReq.oldNamaKelas)
+          .get();
+      for (final doc in muridSnapshot.docs) {
+        batch.update(doc.reference, {'kelas': scheduleReq.kelas});
+      }
+      await batch.commit();
       if (kelasSnapshot.docs.isEmpty && jadwalSnapshot.docs.isEmpty) {
         return const Right('No matching data found');
       }

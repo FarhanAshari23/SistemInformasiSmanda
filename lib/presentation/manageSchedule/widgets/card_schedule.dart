@@ -100,6 +100,21 @@ class _CardScheduleState extends State<CardSchedule> {
                             ),
                           ),
                           menuHeight: 200,
+                          menuStyle: MenuStyle(
+                            padding: WidgetStateProperty.all(
+                              const EdgeInsets.symmetric(horizontal: 8),
+                            ),
+                            alignment: Alignment.bottomLeft,
+                            visualDensity: VisualDensity.compact,
+                            maximumSize: WidgetStateProperty.all(
+                              Size(width * 0.92, 200),
+                            ),
+                            shape: WidgetStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
                           hintText: "Pelaksana:",
                           dropdownMenuEntries: state.teacher.map((doc) {
                             final nama = doc.nama;
@@ -136,8 +151,10 @@ class _CardScheduleState extends State<CardSchedule> {
                         final entries = activities.isEmpty
                             ? [
                                 const DropdownMenuEntry(
-                                    value: '',
-                                    label: 'Pilih guru terlebih dahulu')
+                                  value: '',
+                                  label: 'Pilih guru terlebih dahulu',
+                                  enabled: false,
+                                )
                               ]
                             : activities
                                 .map((a) =>
@@ -159,6 +176,21 @@ class _CardScheduleState extends State<CardSchedule> {
                             ),
                           ),
                           menuHeight: 200,
+                          menuStyle: MenuStyle(
+                            padding: WidgetStateProperty.all(
+                              const EdgeInsets.symmetric(horizontal: 8),
+                            ),
+                            alignment: Alignment.bottomLeft,
+                            visualDensity: VisualDensity.compact,
+                            maximumSize: WidgetStateProperty.all(
+                              Size(width * 0.92, 200),
+                            ),
+                            shape: WidgetStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
                           hintText: 'Kegiatan:',
                           dropdownMenuEntries: entries,
                           onSelected: (value) {
@@ -247,16 +279,25 @@ class _CardScheduleState extends State<CardSchedule> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              if (_kegiatanC.text.isNotEmpty &&
-                                  _durasiMulaiC.text.isNotEmpty &&
-                                  _durasiMulaiC.text.isNotEmpty &&
-                                  _pelaksanaC.text.isNotEmpty) {
+                              if (_kegiatanC.text.isEmpty ||
+                                  _durasiMulaiC.text.isEmpty ||
+                                  _durasiMulaiC.text.isEmpty ||
+                                  _pelaksanaC.text.isEmpty) {
+                                var snackbar = const SnackBar(
+                                  content:
+                                      Text("Tolong isi semua field yang ada"),
+                                  behavior: SnackBarBehavior.floating,
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackbar);
+                              } else {
                                 cubitCreateSchedule.editActivity(
-                                    widget.day,
-                                    widget.index,
-                                    _pelaksanaC.text,
-                                    _kegiatanC.text,
-                                    '${_durasiMulaiC.text} - ${_durasiSelesaiC.text}');
+                                  widget.day,
+                                  widget.index,
+                                  _pelaksanaC.text,
+                                  _kegiatanC.text,
+                                  '${_durasiMulaiC.text} - ${_durasiSelesaiC.text}',
+                                );
                               }
                               cubitEditSchedule.toggleEdit(
                                   widget.index, widget.day);
