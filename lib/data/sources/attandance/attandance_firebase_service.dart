@@ -42,7 +42,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left("Error, please try again");
+      return left(e.toString());
     }
   }
 

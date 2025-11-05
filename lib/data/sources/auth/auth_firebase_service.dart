@@ -61,7 +61,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       final isAdmin = userData['isAdmin'] ?? false;
       return right(isAdmin);
     } catch (e) {
-      return left('An Error Occured');
+      return left(e.toString());
     }
   }
 
@@ -77,7 +77,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           .then((value) => value.docs.first.data());
       return Right(userData);
     } catch (e) {
-      return left('An Error Occured');
+      return left(e.toString());
     }
   }
 
@@ -174,9 +174,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       }
       return Left(message);
     } catch (e) {
-      return left(
-        'Akun anda belum terdaftar. Jika merasa sudah mendaftar, harap tunggu admin mengkonfirmasi pendaftaran anda.',
-      );
+      return left(e.toString());
     }
   }
 }

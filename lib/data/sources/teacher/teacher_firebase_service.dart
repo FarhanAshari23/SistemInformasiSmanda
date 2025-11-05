@@ -29,7 +29,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left("Error get data, please try again later");
+      return Left(e.toString());
     }
   }
 
@@ -48,7 +48,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
           .toList();
       return Right(result);
     } catch (e) {
-      return const Left("Error get data, please try again later");
+      return Left(e.toString());
     }
   }
 
@@ -62,7 +62,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left("Error get data, please try again later");
+      return Left(e.toString());
     }
   }
 
@@ -105,7 +105,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       }
       return const Right('Delete Data Teacher Success');
     } catch (e) {
-      return Left('Something Wrong L $e');
+      return Left('Something Wrong : $e');
     }
   }
 
@@ -134,7 +134,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       }
       return const Right('Update Data Teacher Success');
     } catch (e) {
-      return const Left('Something Wrong');
+      return Left(e.toString());
     }
   }
 
@@ -147,7 +147,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left("Error get data, please try again later");
+      return Left(e.toString());
     }
   }
 
@@ -160,7 +160,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left("Error get data, please try again later");
+      return Left(e.toString());
     }
   }
 
@@ -201,7 +201,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
           await FirebaseFirestore.instance.collection('Roles').get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left('Please try again');
+      return Left(e.toString());
     }
   }
 }

@@ -28,7 +28,7 @@ class NewsFirebaseServiceImpl extends NewsFirebaseService {
       await documentReference.update({'uIdNews': documentReference.id});
       return const Right("Upload news was succesfull");
     } catch (e) {
-      return Left(e);
+      return Left(e.toString());
     }
   }
 
@@ -39,7 +39,7 @@ class NewsFirebaseServiceImpl extends NewsFirebaseService {
           await FirebaseFirestore.instance.collection("News").get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left("Error, please try again");
+      return Left(e.toString());
     }
   }
 
@@ -54,7 +54,7 @@ class NewsFirebaseServiceImpl extends NewsFirebaseService {
       }
       return const Right('Delete Data News Success');
     } catch (e) {
-      return const Left('Something Wrong');
+      return Left(e.toString());
     }
   }
 
@@ -76,7 +76,7 @@ class NewsFirebaseServiceImpl extends NewsFirebaseService {
       }
       return const Right('Update Data News Success');
     } catch (e) {
-      return const Left('Something Wrong');
+      return Left(e.toString());
     }
   }
 }

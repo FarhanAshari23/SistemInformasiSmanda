@@ -31,7 +31,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left("Error get data, please try again later");
+      return Left(e.toString());
     }
   }
 
@@ -59,7 +59,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       }
       return const Right('Update Data Student Success');
     } catch (e) {
-      return const Left('Something Wrong');
+      return Left(e.toString());
     }
   }
 
@@ -75,7 +75,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       }
       return const Right('Delete Data Student Success');
     } catch (e) {
-      return const Left('Something Wrong');
+      return Left(e.toString());
     }
   }
 
@@ -91,7 +91,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       }
       return const Left("Data cant be found");
     } catch (e) {
-      return const Left("Error get data, please try again later");
+      return Left(e.toString());
     }
   }
 
@@ -105,7 +105,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left("Error get data, please try again later");
+      return Left(e.toString());
     }
   }
 
@@ -121,7 +121,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       }
       return const Right('Delete Data Student Success');
     } catch (e) {
-      return const Left('Something Wrong');
+      return Left(e.toString());
     }
   }
 
@@ -135,7 +135,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left("Error get data, please try again later");
+      return Left(e.toString());
     }
   }
 
@@ -208,7 +208,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left('Please try again');
+      return Left(e.toString());
     }
   }
 

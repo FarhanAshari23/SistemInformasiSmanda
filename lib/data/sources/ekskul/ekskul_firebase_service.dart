@@ -244,7 +244,7 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
 
       return const Right('Update Data Ekskul Success');
     } catch (e) {
-      return const Left('Something Wrong');
+      return left(e.toString());
     }
   }
 
@@ -315,7 +315,7 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
 
       return const Right('Delete Data Ekskul Success');
     } catch (e) {
-      return const Left('Something Wrong');
+      return left(e.toString());
     }
   }
 
@@ -381,33 +381,6 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
     }
   }
 
-  Future<void> _updateStudentEkskul(String? nisn, String ekskulBaru) async {
-    if (nisn == null || nisn.trim().isEmpty) return;
-
-    final query = await FirebaseFirestore.instance
-        .collection("Students")
-        .where("nisn", isEqualTo: nisn)
-        .get();
-
-    if (query.docs.isEmpty) return;
-
-    final studentDoc = query.docs.first;
-    final studentRef = studentDoc.reference;
-    final data = studentDoc.data();
-
-    final existingEkskul = data['ekskul']?.toString() ?? '';
-
-    // Hindari duplikasi
-    final hasEkskul = existingEkskul.contains(ekskulBaru);
-    final updateEkskul = hasEkskul
-        ? existingEkskul
-        : (existingEkskul.isEmpty || existingEkskul == '-'
-            ? ekskulBaru
-            : "$existingEkskul, $ekskulBaru");
-
-    await studentRef.update({"ekskul": updateEkskul});
-  }
-
   @override
   Future<Either> deleteAnggota(UpdateAnggotaReq anggotaReq) async {
     try {
@@ -439,5 +412,32 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
     } catch (e) {
       return Left("Something error: $e");
     }
+  }
+
+  Future<void> _updateStudentEkskul(String? nisn, String ekskulBaru) async {
+    if (nisn == null || nisn.trim().isEmpty) return;
+
+    final query = await FirebaseFirestore.instance
+        .collection("Students")
+        .where("nisn", isEqualTo: nisn)
+        .get();
+
+    if (query.docs.isEmpty) return;
+
+    final studentDoc = query.docs.first;
+    final studentRef = studentDoc.reference;
+    final data = studentDoc.data();
+
+    final existingEkskul = data['ekskul']?.toString() ?? '';
+
+    // Hindari duplikasi
+    final hasEkskul = existingEkskul.contains(ekskulBaru);
+    final updateEkskul = hasEkskul
+        ? existingEkskul
+        : (existingEkskul.isEmpty || existingEkskul == '-'
+            ? ekskulBaru
+            : "$existingEkskul, $ekskulBaru");
+
+    await studentRef.update({"ekskul": updateEkskul});
   }
 }

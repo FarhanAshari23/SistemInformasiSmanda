@@ -99,7 +99,7 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
           await FirebaseFirestore.instance.collection('Activities').get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return const Left('Please try again');
+      return Left(e.toString());
     }
   }
 
