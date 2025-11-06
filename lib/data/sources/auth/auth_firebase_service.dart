@@ -11,6 +11,7 @@ abstract class AuthFirebaseService {
   Future<Either> signin(SignInUserReq signinUserReq);
   Future<Either> signUp(UserCreationReq murid);
   Future<Either> forgotPassword(String email);
+  Future<Either> checkEmailUsed(String email);
   Future<Either> logout();
   Future<bool> isLoggedIn();
   Future<Either> getUser();
@@ -175,6 +176,26 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       return Left(message);
     } catch (e) {
       return left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> checkEmailUsed(String email) async {
+    try {
+      QuerySnapshot murid = await FirebaseFirestore.instance
+          .collection('Students')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+      if (murid.docs.isNotEmpty) {
+        return const Left(
+          'Email ini sudah dipakai, silakan akses lupa password untuk mengganti password anda',
+        );
+      } else {
+        return const Right('Ini aman');
+      }
+    } catch (e) {
+      return Left(e.toString());
     }
   }
 }

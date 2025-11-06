@@ -56,6 +56,7 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_kepala_s
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_teacher_by_name.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_waka.dart';
+import 'domain/usecases/auth/check_email_usecase.dart';
 import 'domain/usecases/teacher/update_teacher.dart';
 
 import 'domain/usecases/auth/forgot_password_usecase.dart';
@@ -136,6 +137,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<IsAdminUsecase>(
     IsAdminUsecase(),
+  );
+  sl.registerSingleton<CheckEmailUsecase>(
+    CheckEmailUsecase(),
   );
   sl.registerSingleton<IsRegisterUsecase>(
     IsRegisterUsecase(),
