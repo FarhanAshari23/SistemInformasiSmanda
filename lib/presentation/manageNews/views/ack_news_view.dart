@@ -47,77 +47,86 @@ class AckNewsView extends StatelessWidget {
             }
           },
           child: SafeArea(
-            child: Column(
-              children: [
-                const BasicAppbar(
-                  isBackViewed: true,
-                  isProfileViewed: false,
-                ),
-                const Text(
-                  'APAKAH PENGUMUMAN\nSUDAH SESUAI?',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.primary,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const BasicAppbar(
+                    isBackViewed: true,
+                    isProfileViewed: false,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: height * 0.05),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Tampilan di List Pengumuman',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
-                        ),
+                  const Center(
+                    child: Text(
+                      'APAKAH PENGUMUMAN\nSUDAH SESUAI?',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.primary,
                       ),
-                      SizedBox(height: height * 0.01),
-                      CardNews(
-                        onPressed: () {},
-                        title: createNewsReq.title,
-                        from: createNewsReq.from,
-                        to: createNewsReq.to,
-                      ),
-                      SizedBox(height: height * 0.03),
-                      const Text(
-                        'Tampilan Detail Pengumuman',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      SizedBox(height: height * 0.01),
-                      NewsDetail(
-                        title: createNewsReq.title,
-                        createdAt: createNewsReq.createdAt,
-                        from: createNewsReq.from,
-                        to: createNewsReq.to,
-                        content: createNewsReq.content,
-                      ),
-                      SizedBox(height: height * 0.02),
-                      Center(
-                        child: Builder(builder: (context) {
-                          return BasicButton(
-                            onPressed: () {
-                              context.read<ButtonStateCubit>().execute(
-                                    usecase: CreateNewsUseCase(),
-                                    params: createNewsReq,
-                                  );
-                            },
-                            title: 'Simpan',
-                          );
-                        }),
-                      )
-                    ],
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                )
-              ],
+                  SizedBox(height: height * 0.05),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: Text(
+                      'Tampilan di List Pengumuman',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.01),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: CardNews(
+                      onPressed: () {},
+                      title: createNewsReq.title,
+                      from: createNewsReq.from,
+                      to: createNewsReq.to,
+                    ),
+                  ),
+                  SizedBox(height: height * 0.03),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: Text(
+                      'Tampilan Detail Pengumuman',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.01),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: NewsDetail(
+                      title: createNewsReq.title,
+                      createdAt: createNewsReq.createdAt,
+                      from: createNewsReq.from,
+                      to: createNewsReq.to,
+                      content: createNewsReq.content,
+                    ),
+                  ),
+                  SizedBox(height: height * 0.02),
+                  Center(
+                    child: Builder(builder: (context) {
+                      return BasicButton(
+                        onPressed: () {
+                          context.read<ButtonStateCubit>().execute(
+                                usecase: CreateNewsUseCase(),
+                                params: createNewsReq,
+                              );
+                        },
+                        title: 'Simpan',
+                      );
+                    }),
+                  )
+                ],
+              ),
             ),
           ),
         ),

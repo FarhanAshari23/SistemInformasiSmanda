@@ -18,46 +18,33 @@ class CardNews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryHeight = MediaQuery.of(context).size.height;
-    final bodyHeight = mediaQueryHeight -
-        MediaQuery.of(context).padding.top -
-        MediaQuery.of(context).padding.bottom;
-    double width = MediaQuery.of(context).size.width;
     return CustomInkWell(
-      defaultColor: AppColors.inversePrimary,
+      borderRadius: 12,
+      defaultColor: Colors.white,
       onTap: onPressed,
-      borderRadius: 16,
-      child: SizedBox(
-        width: double.infinity,
-        height: bodyHeight * 0.18,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 16,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 16,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    width: width * 0.65,
-                    height: bodyHeight * 0.065,
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.primary,
-                      ),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.primary,
                     ),
                   ),
-                  SizedBox(height: bodyHeight * 0.008),
-                  SizedBox(
-                    width: width * 0.65,
-                    height: bodyHeight * 0.065,
+                  const SizedBox(height: 4),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
                     child: Text(
                       'Dari $from untuk $to',
                       style: const TextStyle(
@@ -69,22 +56,22 @@ class CardNews extends StatelessWidget {
                   )
                 ],
               ),
-              Container(
-                width: width * 0.135,
-                height: bodyHeight * 0.07,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: AppColors.secondary,
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: AppColors.secondary,
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: AppColors.inversePrimary,
+                  size: 24,
                 ),
-                child: const Center(
-                  child: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: AppColors.inversePrimary,
-                  ),
-                ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

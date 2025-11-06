@@ -103,7 +103,6 @@ class _AddNewsViewState extends State<AddNewsView> {
                 ],
               ),
             ),
-            SizedBox(height: height * 0.04),
             BasicButton(
               onPressed: () {
                 if (_titleC.text.isEmpty ||
@@ -122,6 +121,7 @@ class _AddNewsViewState extends State<AddNewsView> {
                     ),
                   );
                 } else {
+                  FocusScope.of(context).unfocus();
                   AppNavigator.push(
                     context,
                     AckNewsView(
