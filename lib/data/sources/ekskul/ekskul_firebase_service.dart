@@ -4,7 +4,6 @@ import 'package:dartz/dartz.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
 import '../../../domain/entities/ekskul/update_anggota_req.dart';
 import '../../models/auth/user.dart';
-import '../../models/ekskul/anggota.dart';
 import '../../models/ekskul/ekskul.dart';
 import '../../models/teacher/teacher.dart';
 
@@ -32,7 +31,7 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
         bendahara: UserModelX.fromEntity(ekskulCreationReq.bendahara),
         deskripsi: ekskulCreationReq.deskripsi,
         anggota: ekskulCreationReq.anggota
-            .map((a) => AnggotaModel.fromEntity(a))
+            .map((a) => UserModelX.fromEntity(a))
             .toList(),
       );
       await firebaseFirestore.collection("Ekskuls").add(model.toMap());
@@ -42,15 +41,15 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
       final namaEkskul = ekskulCreationReq.namaEkskul.trim();
 
       if (namaPembina.isNotEmpty) {
-        final query = nipPembina != '-' && nipPembina.isNotEmpty
-            ? await FirebaseFirestore.instance
-                .collection("Teachers")
-                .where("NIP", isEqualTo: nipPembina)
-                .get()
-            : await FirebaseFirestore.instance
-                .collection("Teachers")
-                .where("nama", isEqualTo: namaPembina)
-                .get();
+        final query = await FirebaseFirestore.instance
+            .collection("Teachers")
+            .where(
+              nipPembina != '-' && nipPembina.isNotEmpty ? "NIP" : "nama",
+              isEqualTo: nipPembina != '-' && nipPembina.isNotEmpty
+                  ? nipPembina
+                  : namaPembina,
+            )
+            .get();
         if (query.docs.isNotEmpty) {
           final teacherDoc = query.docs.first;
           final teacherRef = teacherDoc.reference;
@@ -132,7 +131,7 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
         bendahara: UserModelX.fromEntity(ekskulUpdateReq.bendahara),
         deskripsi: ekskulUpdateReq.deskripsi,
         anggota: ekskulUpdateReq.anggota
-            .map((a) => AnggotaModel.fromEntity(a))
+            .map((a) => UserModelX.fromEntity(a))
             .toList(),
       );
       await docRef.update(modelBaru.toMap());
@@ -322,10 +321,20 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
   @override
   Future<Either> addAnggota(UpdateAnggotaReq anggotaReq) async {
     try {
-      final anggotaModel = AnggotaModel(
-        nama: anggotaReq.anggota.nama,
-        nisn: anggotaReq.anggota.nisn,
-      );
+      final anggotaModel = UserModel(
+        email: anggotaReq.anggota.email ?? '',
+        nama: anggotaReq.anggota.nama ?? '',
+        kelas: anggotaReq.anggota.kelas ?? '',
+        nisn: anggotaReq.anggota.nisn ?? '',
+        tanggalLahir: anggotaReq.anggota.tanggalLahir ?? '',
+        noHp: anggotaReq.anggota.noHP ?? '',
+        alamat: anggotaReq.anggota.alamat ?? '',
+        ekskul: anggotaReq.anggota.ekskul ?? '',
+        gender: anggotaReq.anggota.gender ?? 0,
+        isAdmin: anggotaReq.anggota.isAdmin ?? false,
+        agama: anggotaReq.anggota.agama ?? '',
+        isRegister: anggotaReq.anggota.isRegister ?? false,
+      ).toMap();
 
       final batch = FirebaseFirestore.instance.batch();
 
@@ -337,7 +346,7 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
 
         for (var doc in query.docs) {
           batch.update(doc.reference, {
-            'anggota': FieldValue.arrayUnion([anggotaModel.toMap()]),
+            'anggota': FieldValue.arrayUnion([anggotaModel]),
           });
         }
       }
@@ -351,9 +360,19 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
   @override
   Future<Either> updateAnggota(UpdateAnggotaReq anggotaReq) async {
     try {
-      final anggotaModel = AnggotaModel(
-        nama: anggotaReq.anggota.nama,
-        nisn: anggotaReq.anggota.nisn,
+      final anggotaModel = UserModel(
+        email: anggotaReq.anggota.email ?? '',
+        nama: anggotaReq.anggota.nama ?? '',
+        kelas: anggotaReq.anggota.kelas ?? '',
+        nisn: anggotaReq.anggota.nisn ?? '',
+        tanggalLahir: anggotaReq.anggota.tanggalLahir ?? '',
+        noHp: anggotaReq.anggota.noHP ?? '',
+        alamat: anggotaReq.anggota.alamat ?? '',
+        ekskul: anggotaReq.anggota.ekskul ?? '',
+        gender: anggotaReq.anggota.gender ?? 0,
+        isAdmin: anggotaReq.anggota.isAdmin ?? false,
+        agama: anggotaReq.anggota.agama ?? '',
+        isRegister: anggotaReq.anggota.isRegister ?? false,
       ).toMap();
 
       final batch = FirebaseFirestore.instance.batch();

@@ -4,7 +4,10 @@ import 'package:new_sistem_informasi_smanda/common/widget/card/card_anggota_eksk
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
+import 'package:new_sistem_informasi_smanda/presentation/students/views/murid_detail.dart';
 
+import '../../../common/helper/app_navigation.dart';
+import '../../../common/widget/card/card_anggota.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../domain/entities/auth/user.dart';
 
@@ -135,7 +138,7 @@ class EkskulDetail extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
                   ekskul.anggota.isEmpty
                       ? Center(
                           child: Column(
@@ -159,58 +162,19 @@ class EkskulDetail extends StatelessWidget {
                       : ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
                           itemBuilder: (context, index) {
                             final anggota = ekskul.anggota[index];
-                            return Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: AppColors.primary,
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: 80,
-                                      height: 80,
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          image:
-                                              AssetImage(AppImages.tendikLaki),
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          anggota.nama,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w900,
-                                            color: AppColors.inversePrimary,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          anggota.nisn,
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.inversePrimary,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ));
+                            return CardAnggota(
+                              onTap: () => AppNavigator.push(
+                                context,
+                                MuridDetail(user: anggota),
+                              ),
+                              murid: anggota,
+                              title: anggota.nama ?? '',
+                              desc: anggota.nisn ?? '',
+                            );
                           },
                           separatorBuilder: (context, index) =>
                               const SizedBox(height: 8),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/anggota.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/update_anggota_req.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/update_anggota_usecase.dart';
 
@@ -402,8 +401,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                             await sl<UpdateAnggotaUsecase>().call(
                           params: UpdateAnggotaReq(
                             namaEkskul: _ekskulC.text.split(', '),
-                            anggota: AnggotaEntity(
-                                nama: _namaC.text, nisn: _nisnC.text),
+                            anggota: widget.user,
                           ),
                         );
                         resultAnggota.fold(

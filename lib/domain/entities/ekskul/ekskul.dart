@@ -1,8 +1,6 @@
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
-import 'anggota.dart';
-
 class EkskulEntity {
   final String namaEkskul;
   final TeacherEntity pembina;
@@ -11,7 +9,7 @@ class EkskulEntity {
   final UserEntity sekretaris;
   final UserEntity bendahara;
   final String deskripsi;
-  final List<AnggotaEntity> anggota;
+  final List<UserEntity> anggota;
   final String? oldNamaEkskul;
 
   EkskulEntity({

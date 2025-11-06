@@ -4,7 +4,6 @@ import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 
 import '../auth/user.dart';
 import '../teacher/teacher.dart';
-import 'anggota.dart';
 
 class EkskulModel {
   final String namaEkskul;
@@ -14,7 +13,7 @@ class EkskulModel {
   final UserModel sekretaris;
   final UserModel bendahara;
   final String deskripsi;
-  final List<AnggotaModel> anggota;
+  final List<UserModel> anggota;
 
   EkskulModel({
     required this.namaEkskul,
@@ -50,8 +49,8 @@ class EkskulModel {
       bendahara: UserModel.fromMap(map['bendahara']),
       deskripsi: map['deskripsi'] ?? '',
       anggota: map['anggota'] != null
-          ? List<AnggotaModel>.from(
-              (map['anggota'] as List).map((x) => AnggotaModel.fromMap(x)),
+          ? List<UserModel>.from(
+              (map['anggota'] as List).map((x) => UserModel.fromMap(x)),
             )
           : [],
     );

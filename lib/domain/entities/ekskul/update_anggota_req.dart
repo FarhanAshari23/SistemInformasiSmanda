@@ -1,7 +1,7 @@
-import 'anggota.dart';
+import '../auth/user.dart';
 
 class UpdateAnggotaReq {
-  final AnggotaEntity anggota;
+  final UserEntity anggota;
   final List<String> namaEkskul;
 
   UpdateAnggotaReq({

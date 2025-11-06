@@ -455,9 +455,9 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                       },
                                     );
                                   },
-                                  murid: widget.ekskul.ketua,
-                                  title: anggota.nama,
-                                  desc: anggota.nisn,
+                                  murid: anggota,
+                                  title: anggota.nama ?? '',
+                                  desc: anggota.nisn ?? '',
                                 );
                               },
                               separatorBuilder: (context, index) =>
