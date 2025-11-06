@@ -57,11 +57,13 @@ class ButtonRole extends StatelessWidget {
               ),
             ),
           ),
-          const Text(
-            'Tunggu sebentar..',
-            style: TextStyle(
-              color: Colors.black87, // lebih kontras
-              fontWeight: FontWeight.bold,
+          const Center(
+            child: Text(
+              'Tunggu sebentar..',
+              style: TextStyle(
+                color: Colors.black87, // lebih kontras
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],

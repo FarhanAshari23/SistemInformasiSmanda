@@ -138,75 +138,79 @@ class RegisterStudentView extends StatelessWidget {
                                       borderRadius: 12,
                                       defaultColor: AppColors.inversePrimary,
                                       onTap: () {
+                                        final outerContext = context;
                                         showDialog(
                                           context: context,
                                           builder: (context) {
-                                            return Dialog(
-                                              backgroundColor:
-                                                  AppColors.secondary,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20.0),
-                                              ),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  SizedBox(
-                                                      height: height * 0.02),
-                                                  const Text(
-                                                    'Apakah Anda Yakin Ingin Menyetujui seluruh data siswa?',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                      color: AppColors
-                                                          .inversePrimary,
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  SizedBox(
-                                                      height: height * 0.02),
-                                                  Row(
-                                                    children: [
-                                                      Builder(
-                                                        builder: (context) {
-                                                          return Expanded(
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: ButtonRole(
-                                                                onPressed:
-                                                                    () async {
-                                                                  context
-                                                                      .read<
-                                                                          ButtonStateCubit>()
-                                                                      .execute(
-                                                                        usecase:
-                                                                            UpdateAllStudentAccountUsecase(),
-                                                                      );
-                                                                },
-                                                                title: 'Setuju',
-                                                              ),
-                                                            ),
-                                                          );
-                                                        },
+                                            return BlocProvider.value(
+                                              value: outerContext
+                                                  .read<ButtonStateCubit>(),
+                                              child: Dialog(
+                                                backgroundColor:
+                                                    AppColors.secondary,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.0),
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    SizedBox(
+                                                        height: height * 0.02),
+                                                    const Text(
+                                                      'Apakah Anda Yakin Ingin Menyetujui seluruh data siswa?',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                        color: AppColors
+                                                            .inversePrimary,
                                                       ),
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: ButtonRole(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    context),
-                                                            title: "Batal",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    SizedBox(
+                                                        height: height * 0.02),
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: ButtonRole(
+                                                              onPressed:
+                                                                  () async {
+                                                                outerContext
+                                                                    .read<
+                                                                        ButtonStateCubit>()
+                                                                    .execute(
+                                                                      usecase:
+                                                                          UpdateAllStudentAccountUsecase(),
+                                                                    );
+                                                              },
+                                                              title: 'Setuju',
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
+                                                        Expanded(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: ButtonRole(
+                                                              onPressed: () =>
+                                                                  Navigator.pop(
+                                                                      context),
+                                                              title: "Batal",
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             );
                                           },
