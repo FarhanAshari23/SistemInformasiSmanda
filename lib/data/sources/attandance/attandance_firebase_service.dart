@@ -4,11 +4,14 @@ import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
 import '../../../domain/entities/attandance/param_attendance.dart';
+import '../../../domain/entities/attandance/param_delete_attendance.dart';
 import '../../models/auth/user.dart';
 
 abstract class AttandanceFirebaseService {
   Future<Either> createDate();
   Future<Either> getListAttendanceDate();
+  Future<Either> deleteAllAttendances();
+  Future<Either> deleteMonthAttendances(ParamDeleteAttendance attendanceReq);
   Future<Either> getAttendanceStudents(ParamAttendanceEntity attendanceReq);
   Future<Either> addStudentAttendances(UserEntity userAddReq);
   Future<Either> searchStudentAttendance(ParamAttendanceEntity attendanceReq);
@@ -131,6 +134,61 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       }
     } catch (e) {
       return left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> deleteAllAttendances() async {
+    final firestore = FirebaseFirestore.instance;
+    final collection = firestore.collection('Attendances');
+
+    try {
+      QuerySnapshot snapshot = await collection.get();
+      while (snapshot.docs.isNotEmpty) {
+        WriteBatch batch = firestore.batch();
+        for (final doc in snapshot.docs.take(500)) {
+          batch.delete(doc.reference);
+        }
+        await batch.commit();
+        snapshot = await collection.get();
+      }
+      return const Right('Semua data kehadiran telah dihapus');
+    } catch (e) {
+      return Left('Something wrong: $e');
+    }
+  }
+
+  @override
+  Future<Either> deleteMonthAttendances(
+      ParamDeleteAttendance attendanceReq) async {
+    final firestore = FirebaseFirestore.instance;
+    final collection = firestore.collection('Attendances');
+
+    final firstDay = DateTime(attendanceReq.year, attendanceReq.month, 1);
+    final lastDay =
+        DateTime(attendanceReq.year, attendanceReq.month + 1, 0, 23, 59, 59);
+    try {
+      final snapshot = await collection
+          .where('timestamp',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(firstDay))
+          .where('timestamp', isLessThanOrEqualTo: Timestamp.fromDate(lastDay))
+          .get();
+      if (snapshot.docs.isEmpty) {
+        return Left(
+          "Maaf, anda belum merekam absen di bulan ${attendanceReq.month}",
+        );
+      }
+      WriteBatch batch = firestore.batch();
+
+      for (var doc in snapshot.docs) {
+        batch.delete(doc.reference);
+      }
+
+      await batch.commit();
+      return Right(
+          'Berhasil menghapus data sebanyak ${snapshot.docs.length} untuk bulan ${attendanceReq.month}');
+    } catch (e) {
+      return Left("Something error: $e");
     }
   }
 }
