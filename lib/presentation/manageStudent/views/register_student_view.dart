@@ -199,11 +199,39 @@ class RegisterStudentView extends StatelessWidget {
                                                             padding:
                                                                 const EdgeInsets
                                                                     .all(8.0),
-                                                            child: ButtonRole(
-                                                              onPressed: () =>
-                                                                  Navigator.pop(
-                                                                      context),
-                                                              title: "Batal",
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child:
+                                                                  CustomInkWell(
+                                                                onTap: () =>
+                                                                    Navigator.pop(
+                                                                        context),
+                                                                borderRadius:
+                                                                    12,
+                                                                defaultColor:
+                                                                    AppColors
+                                                                        .primary,
+                                                                child: SizedBox(
+                                                                  height:
+                                                                      height *
+                                                                          0.085,
+                                                                  child:
+                                                                      const Center(
+                                                                    child: Text(
+                                                                      'Batal',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: AppColors
+                                                                            .inversePrimary,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
                                                         ),

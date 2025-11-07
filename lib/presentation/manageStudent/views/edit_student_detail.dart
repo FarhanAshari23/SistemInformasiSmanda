@@ -35,7 +35,6 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
   late TextEditingController _tanggalC;
   late TextEditingController _noHPC;
   late TextEditingController _alamatC;
-  late TextEditingController _ekskulC;
 
   @override
   void initState() {
@@ -46,7 +45,6 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
     _tanggalC = TextEditingController(text: widget.user.tanggalLahir);
     _noHPC = TextEditingController(text: widget.user.noHP);
     _alamatC = TextEditingController(text: widget.user.alamat);
-    _ekskulC = TextEditingController(text: widget.user.ekskul);
   }
 
   @override
@@ -58,7 +56,6 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
     _tanggalC.dispose();
     _noHPC.dispose();
     _alamatC.dispose();
-    _ekskulC.dispose();
   }
 
   @override
@@ -313,22 +310,6 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                     ),
                     SizedBox(height: height * 0.02),
                     const Text(
-                      'Masukkan Ekstrakulikuler:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    SizedBox(height: height * 0.01),
-                    TextField(
-                      controller: _ekskulC,
-                      maxLines: 4,
-                      decoration: const InputDecoration(
-                          hintText: 'Tuliskan ekskul disini...'),
-                    ),
-                    SizedBox(height: height * 0.02),
-                    const Text(
                       'Jenis Kelamin: ',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
@@ -392,7 +373,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                           tanggalLahir: _tanggalC.text,
                           noHp: _noHPC.text,
                           alamat: _alamatC.text,
-                          ekskul: _ekskulC.text,
+                          ekskul: widget.user.ekskul ?? '',
                           agama: context.read<ReligionCubit>().state!,
                           gender: context
                               .read<GenderSelectionCubit>()

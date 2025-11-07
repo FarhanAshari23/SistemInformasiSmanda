@@ -64,6 +64,7 @@ class ButtonRole extends StatelessWidget {
                 color: Colors.black87, // lebih kontras
                 fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
           ),
         ],

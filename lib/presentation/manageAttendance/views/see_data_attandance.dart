@@ -5,6 +5,7 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/check_same_date.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/views/select_class.dart';
 
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
@@ -145,6 +146,22 @@ class SeeDataAttandance extends StatelessWidget {
                   }
                   return Container();
                 },
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: BasicButton(
+                      onPressed: () {},
+                      title: 'Hapus Bulan Ini',
+                    ),
+                  ),
+                  Expanded(
+                    child: BasicButton(
+                      onPressed: () {},
+                      title: 'Hapus Semua',
+                    ),
+                  ),
+                ],
               )
             ],
           ),
