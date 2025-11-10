@@ -80,6 +80,7 @@ class CardNewsEdit extends StatelessWidget {
                   ),
                 );
               } else if (value == 'Hapus') {
+                final outerContext = context;
                 showDialog(
                   context: context,
                   builder: (context) {
@@ -131,6 +132,9 @@ class CardNewsEdit extends StatelessWidget {
                                     var snackbar = const SnackBar(
                                       content: Text("Data Berhasil Dihapus"),
                                     );
+                                    outerContext
+                                        .read<NewsCubit>()
+                                        .displayNews();
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackbar);
                                     Navigator.pop(context);

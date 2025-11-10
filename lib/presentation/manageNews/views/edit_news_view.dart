@@ -51,8 +51,11 @@ class EditNewsView extends StatelessWidget {
                               itemCount: state.news.length,
                               scrollDirection: Axis.vertical,
                               itemBuilder: (context, index) {
-                                return CardNewsEdit(
-                                  news: state.news[index],
+                                return BlocProvider.value(
+                                  value: context.read<NewsCubit>(),
+                                  child: CardNewsEdit(
+                                    news: state.news[index],
+                                  ),
                                 );
                               },
                             );
