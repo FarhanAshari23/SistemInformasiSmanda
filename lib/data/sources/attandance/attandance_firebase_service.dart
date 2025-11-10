@@ -144,12 +144,31 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
 
     try {
       QuerySnapshot snapshot = await collection.get();
-      while (snapshot.docs.isNotEmpty) {
+      if (snapshot.docs.isEmpty) {
+        return const Left(
+          "Maaf, anda belum merekam absen sama sekali",
+        );
+      }
+      for (var doc in snapshot.docs) {
+        final studentsRef = doc.reference.collection('Students');
+        final studentsSnapshot = await studentsRef.get();
+
+        int counter = 0;
         WriteBatch batch = firestore.batch();
-        for (final doc in snapshot.docs.take(500)) {
-          batch.delete(doc.reference);
+        for (var studentDoc in studentsSnapshot.docs) {
+          batch.delete(studentDoc.reference);
+          counter++;
+
+          if (counter == 500) {
+            await batch.commit();
+            batch = firestore.batch();
+            counter = 0;
+          }
         }
-        await batch.commit();
+        if (counter > 0) {
+          await batch.commit();
+        }
+        await doc.reference.delete();
         snapshot = await collection.get();
       }
       return const Right('Semua data kehadiran telah dihapus');
@@ -178,13 +197,29 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
           "Maaf, anda belum merekam absen di bulan ${attendanceReq.month}",
         );
       }
-      WriteBatch batch = firestore.batch();
 
       for (var doc in snapshot.docs) {
-        batch.delete(doc.reference);
+        final studentsRef = doc.reference.collection('Students');
+        final studentsSnapshot = await studentsRef.get();
+
+        int counter = 0;
+        WriteBatch batch = firestore.batch();
+        for (var studentDoc in studentsSnapshot.docs) {
+          batch.delete(studentDoc.reference);
+          counter++;
+
+          if (counter == 500) {
+            await batch.commit();
+            batch = firestore.batch();
+            counter = 0;
+          }
+        }
+        if (counter > 0) {
+          await batch.commit();
+        }
+        await doc.reference.delete();
       }
 
-      await batch.commit();
       return Right(
           'Berhasil menghapus data sebanyak ${snapshot.docs.length} untuk bulan ${attendanceReq.month}');
     } catch (e) {
