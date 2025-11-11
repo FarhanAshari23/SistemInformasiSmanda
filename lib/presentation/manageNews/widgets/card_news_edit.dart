@@ -4,7 +4,7 @@ import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/news/news.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/news/delete_news.dart';
 
-import '../../../common/widget/button/basic_button.dart';
+import '../../../common/widget/dialog/basic_dialog.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../service_locator.dart';
@@ -84,68 +84,35 @@ class CardNewsEdit extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return Dialog(
-                      backgroundColor: AppColors.inversePrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: SizedBox(
-                        width: width * 0.7,
-                        height: bodyHeight * 0.55,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: width * 0.6,
-                              height: bodyHeight * 0.3,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(AppImages.splashDelete),
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              'Apakah anda yakin ingin menghapus data ${news.title}?',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.primary,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(height: bodyHeight * 0.02),
-                            BasicButton(
-                              onPressed: () async {
-                                var delete = await sl<DeleteNewsUsecase>()
-                                    .call(params: news.uIdNews);
-                                return delete.fold(
-                                  (error) {
-                                    var snackbar = const SnackBar(
-                                      content: Text(
-                                          "Gagal Menghapus Murid, Coba Lagi"),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackbar);
-                                  },
-                                  (r) {
-                                    var snackbar = const SnackBar(
-                                      content: Text("Data Berhasil Dihapus"),
-                                    );
-                                    outerContext
-                                        .read<NewsCubit>()
-                                        .displayNews();
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackbar);
-                                    Navigator.pop(context);
-                                  },
-                                );
-                              },
-                              title: 'Hapus',
-                            ),
-                          ],
-                        ),
-                      ),
+                    return BasicDialog(
+                      height: bodyHeight,
+                      width: width,
+                      splashImage: AppImages.splashDelete,
+                      mainTitle:
+                          'Apakah anda yakin ingin menghapus data ${news.title}?',
+                      buttonTitle: 'Hapus',
+                      onPressed: () async {
+                        var delete = await sl<DeleteNewsUsecase>()
+                            .call(params: news.uIdNews);
+                        return delete.fold(
+                          (error) {
+                            var snackbar = const SnackBar(
+                              content: Text("Gagal Menghapus Murid, Coba Lagi"),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                          },
+                          (r) {
+                            var snackbar = const SnackBar(
+                              content: Text("Data Berhasil Dihapus"),
+                            );
+                            outerContext.read<NewsCubit>().displayNews();
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
                     );
                   },
                 );

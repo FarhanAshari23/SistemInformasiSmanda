@@ -4,6 +4,7 @@ import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart
 import 'package:new_sistem_informasi_smanda/common/bloc/button/button_state.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_students_view.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_teachers_views.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/bloc/edit_state_button_cubit.dart';
@@ -77,6 +78,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
     List<UserEntity> roleEntity = [
       selectedKetua,
@@ -392,65 +394,33 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                     showDialog(
                                       context: context,
                                       builder: (context) {
-                                        return Dialog(
-                                          backgroundColor: AppColors.secondary,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                          ),
-                                          insetPadding:
-                                              const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                          ),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Image.asset(
-                                                AppImages.notfound,
-                                                width: 200,
-                                                height: 200,
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(16.0),
-                                                child: Text(
-                                                  'Apakah anda yakin ingin mengeluarkan //${anggota.nama} dari ekskul ${widget.ekskul.namaEkskul}?',
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.w800,
-                                                    color: AppColors
-                                                        .inversePrimary,
+                                        return BasicDialog(
+                                          width: width,
+                                          height: height,
+                                          splashImage: AppImages.notfound,
+                                          mainTitle:
+                                              'Apakah anda yakin ingin mengeluarkan ${anggota.nama} dari ekskul ${widget.ekskul.namaEkskul}?',
+                                          buttonTitle: 'Hapus',
+                                          onPressed: () {
+                                            setState(() {
+                                              widget.ekskul.anggota.removeWhere(
+                                                  (element) =>
+                                                      element.nisn ==
+                                                      anggota.nisn);
+                                            });
+                                            outerContext
+                                                .read<ButtonStateCubit>()
+                                                .execute(
+                                                  usecase:
+                                                      DeleteAnggotaUsecase(),
+                                                  params: UpdateAnggotaReq(
+                                                    anggota: anggota,
+                                                    namaEkskul: [
+                                                      widget.ekskul.namaEkskul
+                                                    ],
                                                   ),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                              BasicButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    widget.ekskul.anggota
-                                                        .removeWhere(
-                                                            (element) =>
-                                                                element.nisn ==
-                                                                anggota.nisn);
-                                                  });
-                                                  outerContext
-                                                      .read<ButtonStateCubit>()
-                                                      .execute(
-                                                        usecase:
-                                                            DeleteAnggotaUsecase(),
-                                                        params:
-                                                            UpdateAnggotaReq(
-                                                          anggota: anggota,
-                                                          namaEkskul: [
-                                                            widget.ekskul
-                                                                .namaEkskul
-                                                          ],
-                                                        ),
-                                                      );
-                                                },
-                                                title: 'Hapus',
-                                              ),
-                                            ],
-                                          ),
+                                                );
+                                          },
                                         );
                                       },
                                     );

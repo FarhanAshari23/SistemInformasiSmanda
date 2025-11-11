@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
 
 import '../../../common/helper/app_navigation.dart';
-import '../../../common/widget/button/basic_button.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/auth/teacher.dart';
@@ -106,68 +106,36 @@ class CardEditTeacher extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (_) {
-                      return Dialog(
-                        backgroundColor: AppColors.inversePrimary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: SizedBox(
-                          width: width * 0.7,
-                          height: bodyHeight * 0.55,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: width * 0.6,
-                                height: bodyHeight * 0.3,
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(AppImages.splashDelete),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                'Apakah anda yakin ingin menghapus data ${teacher.nama}?',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.primary,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: bodyHeight * 0.02),
-                              BasicButton(
-                                onPressed: () async {
-                                  var delete = await sl<DeleteTeacherUsecase>()
-                                      .call(params: teacher);
-                                  return delete.fold(
-                                    (error) {
-                                      var snackbar = const SnackBar(
-                                        content: Text(
-                                            "Gagal Menghapus Data Guru, Coba Lagi"),
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackbar);
-                                    },
-                                    (r) {
-                                      var snackbar = const SnackBar(
-                                        content: Text("Data Berhasil Dihapus"),
-                                      );
-                                      context
-                                          .read<TeacherCubit>()
-                                          .displayTeacher();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackbar);
-                                      Navigator.pop(context);
-                                    },
-                                  );
-                                },
-                                title: 'Hapus',
-                              ),
-                            ],
-                          ),
-                        ),
+                      return BasicDialog(
+                        width: width,
+                        height: bodyHeight,
+                        splashImage: AppImages.splashDelete,
+                        mainTitle:
+                            'Apakah anda yakin ingin menghapus data ${teacher.nama}?',
+                        buttonTitle: 'Hapus',
+                        onPressed: () async {
+                          var delete = await sl<DeleteTeacherUsecase>()
+                              .call(params: teacher);
+                          return delete.fold(
+                            (error) {
+                              var snackbar = const SnackBar(
+                                content: Text(
+                                    "Gagal Menghapus Data Guru, Coba Lagi"),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackbar);
+                            },
+                            (r) {
+                              var snackbar = const SnackBar(
+                                content: Text("Data Berhasil Dihapus"),
+                              );
+                              context.read<TeacherCubit>().displayTeacher();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackbar);
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
                       );
                     },
                   );

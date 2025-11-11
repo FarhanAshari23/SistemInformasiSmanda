@@ -15,7 +15,7 @@ import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/views/edi
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/helper/app_navigation.dart';
-import '../../../common/widget/button/basic_button.dart';
+import '../../../common/widget/dialog/basic_dialog.dart';
 import '../../../domain/usecases/attendance/create_attendance.dart';
 import '../../../domain/usecases/auth/logout.dart';
 import '../../../service_locator.dart';
@@ -92,257 +92,216 @@ class HomeViewAdmin extends StatelessWidget {
       const ManageJabatanViews(),
     ];
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => CheckPressCubit()..checkLastPress(),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => CheckPressCubit()..checkLastPress(),
+          ),
+          BlocProvider(
+            create: (context) => ButtonStateCubit(),
+          ),
+        ],
         child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                height: height * 0.155,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: height * 0.09,
-                      color: AppColors.secondary,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return Dialog(
-                                      backgroundColor: AppColors.secondary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+          child: BlocListener<ButtonStateCubit, ButtonState>(
+            listener: (context, state) {
+              if (state is ButtonSuccessState) {
+                AppNavigator.pushReplacement(context, LoginView());
+              }
+              if (state is ButtonFailureState) {
+                var snackbar = SnackBar(
+                  content: Text(state.errorMessage),
+                  behavior: SnackBarBehavior.floating,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              }
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: height * 0.155,
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: height * 0.09,
+                        color: AppColors.secondary,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Builder(builder: (outerContext) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return BasicDialog(
+                                          width: width,
+                                          height: height,
+                                          buttonTitle: 'Keluar',
+                                          mainTitle:
+                                              'Apakah Anda Yakin Ingin Keluar dari Aplikasi?',
+                                          splashImage: AppImages.splashLogout,
+                                          onPressed: () {
+                                            outerContext
+                                                .read<ButtonStateCubit>()
+                                                .execute(
+                                                  usecase: LogoutUsecase(),
+                                                );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    width: width * 0.125,
+                                    height: height * 0.06,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: AppColors.tertiary,
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.logout,
+                                        color: AppColors.inversePrimary,
+                                        size: 32,
                                       ),
-                                      child: SizedBox(
-                                        height: height * 0.565,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Image.asset(
-                                                AppImages.splashLogout,
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 30,
+                        left: width * 0.4,
+                        child: Image.asset(
+                          AppImages.logoSMA,
+                          width: width * 0.2,
+                          height: height * 0.095,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    'Selamat Datang Admin',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    'Apa yang ingin anda lakukan hari ini?',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(12),
+                    itemCount: title.length,
+                    scrollDirection: Axis.vertical,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12.0,
+                      mainAxisSpacing: 12.0,
+                      mainAxisExtent: height * 0.25,
+                    ),
+                    itemBuilder: (context, index) {
+                      if (index == 1) {
+                        return BlocBuilder<CheckPressCubit, CheckPressState>(
+                          builder: (context, state) {
+                            return CardFeature(
+                              onpressed: state is MyWidgetPressed
+                                  ? () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            backgroundColor: AppColors.primary,
+                                            title: const Text(
+                                              'Database Absen Hari ini Sudah Tersedia!',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w800,
+                                                color: AppColors.inversePrimary,
                                               ),
-                                              SizedBox(height: height * 0.02),
-                                              const Text(
-                                                'Apakah Anda Yakin Ingin Keluar dari Aplikasi?',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w800,
-                                                  color:
-                                                      AppColors.inversePrimary,
-                                                ),
-                                                textAlign: TextAlign.center,
+                                            ),
+                                            content: const Text(
+                                              'Silakan input data siswa yang hadir dengan scan barcode',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: AppColors.inversePrimary,
                                               ),
-                                              SizedBox(height: height * 0.02),
-                                              BlocProvider(
-                                                create: (context) =>
-                                                    ButtonStateCubit(),
-                                                child: BlocListener<
-                                                    ButtonStateCubit,
-                                                    ButtonState>(
-                                                  listener: (context, state) {
-                                                    if (state
-                                                        is ButtonSuccessState) {
-                                                      AppNavigator
-                                                          .pushReplacement(
-                                                              context,
-                                                              LoginView());
-                                                    }
-                                                    if (state
-                                                        is ButtonFailureState) {
-                                                      var snackbar = SnackBar(
-                                                        content: Text(
-                                                            state.errorMessage),
-                                                        behavior:
-                                                            SnackBarBehavior
-                                                                .floating,
-                                                      );
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              snackbar);
-                                                    }
-                                                  },
-                                                  child: Builder(
-                                                    builder: (context) {
-                                                      return BasicButton(
-                                                        onPressed: () {
-                                                          context
-                                                              .read<
-                                                                  ButtonStateCubit>()
-                                                              .execute(
-                                                                usecase:
-                                                                    LogoutUsecase(),
-                                                              );
-                                                        },
-                                                        title: 'Keluar',
-                                                      );
-                                                    },
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text(
+                                                  'OK',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: AppColors
+                                                        .inversePrimary,
                                                   ),
                                                 ),
                                               ),
                                             ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                              child: Container(
-                                width: width * 0.125,
-                                height: height * 0.06,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: AppColors.tertiary,
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.logout,
-                                    color: AppColors.inversePrimary,
-                                    size: 32,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 30,
-                      left: width * 0.4,
-                      child: Image.asset(
-                        AppImages.logoSMA,
-                        width: width * 0.2,
-                        height: height * 0.095,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Selamat Datang Admin',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Apa yang ingin anda lakukan hari ini?',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(12),
-                  itemCount: title.length,
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12.0,
-                    mainAxisSpacing: 12.0,
-                    mainAxisExtent: height * 0.25,
-                  ),
-                  itemBuilder: (context, index) {
-                    if (index == 1) {
-                      return BlocBuilder<CheckPressCubit, CheckPressState>(
-                        builder: (context, state) {
-                          return CardFeature(
-                            onpressed: state is MyWidgetPressed
-                                ? () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          backgroundColor: AppColors.primary,
-                                          title: const Text(
-                                            'Database Absen Hari ini Sudah Tersedia!',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w800,
-                                              color: AppColors.inversePrimary,
-                                            ),
-                                          ),
-                                          content: const Text(
-                                            'Silakan input data siswa yang hadir dengan scan barcode',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.inversePrimary,
-                                            ),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text(
-                                                'OK',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color:
-                                                      AppColors.inversePrimary,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }
-                                : () async {
-                                    context
-                                        .read<CheckPressCubit>()
-                                        .buttonPressed();
-                                    var returnedData =
-                                        await sl<CreateAttendanceUseCase>()
-                                            .call();
-                                    returnedData.fold(
-                                      (l) {
-                                        return Container();
-                                      },
-                                      (r) {
-                                        AppNavigator.push(
-                                            context, const SuccesAddDate());
-                                      },
-                                    );
-                                  },
-                            title: 'Buat Data Kehadiran',
-                            image: AppImages.attendance,
-                          );
-                        },
+                                          );
+                                        },
+                                      );
+                                    }
+                                  : () async {
+                                      context
+                                          .read<CheckPressCubit>()
+                                          .buttonPressed();
+                                      var returnedData =
+                                          await sl<CreateAttendanceUseCase>()
+                                              .call();
+                                      returnedData.fold(
+                                        (l) {
+                                          return Container();
+                                        },
+                                        (r) {
+                                          AppNavigator.push(
+                                              context, const SuccesAddDate());
+                                        },
+                                      );
+                                    },
+                              title: 'Buat Data Kehadiran',
+                              image: AppImages.attendance,
+                            );
+                          },
+                        );
+                      }
+                      return CardFeature(
+                        onpressed: () =>
+                            AppNavigator.push(context, pages[index]),
+                        title: title[index],
+                        image: images[index],
                       );
-                    }
-                    return CardFeature(
-                      onpressed: () => AppNavigator.push(context, pages[index]),
-                      title: title[index],
-                      image: images[index],
-                    );
-                  },
-                ),
-              )
-            ],
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

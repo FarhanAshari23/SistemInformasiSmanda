@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/delete_ekskul.dart';
 
 import '../../../common/bloc/ekskul/ekskul_cubit.dart';
-import '../../../common/widget/button/basic_button.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../service_locator.dart';
@@ -133,71 +133,36 @@ class CardEkskulEdit extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return Dialog(
-                        backgroundColor: AppColors.inversePrimary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: SizedBox(
-                          width: width * 0.7,
-                          height: height * 0.55,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: width * 0.6,
-                                height: height * 0.3,
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(AppImages.splashDelete),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                'Apakah anda yakin ingin menghapus data ${ekskul.namaEkskul}?',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.primary,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: height * 0.02),
-                              Builder(builder: (context) {
-                                return BasicButton(
-                                  onPressed: () async {
-                                    var delete = await sl<DeleteEkskulUsecase>()
-                                        .call(params: ekskul);
-                                    return delete.fold(
-                                      (error) {
-                                        var snackbar = const SnackBar(
-                                          content: Text(
-                                              "Gagal Menghapus Ekskul, Coba Lagi"),
-                                        );
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackbar);
-                                      },
-                                      (r) {
-                                        var snackbar = const SnackBar(
-                                          content:
-                                              Text("Data Berhasil Dihapus"),
-                                        );
-                                        outerContext
-                                            .read<EkskulCubit>()
-                                            .displayEkskul();
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackbar);
-                                        Navigator.pop(context);
-                                      },
-                                    );
-                                  },
-                                  title: 'Hapus',
-                                );
-                              }),
-                            ],
-                          ),
-                        ),
+                      return BasicDialog(
+                        width: width,
+                        height: height,
+                        splashImage: AppImages.splashDelete,
+                        mainTitle:
+                            'Apakah anda yakin ingin menghapus data ${ekskul.namaEkskul}?',
+                        buttonTitle: 'Hapus',
+                        onPressed: () async {
+                          var delete = await sl<DeleteEkskulUsecase>()
+                              .call(params: ekskul);
+                          return delete.fold(
+                            (error) {
+                              var snackbar = const SnackBar(
+                                content:
+                                    Text("Gagal Menghapus Ekskul, Coba Lagi"),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackbar);
+                            },
+                            (r) {
+                              var snackbar = const SnackBar(
+                                content: Text("Data Berhasil Dihapus"),
+                              );
+                              outerContext.read<EkskulCubit>().displayEkskul();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackbar);
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
                       );
                     },
                   );
