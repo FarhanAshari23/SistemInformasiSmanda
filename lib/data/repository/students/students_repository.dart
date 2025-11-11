@@ -126,4 +126,9 @@ class StudentsRepositoryImpl extends StudentRepository {
   Future<Either> acceptAllStudentAccount() async {
     return await sl<StudentsFirebaseService>().acceptAllStudentAccount();
   }
+
+  @override
+  Future<Either> deleteAllStudentAccount() async {
+    return await sl<StudentsFirebaseService>().deleteAllStudentAccount();
+  }
 }

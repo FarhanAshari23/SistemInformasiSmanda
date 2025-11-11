@@ -11,6 +11,7 @@ abstract class StudentsFirebaseService {
   Future<Either> getStudentsByClass(String kelas);
   Future<Either> acceptStudentAccount(UserEntity student);
   Future<Either> acceptAllStudentAccount();
+  Future<Either> deleteAllStudentAccount();
   Future<Either> getAllKelas();
   Future<Either> getStudentByRegister();
   Future<Either> updateStudent(UpdateUserReq updateUserReq);
@@ -277,6 +278,29 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       return right('Accept All Student Success');
     } catch (e) {
       return Left('Something Wrong: $e');
+    }
+  }
+
+  @override
+  Future<Either> deleteAllStudentAccount() async {
+    final firestore = FirebaseFirestore.instance;
+    final collection = firestore.collection('Students');
+
+    try {
+      QuerySnapshot snapshot =
+          await collection.where('is_register', isEqualTo: false).get();
+      if (snapshot.docs.isEmpty) {
+        return const Left(
+          "Maaf, tidak ada akun registrasi yang harus dihapus",
+        );
+      }
+      for (var doc in snapshot.docs) {
+        await doc.reference.delete();
+        snapshot = await collection.get();
+      }
+      return const Right('Semua data akun registrasi telah dihapus');
+    } catch (e) {
+      return Left('Something wrong: $e');
     }
   }
 }

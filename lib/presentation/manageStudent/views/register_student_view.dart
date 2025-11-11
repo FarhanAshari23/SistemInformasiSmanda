@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_all_student_account_usecase.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/dialog/choose_dialog.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -11,9 +13,9 @@ import '../../../domain/usecases/students/accept_student_register_usecase.dart';
 import '../../../domain/usecases/students/delete_student.dart';
 import '../../../domain/usecases/students/update_all_student_account_usecase.dart';
 import '../../../service_locator.dart';
-import '../../auth/widgets/button_role.dart';
 import '../bloc/get_student_registration_cubit.dart';
 import '../bloc/get_student_registration_state.dart';
+import '../widgets/button_all.dart';
 
 class RegisterStudentView extends StatelessWidget {
   const RegisterStudentView({super.key});
@@ -134,127 +136,69 @@ class RegisterStudentView extends StatelessWidget {
                                       right: 16,
                                       top: 20,
                                     ),
-                                    child: CustomInkWell(
-                                      borderRadius: 12,
-                                      defaultColor: AppColors.inversePrimary,
-                                      onTap: () {
-                                        final outerContext = context;
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return BlocProvider.value(
-                                              value: outerContext
-                                                  .read<ButtonStateCubit>(),
-                                              child: Dialog(
-                                                backgroundColor:
-                                                    AppColors.secondary,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0),
-                                                ),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    SizedBox(
-                                                        height: height * 0.02),
-                                                    const Text(
-                                                      'Apakah Anda Yakin Ingin Menyetujui seluruh data siswa?',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        color: AppColors
-                                                            .inversePrimary,
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                    SizedBox(
-                                                        height: height * 0.02),
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: ButtonRole(
-                                                              onPressed:
-                                                                  () async {
-                                                                outerContext
-                                                                    .read<
-                                                                        ButtonStateCubit>()
-                                                                    .execute(
-                                                                      usecase:
-                                                                          UpdateAllStudentAccountUsecase(),
-                                                                    );
-                                                              },
-                                                              title: 'Setuju',
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  CustomInkWell(
-                                                                onTap: () =>
-                                                                    Navigator.pop(
-                                                                        context),
-                                                                borderRadius:
-                                                                    12,
-                                                                defaultColor:
-                                                                    AppColors
-                                                                        .primary,
-                                                                child: SizedBox(
-                                                                  height:
-                                                                      height *
-                                                                          0.085,
-                                                                  child:
-                                                                      const Center(
-                                                                    child: Text(
-                                                                      'Batal',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: AppColors
-                                                                            .inversePrimary,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ButtonAll(
+                                          title: 'Setujui Semua',
+                                          onTap: () {
+                                            final outerContext = context;
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return BlocProvider.value(
+                                                  value: outerContext
+                                                      .read<ButtonStateCubit>(),
+                                                  child: ChooseDialog(
+                                                    height: height,
+                                                    title:
+                                                        'Apakah Anda Yakin Ingin Menyetujui seluruh data siswa?',
+                                                    onTap: () {
+                                                      outerContext
+                                                          .read<
+                                                              ButtonStateCubit>()
+                                                          .execute(
+                                                            usecase:
+                                                                UpdateAllStudentAccountUsecase(),
+                                                          );
+                                                    },
+                                                  ),
+                                                );
+                                              },
                                             );
                                           },
-                                        );
-                                      },
-                                      child: const Padding(
-                                        padding: EdgeInsets.all(16),
-                                        child: Text(
-                                          'Setujui semua',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.primary,
-                                          ),
                                         ),
-                                      ),
+                                        const SizedBox(width: 8),
+                                        ButtonAll(
+                                          title: 'Hapus Semua',
+                                          onTap: () {
+                                            final outerContext = context;
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return BlocProvider.value(
+                                                  value: outerContext
+                                                      .read<ButtonStateCubit>(),
+                                                  child: ChooseDialog(
+                                                    height: height,
+                                                    title:
+                                                        'Apakah Anda Yakin Ingin Menghapus seluruh data siswa?',
+                                                    onTap: () {
+                                                      outerContext
+                                                          .read<
+                                                              ButtonStateCubit>()
+                                                          .execute(
+                                                            usecase:
+                                                                DeleteAllStudentAccountUsecase(),
+                                                          );
+                                                    },
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 );
