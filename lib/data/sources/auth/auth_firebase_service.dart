@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/signin_user_req.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 import '../../../common/helper/generate_keyword.dart';
 import '../../models/auth/user_creation_req.dart';
@@ -85,7 +90,10 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   @override
   Future<Either> signUp(UserCreationReq murid) async {
     final keywords = generateKeywords(murid.nama ?? '');
+    const String endpoint =
+        "http://192.168.18.2:8000/api/upload-image-students";
     try {
+      //create in firebase
       final key = encrypt.Key.fromUtf8('1234567890123456');
       final iv = encrypt.IV.fromSecureRandom(16);
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
@@ -109,7 +117,54 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           'iv': iv.base64,
         },
       );
-      return const Right('Signup was succesfull');
+
+      Uri? url;
+      try {
+        url = Uri.parse(endpoint);
+      } catch (_) {
+        throw Exception("URL tidak valid: $endpoint");
+      }
+
+      final request = http.MultipartRequest("POST", url);
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          murid.imageFile?.path ?? '',
+          filename: basename(murid.imageFile?.path ?? ''),
+        ),
+      );
+
+      final streamedResponse = await request.send().timeout(
+        const Duration(seconds: 15),
+        onTimeout: () {
+          throw Exception("Timeout: Server tidak merespon.");
+        },
+      );
+
+      final responseBody = await streamedResponse.stream.bytesToString();
+
+      if (streamedResponse.statusCode != 200) {
+        throw Exception(
+          "Upload gagal (status: ${streamedResponse.statusCode}). "
+          "Response: $responseBody",
+        );
+      }
+
+      Map<String, dynamic> json;
+      try {
+        json = jsonDecode(responseBody);
+      } catch (_) {
+        throw Exception("Response server bukan JSON valid: $responseBody");
+      }
+
+      return Right('Signup was succesfull, $json');
+    } on SocketException {
+      throw Exception("Tidak ada koneksi internet.");
+    } on HttpException {
+      throw Exception("Kesalahan HTTP terjadi.");
+    } on FormatException {
+      throw Exception("Format data tidak valid.");
     } catch (e) {
       return Left("Something Error: $e");
     }

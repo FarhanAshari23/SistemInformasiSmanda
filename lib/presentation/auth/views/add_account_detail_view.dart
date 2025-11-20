@@ -6,7 +6,6 @@ import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.da
 import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/religion/religion_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/views/ack_add_account_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/scan_qr_nisn.dart';
 
 import '../../../common/helper/app_navigation.dart';
@@ -14,6 +13,7 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/widget/card/box_gender.dart';
+import 'upload_image_view.dart';
 
 class AddStudentDetailView extends StatefulWidget {
   final UserCreationReq userCreationReq;
@@ -357,7 +357,7 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                       FocusScope.of(context).unfocus();
                       AppNavigator.push(
                         context,
-                        AckAddStudentView(
+                        UploadImageView(
                             userCreationReq: widget.userCreationReq),
                       );
                     }

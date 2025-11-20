@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class UserCreationReq {
   String? email;
   String? password;
@@ -13,6 +15,7 @@ class UserCreationReq {
   bool? isRegister;
   String? agama;
   String? keywords;
+  File? imageFile;
 
   UserCreationReq({
     this.email,
@@ -29,5 +32,6 @@ class UserCreationReq {
     this.agama,
     this.isRegister,
     this.keywords,
+    this.imageFile,
   });
 }
