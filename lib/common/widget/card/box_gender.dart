@@ -26,7 +26,7 @@ class BoxGender extends StatelessWidget {
       onTap: () =>
           context.read<GenderSelectionCubit>().selectGender(genderIndex),
       child: Container(
-        width: width * 0.3,
+        width: width * 0.45,
         height: height * 0.06,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),

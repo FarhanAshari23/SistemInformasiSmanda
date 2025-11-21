@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class UpdateUserReq {
   final String nama;
   final String kelas;
@@ -8,6 +10,7 @@ class UpdateUserReq {
   final String ekskul;
   final String agama;
   final int gender;
+  final File? imageFile;
 
   UpdateUserReq({
     required this.nama,
@@ -19,5 +22,6 @@ class UpdateUserReq {
     required this.ekskul,
     required this.agama,
     required this.gender,
+    this.imageFile,
   });
 }

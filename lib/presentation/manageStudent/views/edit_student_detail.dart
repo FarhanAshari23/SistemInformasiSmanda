@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
@@ -16,6 +19,7 @@ import '../../../domain/usecases/students/update_user.dart';
 import '../../../service_locator.dart';
 import '../../../common/bloc/religion/religion_cubit.dart';
 import '../../auth/widgets/scan_qr_nisn.dart';
+import 'change_photo_view.dart';
 
 class EditStudentDetail extends StatefulWidget {
   final UserEntity user;
@@ -35,6 +39,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
   late TextEditingController _tanggalC;
   late TextEditingController _noHPC;
   late TextEditingController _alamatC;
+  late File? imageProfile;
 
   @override
   void initState() {
@@ -309,99 +314,163 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                           hintText: 'Tuliskan alamat disini...'),
                     ),
                     SizedBox(height: height * 0.02),
-                    const Text(
-                      'Jenis Kelamin: ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    BlocBuilder<GenderSelectionCubit, int>(
-                      builder: (context, state) {
-                        return Row(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            BoxGender(
-                              gender: 'Laki-laki',
-                              context: context,
-                              genderIndex: 1,
+                            const Text(
+                              'Jenis Kelamin: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                                color: AppColors.primary,
+                              ),
                             ),
-                            SizedBox(width: width * 0.01),
-                            BoxGender(
-                              gender: 'Perempuan',
-                              context: context,
-                              genderIndex: 2,
-                            )
+                            const SizedBox(height: 4),
+                            BlocBuilder<GenderSelectionCubit, int>(
+                              builder: (context, state) {
+                                return Column(
+                                  children: [
+                                    BoxGender(
+                                      gender: 'Laki-laki',
+                                      context: context,
+                                      genderIndex: 1,
+                                    ),
+                                    SizedBox(height: width * 0.01),
+                                    BoxGender(
+                                      gender: 'Perempuan',
+                                      context: context,
+                                      genderIndex: 2,
+                                    )
+                                  ],
+                                );
+                              },
+                            ),
                           ],
-                        );
-                      },
-                    ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: CustomInkWell(
+                              borderRadius: 12,
+                              defaultColor: AppColors.secondary,
+                              onTap: () async {
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChangePhotoView(
+                                      user: widget.user,
+                                    ),
+                                  ),
+                                );
+                                if (result != null) {
+                                  imageProfile = result;
+                                }
+                              },
+                              child: SizedBox(
+                                  height: height * 0.12,
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.camera_alt,
+                                        color: Colors.white,
+                                        size: 24,
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        "Ubah Photo",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  )),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 ),
               ),
-              Builder(builder: (context) {
-                return BasicButton(
-                  onPressed: () async {
-                    if (_namaC.text.isEmpty ||
-                        _nisnC.text.isEmpty ||
-                        _tanggalC.text.isEmpty ||
-                        _noHPC.text.isEmpty ||
-                        _alamatC.text.isEmpty ||
-                        context.read<ReligionCubit>().state == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text(
-                            'Tolong isi semua kolom yang sudah tersedia',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+              Builder(
+                builder: (context) {
+                  return BasicButton(
+                    onPressed: () async {
+                      if (_namaC.text.isEmpty ||
+                          _nisnC.text.isEmpty ||
+                          _tanggalC.text.isEmpty ||
+                          _noHPC.text.isEmpty ||
+                          _alamatC.text.isEmpty ||
+                          context.read<ReligionCubit>().state == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              'Tolong isi semua kolom yang sudah tersedia',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    } else {
-                      final cubit = context.read<GetAllKelasCubit>().state;
-                      var result = await sl<UpdateStudentUsecase>().call(
-                        params: UpdateUserReq(
-                          nama: _namaC.text,
-                          kelas: cubit is KelasDisplayLoaded &&
-                                  cubit.selected != null
-                              ? cubit.selected!
-                              : widget.user.kelas!,
-                          nisn: _nisnC.text,
-                          tanggalLahir: _tanggalC.text,
-                          noHp: _noHPC.text,
-                          alamat: _alamatC.text,
-                          ekskul: widget.user.ekskul ?? '',
-                          agama: context.read<ReligionCubit>().state!,
-                          gender: context
-                              .read<GenderSelectionCubit>()
-                              .selectedIndex,
-                        ),
-                      );
-                      result.fold((error) {
-                        var snackbar = const SnackBar(
-                          content: Text("Gagal Mengubah Data"),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                      }, (r) {
-                        context.read<StudentsDisplayCubit>().displayStudents(
-                              params: _kelasC.text,
+                      } else {
+                        final cubit = context.read<GetAllKelasCubit>().state;
+                        var result = await sl<UpdateStudentUsecase>().call(
+                          params: UpdateUserReq(
+                            nama: _namaC.text,
+                            kelas: cubit is KelasDisplayLoaded &&
+                                    cubit.selected != null
+                                ? cubit.selected!
+                                : widget.user.kelas!,
+                            nisn: _nisnC.text,
+                            tanggalLahir: _tanggalC.text,
+                            noHp: _noHPC.text,
+                            alamat: _alamatC.text,
+                            ekskul: widget.user.ekskul ?? '',
+                            agama: context.read<ReligionCubit>().state!,
+                            gender: context
+                                .read<GenderSelectionCubit>()
+                                .selectedIndex,
+                            imageFile: imageProfile,
+                          ),
+                        );
+                        result.fold(
+                          (error) {
+                            var snackbar = SnackBar(
+                              content: Text("Gagal Mengubah Data: $error"),
                             );
-                        FocusScope.of(context).unfocus();
-                        var snackbar = const SnackBar(
-                          content: Text("Data Berhasil Diubah"),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                          },
+                          (r) {
+                            context
+                                .read<StudentsDisplayCubit>()
+                                .displayStudents(
+                                  params: _kelasC.text,
+                                );
+                            FocusScope.of(context).unfocus();
+                            var snackbar = const SnackBar(
+                              content: Text("Data Berhasil Diubah"),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
 
-                        Navigator.pop(context);
-                      });
-                    }
-                  },
-                  title: 'Ubah',
-                );
-              })
+                            Navigator.pop(context);
+                          },
+                        );
+                      }
+                    },
+                    title: 'Ubah',
+                  );
+                },
+              ),
             ],
           ),
         ),

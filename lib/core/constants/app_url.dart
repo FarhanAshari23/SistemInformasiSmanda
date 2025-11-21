@@ -1,5 +1,5 @@
 class AppUrl {
-  static const storageStudent = 'https://puskomsmanda.com/students';
-  static const storageTeacher = 'https://puskomsmanda.com/teachers';
-  static const storageEkskul = 'https://puskomsmanda.com/ekskuls';
+  static const storageStudent = 'http://192.168.18.2:8000/storage/students';
+  static const storageTeacher = 'https://192.168.18.2:8000/storage/teachers';
+  // static const storageEkskul = 'https://192.168.18.2:8000/storage/ekskuls';
 }

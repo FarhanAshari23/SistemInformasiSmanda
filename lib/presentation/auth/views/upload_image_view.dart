@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/bloc/upload_image_state.dart';
 
+import '../../../common/bloc/upload_image/upload_image_state.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/button/basic_button.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../core/configs/theme/app_colors.dart';
 import '../../../data/models/auth/user_creation_req.dart';
-import '../bloc/upload_image_cubit.dart';
+import '../../../common/bloc/upload_image/upload_image_cubit.dart';
 import 'ack_add_account_view.dart';
 
 class UploadImageView extends StatelessWidget {

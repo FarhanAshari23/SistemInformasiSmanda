@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 import '../../../domain/entities/auth/user.dart';
 import '../../models/auth/update_user.dart';
@@ -37,8 +42,60 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   }
 
   @override
-  Future<Either> updateStudent(updateUserReq) async {
+  Future<Either> updateStudent(UpdateUserReq updateUserReq) async {
+    const String endpoint =
+        "http://192.168.18.2:8000/api/update-image-students";
     try {
+      if (updateUserReq.imageFile != null) {
+        Uri? url;
+        try {
+          url = Uri.parse(endpoint);
+        } catch (_) {
+          throw Exception("URL tidak valid: $endpoint");
+        }
+
+        final request = http.MultipartRequest("POST", url);
+
+        request.fields['name'] = updateUserReq.nama;
+        request.fields['nisn'] = updateUserReq.nisn;
+
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            "photo",
+            updateUserReq.imageFile?.path ?? '',
+            filename: basename(updateUserReq.imageFile?.path ?? ''),
+            contentType: http.MediaType("image", "jpg"),
+          ),
+        );
+
+        request.headers.addAll({
+          "Accept": "application/json",
+          "Content-Type": "multipart/form-data",
+        });
+
+        final streamedResponse = await request.send().timeout(
+          const Duration(seconds: 15),
+          onTimeout: () {
+            throw Exception("Timeout: Server tidak merespon.");
+          },
+        );
+
+        final responseBody = await streamedResponse.stream.bytesToString();
+
+        if (streamedResponse.statusCode != 200) {
+          throw Exception(
+            "Upload gagal (status: ${streamedResponse.statusCode}). "
+            "Response: $responseBody",
+          );
+        }
+
+        try {
+          jsonDecode(responseBody);
+        } catch (_) {
+          throw Exception("Response server bukan JSON valid: $responseBody");
+        }
+      }
+
       CollectionReference users =
           FirebaseFirestore.instance.collection('Students');
       QuerySnapshot querySnapshot =
@@ -59,6 +116,12 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         return right('Update Data Student Success');
       }
       return const Right('Update Data Student Success');
+    } on SocketException {
+      throw Exception("Tidak ada koneksi internet.");
+    } on HttpException {
+      throw Exception("Kesalahan HTTP terjadi.");
+    } on FormatException {
+      throw Exception("Format data tidak valid.");
     } catch (e) {
       return Left(e.toString());
     }
