@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/landing/succes.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/signup.dart';
+import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/button_role.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageStudent/widgets/card_ack.dart';
 
 import '../../../common/bloc/button/button_state.dart';
@@ -99,21 +99,29 @@ class AckAddStudentView extends StatelessWidget {
                     height: height * 0.4,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       itemBuilder: (context, index) {
-                        return CardAck(
-                          title: titleList[index],
-                          content: contentList[index],
-                        );
+                        if (index == titleList.length) {
+                          return CardAck(
+                            title: "Foto",
+                            image: userCreationReq.imageFile,
+                          );
+                        } else {
+                          return CardAck(
+                            title: titleList[index],
+                            content: contentList[index],
+                          );
+                        }
                       },
                       separatorBuilder: (context, index) =>
                           SizedBox(width: width * 0.01),
-                      itemCount: titleList.length,
+                      itemCount: titleList.length + 1,
                     ),
                   ),
                   SizedBox(height: height * 0.06),
                   Builder(
                     builder: (context) {
-                      return BasicButton(
+                      return ButtonRole(
                         onPressed: () {
                           context.read<ButtonStateCubit>().execute(
                                 usecase: SignUpUseCase(),

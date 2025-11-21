@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
@@ -5,9 +7,11 @@ import '../../../core/configs/theme/app_colors.dart';
 class CardAck extends StatelessWidget {
   final String title;
   final String? content;
+  final File? image;
   const CardAck({
     super.key,
     required this.title,
+    this.image,
     this.content,
   });
 
@@ -31,15 +35,27 @@ class CardAck extends StatelessWidget {
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Text(
-                  content.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16,
-                    color: AppColors.inversePrimary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                child: image != null
+                    ? Container(
+                        width: height * 0.15,
+                        height: height * 0.15,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: FileImage(image!),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      )
+                    : Text(
+                        content.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16,
+                          color: AppColors.inversePrimary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
               ),
             ),
           ),

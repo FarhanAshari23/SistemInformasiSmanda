@@ -92,32 +92,8 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
     final keywords = generateKeywords(murid.nama ?? '');
     const String endpoint =
         "http://192.168.18.2:8000/api/upload-image-students";
+    DocumentReference? studentRef;
     try {
-      //create in firebase
-      final key = encrypt.Key.fromUtf8('1234567890123456');
-      final iv = encrypt.IV.fromSecureRandom(16);
-      final encrypter = encrypt.Encrypter(encrypt.AES(key));
-      final encryptedPassword = encrypter.encrypt(murid.password!, iv: iv);
-      await FirebaseFirestore.instance.collection('Students').add(
-        {
-          'email': murid.email,
-          'nama': murid.nama,
-          'kelas': murid.kelas,
-          'nisn': murid.nisn,
-          'tanggal_lahir': murid.tanggalLahir,
-          'No_HP': murid.noHP,
-          'alamat': murid.address,
-          'ekskul': murid.ekskul,
-          'gender': murid.gender,
-          'isAdmin': murid.isAdmin,
-          'agama': murid.agama,
-          'password': encryptedPassword.base64,
-          'is_register': murid.isRegister,
-          'keywords': keywords,
-          'iv': iv.base64,
-        },
-      );
-
       Uri? url;
       try {
         url = Uri.parse(endpoint);
@@ -158,12 +134,40 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         throw Exception("Response server bukan JSON valid: $responseBody");
       }
 
+      //create in firebase
+      final key = encrypt.Key.fromUtf8('1234567890123456');
+      final iv = encrypt.IV.fromSecureRandom(16);
+      final encrypter = encrypt.Encrypter(encrypt.AES(key));
+      final encryptedPassword = encrypter.encrypt(murid.password!, iv: iv);
+      studentRef = await FirebaseFirestore.instance.collection('Students').add(
+        {
+          'email': murid.email,
+          'nama': murid.nama,
+          'kelas': murid.kelas,
+          'nisn': murid.nisn,
+          'tanggal_lahir': murid.tanggalLahir,
+          'No_HP': murid.noHP,
+          'alamat': murid.address,
+          'ekskul': murid.ekskul,
+          'gender': murid.gender,
+          'isAdmin': murid.isAdmin,
+          'agama': murid.agama,
+          'password': encryptedPassword.base64,
+          'is_register': murid.isRegister,
+          'keywords': keywords,
+          'iv': iv.base64,
+        },
+      );
+
       return Right('Signup was succesfull, $json');
     } on SocketException {
+      if (studentRef != null) await studentRef.delete();
       throw Exception("Tidak ada koneksi internet.");
     } on HttpException {
+      if (studentRef != null) await studentRef.delete();
       throw Exception("Kesalahan HTTP terjadi.");
     } on FormatException {
+      if (studentRef != null) await studentRef.delete();
       throw Exception("Format data tidak valid.");
     } catch (e) {
       return Left("Something Error: $e");
