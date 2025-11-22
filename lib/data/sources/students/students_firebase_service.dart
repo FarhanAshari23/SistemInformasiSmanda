@@ -20,7 +20,7 @@ abstract class StudentsFirebaseService {
   Future<Either> getAllKelas();
   Future<Either> getStudentByRegister();
   Future<Either> updateStudent(UpdateUserReq updateUserReq);
-  Future<Either> deleteStudent(String nisnStudent);
+  Future<Either> deleteStudent(UserEntity user);
   Future<Either> searchStudentByNISN(String nisnStudent);
   Future<Either> deleteStudentByClass(String kelas);
   Future<Either> getStudentsByname(String name);
@@ -128,16 +128,37 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   }
 
   @override
-  Future<Either> deleteStudent(String nisnStudent) async {
+  Future<Either> deleteStudent(UserEntity user) async {
+    const String endpoint = "http://192.168.18.2:8000/api/delete-image-student";
     try {
+      Uri? url;
+      try {
+        url = Uri.parse(endpoint);
+      } catch (_) {
+        throw Exception("URL tidak valid: $endpoint");
+      }
+
+      final response = await http.post(url, body: {
+        "name": user.nama,
+        "nisn": user.nisn,
+      });
+
+      if (response.statusCode != 200) {
+        throw Exception("Upload gagal (status: ${response.statusCode})");
+      }
+
       CollectionReference users =
           FirebaseFirestore.instance.collection('Students');
       QuerySnapshot querySnapshot =
-          await users.where('nisn', isEqualTo: nisnStudent).get();
+          await users.where('nisn', isEqualTo: user.nisn).get();
       for (var doc in querySnapshot.docs) {
         await doc.reference.delete();
       }
       return const Right('Delete Data Student Success');
+    } on SocketException {
+      throw Exception("Tidak ada koneksi internet.");
+    } on HttpException {
+      throw Exception("Kesalahan HTTP terjadi.");
     } catch (e) {
       return Left(e.toString());
     }
@@ -348,8 +369,17 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   Future<Either> deleteAllStudentAccount() async {
     final firestore = FirebaseFirestore.instance;
     final collection = firestore.collection('Students');
-
+    const String endpoint =
+        "http://192.168.18.2:8000/api/delete-multiple-students";
+    final List<Map<String, String>> studentsPayload = [];
     try {
+      Uri? url;
+      try {
+        url = Uri.parse(endpoint);
+      } catch (_) {
+        throw Exception("URL tidak valid: $endpoint");
+      }
+
       QuerySnapshot snapshot =
           await collection.where('is_register', isEqualTo: false).get();
       if (snapshot.docs.isEmpty) {
@@ -357,11 +387,40 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
           "Maaf, tidak ada akun registrasi yang harus dihapus",
         );
       }
+
+      for (var doc in snapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>;
+
+        studentsPayload.add({
+          "name": data["nama"],
+          "nisn": data["nisn"],
+        });
+      }
+
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: jsonEncode({
+          "students": studentsPayload,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception("Upload gagal (status: ${response.statusCode})");
+      }
+
       for (var doc in snapshot.docs) {
         await doc.reference.delete();
         snapshot = await collection.get();
       }
       return const Right('Semua data akun registrasi telah dihapus');
+    } on SocketException {
+      throw Exception("Tidak ada koneksi internet.");
+    } on HttpException {
+      throw Exception("Kesalahan HTTP terjadi.");
     } catch (e) {
       return Left('Something wrong: $e');
     }

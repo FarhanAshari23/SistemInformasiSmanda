@@ -116,9 +116,9 @@ class _EditProfileViewState extends State<EditProfileView> {
               const Padding(
                 padding: EdgeInsets.only(left: 16),
                 child: Text(
-                  '*data kelas dan nisn tidak bisa diubah, silakan hubungi operator',
+                  '*nama, kelas, dan nisn tidak bisa diubah, silakan hubungi operator',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 10,
                     fontWeight: FontWeight.w500,
                     color: AppColors.primary,
                   ),
@@ -132,6 +132,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     TextField(
                       controller: _namaC,
                       autocorrect: false,
+                      readOnly: true,
                       decoration: const InputDecoration(
                         hintText: 'nama:',
                       ),

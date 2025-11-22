@@ -111,6 +111,11 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         ),
       );
 
+      request.headers.addAll({
+        "Accept": "application/json",
+        "Content-Type": "multipart/form-data",
+      });
+
       final streamedResponse = await request.send().timeout(
         const Duration(seconds: 15),
         onTimeout: () {
