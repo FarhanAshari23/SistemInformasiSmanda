@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../common/bloc/upload_image/upload_image_state.dart';
-import '../../../common/helper/app_navigation.dart';
-import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../common/widget/button/basic_button.dart';
-import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../data/models/auth/user_creation_req.dart';
-import '../../../common/bloc/upload_image/upload_image_cubit.dart';
-import 'ack_add_account_view.dart';
+import '../../bloc/upload_image/upload_image_cubit.dart';
+import '../../bloc/upload_image/upload_image_state.dart';
+import '../appbar/basic_appbar.dart';
+import '../button/basic_button.dart';
+import '../inkwell/custom_inkwell.dart';
 
-class UploadImageView extends StatelessWidget {
-  final UserCreationReq userCreationReq;
-  const UploadImageView({
+class AddPhotoView extends StatelessWidget {
+  final String name, id;
+  const AddPhotoView({
     super.key,
-    required this.userCreationReq,
+    required this.id,
+    required this.name,
   });
 
   @override
@@ -39,8 +37,9 @@ class UploadImageView extends StatelessWidget {
                     return CustomInkWell(
                       borderRadius: 12,
                       defaultColor: AppColors.secondary,
-                      onTap: () => context.read<UploadImageCubit>().pickImage(
-                          "${userCreationReq.nama}_${userCreationReq.nisn}"),
+                      onTap: () => context
+                          .read<UploadImageCubit>()
+                          .pickImage("${name}_$id"),
                       child: SizedBox(
                         width: height * 0.3,
                         height: height * 0.3,
@@ -87,8 +86,7 @@ class UploadImageView extends StatelessWidget {
                           child: BasicButton(
                             onPressed: () => context
                                 .read<UploadImageCubit>()
-                                .pickImage(
-                                    "${userCreationReq.nama}_${userCreationReq.nisn}"),
+                                .pickImage("${name}_$id"),
                             title: "Ambil Ulang",
                           ),
                         )
@@ -101,8 +99,9 @@ class UploadImageView extends StatelessWidget {
                         CustomInkWell(
                           borderRadius: 12,
                           defaultColor: AppColors.secondary,
-                          onTap: () => context.read<UploadImageCubit>().pickImage(
-                              "${userCreationReq.nama}_${userCreationReq.nisn}"),
+                          onTap: () => context
+                              .read<UploadImageCubit>()
+                              .pickImage("${name}_$id"),
                           child: SizedBox(
                             width: height * 0.3,
                             height: height * 0.3,
@@ -148,11 +147,7 @@ class UploadImageView extends StatelessWidget {
                     onPressed: () {
                       final state = context.read<UploadImageCubit>().state;
                       if (state is UploadImageSuccess) {
-                        userCreationReq.imageFile = state.imageFile;
-                        AppNavigator.push(
-                          context,
-                          AckAddStudentView(userCreationReq: userCreationReq),
-                        );
+                        Navigator.pop(context, state.imageFile);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -167,7 +162,7 @@ class UploadImageView extends StatelessWidget {
                         );
                       }
                     },
-                    title: "Lanjut",
+                    title: "Simpan",
                   );
                 },
               )

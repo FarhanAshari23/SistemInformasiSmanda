@@ -1,10 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 
-import '../../../data/models/teacher/teacher.dart';
-
 abstract class TeacherRepository {
-  Future<Either> createTeacher(TeacherModel teacherCreationReq);
+  Future<Either> createTeacher(TeacherEntity teacherCreationReq);
   Future<Either> updateTeacher(TeacherEntity teacherReq);
   Future<Either> deleteTeacher(TeacherEntity teacherReq);
   Future<Either> getTeacherByName(String name);

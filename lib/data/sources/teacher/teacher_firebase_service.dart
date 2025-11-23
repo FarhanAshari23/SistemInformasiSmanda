@@ -1,12 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 import '../../../common/helper/generate_keyword.dart';
 import '../../../domain/entities/auth/teacher.dart';
-import '../../models/teacher/teacher.dart';
 
 abstract class TeacherFirebaseService {
-  Future<Either> createTeacher(TeacherModel teacherCreationReq);
+  Future<Either> createTeacher(TeacherEntity teacherCreationReq);
   Future<Either> updateTeacher(TeacherEntity teacherReq);
   Future<Either> deleteTeacher(TeacherEntity teacherReq);
   Future<Either> getTeacherByName(String name);
@@ -67,11 +71,58 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   }
 
   @override
-  Future<Either> createTeacher(TeacherModel teacherCreationReq) async {
+  Future<Either> createTeacher(TeacherEntity teacherCreationReq) async {
+    const String endpoint =
+        "http://192.168.18.2:8000/api/upload-image-teachers";
+    DocumentReference? teacherRef;
     try {
+      Uri? url;
+      try {
+        url = Uri.parse(endpoint);
+      } catch (_) {
+        throw Exception("URL tidak valid: $endpoint");
+      }
+
+      final request = http.MultipartRequest("POST", url);
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          teacherCreationReq.image?.path ?? '',
+          filename: basename(teacherCreationReq.image?.path ?? ''),
+        ),
+      );
+
+      request.headers.addAll({
+        "Accept": "application/json",
+        "Content-Type": "multipart/form-data",
+      });
+
+      final streamedResponse = await request.send().timeout(
+        const Duration(seconds: 15),
+        onTimeout: () {
+          throw Exception("Timeout: Server tidak merespon.");
+        },
+      );
+
+      final responseBody = await streamedResponse.stream.bytesToString();
+
+      if (streamedResponse.statusCode != 200) {
+        throw Exception(
+          "Upload gagal (status: ${streamedResponse.statusCode}). "
+          "Response: $responseBody",
+        );
+      }
+
+      try {
+        jsonDecode(responseBody);
+      } catch (_) {
+        throw Exception("Response server bukan JSON valid: $responseBody");
+      }
+
       final keywords = generateKeywords(teacherCreationReq.nama);
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-      await firebaseFirestore.collection("Teachers").add(
+      teacherRef = await firebaseFirestore.collection("Teachers").add(
         {
           "nama": teacherCreationReq.nama,
           "NIP": teacherCreationReq.nip,
@@ -84,6 +135,15 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         },
       );
       return const Right("Upload Teacher was succesfull");
+    } on SocketException {
+      if (teacherRef != null) await teacherRef.delete();
+      throw Exception("Tidak ada koneksi internet.");
+    } on HttpException {
+      if (teacherRef != null) await teacherRef.delete();
+      throw Exception("Kesalahan HTTP terjadi.");
+    } on FormatException {
+      if (teacherRef != null) await teacherRef.delete();
+      throw Exception("Format data tidak valid.");
     } catch (e) {
       return Left(e);
     }
@@ -91,7 +151,25 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
 
   @override
   Future<Either> deleteTeacher(TeacherEntity teacherReq) async {
+    const String endpoint =
+        "http://192.168.18.2:8000/api/delete-image-teachers";
     try {
+      Uri? url;
+      try {
+        url = Uri.parse(endpoint);
+      } catch (_) {
+        throw Exception("URL tidak valid: $endpoint");
+      }
+
+      final response = await http.post(url, body: {
+        "name": teacherReq.nama,
+        "nip": teacherReq.nip != '-' ? teacherReq.nip : teacherReq.tanggalLahir,
+      });
+
+      if (response.statusCode != 200) {
+        throw Exception("Upload gagal (status: ${response.statusCode})");
+      }
+
       CollectionReference users =
           FirebaseFirestore.instance.collection('Teachers');
       QuerySnapshot querySnapshot = await users
@@ -111,7 +189,61 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
 
   @override
   Future<Either> updateTeacher(TeacherEntity teacherReq) async {
+    const String endpoint =
+        "http://192.168.18.2:8000/api/update-image-teachers";
     try {
+      if (teacherReq.image != null) {
+        Uri? url;
+        try {
+          url = Uri.parse(endpoint);
+        } catch (_) {
+          throw Exception("URL tidak valid: $endpoint");
+        }
+
+        final request = http.MultipartRequest("POST", url);
+
+        request.fields['name'] = teacherReq.nama;
+        request.fields['nip'] = teacherReq.nip != '-'
+            ? teacherReq.nip
+            : teacherReq.tanggalLahir.toString();
+
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            "photo",
+            teacherReq.image?.path ?? '',
+            filename: basename(teacherReq.image?.path ?? ''),
+            contentType: http.MediaType("image", "jpg"),
+          ),
+        );
+
+        request.headers.addAll({
+          "Accept": "application/json",
+          "Content-Type": "multipart/form-data",
+        });
+
+        final streamedResponse = await request.send().timeout(
+          const Duration(seconds: 15),
+          onTimeout: () {
+            throw Exception("Timeout: Server tidak merespon.");
+          },
+        );
+
+        final responseBody = await streamedResponse.stream.bytesToString();
+
+        if (streamedResponse.statusCode != 200) {
+          throw Exception(
+            "Upload gagal (status: ${streamedResponse.statusCode}). "
+            "Response: $responseBody",
+          );
+        }
+
+        try {
+          jsonDecode(responseBody);
+        } catch (_) {
+          throw Exception("Response server bukan JSON valid: $responseBody");
+        }
+      }
+
       CollectionReference users =
           FirebaseFirestore.instance.collection('Teachers');
       QuerySnapshot querySnapshot = await users
@@ -133,6 +265,12 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         return right('Update Data Teacher Success');
       }
       return const Right('Update Data Teacher Success');
+    } on SocketException {
+      throw Exception("Tidak ada koneksi internet.");
+    } on HttpException {
+      throw Exception("Kesalahan HTTP terjadi.");
+    } on FormatException {
+      throw Exception("Format data tidak valid.");
     } catch (e) {
       return Left(e.toString());
     }

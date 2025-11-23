@@ -1,20 +1,25 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
 
 import '../../../common/bloc/activities/get_activities_cubit.dart';
+import '../../../common/bloc/button/button_state.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/bloc/kelas/kelas_display_state.dart';
+import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/card/box_gender.dart';
 import '../../../common/widget/dropdown/app_dropdown_field.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/teacher.dart';
 import '../../../domain/usecases/teacher/update_teacher.dart';
-import '../../../service_locator.dart';
+import '../../auth/widgets/button_role.dart';
+import '../../manageStudent/views/change_photo_view.dart';
 import 'select_jabatan_view.dart';
 import 'select_mengajar_view.dart';
 
@@ -33,6 +38,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
   late TextEditingController _waliKelasC;
   late TextEditingController _tanggalC;
   late TextEditingController _jabatanC;
+  late File? imageProfile;
 
   @override
   void initState() {
@@ -92,119 +98,127 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
           BlocProvider(
             create: (context) => GetActivitiesCubit()..displayActivites(),
           ),
+          BlocProvider(
+            create: (context) => ButtonStateCubit(),
+          ),
         ],
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const BasicAppbar(
-                isBackViewed: true,
-                isProfileViewed: false,
-              ),
-              const Center(
-                child: Text(
-                  'EDIT DATA GURU',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.primary,
+        child: BlocListener<ButtonStateCubit, ButtonState>(
+          listener: (context, state) {
+            if (state is ButtonFailureState) {
+              var snackbar = SnackBar(
+                content: Text(state.errorMessage),
+                behavior: SnackBarBehavior.floating,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+            }
+            if (state is ButtonSuccessState) {
+              context.read<TeacherCubit>().displayTeacher();
+              var snackbar = const SnackBar(
+                content: Text("Data Berhasil Diubah"),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              Navigator.pop(context);
+            }
+          },
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const BasicAppbar(
+                  isBackViewed: true,
+                  isProfileViewed: false,
+                ),
+                const Center(
+                  child: Text(
+                    'EDIT DATA GURU',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: height * 0.04),
-              const Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Text(
-                  'Masukan informasi yang sesuai pada kolom berikut:',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: AppColors.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(height: height * 0.02),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: List.generate(7, (index) {
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: height * 0.01),
-                        child: _buildFieldByIndex(
-                          context: context,
-                          index: index,
-                          width: width,
-                          height: height,
-                          hinttext: hinttext,
-                          initMengajar: _mengajarC.text,
-                          initWaliKelas: _waliKelasC.text,
-                          controller: controller,
-                        ),
-                      );
-                    }),
+                SizedBox(height: height * 0.04),
+                const Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Text(
+                    'Masukan informasi yang sesuai pada kolom berikut:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: AppColors.primary,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              Builder(builder: (context) {
-                return BasicButton(
-                  onPressed: () async {
-                    if (_namaC.text.isEmpty ||
-                        _nipC.text.isEmpty ||
-                        _mengajarC.text.isEmpty ||
-                        _tanggalC.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text(
-                            'Tolong isi semua kolom yang sudah disediakan',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                SizedBox(height: height * 0.02),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: List.generate(7, (index) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: height * 0.01),
+                          child: _buildFieldByIndex(
+                            context: context,
+                            index: index,
+                            width: width,
+                            height: height,
+                            hinttext: hinttext,
+                            initMengajar: _mengajarC.text,
+                            initWaliKelas: _waliKelasC.text,
+                            controller: controller,
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+                Builder(builder: (context) {
+                  return ButtonRole(
+                    onPressed: () async {
+                      if (_namaC.text.isEmpty ||
+                          _nipC.text.isEmpty ||
+                          _mengajarC.text.isEmpty ||
+                          _tanggalC.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              'Tolong isi semua kolom yang sudah disediakan',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    } else {
-                      final cubit = context.read<GetAllKelasCubit>().state;
-                      var result = await sl<UpdateTeacherUsecase>().call(
-                        params: TeacherEntity(
-                          nama: _namaC.text,
-                          mengajar: _mengajarC.text,
-                          nip: _nipC.text,
-                          tanggalLahir: _tanggalC.text,
-                          waliKelas: cubit is KelasDisplayLoaded &&
-                                  cubit.selected == null
-                              ? '-'
-                              : (cubit as KelasDisplayLoaded).selected!,
-                          jabatan: _jabatanC.text,
-                          gender: context
-                              .read<GenderSelectionCubit>()
-                              .selectedIndex,
-                        ),
-                      );
-                      result.fold(
-                        (error) {
-                          var snackbar = const SnackBar(
-                            content: Text("Gagal Mengubah Data"),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                        },
-                        (r) {
-                          context.read<TeacherCubit>().displayTeacher();
-                          var snackbar = const SnackBar(
-                            content: Text("Data Berhasil Diubah"),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                          Navigator.pop(context);
-                        },
-                      );
-                    }
-                  },
-                  title: 'Ubah',
-                );
-              }),
-            ],
+                        );
+                      } else {
+                        final cubit = context.read<GetAllKelasCubit>().state;
+                        context.read<ButtonStateCubit>().execute(
+                              usecase: UpdateTeacherUsecase(),
+                              params: TeacherEntity(
+                                nama: _namaC.text,
+                                mengajar: _mengajarC.text,
+                                nip: _nipC.text,
+                                tanggalLahir: _tanggalC.text,
+                                waliKelas: cubit is KelasDisplayLoaded &&
+                                        cubit.selected == null
+                                    ? '-'
+                                    : (cubit as KelasDisplayLoaded).selected!,
+                                jabatan: _jabatanC.text,
+                                gender: context
+                                    .read<GenderSelectionCubit>()
+                                    .selectedIndex,
+                                image: imageProfile,
+                              ),
+                            );
+                      }
+                    },
+                    title: 'Ubah',
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       ),
@@ -360,39 +374,86 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
       );
     } else if (index == 6) {
       // Gender Selection
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(4),
-            child: Text(
-              'Jenis Kelamin:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Jenis Kelamin: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: AppColors.primary,
+                ),
+              ),
+              const SizedBox(height: 4),
+              BlocBuilder<GenderSelectionCubit, int>(
+                builder: (context, state) {
+                  return Column(
+                    children: [
+                      BoxGender(
+                        gender: 'Laki-laki',
+                        context: context,
+                        genderIndex: 1,
+                      ),
+                      SizedBox(height: width * 0.01),
+                      BoxGender(
+                        gender: 'Perempuan',
+                        context: context,
+                        genderIndex: 2,
+                      )
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: CustomInkWell(
+                borderRadius: 12,
+                defaultColor: AppColors.secondary,
+                onTap: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChangePhotoView(
+                        teacher: widget.teacher,
+                      ),
+                    ),
+                  );
+                  if (result != null) {
+                    imageProfile = result;
+                  }
+                },
+                child: SizedBox(
+                    height: height * 0.12,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "Ubah Photo",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        )
+                      ],
+                    )),
               ),
             ),
-          ),
-          SizedBox(height: height * 0.01),
-          BlocBuilder<GenderSelectionCubit, int>(
-            builder: (context, state) {
-              return Row(
-                children: [
-                  BoxGender(
-                    gender: 'Laki-laki',
-                    context: context,
-                    genderIndex: 1,
-                  ),
-                  SizedBox(width: width * 0.02),
-                  BoxGender(
-                    gender: 'Perempuan',
-                    context: context,
-                    genderIndex: 2,
-                  ),
-                ],
-              );
-            },
-          ),
+          )
         ],
       );
     }

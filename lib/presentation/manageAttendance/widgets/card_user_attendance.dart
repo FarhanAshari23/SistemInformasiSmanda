@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/photo/network_photo.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -52,21 +54,18 @@ class CardUserAttendance extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15),
             child: Row(
               children: [
-                Container(
-                  width: width * 0.235,
-                  height: bodyHeight * 0.14,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        student.gender == 1
-                            ? AppImages.boyStudent
-                            : student.agama == "Islam"
-                                ? AppImages.girlStudent
-                                : AppImages.girlNonStudent,
-                      ),
-                      fit: BoxFit.fill,
-                    ),
+                NetworkPhoto(
+                  fallbackAsset: student.gender == 1
+                      ? AppImages.boyStudent
+                      : student.agama == "Islam"
+                          ? AppImages.girlStudent
+                          : AppImages.girlNonStudent,
+                  imageUrl: DisplayImage.displayImageStudent(
+                    student.nama ?? '',
+                    student.nisn ?? '',
                   ),
+                  height: mediaQueryHeight * 0.14,
+                  width: width * 0.235,
                 ),
                 SizedBox(width: width * 0.05),
                 Padding(

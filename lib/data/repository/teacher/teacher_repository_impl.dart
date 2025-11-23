@@ -60,7 +60,7 @@ class TeacherRepositoryImpl extends TeacherRepository {
   }
 
   @override
-  Future<Either> createTeacher(TeacherModel teacherCreationReq) async {
+  Future<Either> createTeacher(TeacherEntity teacherCreationReq) async {
     return await sl<TeacherFirebaseService>().createTeacher(teacherCreationReq);
   }
 

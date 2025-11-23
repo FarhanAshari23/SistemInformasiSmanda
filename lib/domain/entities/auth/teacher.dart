@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class TeacherEntity {
   final String nama;
   final String mengajar;
@@ -6,6 +8,7 @@ class TeacherEntity {
   final String waliKelas;
   final String jabatan;
   final int? gender;
+  final File? image;
 
   TeacherEntity({
     required this.nama,
@@ -15,5 +18,6 @@ class TeacherEntity {
     required this.waliKelas,
     required this.jabatan,
     required this.gender,
+    this.image,
   });
 }

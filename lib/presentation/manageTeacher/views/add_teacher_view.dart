@@ -1,21 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/data/models/teacher/teacher.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/views/ack_add_teacher_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/views/select_mengajar_view.dart';
-
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/bloc/kelas/kelas_display_state.dart';
+import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/card/box_gender.dart';
 import '../../../common/widget/dropdown/app_dropdown_field.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../common/widget/photo/add_photo_view.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/teacher.dart';
+import 'ack_add_teacher_view.dart';
 import 'select_jabatan_view.dart';
+import 'select_mengajar_view.dart';
 
 class AddTeacherView extends StatefulWidget {
   const AddTeacherView({
@@ -33,6 +36,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
   final TextEditingController _waliKelasC = TextEditingController();
   final TextEditingController _tanggalC = TextEditingController();
   final TextEditingController _jabatanC = TextEditingController();
+  late File? imageProfile;
 
   @override
   void dispose() {
@@ -112,6 +116,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                           context: context,
                           index: index,
                           width: width,
+                          height: height,
                           hinttext: hinttext,
                           controller: controller,
                         ),
@@ -140,7 +145,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                       AppNavigator.push(
                         context,
                         AckAddTeacherView(
-                          teacherCreationReq: TeacherModel(
+                          teacherCreationReq: TeacherEntity(
                             nama: _namaC.text,
                             mengajar:
                                 _mengajarC.text.isEmpty ? '-' : _mengajarC.text,
@@ -155,6 +160,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                             gender: context
                                 .read<GenderSelectionCubit>()
                                 .selectedIndex,
+                            image: imageProfile,
                           ),
                         ),
                       );
@@ -174,6 +180,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
     required BuildContext context,
     required int index,
     required double width,
+    required double height,
     required List<String> hinttext,
     required List<TextEditingController> controller,
   }) {
@@ -267,36 +274,89 @@ class _AddTeacherViewState extends State<AddTeacherView> {
       );
     } else if (index == 6) {
       // Gender Selection
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Text(
-            'Jenis Kelamin:',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Jenis Kelamin: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: AppColors.primary,
+                ),
+              ),
+              const SizedBox(height: 4),
+              BlocBuilder<GenderSelectionCubit, int>(
+                builder: (context, state) {
+                  return Column(
+                    children: [
+                      BoxGender(
+                        gender: 'Laki-laki',
+                        context: context,
+                        genderIndex: 1,
+                      ),
+                      SizedBox(height: width * 0.01),
+                      BoxGender(
+                        gender: 'Perempuan',
+                        context: context,
+                        genderIndex: 2,
+                      )
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: CustomInkWell(
+                borderRadius: 12,
+                defaultColor: AppColors.secondary,
+                onTap: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddPhotoView(
+                        name: controller[0].text,
+                        id: controller[2].text.isEmpty
+                            ? controller[2].text
+                            : controller[4].text,
+                      ),
+                    ),
+                  );
+                  if (result != null) {
+                    imageProfile = result;
+                  }
+                },
+                child: SizedBox(
+                    height: height * 0.12,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "Ambil Photo",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        )
+                      ],
+                    )),
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          BlocBuilder<GenderSelectionCubit, int>(
-            builder: (context, state) {
-              return Row(
-                children: [
-                  BoxGender(
-                    gender: 'Laki-laki',
-                    context: context,
-                    genderIndex: 1,
-                  ),
-                  SizedBox(width: width * 0.02),
-                  BoxGender(
-                    gender: 'Perempuan',
-                    context: context,
-                    genderIndex: 2,
-                  ),
-                ],
-              );
-            },
-          ),
+          )
         ],
       );
     } else if (index == 5) {

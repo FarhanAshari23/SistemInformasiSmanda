@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/data/models/teacher/teacher.dart';
-import 'package:new_sistem_informasi_smanda/domain/repository/teacher/teacher.dart';
 
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
+import '../../entities/auth/teacher.dart';
+import '../../repository/teacher/teacher.dart';
 
-class CreateTeacherUseCase implements Usecase<Either, TeacherModel> {
+class CreateTeacherUseCase implements Usecase<Either, TeacherEntity> {
   @override
-  Future<Either> call({TeacherModel? params}) async {
+  Future<Either> call({TeacherEntity? params}) async {
     return await sl<TeacherRepository>().createTeacher(params!);
   }
 }

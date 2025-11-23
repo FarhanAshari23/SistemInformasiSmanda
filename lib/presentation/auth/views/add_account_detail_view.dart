@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -6,14 +8,16 @@ import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.da
 import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/religion/religion_cubit.dart';
+import 'package:new_sistem_informasi_smanda/presentation/auth/views/ack_add_account_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/scan_qr_nisn.dart';
 
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../common/widget/photo/add_photo_view.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/widget/card/box_gender.dart';
-import 'upload_image_view.dart';
 
 class AddStudentDetailView extends StatefulWidget {
   final UserCreationReq userCreationReq;
@@ -30,6 +34,7 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
   final TextEditingController _tanggalC = TextEditingController();
   final TextEditingController _noHPC = TextEditingController();
   final TextEditingController _alamatC = TextEditingController();
+  late File? imageProfile;
 
   @override
   void dispose() {
@@ -281,33 +286,88 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                           hintText: 'Tuliskan alamat disini...'),
                     ),
                     SizedBox(height: height * 0.02),
-                    const Text(
-                      'Jenis Kelamin: ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    SizedBox(height: height * 0.01),
-                    BlocBuilder<GenderSelectionCubit, int>(
-                      builder: (context, state) {
-                        return Row(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            BoxGender(
-                              gender: 'Laki-laki',
-                              context: context,
-                              genderIndex: 1,
+                            const Text(
+                              'Jenis Kelamin: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                                color: AppColors.primary,
+                              ),
                             ),
-                            SizedBox(width: width * 0.01),
-                            BoxGender(
-                              gender: 'Perempuan',
-                              context: context,
-                              genderIndex: 2,
-                            )
+                            const SizedBox(height: 4),
+                            BlocBuilder<GenderSelectionCubit, int>(
+                              builder: (context, state) {
+                                return Column(
+                                  children: [
+                                    BoxGender(
+                                      gender: 'Laki-laki',
+                                      context: context,
+                                      genderIndex: 1,
+                                    ),
+                                    SizedBox(height: width * 0.01),
+                                    BoxGender(
+                                      gender: 'Perempuan',
+                                      context: context,
+                                      genderIndex: 2,
+                                    )
+                                  ],
+                                );
+                              },
+                            ),
                           ],
-                        );
-                      },
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: CustomInkWell(
+                              borderRadius: 12,
+                              defaultColor: AppColors.secondary,
+                              onTap: () async {
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AddPhotoView(
+                                      name: _namaC.text,
+                                      id: _nisnC.text,
+                                    ),
+                                  ),
+                                );
+                                if (result != null) {
+                                  imageProfile = result;
+                                }
+                              },
+                              child: SizedBox(
+                                  height: height * 0.12,
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.camera_alt,
+                                        color: Colors.white,
+                                        size: 24,
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        "Ubah Photo",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  )),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ],
                 ),
@@ -354,11 +414,13 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                       widget.userCreationReq.gender =
                           context.read<GenderSelectionCubit>().selectedIndex;
                       widget.userCreationReq.isRegister = false;
+                      widget.userCreationReq.imageFile = imageProfile;
                       FocusScope.of(context).unfocus();
                       AppNavigator.push(
                         context,
-                        UploadImageView(
-                            userCreationReq: widget.userCreationReq),
+                        AckAddStudentView(
+                          userCreationReq: widget.userCreationReq,
+                        ),
                       );
                     }
                   },

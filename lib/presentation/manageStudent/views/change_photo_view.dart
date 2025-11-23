@@ -8,13 +8,17 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
 
 class ChangePhotoView extends StatefulWidget {
-  final UserEntity user;
+  final UserEntity? user;
+  final TeacherEntity? teacher;
+
   const ChangePhotoView({
     super.key,
-    required this.user,
+    this.user,
+    this.teacher,
   });
 
   @override
@@ -24,25 +28,61 @@ class ChangePhotoView extends StatefulWidget {
 class _ChangePhotoViewState extends State<ChangePhotoView> {
   bool imageLoaded = false;
   bool imageFailed = false;
+
+  String? _getName() {
+    if (widget.user != null) return widget.user!.nama;
+    if (widget.teacher != null) return widget.teacher!.nama;
+    return null;
+  }
+
+  String? _getId() {
+    if (widget.user != null) return widget.user!.nisn;
+    if (widget.teacher != null) {
+      return widget.teacher!.nip != ""
+          ? widget.teacher!.nip
+          : widget.teacher!.tanggalLahir.toString();
+    }
+    return null;
+  }
+
+  String? _getImageUrl() {
+    final name = _getName();
+    final id = _getId();
+    if (name == null || id == null) return null;
+
+    return widget.user != null
+        ? DisplayImage.displayImageStudent(name, id)
+        : DisplayImage.displayImageTeacher(name, id);
+  }
+
   @override
   void initState() {
     super.initState();
 
-    final ImageStream stream = NetworkImage(DisplayImage.displayImageStudent(
-            widget.user.nama!, widget.user.nisn!))
-        .resolve(const ImageConfiguration());
+    final url = _getImageUrl();
+    if (url == null || url.isEmpty) {
+      imageFailed = true;
+      return;
+    }
+
+    final ImageStream stream =
+        NetworkImage(url).resolve(const ImageConfiguration());
 
     stream.addListener(
       ImageStreamListener(
         (info, _) {
-          setState(() {
-            imageLoaded = true;
-          });
+          if (mounted) {
+            setState(() {
+              imageLoaded = true;
+            });
+          }
         },
         onError: (error, stackTrace) {
-          setState(() {
-            imageFailed = true;
-          });
+          if (mounted) {
+            setState(() {
+              imageFailed = true;
+            });
+          }
         },
       ),
     );
@@ -51,6 +91,7 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: BlocProvider(
         create: (context) => UploadImageCubit(),
@@ -79,6 +120,19 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 8),
+                        Builder(builder: (context) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 48),
+                            child: BasicButton(
+                              onPressed: () =>
+                                  context.read<UploadImageCubit>().pickImage(
+                                        "${_getName()}_${_getId()}",
+                                      ),
+                              title: "Ambil ulang",
+                            ),
+                          );
+                        }),
                       ],
                     );
                   }
@@ -86,9 +140,9 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
                     return CustomInkWell(
                       borderRadius: 12,
                       defaultColor: AppColors.secondary,
-                      onTap: () => context
-                          .read<UploadImageCubit>()
-                          .pickImage("${widget.user.nama}_${widget.user.nisn}"),
+                      onTap: () => context.read<UploadImageCubit>().pickImage(
+                            "${_getName()}_${_getId()}",
+                          ),
                       child: SizedBox(
                         width: height * 0.3,
                         height: height * 0.3,
@@ -104,9 +158,10 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
                             const Text(
                               "Ambil gambar",
                               style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white),
+                                fontSize: 24,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),
@@ -119,12 +174,7 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: NetworkImage(
-                          DisplayImage.displayImageStudent(
-                            widget.user.nama!,
-                            widget.user.nisn!,
-                          ),
-                        ),
+                        image: NetworkImage(_getImageUrl()!),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -137,9 +187,10 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
                   padding: const EdgeInsets.symmetric(horizontal: 48),
                   child: Builder(builder: (context) {
                     return BasicButton(
-                      onPressed: () => context
-                          .read<UploadImageCubit>()
-                          .pickImage("${widget.user.nama}_${widget.user.nisn}"),
+                      onPressed: () =>
+                          context.read<UploadImageCubit>().pickImage(
+                                "${_getName()}_${_getId()}",
+                              ),
                       title: "Perbarui",
                     );
                   }),
@@ -150,16 +201,15 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
                 builder: (context) {
                   return BasicButton(
                     onPressed: () {
-                      final imageProfile =
-                          context.read<UploadImageCubit>().state;
-                      if (imageProfile is UploadImageSuccess) {
-                        Navigator.pop(context, imageProfile.imageFile);
+                      final state = context.read<UploadImageCubit>().state;
+                      if (state is UploadImageSuccess) {
+                        Navigator.pop(context, state.imageFile);
                       }
                     },
                     title: "Simpan",
                   );
                 },
-              )
+              ),
             ],
           ),
         ),
