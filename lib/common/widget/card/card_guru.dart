@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/teacher.dart';
+import '../../helper/display_image.dart';
+import '../photo/network_photo.dart';
 
 class CardGuru extends StatelessWidget {
-  final String title;
-  final String nip;
-  final int gender;
+  final TeacherEntity teacher;
   const CardGuru({
     super.key,
-    required this.title,
-    required this.nip,
-    required this.gender,
+    required this.teacher,
   });
 
   @override
@@ -26,17 +25,14 @@ class CardGuru extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
+            NetworkPhoto(
               width: width * 0.285,
               height: height * 0.135,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(gender == 1
-                      ? AppImages.guruLaki
-                      : AppImages.guruPerempuan),
-                  fit: BoxFit.fill,
-                ),
-              ),
+              fallbackAsset: teacher.gender == 1
+                  ? AppImages.guruLaki
+                  : AppImages.guruPerempuan,
+              imageUrl: DisplayImage.displayImageTeacher(teacher.nama,
+                  teacher.nip != "-" ? teacher.nip : teacher.tanggalLahir),
             ),
             SizedBox(height: height * 0.01),
             SizedBox(
@@ -44,7 +40,7 @@ class CardGuru extends StatelessWidget {
               height: height * 0.06,
               child: Center(
                 child: Text(
-                  title,
+                  teacher.nama,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,

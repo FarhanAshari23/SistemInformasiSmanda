@@ -79,9 +79,7 @@ class SearchScreenTeacher extends StatelessWidget {
           borderRadius: 8,
           defaultColor: AppColors.secondary,
           child: CardGuru(
-            gender: teachers[index].gender ?? 0,
-            nip: teachers[index].nip,
-            title: teachers[index].nama,
+            teacher: teachers[index],
           ),
         );
       },

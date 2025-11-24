@@ -20,7 +20,7 @@ import '../../../domain/usecases/students/update_user.dart';
 import '../../../common/bloc/religion/religion_cubit.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../auth/widgets/scan_qr_nisn.dart';
-import 'change_photo_view.dart';
+import '../../../common/widget/photo/change_photo_view.dart';
 
 class EditStudentDetail extends StatefulWidget {
   final UserEntity user;

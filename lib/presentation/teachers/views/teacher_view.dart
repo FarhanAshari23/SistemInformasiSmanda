@@ -68,9 +68,7 @@ class TeacherView extends StatelessWidget {
                             borderRadius: 8,
                             defaultColor: AppColors.secondary,
                             child: CardGuru(
-                              nip: state.teacher[index].nip,
-                              title: state.teacher[index].nama,
-                              gender: state.teacher[index].gender ?? 0,
+                              teacher: state.teacher[index],
                             ),
                           );
                         },

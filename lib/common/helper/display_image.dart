@@ -6,7 +6,7 @@ class DisplayImage {
   }
 
   static String displayImageTeacher(String name, String nip) {
-    return '${AppUrl.storageStudent}/$name$nip.jpg';
+    return '${AppUrl.storageTeacher}/${name}_$nip.jpg';
   }
 
   static String displayImageStaff(String name) {

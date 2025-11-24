@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 
-import '../../../common/bloc/upload_image/upload_image_cubit.dart';
-import '../../../common/bloc/upload_image/upload_image_state.dart';
-import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../common/widget/button/basic_button.dart';
-import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../bloc/upload_image/upload_image_cubit.dart';
+import '../../bloc/upload_image/upload_image_state.dart';
+import '../appbar/basic_appbar.dart';
+import '../button/basic_button.dart';
+import '../inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/auth/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
@@ -121,18 +121,22 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Builder(builder: (context) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 48),
-                            child: BasicButton(
-                              onPressed: () =>
-                                  context.read<UploadImageCubit>().pickImage(
-                                        "${_getName()}_${_getId()}",
-                                      ),
-                              title: "Ambil ulang",
-                            ),
-                          );
-                        }),
+                        Visibility(
+                          visible: !imageLoaded && imageFailed,
+                          child: Builder(builder: (context) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 48),
+                              child: BasicButton(
+                                onPressed: () =>
+                                    context.read<UploadImageCubit>().pickImage(
+                                          "${_getName()}_${_getId()}",
+                                        ),
+                                title: "Ambil ulang",
+                              ),
+                            );
+                          }),
+                        ),
                       ],
                     );
                   }
@@ -191,7 +195,7 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
                           context.read<UploadImageCubit>().pickImage(
                                 "${_getName()}_${_getId()}",
                               ),
-                      title: "Perbarui",
+                      title: "Ambil ulang",
                     );
                   }),
                 ),

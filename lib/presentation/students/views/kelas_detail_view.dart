@@ -91,10 +91,7 @@ class KelasDetailView extends StatelessWidget {
                                             user: state.students[index],
                                           ),
                                         ),
-                                        name: state.students[index].nama!,
-                                        nisn: state.students[index].nisn!,
-                                        agama: state.students[index].agama!,
-                                        gender: state.students[index].gender!,
+                                        user: state.students[index],
                                       );
                                     },
                                     separatorBuilder: (context, index) =>

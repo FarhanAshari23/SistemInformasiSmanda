@@ -59,10 +59,7 @@ class SearchStudentsView extends StatelessWidget {
       itemBuilder: (context, index) {
         return CardUser(
           onTap: () => Navigator.pop(context, students[index]),
-          name: students[index].nama!,
-          nisn: students[index].nisn!,
-          agama: students[index].agama!,
-          gender: students[index].gender!,
+          user: students[index],
         );
       },
       separatorBuilder: (context, index) => SizedBox(height: height * 0.02),

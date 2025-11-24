@@ -19,7 +19,7 @@ import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/auth/teacher.dart';
 import '../../../domain/usecases/teacher/update_teacher.dart';
 import '../../auth/widgets/button_role.dart';
-import '../../manageStudent/views/change_photo_view.dart';
+import '../../../common/widget/photo/change_photo_view.dart';
 import 'select_jabatan_view.dart';
 import 'select_mengajar_view.dart';
 

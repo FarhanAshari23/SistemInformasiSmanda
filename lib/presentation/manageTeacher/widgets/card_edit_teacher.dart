@@ -1,11 +1,11 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
 
 import '../../../common/helper/app_navigation.dart';
+import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/auth/teacher.dart';
@@ -41,17 +41,15 @@ class CardEditTeacher extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15),
             child: Row(
               children: [
-                Container(
+                NetworkPhoto(
                   width: width * 0.25,
                   height: bodyHeight * 0.12,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(
-                      image: AssetImage(teacher.gender == 1
-                          ? AppImages.guruLaki
-                          : AppImages.guruPerempuan),
-                      fit: BoxFit.fill,
-                    ),
+                  fallbackAsset: teacher.gender == 1
+                      ? AppImages.guruLaki
+                      : AppImages.guruPerempuan,
+                  imageUrl: DisplayImage.displayImageTeacher(
+                    teacher.nama,
+                    teacher.nip != '-' ? teacher.nip : teacher.tanggalLahir,
                   ),
                 ),
                 SizedBox(width: width * 0.05),
