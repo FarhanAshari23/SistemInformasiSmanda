@@ -8,6 +8,8 @@ class NetworkPhoto extends StatelessWidget {
   final double width;
   final double height;
   final BoxShape shape;
+  final bool forceRefresh;
+
   const NetworkPhoto({
     super.key,
     required this.fallbackAsset,
@@ -15,12 +17,17 @@ class NetworkPhoto extends StatelessWidget {
     required this.height,
     required this.width,
     this.shape = BoxShape.rectangle,
+    this.forceRefresh = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    final finalUrl = forceRefresh
+        ? "$imageUrl?v=${DateTime.now().millisecondsSinceEpoch}"
+        : imageUrl;
+
     return CachedNetworkImage(
-      imageUrl: imageUrl,
+      imageUrl: finalUrl,
       imageBuilder: (context, provider) => Container(
         width: width,
         height: height,
