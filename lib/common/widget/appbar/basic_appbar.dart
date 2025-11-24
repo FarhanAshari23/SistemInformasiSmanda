@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
+import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/extract_name.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_cubit.dart';
@@ -9,6 +10,7 @@ import 'package:new_sistem_informasi_smanda/presentation/profile/views/profile_v
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../photo/network_photo.dart';
 
 class BasicAppbar extends StatelessWidget {
   final bool isBackViewed;
@@ -126,21 +128,16 @@ class BasicAppbar extends StatelessWidget {
                                     context,
                                     const ProfileView(),
                                   ),
-                                  child: Container(
+                                  child: NetworkPhoto(
                                     width: width * 0.105,
                                     height: height * 0.065,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColors.tertiary,
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                          state.userEntity.gender == 1
-                                              ? AppImages.boyStudent
-                                              : AppImages.girlStudent,
-                                        ),
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
+                                    shape: BoxShape.circle,
+                                    fallbackAsset: state.userEntity.gender == 1
+                                        ? AppImages.boyStudent
+                                        : AppImages.girlStudent,
+                                    imageUrl: DisplayImage.displayImageStudent(
+                                        state.userEntity.nama ?? '',
+                                        state.userEntity.nisn ?? ''),
                                   ),
                                 ),
                               ],

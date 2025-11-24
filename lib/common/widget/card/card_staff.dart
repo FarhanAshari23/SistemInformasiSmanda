@@ -4,18 +4,19 @@ import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/teacher.dart';
+import '../../helper/display_image.dart';
+import '../photo/network_photo.dart';
 
 class CardStaff extends StatelessWidget {
-  final String title;
-  final String content;
-  final int gender;
+  final TeacherEntity teacher;
+  final String? content;
   final Widget page;
   const CardStaff({
     super.key,
-    required this.title,
-    required this.content,
+    this.content,
+    required this.teacher,
     required this.page,
-    required this.gender,
   });
 
   @override
@@ -34,18 +35,15 @@ class CardStaff extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
+              NetworkPhoto(
                 width: width * 0.24,
                 height: height * 0.115,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                      gender == 1
-                          ? AppImages.tendikLaki
-                          : AppImages.tendikPerempuan,
-                    ),
-                    fit: BoxFit.fill,
-                  ),
+                fallbackAsset: teacher.gender == 1
+                    ? AppImages.tendikLaki
+                    : AppImages.tendikPerempuan,
+                imageUrl: DisplayImage.displayImageTeacher(
+                  teacher.nama,
+                  teacher.nip != '-' ? teacher.nip : teacher.tanggalLahir,
                 ),
               ),
               SizedBox(height: height * 0.01),
@@ -54,7 +52,7 @@ class CardStaff extends StatelessWidget {
                 height: height * 0.06,
                 child: Center(
                   child: Text(
-                    title,
+                    teacher.nama,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
@@ -66,7 +64,7 @@ class CardStaff extends StatelessWidget {
               ),
               SizedBox(height: height * 0.01),
               Text(
-                content,
+                content != null ? content! : teacher.jabatan,
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,

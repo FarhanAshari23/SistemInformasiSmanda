@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 
+import '../../../common/helper/display_image.dart';
+import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../students/widgets/card_detail.dart';
@@ -30,18 +32,17 @@ class StaffDetail extends StatelessWidget {
                 child: Stack(
                   alignment: AlignmentDirectional.topCenter,
                   children: [
-                    Container(
+                    NetworkPhoto(
                       width: double.infinity,
                       height: bodyHeight * 0.49,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                            teachers.gender == 1
-                                ? AppImages.tendikLaki
-                                : AppImages.tendikPerempuan,
-                          ),
-                          fit: BoxFit.fill,
-                        ),
+                      fallbackAsset: teachers.gender == 1
+                          ? AppImages.tendikLaki
+                          : AppImages.tendikPerempuan,
+                      imageUrl: DisplayImage.displayImageTeacher(
+                        teachers.nama,
+                        teachers.nip != '-'
+                            ? teachers.nip
+                            : teachers.tanggalLahir,
                       ),
                     ),
                     Align(
@@ -108,13 +109,18 @@ class StaffDetail extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    CardDetailSiswa(
-                                      title: 'Tanggal Lahir',
-                                      content: teachers.tanggalLahir,
+                                    Expanded(
+                                      child: CardDetailSiswa(
+                                        title: 'Tanggal Lahir',
+                                        content: teachers.tanggalLahir,
+                                      ),
                                     ),
-                                    CardDetailSiswa(
-                                      title: 'Pekerjaan',
-                                      content: teachers.mengajar,
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: CardDetailSiswa(
+                                        title: 'Pekerjaan',
+                                        content: teachers.mengajar,
+                                      ),
                                     ),
                                   ],
                                 ),

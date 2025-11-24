@@ -8,6 +8,9 @@ import 'package:new_sistem_informasi_smanda/presentation/students/widgets/card_d
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../common/helper/display_image.dart';
+import '../../../common/widget/photo/network_photo.dart';
+
 class MuridDetail extends StatelessWidget {
   final UserEntity user;
   const MuridDetail({
@@ -84,21 +87,17 @@ class MuridDetail extends StatelessWidget {
                       height: bodyHeight * 0.51,
                       child: Stack(
                         children: [
-                          Container(
+                          NetworkPhoto(
                             width: double.infinity,
                             height: bodyHeight,
-                            decoration: BoxDecoration(
-                              color: const Color(0xff2D66BD),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  user.gender == 1
-                                      ? AppImages.boyStudent
-                                      : user.agama == "Islam"
-                                          ? AppImages.girlStudent
-                                          : AppImages.girlNonStudent,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
+                            fallbackAsset: user.gender == 1
+                                ? AppImages.boyStudent
+                                : user.agama == "Islam"
+                                    ? AppImages.girlStudent
+                                    : AppImages.girlNonStudent,
+                            imageUrl: DisplayImage.displayImageStudent(
+                              user.nama ?? '',
+                              user.nisn ?? '',
                             ),
                           ),
                           Align(

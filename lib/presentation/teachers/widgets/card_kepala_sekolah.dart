@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
+import '../../../common/helper/display_image.dart';
+import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/teacher.dart';
 
 class CardKepalaSekolah extends StatelessWidget {
-  final String title;
-  final String nisn;
-  final int gender;
+  final TeacherEntity teacher;
   final Widget page;
   const CardKepalaSekolah({
     super.key,
-    required this.title,
-    required this.nisn,
+    required this.teacher,
     required this.page,
-    required this.gender,
   });
 
   @override
@@ -31,16 +30,15 @@ class CardKepalaSekolah extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
+            NetworkPhoto(
               width: width * 0.31,
               height: height * 0.15,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    gender == 1 ? AppImages.guruLaki : AppImages.guruPerempuan,
-                  ),
-                  fit: BoxFit.fill,
-                ),
+              fallbackAsset: teacher.gender == 1
+                  ? AppImages.guruLaki
+                  : AppImages.guruPerempuan,
+              imageUrl: DisplayImage.displayImageTeacher(
+                teacher.nama,
+                teacher.nip != '-' ? teacher.nip : teacher.tanggalLahir,
               ),
             ),
             const SizedBox(width: 8),
@@ -50,7 +48,7 @@ class CardKepalaSekolah extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    title,
+                    teacher.nama,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -59,7 +57,7 @@ class CardKepalaSekolah extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    nisn,
+                    teacher.nip,
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w800,

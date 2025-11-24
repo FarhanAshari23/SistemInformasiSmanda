@@ -5,6 +5,8 @@ import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_cubit.dart';
+import '../../../common/helper/display_image.dart';
+import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../views/edit_profile_view.dart';
 
@@ -28,18 +30,17 @@ class CardProfile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
+          NetworkPhoto(
             width: width * 0.3,
             height: height * 0.15,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  user.gender == 1
-                      ? AppImages.boyStudent
-                      : AppImages.girlStudent,
-                ),
-                fit: BoxFit.fill,
-              ),
+            fallbackAsset: user.gender == 1
+                ? AppImages.boyStudent
+                : user.agama == "Islam"
+                    ? AppImages.girlStudent
+                    : AppImages.girlNonStudent,
+            imageUrl: DisplayImage.displayImageStudent(
+              user.nama ?? '',
+              user.nisn ?? '',
             ),
           ),
           Padding(

@@ -5,6 +5,8 @@ import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/auth/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
+import '../../helper/display_image.dart';
+import '../photo/network_photo.dart';
 
 class CardAnggota extends StatelessWidget {
   final String title;
@@ -35,25 +37,27 @@ class CardAnggota extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
+            NetworkPhoto(
               width: 80,
               height: 80,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    murid != null
-                        ? murid!.gender == 1
-                            ? AppImages.boyStudent
-                            : murid!.agama == "Islam"
-                                ? AppImages.girlStudent
-                                : AppImages.girlNonStudent
-                        : pembina!.gender == 1
-                            ? AppImages.guruLaki
-                            : AppImages.guruPerempuan,
-                  ),
-                  fit: BoxFit.fill,
-                ),
-              ),
+              fallbackAsset: murid != null
+                  ? murid!.gender == 1
+                      ? AppImages.boyStudent
+                      : murid!.agama == "Islam"
+                          ? AppImages.girlStudent
+                          : AppImages.girlNonStudent
+                  : pembina!.gender == 1
+                      ? AppImages.guruLaki
+                      : AppImages.guruPerempuan,
+              imageUrl: murid != null
+                  ? DisplayImage.displayImageStudent(
+                      murid?.nama ?? '', murid?.nisn ?? '')
+                  : DisplayImage.displayImageTeacher(
+                      pembina?.nama ?? '',
+                      pembina?.nip != '-'
+                          ? pembina?.nip ?? ''
+                          : pembina?.tanggalLahir ?? '',
+                    ),
             ),
             const SizedBox(width: 12),
             Expanded(

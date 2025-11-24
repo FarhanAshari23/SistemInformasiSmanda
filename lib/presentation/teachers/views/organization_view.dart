@@ -56,9 +56,7 @@ class OrganizationView extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: CardKepalaSekolah(
-                        nisn: state.teacher[0].nip,
-                        title: state.teacher[0].nama,
-                        gender: state.teacher[0].gender ?? 0,
+                        teacher: state.teacher[0],
                         page: TeacherDetail(teachers: state.teacher[0]),
                       ),
                     );
@@ -124,8 +122,7 @@ class OrganizationView extends StatelessWidget {
                             orElse: () => "",
                           );
                           return CardStaff(
-                            title: state.teacher[index].nama,
-                            gender: state.teacher[index].gender ?? 0,
+                            teacher: state.teacher[index],
                             content: mainJabatan,
                             page: TeacherDetail(
                               teachers: state.teacher[index],

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../../common/helper/display_image.dart';
+import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../students/widgets/card_detail.dart';
@@ -32,18 +34,17 @@ class TeacherDetail extends StatelessWidget {
                 child: Stack(
                   alignment: AlignmentDirectional.topCenter,
                   children: [
-                    Container(
+                    NetworkPhoto(
                       width: double.infinity,
                       height: bodyHeight * 0.51,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                            teachers.gender == 1
-                                ? AppImages.guruLaki
-                                : AppImages.guruPerempuan,
-                          ),
-                          fit: BoxFit.fill,
-                        ),
+                      fallbackAsset: teachers.gender == 1
+                          ? AppImages.guruLaki
+                          : AppImages.guruPerempuan,
+                      imageUrl: DisplayImage.displayImageTeacher(
+                        teachers.nama,
+                        teachers.nip != '-'
+                            ? teachers.nip
+                            : teachers.tanggalLahir,
                       ),
                     ),
                     Align(
