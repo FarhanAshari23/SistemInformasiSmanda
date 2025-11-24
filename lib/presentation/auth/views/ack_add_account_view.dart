@@ -101,7 +101,8 @@ class AckAddStudentView extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       itemBuilder: (context, index) {
-                        if (index == titleList.length) {
+                        if (index == titleList.length &&
+                            userCreationReq.imageFile != null) {
                           return CardAck(
                             title: "Foto",
                             image: userCreationReq.imageFile,
@@ -115,7 +116,9 @@ class AckAddStudentView extends StatelessWidget {
                       },
                       separatorBuilder: (context, index) =>
                           SizedBox(width: width * 0.01),
-                      itemCount: titleList.length + 1,
+                      itemCount: userCreationReq.imageFile != null
+                          ? titleList.length + 1
+                          : titleList.length,
                     ),
                   ),
                   SizedBox(height: height * 0.06),

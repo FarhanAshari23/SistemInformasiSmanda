@@ -34,7 +34,7 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
   final TextEditingController _tanggalC = TextEditingController();
   final TextEditingController _noHPC = TextEditingController();
   final TextEditingController _alamatC = TextEditingController();
-  late File? imageProfile;
+  File? imageProfile;
 
   @override
   void dispose() {
@@ -414,7 +414,10 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                       widget.userCreationReq.gender =
                           context.read<GenderSelectionCubit>().selectedIndex;
                       widget.userCreationReq.isRegister = false;
-                      widget.userCreationReq.imageFile = imageProfile;
+                      if (imageProfile != null) {
+                        widget.userCreationReq.imageFile = imageProfile!;
+                      }
+
                       FocusScope.of(context).unfocus();
                       AppNavigator.push(
                         context,

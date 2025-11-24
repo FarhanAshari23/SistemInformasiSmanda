@@ -143,7 +143,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         "nisn": user.nisn,
       });
 
-      if (response.statusCode != 200) {
+      if (response.statusCode != 200 && response.statusCode != 404) {
         throw Exception("Upload gagal (status: ${response.statusCode})");
       }
 

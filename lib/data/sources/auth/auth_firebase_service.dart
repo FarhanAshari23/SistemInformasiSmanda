@@ -94,49 +94,50 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         "http://192.168.18.2:8000/api/upload-image-students";
     DocumentReference? studentRef;
     try {
-      Uri? url;
-      try {
-        url = Uri.parse(endpoint);
-      } catch (_) {
-        throw Exception("URL tidak valid: $endpoint");
-      }
+      if (murid.imageFile != null) {
+        Uri? url;
+        try {
+          url = Uri.parse(endpoint);
+        } catch (_) {
+          throw Exception("URL tidak valid: $endpoint");
+        }
 
-      final request = http.MultipartRequest("POST", url);
+        final request = http.MultipartRequest("POST", url);
 
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'image',
-          murid.imageFile?.path ?? '',
-          filename: basename(murid.imageFile?.path ?? ''),
-        ),
-      );
-
-      request.headers.addAll({
-        "Accept": "application/json",
-        "Content-Type": "multipart/form-data",
-      });
-
-      final streamedResponse = await request.send().timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          throw Exception("Timeout: Server tidak merespon.");
-        },
-      );
-
-      final responseBody = await streamedResponse.stream.bytesToString();
-
-      if (streamedResponse.statusCode != 200) {
-        throw Exception(
-          "Upload gagal (status: ${streamedResponse.statusCode}). "
-          "Response: $responseBody",
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'image',
+            murid.imageFile?.path ?? '',
+            filename: basename(murid.imageFile?.path ?? ''),
+          ),
         );
-      }
 
-      Map<String, dynamic> json;
-      try {
-        json = jsonDecode(responseBody);
-      } catch (_) {
-        throw Exception("Response server bukan JSON valid: $responseBody");
+        request.headers.addAll({
+          "Accept": "application/json",
+          "Content-Type": "multipart/form-data",
+        });
+
+        final streamedResponse = await request.send().timeout(
+          const Duration(seconds: 15),
+          onTimeout: () {
+            throw Exception("Timeout: Server tidak merespon.");
+          },
+        );
+
+        final responseBody = await streamedResponse.stream.bytesToString();
+
+        if (streamedResponse.statusCode != 200) {
+          throw Exception(
+            "Upload gagal (status: ${streamedResponse.statusCode}). "
+            "Response: $responseBody",
+          );
+        }
+
+        try {
+          jsonDecode(responseBody);
+        } catch (_) {
+          throw Exception("Response server bukan JSON valid: $responseBody");
+        }
       }
 
       //create in firebase
