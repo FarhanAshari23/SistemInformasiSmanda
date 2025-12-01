@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -99,7 +100,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       });
 
       final streamedResponse = await request.send().timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 5),
         onTimeout: () {
           throw Exception("Timeout: Server tidak merespon.");
         },
@@ -135,6 +136,9 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         },
       );
       return const Right("Upload Teacher was succesfull");
+    } on TimeoutException {
+      return const Left(
+          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
     } on SocketException {
       if (teacherRef != null) await teacherRef.delete();
       throw Exception("Tidak ada koneksi internet.");
@@ -163,7 +167,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       final response = await http.post(url, body: {
         "name": teacherReq.nama,
         "nip": teacherReq.nip != '-' ? teacherReq.nip : teacherReq.tanggalLahir,
-      });
+      }).timeout(const Duration(seconds: 5));
 
       if (response.statusCode != 200) {
         return Left("Upload gagal (status: ${response.statusCode})");
@@ -181,6 +185,13 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         await doc.reference.delete();
       }
       return const Right('Delete Data Teacher Success');
+    } on TimeoutException {
+      return const Left(
+          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
+    } on SocketException {
+      return const Left("Tidak ada koneksi internet.");
+    } on HttpException {
+      return const Left("Kesalahan HTTP terjadi.");
     } catch (e) {
       return Left('Something Wrong : $e');
     }
@@ -220,7 +231,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         });
 
         final streamedResponse = await request.send().timeout(
-          const Duration(seconds: 15),
+          const Duration(seconds: 5),
           onTimeout: () {
             throw Exception("Timeout: Server tidak merespon.");
           },
@@ -263,6 +274,9 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         return right('Update Data Teacher Success');
       }
       return const Right('Update Data Teacher Success');
+    } on TimeoutException {
+      return const Left(
+          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
     } on SocketException {
       throw Exception("Tidak ada koneksi internet.");
     } on HttpException {

@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 
 import '../../bloc/upload_image/upload_image_cubit.dart';
 import '../../bloc/upload_image/upload_image_state.dart';
+import '../../helper/cache_manager.dart';
 import '../appbar/basic_appbar.dart';
 import '../button/basic_button.dart';
 import '../inkwell/custom_inkwell.dart';
@@ -65,8 +67,12 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
       return;
     }
 
-    final ImageStream stream =
-        NetworkImage(url).resolve(const ImageConfiguration());
+    final provider = CachedNetworkImageProvider(
+      url,
+      cacheManager: FastCacheManager(),
+    );
+
+    final stream = provider.resolve(const ImageConfiguration());
 
     stream.addListener(
       ImageStreamListener(

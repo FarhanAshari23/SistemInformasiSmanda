@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -74,7 +75,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         });
 
         final streamedResponse = await request.send().timeout(
-          const Duration(seconds: 15),
+          const Duration(seconds: 5),
           onTimeout: () {
             throw Exception("Timeout: Server tidak merespon.");
           },
@@ -116,6 +117,9 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         return right('Update Data Student Success');
       }
       return const Right('Update Data Student Success');
+    } on TimeoutException {
+      return const Left(
+          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
     } on SocketException {
       throw Exception("Tidak ada koneksi internet.");
     } on HttpException {
@@ -141,11 +145,14 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       final response = await http.post(url, body: {
         "name": user.nama,
         "nisn": user.nisn,
-      });
+      }).timeout(const Duration(seconds: 5));
 
       if (response.statusCode != 200 && response.statusCode != 404) {
         return Left("Upload gagal (status: ${response.statusCode})");
       }
+    } on TimeoutException {
+      return const Left(
+          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
     } on SocketException {
       return const Left("Tidak ada koneksi internet.");
     } on HttpException {
@@ -229,16 +236,18 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         });
       }
 
-      final response = await http.post(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: jsonEncode({
-          "students": studentsPayload,
-        }),
-      );
+      final response = await http
+          .post(
+            url,
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: jsonEncode({
+              "students": studentsPayload,
+            }),
+          )
+          .timeout(const Duration(seconds: 5));
 
       if (response.statusCode != 200) {
         return Left("Upload gagal (status: ${response.statusCode})");
@@ -248,6 +257,9 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         await doc.reference.delete();
       }
       return const Right('Delete Data Student Success');
+    } on TimeoutException {
+      return const Left(
+          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
     } on SocketException {
       return const Left("Tidak ada koneksi internet.");
     } on HttpException {
@@ -443,16 +455,18 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         });
       }
 
-      final response = await http.post(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: jsonEncode({
-          "students": studentsPayload,
-        }),
-      );
+      final response = await http
+          .post(
+            url,
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: jsonEncode({
+              "students": studentsPayload,
+            }),
+          )
+          .timeout(const Duration(seconds: 5));
 
       if (response.statusCode != 200) {
         return Left("Upload gagal (status: ${response.statusCode})");
@@ -463,6 +477,9 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         snapshot = await collection.get();
       }
       return const Right('Semua data akun registrasi telah dihapus');
+    } on TimeoutException {
+      return const Left(
+          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
     } on SocketException {
       return const Left("Tidak ada koneksi internet.");
     } on HttpException {
