@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 
+import '../../../common/helper/execute_crud.dart';
 import '../../../common/helper/generate_keyword.dart';
 import '../../../domain/entities/auth/teacher.dart';
 
@@ -72,8 +73,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
 
   @override
   Future<Either> createTeacher(TeacherEntity teacherCreationReq) async {
-    const String endpoint =
-        "http://192.168.18.2:8000/api/upload-image-teachers";
+    String endpoint = ExecuteCRUD.uploadImageTeacher();
     DocumentReference? teacherRef;
     try {
       Uri? url;
@@ -151,14 +151,13 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
 
   @override
   Future<Either> deleteTeacher(TeacherEntity teacherReq) async {
-    const String endpoint =
-        "http://192.168.18.2:8000/api/delete-image-teachers";
+    String endpoint = ExecuteCRUD.deleteImageTeacher();
     try {
       Uri? url;
       try {
         url = Uri.parse(endpoint);
       } catch (_) {
-        throw Exception("URL tidak valid: $endpoint");
+        return Left("URL tidak valid: $endpoint");
       }
 
       final response = await http.post(url, body: {
@@ -167,7 +166,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       });
 
       if (response.statusCode != 200) {
-        throw Exception("Upload gagal (status: ${response.statusCode})");
+        return Left("Upload gagal (status: ${response.statusCode})");
       }
 
       CollectionReference users =
@@ -189,8 +188,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
 
   @override
   Future<Either> updateTeacher(TeacherEntity teacherReq) async {
-    const String endpoint =
-        "http://192.168.18.2:8000/api/update-image-teachers";
+    String endpoint = ExecuteCRUD.updateImageTeacher();
     try {
       if (teacherReq.image != null) {
         Uri? url;

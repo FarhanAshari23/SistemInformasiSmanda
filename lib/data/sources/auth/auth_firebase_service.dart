@@ -9,6 +9,7 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 
+import '../../../common/helper/execute_crud.dart';
 import '../../../common/helper/generate_keyword.dart';
 import '../../models/auth/user_creation_req.dart';
 
@@ -90,8 +91,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   @override
   Future<Either> signUp(UserCreationReq murid) async {
     final keywords = generateKeywords(murid.nama ?? '');
-    const String endpoint =
-        "http://192.168.18.2:8000/api/upload-image-students";
+    String endpoint = ExecuteCRUD.uploadImageStudent();
     DocumentReference? studentRef;
     try {
       if (murid.imageFile != null) {

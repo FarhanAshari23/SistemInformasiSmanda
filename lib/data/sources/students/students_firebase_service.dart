@@ -9,6 +9,7 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 
+import '../../../common/helper/execute_crud.dart';
 import '../../../domain/entities/auth/user.dart';
 import '../../models/auth/update_user.dart';
 
@@ -43,8 +44,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
 
   @override
   Future<Either> updateStudent(UpdateUserReq updateUserReq) async {
-    const String endpoint =
-        "http://192.168.18.2:8000/api/update-image-students";
+    String endpoint = ExecuteCRUD.updateImageStudent();
     try {
       if (updateUserReq.imageFile != null) {
         Uri? url;
@@ -129,24 +129,32 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
 
   @override
   Future<Either> deleteStudent(UserEntity user) async {
-    const String endpoint = "http://192.168.18.2:8000/api/delete-image-student";
+    String endpoint = ExecuteCRUD.deleteImageStudent();
+    Uri? url;
     try {
-      Uri? url;
-      try {
-        url = Uri.parse(endpoint);
-      } catch (_) {
-        throw Exception("URL tidak valid: $endpoint");
-      }
+      url = Uri.parse(endpoint);
+    } catch (_) {
+      return Left("URL tidak valid: $endpoint");
+    }
 
+    try {
       final response = await http.post(url, body: {
         "name": user.nama,
         "nisn": user.nisn,
       });
 
       if (response.statusCode != 200 && response.statusCode != 404) {
-        throw Exception("Upload gagal (status: ${response.statusCode})");
+        return Left("Upload gagal (status: ${response.statusCode})");
       }
+    } on SocketException {
+      return const Left("Tidak ada koneksi internet.");
+    } on HttpException {
+      return const Left("Kesalahan HTTP terjadi.");
+    } catch (e) {
+      return Left(e.toString());
+    }
 
+    try {
       CollectionReference users =
           FirebaseFirestore.instance.collection('Students');
       QuerySnapshot querySnapshot =
@@ -155,10 +163,6 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         await doc.reference.delete();
       }
       return const Right('Delete Data Student Success');
-    } on SocketException {
-      throw Exception("Tidak ada koneksi internet.");
-    } on HttpException {
-      throw Exception("Kesalahan HTTP terjadi.");
     } catch (e) {
       return Left(e.toString());
     }
@@ -196,15 +200,58 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
 
   @override
   Future<Either> deleteStudentByClass(String kelas) async {
+    final firestore = FirebaseFirestore.instance;
+    final collection = firestore.collection('Students');
+    String endpoint = ExecuteCRUD.deleteMultipleImageStudent();
+    final List<Map<String, String>> studentsPayload = [];
     try {
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Students');
+      Uri? url;
+      try {
+        url = Uri.parse(endpoint);
+      } catch (_) {
+        return Left("URL tidak valid: $endpoint");
+      }
+
       QuerySnapshot querySnapshot =
-          await users.where('kelas', isEqualTo: kelas).get();
+          await collection.where('kelas', isEqualTo: kelas).get();
+      if (querySnapshot.docs.isEmpty) {
+        return const Left(
+          "Maaf, tidak ada data murid yang bisa dihapus",
+        );
+      }
+
+      for (var doc in querySnapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>;
+
+        studentsPayload.add({
+          "name": data["nama"],
+          "nisn": data["nisn"],
+        });
+      }
+
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: jsonEncode({
+          "students": studentsPayload,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        return Left("Upload gagal (status: ${response.statusCode})");
+      }
+
       for (var doc in querySnapshot.docs) {
         await doc.reference.delete();
       }
       return const Right('Delete Data Student Success');
+    } on SocketException {
+      return const Left("Tidak ada koneksi internet.");
+    } on HttpException {
+      return const Left("Kesalahan HTTP terjadi.");
     } catch (e) {
       return Left(e.toString());
     }
@@ -369,15 +416,14 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   Future<Either> deleteAllStudentAccount() async {
     final firestore = FirebaseFirestore.instance;
     final collection = firestore.collection('Students');
-    const String endpoint =
-        "http://192.168.18.2:8000/api/delete-multiple-students";
+    String endpoint = ExecuteCRUD.deleteMultipleImageStudent();
     final List<Map<String, String>> studentsPayload = [];
     try {
       Uri? url;
       try {
         url = Uri.parse(endpoint);
       } catch (_) {
-        throw Exception("URL tidak valid: $endpoint");
+        return Left("URL tidak valid: $endpoint");
       }
 
       QuerySnapshot snapshot =
@@ -409,7 +455,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       );
 
       if (response.statusCode != 200) {
-        throw Exception("Upload gagal (status: ${response.statusCode})");
+        return Left("Upload gagal (status: ${response.statusCode})");
       }
 
       for (var doc in snapshot.docs) {
@@ -418,9 +464,9 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       }
       return const Right('Semua data akun registrasi telah dihapus');
     } on SocketException {
-      throw Exception("Tidak ada koneksi internet.");
+      return const Left("Tidak ada koneksi internet.");
     } on HttpException {
-      throw Exception("Kesalahan HTTP terjadi.");
+      return const Left("Kesalahan HTTP terjadi.");
     } catch (e) {
       return Left('Something wrong: $e');
     }

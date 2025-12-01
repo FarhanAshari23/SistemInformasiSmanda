@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../helper/cache_manager.dart';
+
 class NetworkPhoto extends StatelessWidget {
   final String imageUrl;
   final String fallbackAsset;
@@ -28,6 +30,7 @@ class NetworkPhoto extends StatelessWidget {
 
     return CachedNetworkImage(
       imageUrl: finalUrl,
+      cacheManager: FastCacheManager(),
       imageBuilder: (context, provider) => Container(
         width: width,
         height: height,
