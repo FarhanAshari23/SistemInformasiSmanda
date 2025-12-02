@@ -26,6 +26,7 @@ class AckAddTeacherView extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     List<String> titleList = [
       'Nama',
+      'Email',
       "NIP",
       "Mengajar",
       "Tanggal Lahir",
@@ -35,6 +36,7 @@ class AckAddTeacherView extends StatelessWidget {
     ];
     List<String> contentList = [
       teacherCreationReq.nama,
+      teacherCreationReq.email ?? '',
       teacherCreationReq.nip,
       teacherCreationReq.mengajar,
       teacherCreationReq.tanggalLahir,

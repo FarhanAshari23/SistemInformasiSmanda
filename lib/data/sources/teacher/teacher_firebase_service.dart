@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 
@@ -77,49 +79,65 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
     String endpoint = ExecuteCRUD.uploadImageTeacher();
     DocumentReference? teacherRef;
     try {
-      Uri? url;
-      try {
-        url = Uri.parse(endpoint);
-      } catch (_) {
-        throw Exception("URL tidak valid: $endpoint");
-      }
+      if (teacherCreationReq.image != null) {
+        Uri? url;
+        try {
+          url = Uri.parse(endpoint);
+        } catch (_) {
+          throw Exception("URL tidak valid: $endpoint");
+        }
 
-      final request = http.MultipartRequest("POST", url);
+        final request = http.MultipartRequest("POST", url);
 
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'image',
-          teacherCreationReq.image?.path ?? '',
-          filename: basename(teacherCreationReq.image?.path ?? ''),
-        ),
-      );
-
-      request.headers.addAll({
-        "Accept": "application/json",
-        "Content-Type": "multipart/form-data",
-      });
-
-      final streamedResponse = await request.send().timeout(
-        const Duration(seconds: 5),
-        onTimeout: () {
-          throw Exception("Timeout: Server tidak merespon.");
-        },
-      );
-
-      final responseBody = await streamedResponse.stream.bytesToString();
-
-      if (streamedResponse.statusCode != 200) {
-        throw Exception(
-          "Upload gagal (status: ${streamedResponse.statusCode}). "
-          "Response: $responseBody",
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'image',
+            teacherCreationReq.image?.path ?? '',
+            filename: basename(teacherCreationReq.image?.path ?? ''),
+          ),
         );
-      }
 
-      try {
-        jsonDecode(responseBody);
-      } catch (_) {
-        throw Exception("Response server bukan JSON valid: $responseBody");
+        request.headers.addAll({
+          "Accept": "application/json",
+          "Content-Type": "multipart/form-data",
+        });
+
+        final streamedResponse = await request.send().timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {
+            throw Exception("Timeout: Server tidak merespon.");
+          },
+        );
+
+        final responseBody = await streamedResponse.stream.bytesToString();
+
+        if (streamedResponse.statusCode != 200) {
+          throw Exception(
+            "Upload gagal (status: ${streamedResponse.statusCode}). "
+            "Response: $responseBody",
+          );
+        }
+
+        try {
+          jsonDecode(responseBody);
+        } catch (_) {
+          throw Exception("Response server bukan JSON valid: $responseBody");
+        }
       }
+      final FirebaseApp secondaryApp = await Firebase.initializeApp(
+        name: 'SecondaryApp',
+        options: Firebase.app().options,
+      );
+
+      final FirebaseAuth secondaryAuth =
+          FirebaseAuth.instanceFor(app: secondaryApp);
+
+      final userCredential = await secondaryAuth.createUserWithEmailAndPassword(
+        email: teacherCreationReq.email ?? '',
+        password: teacherCreationReq.password ?? '',
+      );
+
+      final newUid = userCredential.user?.uid;
 
       final keywords = generateKeywords(teacherCreationReq.nama);
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -133,8 +151,10 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
           "jabatan_tambahan": teacherCreationReq.jabatan,
           "gender": teacherCreationReq.gender,
           "keywords": keywords,
+          "uid": newUid,
         },
       );
+
       return const Right("Upload Teacher was succesfull");
     } on TimeoutException {
       return const Left(

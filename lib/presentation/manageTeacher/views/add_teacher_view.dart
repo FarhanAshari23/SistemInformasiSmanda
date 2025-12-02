@@ -31,17 +31,19 @@ class AddTeacherView extends StatefulWidget {
 
 class _AddTeacherViewState extends State<AddTeacherView> {
   final TextEditingController _namaC = TextEditingController();
+  final TextEditingController _emailC = TextEditingController();
   final TextEditingController _mengajarC = TextEditingController();
   final TextEditingController _nipC = TextEditingController();
   final TextEditingController _waliKelasC = TextEditingController();
   final TextEditingController _tanggalC = TextEditingController();
   final TextEditingController _jabatanC = TextEditingController();
-  late File? imageProfile;
+  File? imageProfile;
 
   @override
   void dispose() {
     super.dispose();
     _namaC.dispose();
+    _emailC.dispose();
     _mengajarC.dispose();
     _nipC.dispose();
     _waliKelasC.dispose();
@@ -53,17 +55,19 @@ class _AddTeacherViewState extends State<AddTeacherView> {
   Widget build(BuildContext context) {
     List<String> hinttext = [
       'Nama:',
+      'Email:',
       'Mengajar:',
-      'NIP:',
       'Wali kelas:',
+      'NIP:',
       'Tanggal Lahir:',
       'Jabatan Tambahan:'
     ];
     List<TextEditingController> controller = [
       _namaC,
+      _emailC,
       _mengajarC,
-      _nipC,
       _waliKelasC,
+      _nipC,
       _tanggalC,
       _jabatanC,
     ];
@@ -109,7 +113,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
-                    children: List.generate(7, (index) {
+                    children: List.generate(8, (index) {
                       return Padding(
                         padding: EdgeInsets.only(bottom: height * 0.01),
                         child: _buildFieldByIndex(
@@ -142,11 +146,16 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                       );
                     } else {
                       final cubit = context.read<GetAllKelasCubit>().state;
+                      DateTime date = DateFormat("d MMMM yyyy", "id_ID")
+                          .parse(_tanggalC.text);
+                      String password = DateFormat("ddMMyyyy").format(date);
                       AppNavigator.push(
                         context,
                         AckAddTeacherView(
                           teacherCreationReq: TeacherEntity(
                             nama: _namaC.text,
+                            email: _emailC.text,
+                            password: password,
                             mengajar:
                                 _mengajarC.text.isEmpty ? '-' : _mengajarC.text,
                             nip: _nipC.text.isEmpty ? '-' : _nipC.text,
@@ -222,7 +231,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
           return const SizedBox();
         },
       );
-    } else if (index == 1) {
+    } else if (index == 2) {
       // Dropdown Mengajar
       return TextField(
         controller: controller[index],
@@ -252,7 +261,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
           }
         },
       );
-    } else if (index == 4) {
+    } else if (index == 5) {
       // Tanggal Picker
       return TextField(
         controller: controller[index],
@@ -272,7 +281,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
         },
         decoration: InputDecoration(hintText: hinttext[index]),
       );
-    } else if (index == 6) {
+    } else if (index == 7) {
       // Gender Selection
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -359,7 +368,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
           )
         ],
       );
-    } else if (index == 5) {
+    } else if (index == 6) {
       //jabatan_tambahan
       return TextField(
         controller: controller[index],

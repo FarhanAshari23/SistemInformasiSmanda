@@ -9,6 +9,8 @@ class TeacherEntity {
   final String jabatan;
   final int? gender;
   final File? image;
+  final String? email;
+  final String? password;
 
   TeacherEntity({
     required this.nama,
@@ -18,6 +20,8 @@ class TeacherEntity {
     required this.waliKelas,
     required this.jabatan,
     required this.gender,
+    this.email,
+    this.password,
     this.image,
   });
 }
