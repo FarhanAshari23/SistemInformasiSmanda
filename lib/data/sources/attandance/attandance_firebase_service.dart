@@ -8,7 +8,6 @@ import '../../../domain/entities/attandance/param_delete_attendance.dart';
 import '../../models/auth/user.dart';
 
 abstract class AttandanceFirebaseService {
-  Future<Either> createDate();
   Future<Either> getListAttendanceDate();
   Future<Either> deleteAllAttendances();
   Future<Either> deleteMonthAttendances(ParamDeleteAttendance attendanceReq);
@@ -18,24 +17,6 @@ abstract class AttandanceFirebaseService {
 }
 
 class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
-  @override
-  Future<Either> createDate() async {
-    try {
-      DateTime sekarang = DateTime.now();
-      String formattedDate = DateFormat('dd-MM-yyyy').format(sekarang);
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-      await firebaseFirestore.collection("Attendances").add(
-        {
-          "createdAt": formattedDate,
-          "timestamp": Timestamp.now(),
-        },
-      );
-      return const Right("Upload Attendance was succesfull");
-    } catch (e) {
-      return Left(e);
-    }
-  }
-
   @override
   Future<Either> getListAttendanceDate() async {
     try {
@@ -52,16 +33,24 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   @override
   Future<Either> addStudentAttendances(UserEntity userAddReq) async {
     try {
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
       CollectionReference kehadiran =
-          FirebaseFirestore.instance.collection('Attendances');
+          firebaseFirestore.collection('Attendances');
       DateTime sekarang = DateTime.now();
       String formattedDate = DateFormat('dd-MM-yyyy').format(sekarang);
       QuerySnapshot snapshot =
           await kehadiran.where('createdAt', isEqualTo: formattedDate).get();
+      DocumentReference kehadiranDoc;
       if (snapshot.docs.isEmpty) {
-        return const Left("Date cant be found");
+        kehadiranDoc = await firebaseFirestore.collection("Attendances").add(
+          {
+            "createdAt": formattedDate,
+            "timestamp": Timestamp.now(),
+          },
+        );
+      } else {
+        kehadiranDoc = snapshot.docs.first.reference;
       }
-      DocumentReference kehadiranDoc = snapshot.docs.first.reference;
       CollectionReference murid = kehadiranDoc.collection('Students');
       QuerySnapshot existingStudent =
           await murid.where("nisn", isEqualTo: userAddReq.nisn).limit(1).get();

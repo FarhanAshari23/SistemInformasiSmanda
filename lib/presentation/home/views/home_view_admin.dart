@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/bloc/check_press_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/add_data_ekskul_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/edit_data_ekskul_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageNews/views/add_news_view.dart';
@@ -16,13 +15,9 @@ import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/dialog/basic_dialog.dart';
-import '../../../domain/usecases/attendance/create_attendance.dart';
 import '../../../domain/usecases/auth/logout.dart';
-import '../../../service_locator.dart';
 import '../../auth/views/login_view.dart';
 import '../../manageActivity/views/manage_activity_view.dart';
-import '../../manageAttendance/bloc/check_press_state.dart';
-import '../../manageAttendance/screens/succes_add_date.dart';
 import '../../manageAttendance/views/scan_barcode_view.dart';
 import '../../manageAttendance/views/see_data_attandance.dart';
 import '../../manageAttendance/widgets/card_feature.dart';
@@ -39,7 +34,6 @@ class HomeViewAdmin extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     List<String> title = [
       'Scan barcode absen',
-      'Buat data kehadiran',
       'Lihat data kehadiran',
       'Registrasi data siswa',
       'Edit data siswa',
@@ -56,7 +50,6 @@ class HomeViewAdmin extends StatelessWidget {
     ];
     List<String> images = [
       AppImages.camera,
-      AppImages.attendance,
       AppImages.verification,
       AppImages.students,
       AppImages.students,
@@ -73,7 +66,6 @@ class HomeViewAdmin extends StatelessWidget {
     ];
     List<Widget> pages = [
       const ScanBarcodeView(),
-      Container(),
       const SeeDataAttandance(),
       const RegisterStudentView(),
       BlocProvider(
@@ -94,9 +86,6 @@ class HomeViewAdmin extends StatelessWidget {
     return Scaffold(
       body: MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (context) => CheckPressCubit()..checkLastPress(),
-          ),
           BlocProvider(
             create: (context) => ButtonStateCubit(),
           ),
@@ -224,73 +213,6 @@ class HomeViewAdmin extends StatelessWidget {
                       mainAxisExtent: height * 0.25,
                     ),
                     itemBuilder: (context, index) {
-                      if (index == 1) {
-                        return BlocBuilder<CheckPressCubit, CheckPressState>(
-                          builder: (context, state) {
-                            return CardFeature(
-                              onpressed: state is MyWidgetPressed
-                                  ? () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            backgroundColor: AppColors.primary,
-                                            title: const Text(
-                                              'Database Absen Hari ini Sudah Tersedia!',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                                color: AppColors.inversePrimary,
-                                              ),
-                                            ),
-                                            content: const Text(
-                                              'Silakan input data siswa yang hadir dengan scan barcode',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors.inversePrimary,
-                                              ),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text(
-                                                  'OK',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: AppColors
-                                                        .inversePrimary,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }
-                                  : () async {
-                                      context
-                                          .read<CheckPressCubit>()
-                                          .buttonPressed();
-                                      var returnedData =
-                                          await sl<CreateAttendanceUseCase>()
-                                              .call();
-                                      returnedData.fold(
-                                        (l) {
-                                          return Container();
-                                        },
-                                        (r) {
-                                          AppNavigator.push(
-                                              context, const SuccesAddDate());
-                                        },
-                                      );
-                                    },
-                              title: 'Buat Data Kehadiran',
-                              image: AppImages.attendance,
-                            );
-                          },
-                        );
-                      }
                       return CardFeature(
                         onpressed: () =>
                             AppNavigator.push(context, pages[index]),

@@ -117,7 +117,6 @@ class CardEditUser extends StatelessWidget {
                               .call(params: student);
                           return delete.fold(
                             (error) {
-                              print(error.toString());
                               var snackbar = const SnackBar(
                                 content:
                                     Text("Gagal Menghapus Murid, Coba Lagi"),

@@ -4,7 +4,6 @@ import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_del
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
 abstract class AttandanceRepository {
-  Future<Either> createDate();
   Future<Either> getListAttendanceDate();
   Future<Either> deleteAllAttendances();
   Future<Either> deleteMonthAttendances(ParamDeleteAttendance attendanceReq);

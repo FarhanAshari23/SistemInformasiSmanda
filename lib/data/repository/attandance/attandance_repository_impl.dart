@@ -11,11 +11,6 @@ import '../../models/auth/user.dart';
 
 class AttandanceRepositoryImpl extends AttandanceRepository {
   @override
-  Future<Either> createDate() async {
-    return await sl<AttandanceFirebaseService>().createDate();
-  }
-
-  @override
   Future<Either> addStudentAttendances(UserEntity userAddReq) async {
     return await sl<AttandanceFirebaseService>()
         .addStudentAttendances(userAddReq);
