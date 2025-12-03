@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/button/button_state.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/views/login_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/bar_days_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/section_cubit.dart';
@@ -12,9 +11,7 @@ import 'package:new_sistem_informasi_smanda/presentation/profile/screen/qr_scree
 import 'package:new_sistem_informasi_smanda/presentation/profile/widgets/card_profile.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/usecases/auth/logout.dart';
 import '../bloc/jadwal_display_cubit.dart';
 import '../bloc/profile_info_cubit.dart';
 import '../bloc/profile_info_state.dart';

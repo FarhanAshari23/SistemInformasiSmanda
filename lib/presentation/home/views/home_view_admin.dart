@@ -15,8 +15,6 @@ import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../common/widget/dialog/basic_dialog.dart';
-import '../../../domain/usecases/auth/logout.dart';
 import '../../auth/views/login_view.dart';
 import '../../manageActivity/views/manage_activity_view.dart';
 import '../../manageAttendance/views/scan_barcode_view.dart';
@@ -31,7 +29,6 @@ class HomeViewAdmin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     List<String> title = [
       'Scan barcode absen',
