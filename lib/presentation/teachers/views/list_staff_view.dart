@@ -51,6 +51,7 @@ class ListStaffView extends StatelessWidget {
                         ),
                         itemBuilder: (context, index) {
                           return CardStaff(
+                            forceRefresh: false,
                             teacher: state.teacher[index],
                             page: StaffDetail(
                               teachers: state.teacher[index],

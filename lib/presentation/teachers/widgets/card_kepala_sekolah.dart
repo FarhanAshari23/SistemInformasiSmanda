@@ -31,6 +31,7 @@ class CardKepalaSekolah extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             NetworkPhoto(
+              forceRefresh: false,
               width: width * 0.31,
               height: height * 0.15,
               fallbackAsset: teacher.gender == 1

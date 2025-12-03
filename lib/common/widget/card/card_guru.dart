@@ -8,9 +8,11 @@ import '../photo/network_photo.dart';
 
 class CardGuru extends StatelessWidget {
   final TeacherEntity teacher;
+  final bool forceRefresh;
   const CardGuru({
     super.key,
     required this.teacher,
+    this.forceRefresh = true,
   });
 
   @override
@@ -26,6 +28,7 @@ class CardGuru extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             NetworkPhoto(
+              forceRefresh: forceRefresh,
               width: width * 0.285,
               height: height * 0.135,
               fallbackAsset: teacher.gender == 1

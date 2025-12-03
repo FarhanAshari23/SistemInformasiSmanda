@@ -85,6 +85,7 @@ class KelasDetailView extends StatelessWidget {
                                     ),
                                     itemBuilder: (context, index) {
                                       return CardUser(
+                                        forceRefresh: false,
                                         onTap: () => AppNavigator.push(
                                           context,
                                           MuridDetail(

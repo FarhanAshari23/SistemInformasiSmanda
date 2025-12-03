@@ -11,12 +11,14 @@ import '../photo/network_photo.dart';
 class CardStaff extends StatelessWidget {
   final TeacherEntity teacher;
   final String? content;
+  final bool forceRefresh;
   final Widget page;
   const CardStaff({
     super.key,
     this.content,
     required this.teacher,
     required this.page,
+    this.forceRefresh = true,
   });
 
   @override
@@ -36,6 +38,7 @@ class CardStaff extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               NetworkPhoto(
+                forceRefresh: forceRefresh,
                 width: width * 0.24,
                 height: height * 0.115,
                 fallbackAsset: teacher.gender == 1

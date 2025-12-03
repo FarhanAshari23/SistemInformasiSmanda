@@ -60,6 +60,7 @@ class SearchScreenStudent extends StatelessWidget {
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         return CardUser(
+          forceRefresh: false,
           onTap: () => AppNavigator.push(
             context,
             MuridDetail(

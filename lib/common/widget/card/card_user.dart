@@ -10,10 +10,12 @@ import '../photo/network_photo.dart';
 class CardUser extends StatelessWidget {
   final UserEntity user;
   final VoidCallback? onTap;
+  final bool forceRefresh;
   const CardUser({
     super.key,
     required this.user,
     required this.onTap,
+    this.forceRefresh = true,
   });
 
   @override
@@ -38,6 +40,7 @@ class CardUser extends StatelessWidget {
               child: Row(
                 children: [
                   NetworkPhoto(
+                    forceRefresh: forceRefresh,
                     width: width * 0.235,
                     height: bodyHeight * 0.14,
                     fallbackAsset: user.gender == 1

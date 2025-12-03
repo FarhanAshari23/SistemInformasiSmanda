@@ -122,6 +122,7 @@ class OrganizationView extends StatelessWidget {
                             orElse: () => "",
                           );
                           return CardStaff(
+                            forceRefresh: false,
                             teacher: state.teacher[index],
                             content: mainJabatan,
                             page: TeacherDetail(
