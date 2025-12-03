@@ -29,6 +29,7 @@ import 'domain/usecases/attendance/get_list_attendances.dart';
 import 'domain/usecases/auth/check_admin.dart';
 import 'domain/usecases/auth/check_email_usecase.dart';
 import 'domain/usecases/auth/check_register.dart';
+import 'domain/usecases/auth/check_teacher_usecase.dart';
 import 'domain/usecases/auth/get_user.dart';
 import 'domain/usecases/auth/is_logged_in.dart';
 import 'domain/usecases/auth/signin.dart';
@@ -154,6 +155,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<ForgotPasswordUsecase>(
     ForgotPasswordUsecase(),
+  );
+  sl.registerSingleton<CheckTeacherUsecase>(
+    CheckTeacherUsecase(),
   );
 
   //teacher

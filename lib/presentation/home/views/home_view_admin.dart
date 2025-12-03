@@ -14,6 +14,7 @@ import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/views/edi
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/helper/app_navigation.dart';
+import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/dialog/basic_dialog.dart';
 import '../../../domain/usecases/auth/logout.dart';
 import '../../auth/views/login_view.dart';
@@ -107,76 +108,10 @@ class HomeViewAdmin extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: height * 0.155,
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: height * 0.09,
-                        color: AppColors.secondary,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Builder(builder: (outerContext) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return BasicDialog(
-                                          width: width,
-                                          height: height,
-                                          buttonTitle: 'Keluar',
-                                          mainTitle:
-                                              'Apakah Anda Yakin Ingin Keluar dari Aplikasi?',
-                                          splashImage: AppImages.splashLogout,
-                                          onPressed: () {
-                                            outerContext
-                                                .read<ButtonStateCubit>()
-                                                .execute(
-                                                  usecase: LogoutUsecase(),
-                                                );
-                                          },
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: Container(
-                                    width: width * 0.125,
-                                    height: height * 0.06,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: AppColors.tertiary,
-                                    ),
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.logout,
-                                        color: AppColors.inversePrimary,
-                                        size: 32,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 30,
-                        left: width * 0.4,
-                        child: Image.asset(
-                          AppImages.logoSMA,
-                          width: width * 0.2,
-                          height: height * 0.095,
-                        ),
-                      ),
-                    ],
-                  ),
+                const BasicAppbar(
+                  isBackViewed: false,
+                  isLogout: true,
+                  isProfileViewed: false,
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),

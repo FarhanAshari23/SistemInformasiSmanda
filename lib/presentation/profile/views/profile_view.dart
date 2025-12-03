@@ -11,6 +11,7 @@ import 'package:new_sistem_informasi_smanda/presentation/profile/screen/qr_scree
 
 import 'package:new_sistem_informasi_smanda/presentation/profile/widgets/card_profile.dart';
 import '../../../common/helper/app_navigation.dart';
+import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/auth/logout.dart';
@@ -54,95 +55,10 @@ class ProfileView extends StatelessWidget {
             },
             child: Column(
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: height * 0.155,
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: height * 0.09,
-                        color: AppColors.secondary,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () => Navigator.pop(context),
-                                child: Container(
-                                  width: width * 0.125,
-                                  height: height * 0.06,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: AppColors.tertiary,
-                                  ),
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.arrow_back,
-                                      color: AppColors.inversePrimary,
-                                      size: 32,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Builder(builder: (outerContext) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      useRootNavigator: false,
-                                      builder: (context) {
-                                        return BasicDialog(
-                                          width: width,
-                                          height: height,
-                                          splashImage: AppImages.splashLogout,
-                                          mainTitle:
-                                              'Apakah Anda Yakin Ingin Keluar dari Aplikasi?',
-                                          buttonTitle: "Keluar",
-                                          onPressed: () {
-                                            outerContext
-                                                .read<ButtonStateCubit>()
-                                                .execute(
-                                                  usecase: LogoutUsecase(),
-                                                );
-                                          },
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: Container(
-                                    width: width * 0.125,
-                                    height: height * 0.06,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: AppColors.tertiary,
-                                    ),
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.logout,
-                                        color: AppColors.inversePrimary,
-                                        size: 32,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 30,
-                        left: width * 0.4,
-                        child: Image.asset(
-                          AppImages.logoSMA,
-                          width: width * 0.2,
-                          height: height * 0.095,
-                        ),
-                      ),
-                    ],
-                  ),
+                const BasicAppbar(
+                  isBackViewed: true,
+                  isLogout: true,
+                  isProfileViewed: false,
                 ),
                 Expanded(
                   child: Column(

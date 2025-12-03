@@ -145,6 +145,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         {
           "nama": teacherCreationReq.nama,
           "NIP": teacherCreationReq.nip,
+          "email": teacherCreationReq.email,
           "mengajar": teacherCreationReq.mengajar,
           "tanggal_lahir": teacherCreationReq.tanggalLahir,
           "wali_kelas": teacherCreationReq.waliKelas,
@@ -189,7 +190,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         "nip": teacherReq.nip != '-' ? teacherReq.nip : teacherReq.tanggalLahir,
       }).timeout(const Duration(seconds: 5));
 
-      if (response.statusCode != 200) {
+      if (response.statusCode != 200 && response.statusCode != 404) {
         return Left("Upload gagal (status: ${response.statusCode})");
       }
 

@@ -8,6 +8,7 @@ import 'package:new_sistem_informasi_smanda/core/configs/assets/app_lotties.dart
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_admin.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_register.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_teacher_usecase.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/bloc/password_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/views/add_account_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/button_role.dart';
@@ -17,8 +18,8 @@ import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_ad
 import '../../../data/models/auth/signin_user_req.dart';
 import '../../../domain/usecases/auth/signin.dart';
 import '../../../service_locator.dart';
+import '../../teachers/views/profile_teacher.dart';
 import 'forget_password_view.dart';
-//import '../../home/views/home_view.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
@@ -56,9 +57,21 @@ class LoginView extends StatelessWidget {
                 if (state is ButtonSuccessState) {
                   var resultRegister = await sl<IsRegisterUsecase>().call();
                   return resultRegister.fold(
-                    (l) {
-                      var snackbar = SnackBar(content: Text(l));
-                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                    (l) async {
+                      var resultTeacher =
+                          await sl<CheckTeacherUsecase>().call();
+                      return resultTeacher.fold(
+                        (error) {
+                          var snackbar = SnackBar(content: Text(error));
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                        },
+                        (r) {
+                          AppNavigator.pushAndRemoveUntil(
+                            context,
+                            const ProfileTeacher(),
+                          );
+                        },
+                      );
                     },
                     (r) async {
                       var resultAdmin = await sl<IsAdminUsecase>().call();
@@ -67,7 +80,7 @@ class LoginView extends StatelessWidget {
                           var snackbar = SnackBar(content: Text(error));
                           ScaffoldMessenger.of(context).showSnackBar(snackbar);
                         },
-                        (r) {
+                        (r) async {
                           if (r) {
                             AppNavigator.pushAndRemoveUntil(
                               context,

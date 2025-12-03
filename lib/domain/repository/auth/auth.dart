@@ -12,4 +12,5 @@ abstract class AuthRepository {
   Future<Either> getUser();
   Future<Either> isAdmin();
   Future<Either> isRegister();
+  Future<Either> isTeacher();
 }

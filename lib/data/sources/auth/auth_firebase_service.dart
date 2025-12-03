@@ -23,6 +23,7 @@ abstract class AuthFirebaseService {
   Future<Either> getUser();
   Future<Either> isAdmin();
   Future<Either> isRegister();
+  Future<Either> isTeacher();
 }
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
@@ -62,7 +63,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           .get();
 
       if (query.docs.isEmpty) {
-        return const Left("User not found");
+        return const Left("Admin not found");
       }
       final userData = query.docs.first.data();
       final isAdmin = userData['isAdmin'] ?? false;
@@ -212,7 +213,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           .get();
 
       if (query.docs.isEmpty) {
-        return const Left("User not found");
+        return const Left("User Register not found");
       }
       final userData = query.docs.first.data();
       final isRegister = userData['is_register'] ?? false;
@@ -261,6 +262,29 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       }
     } catch (e) {
       return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> isTeacher() async {
+    try {
+      FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+      final query = await firebaseFirestore
+          .collection('Teachers')
+          .where('uid', isEqualTo: firebaseAuth.currentUser?.uid)
+          .limit(1)
+          .get();
+
+      if (query.docs.isEmpty) {
+        return const Left("Teacher not found");
+      }
+      final userData = query.docs.first.data();
+      final isTeacher = userData['mengajar'] != null;
+      return right(isTeacher);
+    } catch (e) {
+      return left(e.toString());
     }
   }
 }

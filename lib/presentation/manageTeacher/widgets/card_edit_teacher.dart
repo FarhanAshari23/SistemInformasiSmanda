@@ -116,9 +116,9 @@ class CardEditTeacher extends StatelessWidget {
                               .call(params: teacher);
                           return delete.fold(
                             (error) {
-                              var snackbar = const SnackBar(
+                              var snackbar = SnackBar(
                                 content: Text(
-                                    "Gagal Menghapus Data Guru, Coba Lagi"),
+                                    "Gagal Menghapus Data Guru: ${error.toString()}"),
                               );
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackbar);
