@@ -10,7 +10,7 @@ import '../../../service_locator.dart';
 import '../../auth/views/login_view.dart';
 import '../../home/views/home_view.dart';
 import '../../home/views/home_view_admin.dart';
-import '../../teachers/views/profile_teacher.dart';
+import '../../profile/views/profile_teacher_view.dart';
 import '../bloc/splash_cubit.dart';
 import '../bloc/splash_state.dart';
 

@@ -23,20 +23,20 @@ import '../../../core/configs/theme/app_colors.dart';
 import '../../../data/models/auth/update_user.dart';
 import '../../../domain/usecases/students/update_user.dart';
 import '../../../service_locator.dart';
-import '../bloc/profile_info_cubit.dart';
+import '../../../common/bloc/profile/profile_info_cubit.dart';
 
-class EditProfileView extends StatefulWidget {
-  final UserEntity user;
-  const EditProfileView({
+class EditProfileStudentView extends StatefulWidget {
+  final UserEntity? user;
+  const EditProfileStudentView({
     super.key,
-    required this.user,
+    this.user,
   });
 
   @override
-  State<EditProfileView> createState() => _EditProfileViewState();
+  State<EditProfileStudentView> createState() => _EditProfileStudentViewState();
 }
 
-class _EditProfileViewState extends State<EditProfileView> {
+class _EditProfileStudentViewState extends State<EditProfileStudentView> {
   late TextEditingController _namaC;
   late TextEditingController _kelasC;
   late TextEditingController _nisnC;
@@ -49,13 +49,13 @@ class _EditProfileViewState extends State<EditProfileView> {
   @override
   void initState() {
     super.initState();
-    _namaC = TextEditingController(text: widget.user.nama);
-    _kelasC = TextEditingController(text: widget.user.kelas);
-    _nisnC = TextEditingController(text: widget.user.nisn);
-    _tanggalC = TextEditingController(text: widget.user.tanggalLahir);
-    _noHPC = TextEditingController(text: widget.user.noHP);
-    _alamatC = TextEditingController(text: widget.user.alamat);
-    _ekskulC = TextEditingController(text: widget.user.ekskul);
+    _namaC = TextEditingController(text: widget.user?.nama);
+    _kelasC = TextEditingController(text: widget.user?.kelas);
+    _nisnC = TextEditingController(text: widget.user?.nisn);
+    _tanggalC = TextEditingController(text: widget.user?.tanggalLahir);
+    _noHPC = TextEditingController(text: widget.user?.noHP);
+    _alamatC = TextEditingController(text: widget.user?.alamat);
+    _ekskulC = TextEditingController(text: widget.user?.ekskul);
   }
 
   @override
@@ -81,21 +81,21 @@ class _EditProfileViewState extends State<EditProfileView> {
           BlocProvider(
             create: (context) {
               final cubit = GenderSelectionCubit();
-              cubit.selectGender(widget.user.gender ?? 0);
+              cubit.selectGender(widget.user?.gender ?? 0);
               return cubit;
             },
           ),
           BlocProvider(
             create: (context) {
               final cubit = ReligionCubit();
-              cubit.selectItem(widget.user.agama);
+              cubit.selectItem(widget.user?.agama);
               return cubit;
             },
           ),
           BlocProvider(
             create: (context) {
               final cubit = GetAllKelasCubit()..displayAll();
-              cubit.selectItem(widget.user.kelas);
+              cubit.selectItem(widget.user?.kelas);
               return cubit;
             },
           ),
@@ -115,7 +115,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               var resultAnggota = await sl<UpdateAnggotaUsecase>().call(
                 params: UpdateAnggotaReq(
                   namaEkskul: _ekskulC.text.split(', '),
-                  anggota: widget.user,
+                  anggota: widget.user!,
                 ),
               );
               resultAnggota.fold(
@@ -126,7 +126,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   ScaffoldMessenger.of(context).showSnackBar(snackbar);
                 },
                 (r) {
-                  context.read<ProfileInfoCubit>().getUser();
+                  context.read<ProfileInfoCubit>().getUser("Students");
                   FocusScope.of(context).unfocus();
                   var snackbar = const SnackBar(
                     content: Text("Data Berhasil Diubah"),
@@ -208,7 +208,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 ),
                               ),
                               menuHeight: 200,
-                              hintText: widget.user.kelas,
+                              hintText: widget.user?.kelas,
                               dropdownMenuEntries: state.kelas.map((doc) {
                                 final kelas = doc.kelas;
                                 return DropdownMenuEntry(
@@ -297,7 +297,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                               ),
                             ),
                             menuHeight: 200,
-                            hintText: widget.user.agama,
+                            hintText: widget.user?.agama,
                             dropdownMenuEntries: cubit.items.map((doc) {
                               return DropdownMenuEntry(
                                 value: doc,
@@ -481,7 +481,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 kelas: cubit is KelasDisplayLoaded &&
                                         cubit.selected != null
                                     ? cubit.selected!
-                                    : widget.user.kelas!,
+                                    : widget.user?.kelas ?? '',
                                 nisn: _nisnC.text,
                                 tanggalLahir: _tanggalC.text,
                                 noHp: _noHPC.text,

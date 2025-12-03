@@ -6,6 +6,7 @@ import 'package:new_sistem_informasi_smanda/domain/repository/auth/auth.dart';
 
 import '../../../service_locator.dart';
 import '../../models/auth/user.dart';
+import '../../models/teacher/teacher.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   @override
@@ -19,14 +20,16 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either> getUser() async {
-    var user = await sl<AuthFirebaseService>().getUser();
-    return user.fold(
+  Future<Either> getUser(String user) async {
+    var userLogin = await sl<AuthFirebaseService>().getUser(user);
+    return userLogin.fold(
       (error) {
         return Left(error);
       },
       (data) {
-        return Right(UserModel.fromMap(data).toEntity());
+        return user == "Students"
+            ? Right(UserModel.fromMap(data).toEntity())
+            : Right(TeacherModel.fromMap(data).toEntity());
       },
     );
   }

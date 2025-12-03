@@ -20,7 +20,7 @@ abstract class AuthFirebaseService {
   Future<Either> checkEmailUsed(String email);
   Future<Either> logout();
   Future<bool> isLoggedIn();
-  Future<Either> getUser();
+  Future<Either> getUser(String user);
   Future<Either> isAdmin();
   Future<Either> isRegister();
   Future<Either> isTeacher();
@@ -74,11 +74,11 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   }
 
   @override
-  Future<Either> getUser() async {
+  Future<Either> getUser(String user) async {
     try {
       var currentUser = FirebaseAuth.instance.currentUser;
       var userData = await FirebaseFirestore.instance
-          .collection('Students')
+          .collection(user)
           .where('uid', isEqualTo: currentUser?.uid)
           .limit(1)
           .get()

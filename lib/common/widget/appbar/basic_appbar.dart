@@ -4,9 +4,9 @@ import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/extract_name.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
-import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_state.dart';
-import 'package:new_sistem_informasi_smanda/presentation/profile/views/profile_view.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/profile/profile_info_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/profile/profile_info_state.dart';
+import 'package:new_sistem_informasi_smanda/presentation/profile/views/profile_student_view.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -47,7 +47,7 @@ class BasicAppbar extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ProfileInfoCubit()..getUser(),
+          create: (context) => ProfileInfoCubit()..getUser("Students"),
         ),
         BlocProvider(
           create: (context) => ButtonStateCubit(),
@@ -118,7 +118,7 @@ class BasicAppbar extends StatelessWidget {
                                       GestureDetector(
                                         onTap: () => AppNavigator.push(
                                           context,
-                                          const ProfileView(),
+                                          const ProfileStudentView(),
                                         ),
                                         child: Container(
                                           width: width * 0.105,
@@ -137,7 +137,7 @@ class BasicAppbar extends StatelessWidget {
                                 }
                                 if (state is ProfileInfoLoaded) {
                                   String nickname =
-                                      extractName(state.userEntity.nama!);
+                                      extractName(state.userEntity?.nama ?? '');
                                   return Row(
                                     children: [
                                       Text(
@@ -152,20 +152,20 @@ class BasicAppbar extends StatelessWidget {
                                       GestureDetector(
                                         onTap: () => AppNavigator.push(
                                           context,
-                                          const ProfileView(),
+                                          const ProfileStudentView(),
                                         ),
                                         child: NetworkPhoto(
                                           width: width * 0.105,
                                           height: height * 0.065,
                                           shape: BoxShape.circle,
                                           fallbackAsset:
-                                              state.userEntity.gender == 1
+                                              state.userEntity?.gender == 1
                                                   ? AppImages.boyStudent
                                                   : AppImages.girlStudent,
                                           imageUrl:
                                               DisplayImage.displayImageStudent(
-                                                  state.userEntity.nama ?? '',
-                                                  state.userEntity.nisn ?? ''),
+                                                  state.userEntity?.nama ?? '',
+                                                  state.userEntity?.nisn ?? ''),
                                         ),
                                       ),
                                     ],

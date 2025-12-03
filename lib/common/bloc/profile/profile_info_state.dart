@@ -1,3 +1,4 @@
+import '../../../domain/entities/auth/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
 
 abstract class ProfileInfoState {}
@@ -5,9 +6,11 @@ abstract class ProfileInfoState {}
 class ProfileInfoLoading extends ProfileInfoState {}
 
 class ProfileInfoLoaded extends ProfileInfoState {
-  UserEntity userEntity;
+  UserEntity? userEntity;
+  TeacherEntity? teacherEntity;
   ProfileInfoLoaded({
-    required this.userEntity,
+    this.userEntity,
+    this.teacherEntity,
   });
 }
 

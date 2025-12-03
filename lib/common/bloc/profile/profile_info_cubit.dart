@@ -7,14 +7,18 @@ import 'profile_info_state.dart';
 class ProfileInfoCubit extends Cubit<ProfileInfoState> {
   ProfileInfoCubit() : super(ProfileInfoLoading());
 
-  Future<void> getUser() async {
-    var user = await sl<GetUserUsecase>().call();
-    user.fold(
+  Future<void> getUser(String user) async {
+    var userLogin = await sl<GetUserUsecase>().call(params: user);
+    userLogin.fold(
       (l) {
         emit(ProfileInfoFailure());
       },
-      (userEntity) {
-        emit(ProfileInfoLoaded(userEntity: userEntity));
+      (currentUser) {
+        emit(
+          user == "Students"
+              ? ProfileInfoLoaded(userEntity: currentUser)
+              : ProfileInfoLoaded(teacherEntity: currentUser),
+        );
       },
     );
   }

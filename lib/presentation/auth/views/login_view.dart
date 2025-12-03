@@ -18,7 +18,7 @@ import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_ad
 import '../../../data/models/auth/signin_user_req.dart';
 import '../../../domain/usecases/auth/signin.dart';
 import '../../../service_locator.dart';
-import '../../teachers/views/profile_teacher.dart';
+import '../../profile/views/profile_teacher_view.dart';
 import 'forget_password_view.dart';
 
 class LoginView extends StatelessWidget {

@@ -13,11 +13,11 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../bloc/jadwal_display_cubit.dart';
-import '../bloc/profile_info_cubit.dart';
-import '../bloc/profile_info_state.dart';
+import '../../../common/bloc/profile/profile_info_cubit.dart';
+import '../../../common/bloc/profile/profile_info_state.dart';
 
-class ProfileView extends StatelessWidget {
-  const ProfileView({super.key});
+class ProfileStudentView extends StatelessWidget {
+  const ProfileStudentView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,8 @@ class ProfileView extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => BarDaysCubit()),
-        BlocProvider(create: (context) => ProfileInfoCubit()..getUser()),
+        BlocProvider(
+            create: (context) => ProfileInfoCubit()..getUser("Students")),
         BlocProvider(create: (context) => TwoContainersCubit()),
         BlocProvider(
           create: (context) => JadwalDisplayCubit()..displayJadwal(),
@@ -99,7 +100,7 @@ class ProfileView extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       CardProfile(
-                                        user: state.userEntity,
+                                        student: state.userEntity,
                                       ),
                                       Column(
                                         mainAxisSize: MainAxisSize.min,
@@ -230,7 +231,8 @@ class ProfileView extends StatelessWidget {
                                             ? const JadwalScreen()
                                             : QrScreen(
                                                 qrCodeData:
-                                                    state.userEntity.nisn!);
+                                                    state.userEntity?.nisn ??
+                                                        '');
                                       }),
                                     ),
                                   )

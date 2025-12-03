@@ -9,7 +9,7 @@ abstract class AuthRepository {
   Future<Either> checkEmailUsed(String email);
   Future<Either> logout();
   Future<bool> isLoggedIn();
-  Future<Either> getUser();
+  Future<Either> getUser(String user);
   Future<Either> isAdmin();
   Future<Either> isRegister();
   Future<Either> isTeacher();
