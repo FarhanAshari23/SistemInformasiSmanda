@@ -7,12 +7,14 @@ class CardJadwal extends StatelessWidget {
   final String jam;
   final String kegiatan;
   final String pelaksana;
+  final bool isTeacher;
   const CardJadwal({
     super.key,
     required this.jam,
     required this.kegiatan,
     required this.pelaksana,
     required this.urutan,
+    this.isTeacher = false,
   });
 
   @override
@@ -41,6 +43,7 @@ class CardJadwal extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              SizedBox(width: isTeacher ? 8 : 0),
               Container(
                 padding: const EdgeInsets.all(24),
                 margin: const EdgeInsets.only(right: 4),
@@ -59,6 +62,7 @@ class CardJadwal extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(width: isTeacher ? 16 : 0),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Column(
@@ -67,8 +71,10 @@ class CardJadwal extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Icon(
-                          Icons.person_3,
+                        Icon(
+                          isTeacher
+                              ? Icons.watch_later_rounded
+                              : Icons.person_3,
                           color: AppColors.primary,
                           size: 20,
                         ),
@@ -107,14 +113,17 @@ class CardJadwal extends StatelessWidget {
             ],
           ),
           Center(
-            child: Text(
-              jam,
-              style: const TextStyle(
-                color: AppColors.primary,
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
+            child: Padding(
+              padding: EdgeInsets.only(right: isTeacher ? 8 : 0),
+              child: Text(
+                jam,
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: isTeacher ? 16 : 10,
+                  fontWeight: FontWeight.w800,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
           )
         ],

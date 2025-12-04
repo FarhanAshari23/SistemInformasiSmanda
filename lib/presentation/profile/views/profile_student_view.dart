@@ -5,8 +5,8 @@ import 'package:new_sistem_informasi_smanda/common/bloc/button/button_state.dart
 import 'package:new_sistem_informasi_smanda/presentation/auth/views/login_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/bar_days_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/section_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/profile/screen/jadwal.dart';
-import 'package:new_sistem_informasi_smanda/presentation/profile/screen/qr_screen.dart';
+import 'package:new_sistem_informasi_smanda/presentation/profile/widgets/jadwal_days_selection.dart';
+import 'package:new_sistem_informasi_smanda/presentation/profile/views/profile_student_qr_view.dart';
 
 import 'package:new_sistem_informasi_smanda/presentation/profile/widgets/card_profile.dart';
 import '../../../common/helper/app_navigation.dart';
@@ -228,8 +228,8 @@ class ProfileStudentView extends StatelessWidget {
                                                     .state ==
                                                 TwoContainersState
                                                     .containerOneSelected
-                                            ? const JadwalScreen()
-                                            : QrScreen(
+                                            ? const JadwalDaysSelection()
+                                            : ProfileStudentQrView(
                                                 qrCodeData:
                                                     state.userEntity?.nisn ??
                                                         '');

@@ -5,10 +5,15 @@ import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell
 import '../../../core/configs/theme/app_colors.dart';
 import '../bloc/bar_days_cubit.dart';
 import '../bloc/jadwal_display_cubit.dart';
-import '../widgets/jadwal_detail.dart';
+import '../views/profile_student_schedule_view.dart';
+import '../views/profile_teacher_schedule_view.dart';
 
-class JadwalScreen extends StatelessWidget {
-  const JadwalScreen({super.key});
+class JadwalDaysSelection extends StatelessWidget {
+  final bool isTeacherSchedule;
+  const JadwalDaysSelection({
+    super.key,
+    this.isTeacherSchedule = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +29,6 @@ class JadwalScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
-          'Jadwal Pelajaran',
-          style: TextStyle(
-            color: AppColors.primary,
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-        SizedBox(height: height * 0.01),
         SizedBox(
           width: double.infinity,
           height: height * 0.1,
@@ -43,9 +39,11 @@ class JadwalScreen extends StatelessWidget {
             itemBuilder: (context, index) => CustomInkWell(
               onTap: () {
                 context.read<BarDaysCubit>().changeColor(index);
-                context
-                    .read<JadwalDisplayCubit>()
-                    .displayJadwal(params: dayName[index]);
+                if (!isTeacherSchedule) {
+                  context
+                      .read<JadwalDisplayCubit>()
+                      .displayJadwal(params: dayName[index]);
+                }
               },
               defaultColor: context.watch<BarDaysCubit>().state == index
                   ? AppColors.primary
@@ -73,7 +71,9 @@ class JadwalScreen extends StatelessWidget {
         Builder(builder: (context) {
           final selectedDay = dayName[context.watch<BarDaysCubit>().state];
           return Expanded(
-            child: JadwalDetail(hari: selectedDay),
+            child: isTeacherSchedule
+                ? ProfileTeacherScheduleView(hari: selectedDay)
+                : ProfileStudentScheduleView(hari: selectedDay),
           );
         }),
       ],

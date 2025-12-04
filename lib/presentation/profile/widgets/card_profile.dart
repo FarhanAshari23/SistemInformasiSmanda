@@ -10,7 +10,6 @@ import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../views/edit_profile_student_view.dart';
-import '../views/edit_profile_teacher_view.dart';
 
 class CardProfile extends StatelessWidget {
   final UserEntity? student;
@@ -93,24 +92,25 @@ class CardProfile extends StatelessWidget {
                     ),
                   ],
                 ),
-                CustomInkWell(
-                  borderRadius: 999,
-                  defaultColor: AppColors.primary,
-                  onTap: () => AppNavigator.push(
-                    context,
-                    BlocProvider.value(
-                      value: context.read<ProfileInfoCubit>(),
-                      child: student != null
-                          ? EditProfileStudentView(user: student!)
-                          : EditProfileTeacherView(teacher: teacher!),
+                Visibility(
+                  visible: student != null,
+                  child: CustomInkWell(
+                    borderRadius: 999,
+                    defaultColor: AppColors.primary,
+                    onTap: () => AppNavigator.push(
+                      context,
+                      BlocProvider.value(
+                        value: context.read<ProfileInfoCubit>(),
+                        child: EditProfileStudentView(user: student!),
+                      ),
                     ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                      size: 12,
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                        size: 12,
+                      ),
                     ),
                   ),
                 ),

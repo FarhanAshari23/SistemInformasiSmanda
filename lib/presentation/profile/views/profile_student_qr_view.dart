@@ -2,9 +2,9 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 
-class QrScreen extends StatelessWidget {
+class ProfileStudentQrView extends StatelessWidget {
   final String qrCodeData;
-  const QrScreen({
+  const ProfileStudentQrView({
     super.key,
     required this.qrCodeData,
   });

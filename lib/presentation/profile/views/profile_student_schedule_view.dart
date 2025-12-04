@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/jadwal_display_cubit.dart';
 import '../bloc/jadwal_display_state.dart';
-import 'card_jadwal.dart';
+import '../widgets/card_jadwal.dart';
 
-class JadwalDetail extends StatelessWidget {
+class ProfileStudentScheduleView extends StatelessWidget {
   final String hari;
-  const JadwalDetail({
+  const ProfileStudentScheduleView({
     super.key,
     required this.hari,
   });

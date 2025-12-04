@@ -85,15 +85,17 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
             ScaffoldMessenger.of(context).showSnackBar(snackbar);
           }
           if (state is ButtonSuccessState) {
-            context.read<GetAllJadwalCubit>().displayAllJadwal();
-            var snackbar = SnackBar(
-              content: Text(
-                'Berhasil mengubah jadwal untuk kelas ${_kelasC.text}',
-              ),
-              behavior: SnackBarBehavior.floating,
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackbar);
-            Navigator.pop(context);
+            Future.microtask(() {
+              final ctx = context; // simpan context saat ini
+
+              ctx.read<GetAllJadwalCubit>().displayAllJadwal();
+
+              ScaffoldMessenger.of(ctx).showSnackBar(
+                SnackBar(content: Text("Berhasil mengubah jadwal...")),
+              );
+
+              Navigator.pop(ctx);
+            });
           }
         },
         child: Scaffold(
