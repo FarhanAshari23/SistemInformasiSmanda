@@ -91,7 +91,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
               ctx.read<GetAllJadwalCubit>().displayAllJadwal();
 
               ScaffoldMessenger.of(ctx).showSnackBar(
-                SnackBar(content: Text("Berhasil mengubah jadwal...")),
+                SnackBar(content: Text("Berhasil mengubah jadwal")),
               );
 
               Navigator.pop(ctx);
