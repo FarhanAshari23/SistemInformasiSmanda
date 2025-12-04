@@ -7,6 +7,9 @@ import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_state.dart
 import 'package:new_sistem_informasi_smanda/presentation/home/widgets/card_ekskul.dart';
 import 'package:stacked_listview/stacked_listview.dart';
 
+import '../../../core/configs/assets/app_images.dart';
+import '../../../core/configs/theme/app_colors.dart';
+
 class EkskulScreen extends StatelessWidget {
   const EkskulScreen({super.key});
 
@@ -17,20 +20,39 @@ class EkskulScreen extends StatelessWidget {
     return Scaffold(
       body: BlocProvider(
         create: (context) => EkskulCubit()..displayEkskul(),
-        child: Padding(
-          padding: EdgeInsets.only(top: height * 0.07),
-          child: BlocBuilder<EkskulCubit, EkskulState>(
-            builder: (context, state) {
-              if (state is EkskulLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+        child: BlocBuilder<EkskulCubit, EkskulState>(
+          builder: (context, state) {
+            if (state is EkskulLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (state is EkskulLoaded) {
+              if (state.ekskul.isEmpty) {
+                return Center(
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        AppImages.notfound,
+                        width: height * 0.3,
+                        height: height * 0.3,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Data ekskul masih kosong",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
+                  ),
                 );
-              }
-              if (state is EkskulLoaded) {
+              } else {
                 return StackedListView(
                   padding: EdgeInsets.only(
-                    bottom: height * 0.15,
-                  ),
+                      bottom: height * 0.15, top: height * 0.07),
                   itemExtent: width * 0.475,
                   itemCount: state.ekskul.length,
                   scrollDirection: Axis.horizontal,
@@ -55,9 +77,9 @@ class EkskulScreen extends StatelessWidget {
                   },
                 );
               }
-              return Container();
-            },
-          ),
+            }
+            return Container();
+          },
         ),
       ),
     );

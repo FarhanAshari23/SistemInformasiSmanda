@@ -6,6 +6,8 @@ import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_cubit.dart
 import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_state.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/widgets/card_ekskul_edit.dart';
 
+import '../../../core/configs/assets/app_images.dart';
+
 class EditDataEkskulView extends StatelessWidget {
   const EditDataEkskulView({super.key});
 
@@ -37,24 +39,47 @@ class EditDataEkskulView extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (state is EkskulLoaded) {
-                    return Expanded(
-                      child: GridView.builder(
-                        itemCount: state.ekskul.length,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+                    if (state.ekskul.isEmpty) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            AppImages.notfound,
+                            width: height * 0.3,
+                            height: height * 0.3,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            "Data ekskul masih kosong",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Expanded(
+                        child: GridView.builder(
+                          itemCount: state.ekskul.length,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: width * 0.025,
+                            mainAxisSpacing: 12.0,
+                            mainAxisExtent: height * 0.315,
+                          ),
+                          itemBuilder: (context, index) => CardEkskulEdit(
+                            ekskul: state.ekskul[index],
+                          ),
                         ),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: width * 0.025,
-                          mainAxisSpacing: 12.0,
-                          mainAxisExtent: height * 0.315,
-                        ),
-                        itemBuilder: (context, index) => CardEkskulEdit(
-                          ekskul: state.ekskul[index],
-                        ),
-                      ),
-                    );
+                      );
+                    }
                   }
                   return Container();
                 },
