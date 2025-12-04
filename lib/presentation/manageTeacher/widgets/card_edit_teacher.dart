@@ -8,7 +8,7 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/teacher/delete_teacher.dart';
 import '../../../service_locator.dart';
 import '../views/edit_teacher_detail_view.dart';

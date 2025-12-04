@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_teacher.dart';
 
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../service_locator.dart';
 import 'teacher_state.dart';
 

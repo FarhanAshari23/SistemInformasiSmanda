@@ -6,7 +6,7 @@ import '../../../common/helper/display_image.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 
 class CardKepalaSekolah extends StatelessWidget {
   final TeacherEntity teacher;

@@ -4,11 +4,11 @@ import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/profile/profile_info_cubit.dart';
+import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_cubit.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../views/edit_profile_student_view.dart';
 import '../views/edit_profile_teacher_view.dart';
 

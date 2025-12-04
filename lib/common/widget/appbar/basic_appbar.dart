@@ -4,8 +4,8 @@ import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/extract_name.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/profile/profile_info_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/profile/profile_info_state.dart';
+import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_cubit.dart';
+import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_state.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/views/profile_student_view.dart';
 
 import '../../../core/configs/assets/app_images.dart';

@@ -8,7 +8,7 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/landing/succes.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../home/views/home_view_admin.dart';
 import '../../manageStudent/widgets/card_ack.dart';

@@ -8,7 +8,7 @@ import 'package:new_sistem_informasi_smanda/presentation/teachers/views/teacher_
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
 
 class CardAnggotaEkskul extends StatelessWidget {

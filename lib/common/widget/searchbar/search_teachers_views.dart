@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/teacher/get_teacher_by_name.dart';
 import '../../../presentation/teachers/blocs/get_teacher_cubit.dart';
 import '../../../presentation/teachers/blocs/get_teacher_state.dart';

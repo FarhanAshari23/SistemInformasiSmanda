@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/landing/not_found.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_teacher_by_name.dart';
 import 'package:new_sistem_informasi_smanda/presentation/teachers/blocs/get_teacher_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/teachers/blocs/get_teacher_state.dart';

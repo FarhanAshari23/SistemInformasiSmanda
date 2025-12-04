@@ -1,4 +1,4 @@
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
 
 abstract class ProfileInfoState {}

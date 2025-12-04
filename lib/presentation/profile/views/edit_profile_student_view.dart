@@ -23,7 +23,7 @@ import '../../../core/configs/theme/app_colors.dart';
 import '../../../data/models/auth/update_user.dart';
 import '../../../domain/usecases/students/update_user.dart';
 import '../../../service_locator.dart';
-import '../../../common/bloc/profile/profile_info_cubit.dart';
+import '../bloc/profile_info_cubit.dart';
 
 class EditProfileStudentView extends StatefulWidget {
   final UserEntity? user;

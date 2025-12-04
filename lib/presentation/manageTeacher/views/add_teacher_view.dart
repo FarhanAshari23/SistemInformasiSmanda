@@ -15,7 +15,7 @@ import '../../../common/widget/dropdown/app_dropdown_field.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../common/widget/photo/add_photo_view.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import 'ack_add_teacher_view.dart';
 import 'select_jabatan_view.dart';
 import 'select_mengajar_view.dart';

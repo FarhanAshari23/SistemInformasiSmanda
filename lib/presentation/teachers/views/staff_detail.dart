@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/teacher.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
 
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/photo/network_photo.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 
 class EditProfileTeacherView extends StatelessWidget {
   final TeacherEntity? teacher;

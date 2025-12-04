@@ -13,8 +13,8 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../bloc/jadwal_display_cubit.dart';
-import '../../../common/bloc/profile/profile_info_cubit.dart';
-import '../../../common/bloc/profile/profile_info_state.dart';
+import '../bloc/profile_info_cubit.dart';
+import '../bloc/profile_info_state.dart';
 
 class ProfileStudentView extends StatelessWidget {
   const ProfileStudentView({super.key});

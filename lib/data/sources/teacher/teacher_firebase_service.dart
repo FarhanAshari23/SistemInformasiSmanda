@@ -7,17 +7,20 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:http/http.dart' as http;
+import 'package:new_sistem_informasi_smanda/domain/entities/teacher/schedule_teacher.dart';
 import 'package:path/path.dart';
 
 import '../../../common/helper/execute_crud.dart';
 import '../../../common/helper/generate_keyword.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
+import '../../models/teacher/schedule_teacher.dart';
 
 abstract class TeacherFirebaseService {
   Future<Either> createTeacher(TeacherEntity teacherCreationReq);
   Future<Either> updateTeacher(TeacherEntity teacherReq);
   Future<Either> deleteTeacher(TeacherEntity teacherReq);
   Future<Either> getTeacherByName(String name);
+  Future<Either> getScheduleTeacher(String name);
   Future<Either> createRoles(String role);
   Future<Either> deleteRole(String role);
   Future<Either> getRoles();
@@ -373,6 +376,38 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
       return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> getScheduleTeacher(String name) async {
+    final firestore = FirebaseFirestore.instance;
+    try {
+      final schedules = await firestore.collection("Jadwals").get();
+      List<ScheduleTeacherEntity> result = [];
+      for (var doc in schedules.docs) {
+        final data = doc.data();
+        List<String> days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
+        for (var day in days) {
+          if (data[day] != null && data[day] is List) {
+            for (var item in data[day]) {
+              if (item['pelaksana'] == name) {
+                final mapped = {
+                  "hari": day,
+                  "jam": item['jam'],
+                  "kegiatan": item['kegiatan'],
+                  "kelas": data['kelas']
+                };
+                final model = ScheduleTeacherModel.fromMap(mapped);
+                result.add(model.toEntity());
+              }
+            }
+          }
+        }
+      }
+      return Right(result);
+    } catch (e) {
+      return Left("Something wrong: $e");
     }
   }
 }

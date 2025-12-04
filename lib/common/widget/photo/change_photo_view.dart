@@ -10,7 +10,7 @@ import '../appbar/basic_appbar.dart';
 import '../button/basic_button.dart';
 import '../inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
 
 class ChangePhotoView extends StatefulWidget {

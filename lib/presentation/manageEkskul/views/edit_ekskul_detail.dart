@@ -13,7 +13,7 @@ import '../../../common/widget/card/card_anggota.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
 import '../../../domain/entities/ekskul/update_anggota_req.dart';

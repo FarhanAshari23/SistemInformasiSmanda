@@ -7,7 +7,7 @@ import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/ack_
 import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_students_view.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
 

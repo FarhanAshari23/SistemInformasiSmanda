@@ -4,7 +4,7 @@ import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/teacher.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../helper/display_image.dart';
 import '../photo/network_photo.dart';
 
