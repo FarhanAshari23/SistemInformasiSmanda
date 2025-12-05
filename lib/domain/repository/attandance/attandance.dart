@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_attendance.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_delete_attendance.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
+
+import '../../entities/attandance/param_attendance.dart';
+import '../../entities/attandance/param_delete_attendance.dart';
+import '../../entities/auth/user.dart';
+import '../../entities/teacher/teacher.dart';
 
 abstract class AttandanceRepository {
   Future<Either> getListAttendanceDate();
@@ -10,4 +12,5 @@ abstract class AttandanceRepository {
   Future<Either> searchStudentAttendance(ParamAttendanceEntity attendanceReq);
   Future<Either> getAttendanceStudents(ParamAttendanceEntity attendanceReq);
   Future<Either> addStudentAttendances(UserEntity userAddReq);
+  Future<Either> addTeacherAttendances(TeacherEntity teacherAddReq);
 }

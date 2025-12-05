@@ -55,6 +55,7 @@ class ProfileTeacher extends StatelessWidget {
                       return Container(
                         width: double.infinity,
                         height: height * 0.2,
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                           color: AppColors.secondary,
@@ -204,7 +205,9 @@ class ProfileTeacher extends StatelessWidget {
                                       ? const JadwalDaysSelection(
                                           isTeacherSchedule: true,
                                         )
-                                      : const ProfileTeacherMenuView();
+                                      : ProfileTeacherMenuView(
+                                          teacher: state.teacherEntity!,
+                                        );
                                 }),
                               ),
                             )

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/update_schedule_usecase.dart';
@@ -86,12 +88,12 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
           }
           if (state is ButtonSuccessState) {
             Future.microtask(() {
-              final ctx = context; // simpan context saat ini
+              final ctx = context;
 
               ctx.read<GetAllJadwalCubit>().displayAllJadwal();
 
               ScaffoldMessenger.of(ctx).showSnackBar(
-                SnackBar(content: Text("Berhasil mengubah jadwal")),
+                const SnackBar(content: Text("Berhasil mengubah jadwal")),
               );
 
               Navigator.pop(ctx);

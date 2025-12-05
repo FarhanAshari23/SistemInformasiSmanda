@@ -109,36 +109,13 @@ class BasicAppbar extends StatelessWidget {
                               ? BlocBuilder<ProfileInfoCubit, ProfileInfoState>(
                                   builder: (context, state) {
                                     if (state is ProfileInfoLoading) {
-                                      return Row(
-                                        children: [
-                                          const Text(
-                                            'Tunggu Sebentar...',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w800,
-                                              color: AppColors.inversePrimary,
-                                            ),
-                                          ),
-                                          SizedBox(width: width * 0.02),
-                                          GestureDetector(
-                                            onTap: () => AppNavigator.push(
-                                              context,
-                                              const ProfileStudentView(),
-                                            ),
-                                            child: Container(
-                                              width: width * 0.105,
-                                              height: height * 0.065,
-                                              decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: AppColors.tertiary,
-                                              ),
-                                              child: const Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                      return const Text(
+                                        'Tunggu Sebentar...',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800,
+                                          color: AppColors.inversePrimary,
+                                        ),
                                       );
                                     }
                                     if (state is ProfileInfoLoaded) {

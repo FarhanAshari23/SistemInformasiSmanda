@@ -5,7 +5,9 @@ import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
 import '../../../domain/entities/attandance/param_attendance.dart';
 import '../../../domain/entities/attandance/param_delete_attendance.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../models/auth/user.dart';
+import '../../models/teacher/teacher.dart';
 
 abstract class AttandanceFirebaseService {
   Future<Either> getListAttendanceDate();
@@ -13,6 +15,7 @@ abstract class AttandanceFirebaseService {
   Future<Either> deleteMonthAttendances(ParamDeleteAttendance attendanceReq);
   Future<Either> getAttendanceStudents(ParamAttendanceEntity attendanceReq);
   Future<Either> addStudentAttendances(UserEntity userAddReq);
+  Future<Either> addTeacherAttendances(TeacherEntity teacherAddReq);
   Future<Either> searchStudentAttendance(ParamAttendanceEntity attendanceReq);
 }
 
@@ -42,7 +45,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
           await kehadiran.where('createdAt', isEqualTo: formattedDate).get();
       DocumentReference kehadiranDoc;
       if (snapshot.docs.isEmpty) {
-        kehadiranDoc = await firebaseFirestore.collection("Attendances").add(
+        kehadiranDoc = await kehadiran.add(
           {
             "createdAt": formattedDate,
             "timestamp": Timestamp.now(),
@@ -213,6 +216,54 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
           'Berhasil menghapus data sebanyak ${snapshot.docs.length} untuk bulan ${attendanceReq.month}');
     } catch (e) {
       return Left("Something error: $e");
+    }
+  }
+
+  @override
+  Future<Either> addTeacherAttendances(teacherAddReq) async {
+    try {
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      CollectionReference kehadiran =
+          firebaseFirestore.collection('TeachersAttendances');
+      DateTime sekarang = DateTime.now();
+      String formattedDate = DateFormat('dd-MM-yyyy').format(sekarang);
+      QuerySnapshot snapshot =
+          await kehadiran.where('createdAt', isEqualTo: formattedDate).get();
+      DocumentReference kehadiranDoc;
+      if (snapshot.docs.isEmpty) {
+        kehadiranDoc = await kehadiran.add(
+          {
+            "createdAt": formattedDate,
+            "timestamp": Timestamp.now(),
+          },
+        );
+      } else {
+        kehadiranDoc = snapshot.docs.first.reference;
+      }
+      CollectionReference teacher = kehadiranDoc.collection('Teachers');
+      QuerySnapshot existingTeacher = await teacher
+          .where(teacherAddReq.nip != '-' ? "NIP" : "nama",
+              isEqualTo: teacherAddReq.nip != '-'
+                  ? teacherAddReq.nip
+                  : teacherAddReq.nama)
+          .limit(1)
+          .get();
+      if (existingTeacher.docs.isNotEmpty) {
+        return const Left(
+          'Kehadiran anda sudah disimpan, silakan absen keesokan harinya',
+        );
+      }
+      final teacherModel = TeacherModelX.fromEntity(teacherAddReq);
+      final teacherData = teacherModel.toMap();
+
+      // Tambahkan jam masuk sekarang
+      teacherData['jam_masuk'] = Timestamp.now();
+
+      await teacher.add(teacherData);
+
+      return right('Attendance record success!');
+    } catch (e) {
+      return left(e.toString());
     }
   }
 }

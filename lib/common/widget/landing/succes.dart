@@ -8,11 +8,13 @@ import '../appbar/basic_appbar.dart';
 
 class SuccesPage extends StatelessWidget {
   final String title;
+  final bool isPop;
   final Widget page;
   const SuccesPage({
     super.key,
     required this.page,
     required this.title,
+    this.isPop = false,
   });
 
   @override
@@ -48,10 +50,12 @@ class SuccesPage extends StatelessWidget {
             ),
             SizedBox(height: height * 0.06),
             GestureDetector(
-              onTap: () => AppNavigator.pushReplacement(
-                context,
-                page,
-              ),
+              onTap: () => isPop
+                  ? Navigator.pop(context)
+                  : AppNavigator.pushReplacement(
+                      context,
+                      page,
+                    ),
               child: Center(
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 24),

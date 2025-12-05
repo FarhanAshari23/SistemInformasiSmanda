@@ -21,6 +21,7 @@ import 'domain/repository/schedule/schedule.dart';
 import 'domain/repository/students/students.dart';
 import 'domain/repository/teacher/teacher.dart';
 import 'domain/usecases/attendance/add_student_attendance.dart';
+import 'domain/usecases/attendance/add_teacher_attendance.dart';
 import 'domain/usecases/attendance/delete_attendances_usecase.dart';
 import 'domain/usecases/attendance/delete_month_attendances_usecase.dart';
 import 'domain/usecases/attendance/get_attendance_name_usecase.dart';
@@ -293,6 +294,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<DeleteMonthAttendancesUsecase>(
     DeleteMonthAttendancesUsecase(),
+  );
+  sl.registerSingleton<AddTeacherAttendanceUseCase>(
+    AddTeacherAttendanceUseCase(),
   );
 
   //schedule

@@ -3,6 +3,7 @@ import 'package:new_sistem_informasi_smanda/data/models/attendance/attendance.da
 import 'package:new_sistem_informasi_smanda/data/sources/attandance/attandance_firebase_service.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_delete_attendance.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/repository/attandance/attandance.dart';
 
 import '../../../domain/entities/attandance/param_attendance.dart';
@@ -86,5 +87,11 @@ class AttandanceRepositoryImpl extends AttandanceRepository {
       ParamDeleteAttendance attendanceReq) async {
     return await sl<AttandanceFirebaseService>()
         .deleteMonthAttendances(attendanceReq);
+  }
+
+  @override
+  Future<Either> addTeacherAttendances(TeacherEntity teacherAddReq) async {
+    return await sl<AttandanceFirebaseService>()
+        .addTeacherAttendances(teacherAddReq);
   }
 }
