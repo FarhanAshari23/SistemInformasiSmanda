@@ -19,7 +19,7 @@ import '../../auth/views/login_view.dart';
 import '../../manageActivity/views/manage_activity_view.dart';
 import '../../manageAttendance/views/scan_barcode_view.dart';
 import '../../manageAttendance/views/see_data_attandance.dart';
-import '../../manageAttendance/widgets/card_feature.dart';
+import '../../../common/widget/card/card_basic.dart';
 import '../../manageJabatan/views/manage_jabatan_views.dart';
 import '../../manageSchedule/views/add_schedule_view.dart';
 import '../../manageSchedule/views/edit_schedule_view.dart';
@@ -145,7 +145,7 @@ class HomeViewAdmin extends StatelessWidget {
                       mainAxisExtent: height * 0.25,
                     ),
                     itemBuilder: (context, index) {
-                      return CardFeature(
+                      return CardBasic(
                         onpressed: () =>
                             AppNavigator.push(context, pages[index]),
                         title: title[index],

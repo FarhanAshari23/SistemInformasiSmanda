@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/extract_name.dart';
+import 'package:new_sistem_informasi_smanda/common/helper/get_first_name.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_state.dart';
@@ -20,12 +21,14 @@ import '../photo/network_photo.dart';
 class BasicAppbar extends StatelessWidget {
   final bool isBackViewed;
   final bool isProfileViewed;
+  final bool isProfileTeacherViewed;
   final bool? isLogout;
   const BasicAppbar({
     super.key,
     required this.isBackViewed,
     required this.isProfileViewed,
     this.isLogout,
+    this.isProfileTeacherViewed = false,
   });
 
   @override
@@ -46,8 +49,12 @@ class BasicAppbar extends StatelessWidget {
     }
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => ProfileInfoCubit()),
         BlocProvider(
           create: (context) => ProfileInfoCubit()..getUser("Students"),
+        ),
+        BlocProvider(
+          create: (context) => ProfileInfoCubit()..getUser("Teachers"),
         ),
         BlocProvider(
           create: (context) => ButtonStateCubit(),
@@ -81,25 +88,75 @@ class BasicAppbar extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Visibility(
-                        visible: isBackViewed,
-                        child: CustomInkWell(
-                          onTap: () => Navigator.pop(context),
-                          borderRadius: 8,
-                          defaultColor: AppColors.tertiary,
-                          child: SizedBox(
-                            width: width * 0.125,
-                            height: height * 0.06,
-                            child: const Center(
-                              child: Icon(
-                                Icons.arrow_back,
-                                color: AppColors.inversePrimary,
-                                size: 32,
+                      isBackViewed
+                          ? CustomInkWell(
+                              onTap: () => Navigator.pop(context),
+                              borderRadius: 8,
+                              defaultColor: AppColors.tertiary,
+                              child: SizedBox(
+                                width: width * 0.125,
+                                height: height * 0.06,
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.arrow_back,
+                                    color: AppColors.inversePrimary,
+                                    size: 32,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
+                            )
+                          : isProfileTeacherViewed
+                              ? BlocBuilder<ProfileInfoCubit, ProfileInfoState>(
+                                  builder: (context, state) {
+                                    if (state is ProfileInfoLoading) {
+                                      return Row(
+                                        children: [
+                                          const Text(
+                                            'Tunggu Sebentar...',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w800,
+                                              color: AppColors.inversePrimary,
+                                            ),
+                                          ),
+                                          SizedBox(width: width * 0.02),
+                                          GestureDetector(
+                                            onTap: () => AppNavigator.push(
+                                              context,
+                                              const ProfileStudentView(),
+                                            ),
+                                            child: Container(
+                                              width: width * 0.105,
+                                              height: height * 0.065,
+                                              decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: AppColors.tertiary,
+                                              ),
+                                              child: const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                    if (state is ProfileInfoLoaded) {
+                                      String nickname = getFirstRealName(
+                                          state.teacherEntity?.nama ?? '');
+                                      return Text(
+                                        'Selamat $greeting $nickname!',
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w800,
+                                          color: AppColors.inversePrimary,
+                                        ),
+                                      );
+                                    }
+                                    return const Text("something error");
+                                  },
+                                )
+                              : const SizedBox(),
                       isProfileViewed
                           ? BlocBuilder<ProfileInfoCubit, ProfileInfoState>(
                               builder: (context, state) {

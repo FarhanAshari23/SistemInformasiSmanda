@@ -47,6 +47,7 @@ class ProfileTeacher extends StatelessWidget {
                   isBackViewed: false,
                   isLogout: true,
                   isProfileViewed: false,
+                  isProfileTeacherViewed: true,
                 ),
                 BlocBuilder<ProfileInfoCubit, ProfileInfoState>(
                   builder: (context, state) {

@@ -3,12 +3,12 @@ import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell
 
 import '../../../core/configs/theme/app_colors.dart';
 
-class CardFeature extends StatelessWidget {
+class CardBasic extends StatelessWidget {
   final String title;
   final String image;
   final VoidCallback onpressed;
 
-  const CardFeature({
+  const CardBasic({
     super.key,
     required this.title,
     required this.image,
