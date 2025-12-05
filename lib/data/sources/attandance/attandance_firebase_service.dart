@@ -17,6 +17,7 @@ abstract class AttandanceFirebaseService {
   Future<Either> addStudentAttendances(UserEntity userAddReq);
   Future<Either> addTeacherAttendances(TeacherEntity teacherAddReq);
   Future<Either> searchStudentAttendance(ParamAttendanceEntity attendanceReq);
+  Future<Either> addTeacherCompletion(TeacherEntity teacherAddReq);
 }
 
 class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
@@ -258,6 +259,54 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
 
       // Tambahkan jam masuk sekarang
       teacherData['jam_masuk'] = Timestamp.now();
+
+      await teacher.add(teacherData);
+
+      return right('Attendance record success!');
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> addTeacherCompletion(TeacherEntity teacherAddReq) async {
+    try {
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      CollectionReference kehadiran =
+          firebaseFirestore.collection('TeachersCompletions');
+      DateTime sekarang = DateTime.now();
+      String formattedDate = DateFormat('dd-MM-yyyy').format(sekarang);
+      QuerySnapshot snapshot =
+          await kehadiran.where('createdAt', isEqualTo: formattedDate).get();
+      DocumentReference kehadiranDoc;
+      if (snapshot.docs.isEmpty) {
+        kehadiranDoc = await kehadiran.add(
+          {
+            "createdAt": formattedDate,
+            "timestamp": Timestamp.now(),
+          },
+        );
+      } else {
+        kehadiranDoc = snapshot.docs.first.reference;
+      }
+      CollectionReference teacher = kehadiranDoc.collection('Teachers');
+      QuerySnapshot existingTeacher = await teacher
+          .where(teacherAddReq.nip != '-' ? "NIP" : "nama",
+              isEqualTo: teacherAddReq.nip != '-'
+                  ? teacherAddReq.nip
+                  : teacherAddReq.nama)
+          .limit(1)
+          .get();
+      if (existingTeacher.docs.isNotEmpty) {
+        return const Left(
+          'Kehadiran anda sudah disimpan, silakan absen keesokan harinya',
+        );
+      }
+      final teacherModel = TeacherModelX.fromEntity(teacherAddReq);
+      final teacherData = teacherModel.toMap();
+
+      // Tambahkan jam masuk sekarang
+      teacherData['jam_pulang'] = Timestamp.now();
 
       await teacher.add(teacherData);
 

@@ -9,6 +9,7 @@ import '../../../common/widget/landing/succes.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/attendance/add_teacher_attendance.dart';
+import '../../../domain/usecases/attendance/add_teacher_completion_usecase.dart';
 import '../bloc/get_distace_state.dart';
 import '../bloc/get_distance_cubit.dart';
 
@@ -50,7 +51,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
                   context,
                   const SuccesPage(
                     page: SizedBox(),
-                    title: "Proses absen masuk berhasil dilakukan",
+                    title: "Proses absen berhasil dilakukan",
                     isPop: true,
                   ),
                 );
@@ -100,11 +101,34 @@ class ProfileTeacherMenuView extends StatelessWidget {
                       title: 'Absen Masuk',
                     );
                   }),
-                  CardBasic(
-                    image: AppImages.attendance,
-                    onpressed: () {},
-                    title: 'Absen Pulang',
-                  ),
+                  Builder(builder: (context) {
+                    return CardBasic(
+                      image: AppImages.attendance,
+                      onpressed: () async {
+                        final distanceCubit = context.read<GetDistanceCubit>();
+                        final buttonCubit = context.read<ButtonStateCubit>();
+                        final messenger = ScaffoldMessenger.of(context);
+
+                        await distanceCubit.getDistance();
+                        final state = distanceCubit.state;
+
+                        if (state is GetDistanceLoaded && state.isNear) {
+                          buttonCubit.execute(
+                            usecase: AddTeacherCompletionUseCase(),
+                            params: teacher,
+                          );
+                        } else {
+                          messenger.showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  "Anda tidak berada di lingkungan SMA N 2 Metro, harap melakukan absen di sekolah"),
+                            ),
+                          );
+                        }
+                      },
+                      title: 'Absen Pulang',
+                    );
+                  }),
                 ],
               ),
               const SizedBox(height: 16),

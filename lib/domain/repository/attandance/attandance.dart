@@ -13,4 +13,5 @@ abstract class AttandanceRepository {
   Future<Either> getAttendanceStudents(ParamAttendanceEntity attendanceReq);
   Future<Either> addStudentAttendances(UserEntity userAddReq);
   Future<Either> addTeacherAttendances(TeacherEntity teacherAddReq);
+  Future<Either> addTeacherCompletion(TeacherEntity teacherAddReq);
 }
