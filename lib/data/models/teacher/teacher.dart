@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
 
 class TeacherModel {

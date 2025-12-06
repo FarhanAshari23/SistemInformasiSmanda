@@ -9,9 +9,9 @@ import '../../../common/widget/landing/succes.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/attendance/add_teacher_attendance.dart';
-import '../../../domain/usecases/attendance/add_teacher_completion_usecase.dart';
 import '../bloc/get_distace_state.dart';
 import '../bloc/get_distance_cubit.dart';
+import 'schedule_attendance_teacher_view.dart';
 
 class ProfileTeacherMenuView extends StatelessWidget {
   final TeacherEntity teacher;
@@ -85,9 +85,11 @@ class ProfileTeacherMenuView extends StatelessWidget {
                         final state = distanceCubit.state;
 
                         if (state is GetDistanceLoaded && state.isNear) {
+                          final updatedTeacher =
+                              teacher.copyWith(isAttendance: true);
                           buttonCubit.execute(
                             usecase: AddTeacherAttendanceUseCase(),
-                            params: teacher,
+                            params: updatedTeacher,
                           );
                         } else {
                           messenger.showSnackBar(
@@ -113,9 +115,11 @@ class ProfileTeacherMenuView extends StatelessWidget {
                         final state = distanceCubit.state;
 
                         if (state is GetDistanceLoaded && state.isNear) {
+                          final updatedTeacher =
+                              teacher.copyWith(isAttendance: false);
                           buttonCubit.execute(
-                            usecase: AddTeacherCompletionUseCase(),
-                            params: teacher,
+                            usecase: AddTeacherAttendanceUseCase(),
+                            params: updatedTeacher,
                           );
                         } else {
                           messenger.showSnackBar(
@@ -137,7 +141,16 @@ class ProfileTeacherMenuView extends StatelessWidget {
                 children: [
                   CardBasic(
                     image: AppImages.verification,
-                    onpressed: () {},
+                    onpressed: () {
+                      final updatedTeacher =
+                          teacher.copyWith(isAttendance: true);
+                      AppNavigator.push(
+                        context,
+                        ScheduleAttendanceTeacherView(
+                          teacher: updatedTeacher,
+                        ),
+                      );
+                    },
                     title: 'Data Absen Masuk',
                   ),
                   CardBasic(

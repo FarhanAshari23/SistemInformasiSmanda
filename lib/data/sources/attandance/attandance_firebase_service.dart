@@ -15,9 +15,9 @@ abstract class AttandanceFirebaseService {
   Future<Either> deleteMonthAttendances(ParamDeleteAttendance attendanceReq);
   Future<Either> getAttendanceStudents(ParamAttendanceEntity attendanceReq);
   Future<Either> addStudentAttendances(UserEntity userAddReq);
+  Future<Either> getAttendanceTeacher(TeacherEntity attendanceReq);
   Future<Either> addTeacherAttendances(TeacherEntity teacherAddReq);
   Future<Either> searchStudentAttendance(ParamAttendanceEntity attendanceReq);
-  Future<Either> addTeacherCompletion(TeacherEntity teacherAddReq);
 }
 
 class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
@@ -223,44 +223,71 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   @override
   Future<Either> addTeacherAttendances(teacherAddReq) async {
     try {
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-      CollectionReference kehadiran =
-          firebaseFirestore.collection('TeachersAttendances');
-      DateTime sekarang = DateTime.now();
-      String formattedDate = DateFormat('dd-MM-yyyy').format(sekarang);
-      QuerySnapshot snapshot =
-          await kehadiran.where('createdAt', isEqualTo: formattedDate).get();
-      DocumentReference kehadiranDoc;
-      if (snapshot.docs.isEmpty) {
-        kehadiranDoc = await kehadiran.add(
-          {
-            "createdAt": formattedDate,
-            "timestamp": Timestamp.now(),
-          },
-        );
-      } else {
-        kehadiranDoc = snapshot.docs.first.reference;
-      }
-      CollectionReference teacher = kehadiranDoc.collection('Teachers');
-      QuerySnapshot existingTeacher = await teacher
-          .where(teacherAddReq.nip != '-' ? "NIP" : "nama",
-              isEqualTo: teacherAddReq.nip != '-'
-                  ? teacherAddReq.nip
-                  : teacherAddReq.nama)
+      final firestore = FirebaseFirestore.instance;
+      final now = DateTime.now();
+      final formattedDate = DateFormat('dd-MM-yyyy').format(now);
+
+      final teacherQuery = await firestore
+          .collection('Teachers')
+          .where(
+            teacherAddReq.nip != '-' ? 'NIP' : 'nama',
+            isEqualTo: teacherAddReq.nip != '-'
+                ? teacherAddReq.nip
+                : teacherAddReq.nama,
+          )
           .limit(1)
           .get();
-      if (existingTeacher.docs.isNotEmpty) {
+
+      if (teacherQuery.docs.isEmpty) {
+        return const Left("Data guru tidak ditemukan");
+      }
+
+      final teacherDoc = teacherQuery.docs.first.reference;
+
+      final attendanceRef = teacherDoc.collection(
+          teacherAddReq.isAttendance ?? false ? 'Attendances' : 'Completions');
+      final todayAttendance = await attendanceRef.doc(formattedDate).get();
+
+      if (todayAttendance.exists) {
         return const Left(
           'Kehadiran anda sudah disimpan, silakan absen keesokan harinya',
         );
       }
+
+      final attendanceData = {
+        "createdAt": formattedDate,
+        "timestamp": Timestamp.now(),
+      };
+
+      await attendanceRef.doc(formattedDate).set(attendanceData);
+
+      final teacherAttendances = firestore.collection(
+          teacherAddReq.isAttendance ?? false
+              ? 'TeachersAttendances'
+              : 'TeachersCompletions');
+
+      final dateQuery = await teacherAttendances
+          .where("createdAt", isEqualTo: formattedDate)
+          .limit(1)
+          .get();
+
+      late final DocumentReference todayDoc;
+
+      if (dateQuery.docs.isEmpty) {
+        todayDoc = await teacherAttendances.add({
+          "createdAt": formattedDate,
+          "timestamp": Timestamp.now(),
+        });
+      } else {
+        todayDoc = dateQuery.docs.first.reference;
+      }
+
       final teacherModel = TeacherModelX.fromEntity(teacherAddReq);
       final teacherData = teacherModel.toMap();
-
-      // Tambahkan jam masuk sekarang
-      teacherData['jam_masuk'] = Timestamp.now();
-
-      await teacher.add(teacherData);
+      teacherData[teacherAddReq.isAttendance ?? false
+          ? 'jam_masuk'
+          : 'jam_pulang'] = Timestamp.now();
+      await todayDoc.collection("Teachers").add(teacherData);
 
       return right('Attendance record success!');
     } catch (e) {
@@ -269,50 +296,37 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   }
 
   @override
-  Future<Either> addTeacherCompletion(TeacherEntity teacherAddReq) async {
+  Future<Either> getAttendanceTeacher(TeacherEntity attendanceReq) async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    CollectionReference kehadiran = firebaseFirestore.collection('Teachers');
     try {
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-      CollectionReference kehadiran =
-          firebaseFirestore.collection('TeachersCompletions');
-      DateTime sekarang = DateTime.now();
-      String formattedDate = DateFormat('dd-MM-yyyy').format(sekarang);
-      QuerySnapshot snapshot =
-          await kehadiran.where('createdAt', isEqualTo: formattedDate).get();
-      DocumentReference kehadiranDoc;
-      if (snapshot.docs.isEmpty) {
-        kehadiranDoc = await kehadiran.add(
-          {
-            "createdAt": formattedDate,
-            "timestamp": Timestamp.now(),
-          },
-        );
-      } else {
-        kehadiranDoc = snapshot.docs.first.reference;
-      }
-      CollectionReference teacher = kehadiranDoc.collection('Teachers');
-      QuerySnapshot existingTeacher = await teacher
-          .where(teacherAddReq.nip != '-' ? "NIP" : "nama",
-              isEqualTo: teacherAddReq.nip != '-'
-                  ? teacherAddReq.nip
-                  : teacherAddReq.nama)
+      final attendanceQuery = await kehadiran
+          .where(
+            attendanceReq.nip != '-' ? 'NIP' : 'nama',
+            isEqualTo: attendanceReq.nip != '-'
+                ? attendanceReq.nip
+                : attendanceReq.nama,
+          )
           .limit(1)
           .get();
-      if (existingTeacher.docs.isNotEmpty) {
-        return const Left(
-          'Kehadiran anda sudah disimpan, silakan absen keesokan harinya',
-        );
+      if (attendanceQuery.docs.isEmpty) {
+        return const Left("Data guru tidak ditemukan");
       }
-      final teacherModel = TeacherModelX.fromEntity(teacherAddReq);
-      final teacherData = teacherModel.toMap();
 
-      // Tambahkan jam masuk sekarang
-      teacherData['jam_pulang'] = Timestamp.now();
-
-      await teacher.add(teacherData);
-
-      return right('Attendance record success!');
+      final attendanceDocId = attendanceQuery.docs.first.id;
+      final teacherDoc = await kehadiran
+          .doc(attendanceDocId)
+          .collection(attendanceReq.isAttendance ?? false
+              ? 'Attendances'
+              : 'Completions')
+          .orderBy("timestamp", descending: true)
+          .get();
+      if (teacherDoc.docs.isEmpty) {
+        return const Left("Data kehadiran anda sudah dihapus");
+      }
+      return Right(teacherDoc.docs.map((e) => e.data()).toList());
     } catch (e) {
-      return left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 }

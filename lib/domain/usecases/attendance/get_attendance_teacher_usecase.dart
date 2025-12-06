@@ -5,9 +5,9 @@ import '../../../service_locator.dart';
 import '../../entities/teacher/teacher.dart';
 import '../../repository/attandance/attandance.dart';
 
-class AddTeacherCompletionUseCase implements Usecase<Either, TeacherEntity> {
+class GetAttendanceTeacherUsecase implements Usecase<Either, TeacherEntity> {
   @override
   Future<Either> call({TeacherEntity? params}) async {
-    return await sl<AttandanceRepository>().addTeacherCompletion(params!);
+    return await sl<AttandanceRepository>().getAttendanceTeacher(params!);
   }
 }
