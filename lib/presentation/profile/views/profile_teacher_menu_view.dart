@@ -155,7 +155,17 @@ class ProfileTeacherMenuView extends StatelessWidget {
                   ),
                   CardBasic(
                     image: AppImages.verification,
-                    onpressed: () {},
+                    onpressed: () {
+                      final updatedTeacher =
+                          teacher.copyWith(isAttendance: false);
+                      AppNavigator.push(
+                        context,
+                        ScheduleAttendanceTeacherView(
+                          teacher: updatedTeacher,
+                          isAttendance: false,
+                        ),
+                      );
+                    },
                     title: 'Data Absen Pulang',
                   ),
                 ],
