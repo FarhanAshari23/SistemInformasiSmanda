@@ -5,9 +5,8 @@ import '../../../core/configs/theme/app_colors.dart';
 class CustomInkWell extends StatefulWidget {
   final VoidCallback? onTap;
   final Widget child;
-  final Color defaultColor;
-  final Color pressedColor;
-  final double borderRadius;
+  final Color defaultColor, pressedColor;
+  final double borderRadius, left, right;
 
   const CustomInkWell({
     super.key,
@@ -16,6 +15,8 @@ class CustomInkWell extends StatefulWidget {
     this.defaultColor = AppColors.primary,
     this.pressedColor = const Color(0xFFD3D3D3),
     this.borderRadius = 0,
+    this.left = 0,
+    this.right = 0,
   });
 
   @override
@@ -41,7 +42,12 @@ class _CustomInkWellState extends State<CustomInkWell> {
           duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
             color: _isPressed ? widget.pressedColor : widget.defaultColor,
-            borderRadius: BorderRadius.circular(widget.borderRadius),
+            borderRadius: BorderRadius.horizontal(
+              left: Radius.circular(
+                  widget.left != 0 ? widget.left : widget.borderRadius),
+              right: Radius.circular(
+                  widget.right != 0 ? widget.right : widget.borderRadius),
+            ),
           ),
           child: widget.child,
         ),
