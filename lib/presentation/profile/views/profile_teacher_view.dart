@@ -193,7 +193,7 @@ class ProfileTeacher extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(height: height * 0.02),
+                            SizedBox(height: height * 0.01),
                             Expanded(
                               child: SizedBox(
                                 child: Builder(builder: (context) {

@@ -319,7 +319,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
           .collection(attendanceReq.isAttendance ?? false
               ? 'Attendances'
               : 'Completions')
-          .orderBy("timestamp", descending: true)
+          .orderBy("timestamp", descending: false)
           .get();
       if (teacherDoc.docs.isEmpty) {
         return const Left("Data kehadiran anda sudah dihapus");

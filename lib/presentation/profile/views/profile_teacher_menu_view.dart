@@ -22,6 +22,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -135,7 +136,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
                   }),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: height * 0.01),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

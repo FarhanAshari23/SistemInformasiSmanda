@@ -7,4 +7,8 @@ class SelectTimestampCubit extends Cubit<Timestamp?> {
   void select(Timestamp time) {
     emit(time);
   }
+
+  void reset() {
+    emit(null);
+  }
 }
