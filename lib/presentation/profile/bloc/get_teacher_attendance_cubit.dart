@@ -9,6 +9,7 @@ class GetTeacherAttendanceCubit extends Cubit<GetTeacherAttendanceState> {
   GetTeacherAttendanceCubit() : super(GetTeacherAttendanceLoading());
 
   Future<void> getAttendanceTeacher(TeacherEntity teacher) async {
+    emit(GetTeacherAttendanceLoading());
     var teacherSchedule =
         await sl<GetAttendanceTeacherUsecase>().call(params: teacher);
     teacherSchedule.fold(

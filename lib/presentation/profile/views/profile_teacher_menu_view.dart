@@ -9,6 +9,7 @@ import '../../../common/widget/landing/succes.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/attendance/add_teacher_attendance.dart';
+import '../../manageAttendance/views/scan_barcode_view.dart';
 import '../bloc/get_distace_state.dart';
 import '../bloc/get_distance_cubit.dart';
 import 'schedule_attendance_teacher_view.dart';
@@ -143,31 +144,24 @@ class ProfileTeacherMenuView extends StatelessWidget {
                   CardBasic(
                     image: AppImages.verification,
                     onpressed: () {
-                      final updatedTeacher =
-                          teacher.copyWith(isAttendance: true);
                       AppNavigator.push(
                         context,
                         ScheduleAttendanceTeacherView(
-                          teacher: updatedTeacher,
+                          teacher: teacher,
                         ),
                       );
                     },
-                    title: 'Data Absen Masuk',
+                    title: 'Lihat Data Absen',
                   ),
                   CardBasic(
-                    image: AppImages.verification,
+                    image: AppImages.camera,
+                    title: 'Rekam Kehadiran Siswa',
                     onpressed: () {
-                      final updatedTeacher =
-                          teacher.copyWith(isAttendance: false);
                       AppNavigator.push(
                         context,
-                        ScheduleAttendanceTeacherView(
-                          teacher: updatedTeacher,
-                          isAttendance: false,
-                        ),
+                        const ScanBarcodeView(),
                       );
                     },
-                    title: 'Data Absen Pulang',
                   ),
                 ],
               ),
