@@ -4,28 +4,30 @@ import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
 import '../../../domain/entities/attandance/param_attendance.dart';
+import '../../../domain/entities/attandance/param_attendance_teacher.dart';
 import '../../../domain/entities/attandance/param_delete_attendance.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../models/auth/user.dart';
 import '../../models/teacher/teacher.dart';
 
 abstract class AttandanceFirebaseService {
-  Future<Either> getListAttendanceDate();
+  Future<Either> getListAttendanceDate(String nameCollection);
   Future<Either> deleteAllAttendances();
   Future<Either> deleteMonthAttendances(ParamDeleteAttendance attendanceReq);
   Future<Either> getAttendanceStudents(ParamAttendanceEntity attendanceReq);
   Future<Either> addStudentAttendances(UserEntity userAddReq);
   Future<Either> getAttendanceTeacher(TeacherEntity attendanceReq);
+  Future<Either> getAttendanceAllTeacher(ParamAttendanceTeacher req);
   Future<Either> addTeacherAttendances(TeacherEntity teacherAddReq);
   Future<Either> searchStudentAttendance(ParamAttendanceEntity attendanceReq);
 }
 
 class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   @override
-  Future<Either> getListAttendanceDate() async {
+  Future<Either> getListAttendanceDate(String nameCollection) async {
     try {
       var returnedData = await FirebaseFirestore.instance
-          .collection('Attendances')
+          .collection(nameCollection)
           .orderBy('timestamp', descending: true)
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
@@ -327,6 +329,26 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       return Right(teacherDoc.docs.map((e) => e.data()).toList());
     } catch (e) {
       return Left("Something error: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<Either> getAttendanceAllTeacher(ParamAttendanceTeacher req) async {
+    try {
+      CollectionReference kehadiran =
+          FirebaseFirestore.instance.collection(req.nameCollection);
+      QuerySnapshot snapshot =
+          await kehadiran.where('createdAt', isEqualTo: req.date).get();
+      if (snapshot.docs.isNotEmpty) {
+        String attendanceId = snapshot.docs.first.id;
+        QuerySnapshot teachers =
+            await kehadiran.doc(attendanceId).collection('Teachers').get();
+        return Right(teachers.docs.map((e) => e.data()).toList());
+      } else {
+        return left('Date cant be found');
+      }
+    } catch (e) {
+      return left(e.toString());
     }
   }
 }

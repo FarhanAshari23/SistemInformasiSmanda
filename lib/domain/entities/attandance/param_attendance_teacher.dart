@@ -1,11 +1,8 @@
 class ParamAttendanceTeacher {
-  final String date;
-  final String nip;
-  final String name;
+  final String date, nameCollection;
 
   ParamAttendanceTeacher({
     required this.date,
-    required this.nip,
-    required this.name,
+    required this.nameCollection,
   });
 }

@@ -7,8 +7,9 @@ import 'display_date_state.dart';
 class DisplayDateCubit extends Cubit<DisplayDateState> {
   DisplayDateCubit() : super(DisplayDateLoading());
 
-  void displayAttendances() async {
-    var returnedData = await sl<GetListAttendancesUseCase>().call();
+  void displayAttendances(String nameCollection) async {
+    var returnedData =
+        await sl<GetListAttendancesUseCase>().call(params: nameCollection);
     returnedData.fold(
       (error) {
         return emit(DisplayDateFailure(errorMessage: error));

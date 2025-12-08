@@ -39,7 +39,8 @@ class _SeeDataAttandanceState extends State<SeeDataAttandance> {
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => DisplayDateCubit()..displayAttendances(),
+            create: (context) =>
+                DisplayDateCubit()..displayAttendances('Attendances'),
           ),
           BlocProvider(
             create: (context) => ButtonStateCubit(),
@@ -48,7 +49,9 @@ class _SeeDataAttandanceState extends State<SeeDataAttandance> {
         child: BlocListener<ButtonStateCubit, ButtonState>(
           listener: (context, state) {
             if (state is ButtonSuccessState) {
-              context.read<DisplayDateCubit>().displayAttendances();
+              context
+                  .read<DisplayDateCubit>()
+                  .displayAttendances('Attendances');
               var snackbar = const SnackBar(
                 content: Text("Data Berhasil dihapus"),
               );
@@ -131,7 +134,7 @@ class _SeeDataAttandanceState extends State<SeeDataAttandance> {
                             ),
                             iconColor: AppColors.primary,
                             weekendTextStyle: const TextStyle(
-                              color: Colors.red,
+                              color: Color(0xFFCD5C5C),
                               fontWeight: FontWeight.w700,
                             ),
                             weekdayTextStyle: const TextStyle(
