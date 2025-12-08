@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
 
 class TeacherModel {
@@ -9,6 +10,7 @@ class TeacherModel {
   final String waliKelas;
   final String jabatan;
   final int? gender;
+  final Timestamp? timeIn, timeOut;
 
   TeacherModel({
     required this.nama,
@@ -18,6 +20,8 @@ class TeacherModel {
     required this.waliKelas,
     required this.jabatan,
     required this.gender,
+    this.timeIn,
+    this.timeOut,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,19 +33,22 @@ class TeacherModel {
       'wali_kelas': waliKelas,
       'jabatan_tambahan': jabatan,
       "gender": gender,
+      "jam_masuk": timeIn,
+      "jam_pulang": timeOut,
     };
   }
 
   factory TeacherModel.fromMap(Map<String, dynamic> map) {
     return TeacherModel(
-      nama: map["nama"] ?? '',
-      mengajar: map["mengajar"] ?? '',
-      nip: map["NIP"] ?? '',
-      tanggalLahir: map["tanggal_lahir"] ?? '',
-      waliKelas: map["wali_kelas"] ?? '',
-      jabatan: map["jabatan_tambahan"] ?? '',
-      gender: map["gender"],
-    );
+        nama: map["nama"] ?? '',
+        mengajar: map["mengajar"] ?? '',
+        nip: map["NIP"] ?? '',
+        tanggalLahir: map["tanggal_lahir"] ?? '',
+        waliKelas: map["wali_kelas"] ?? '',
+        jabatan: map["jabatan_tambahan"] ?? '',
+        gender: map["gender"],
+        timeIn: map['jam_masuk'],
+        timeOut: map['jam_pulang']);
   }
 
   String toJson() => json.encode(toMap());
@@ -60,6 +67,8 @@ extension TeacherModelX on TeacherModel {
       waliKelas: waliKelas,
       jabatan: jabatan,
       gender: gender,
+      timeIn: timeIn,
+      timeOut: timeOut,
     );
   }
 
@@ -72,6 +81,8 @@ extension TeacherModelX on TeacherModel {
       waliKelas: entity.waliKelas,
       jabatan: entity.jabatan,
       gender: entity.gender,
+      timeIn: entity.timeIn,
+      timeOut: entity.timeOut,
     );
   }
 }

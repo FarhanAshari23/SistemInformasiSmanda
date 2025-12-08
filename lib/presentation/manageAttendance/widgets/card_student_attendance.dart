@@ -7,9 +7,9 @@ import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/auth/user.dart';
 
-class CardUserAttendance extends StatelessWidget {
+class CardStudentAttendance extends StatelessWidget {
   final UserEntity student;
-  const CardUserAttendance({
+  const CardStudentAttendance({
     super.key,
     required this.student,
   });

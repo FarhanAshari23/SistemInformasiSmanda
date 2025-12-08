@@ -22,14 +22,16 @@ import '../bloc/display_date_cubit.dart';
 import '../bloc/display_date_state.dart';
 import 'select_class.dart';
 
-class SeeDataAttandance extends StatefulWidget {
-  const SeeDataAttandance({super.key});
+class SeeAllDataAttandanceStudents extends StatefulWidget {
+  const SeeAllDataAttandanceStudents({super.key});
 
   @override
-  State<SeeDataAttandance> createState() => _SeeDataAttandanceState();
+  State<SeeAllDataAttandanceStudents> createState() =>
+      _SeeAllDataAttandanceStudentsState();
 }
 
-class _SeeDataAttandanceState extends State<SeeDataAttandance> {
+class _SeeAllDataAttandanceStudentsState
+    extends State<SeeAllDataAttandanceStudents> {
   DateTime displayedMonth = DateTime.now();
   @override
   Widget build(BuildContext context) {
@@ -116,13 +118,6 @@ class _SeeDataAttandanceState extends State<SeeDataAttandance> {
                                   BlocProvider.value(
                                     value: GetAllKelasCubit(),
                                     child: SelectClass(date: formatted),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        "Tanggal ini belum dibuat list absensinya, silakan buat terlebih dahulu."),
                                   ),
                                 );
                               }

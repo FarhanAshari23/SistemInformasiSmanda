@@ -17,9 +17,9 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../auth/views/login_view.dart';
 import '../../manageActivity/views/manage_activity_view.dart';
-import '../../manageAttendance/views/scan_barcode_view.dart';
-import '../../manageAttendance/views/see_data_attandance.dart';
+import '../../manageAttendance/views/see_all_data_attandance_students.dart';
 import '../../../common/widget/card/card_basic.dart';
+import '../../manageAttendance/views/see_all_data_attendance_teacher.dart';
 import '../../manageJabatan/views/manage_jabatan_views.dart';
 import '../../manageSchedule/views/add_schedule_view.dart';
 import '../../manageSchedule/views/edit_schedule_view.dart';
@@ -31,8 +31,8 @@ class HomeViewAdmin extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     List<String> title = [
-      'Scan barcode absen',
-      'Lihat data kehadiran',
+      'Lihat data kehadiran guru',
+      'Lihat data kehadiran siswa',
       'Registrasi data siswa',
       'Edit data siswa',
       'Tambah data guru',
@@ -47,7 +47,7 @@ class HomeViewAdmin extends StatelessWidget {
       'Daftar jabatan',
     ];
     List<String> images = [
-      AppImages.camera,
+      AppImages.verification,
       AppImages.verification,
       AppImages.students,
       AppImages.students,
@@ -63,8 +63,8 @@ class HomeViewAdmin extends StatelessWidget {
       AppImages.roleIcon,
     ];
     List<Widget> pages = [
-      const ScanBarcodeView(),
-      const SeeDataAttandance(),
+      const SeeAllDataAttendanceTeacher(),
+      const SeeAllDataAttandanceStudents(),
       const RegisterStudentView(),
       BlocProvider(
         create: (context) => GetAllKelasCubit()..displayAll(),

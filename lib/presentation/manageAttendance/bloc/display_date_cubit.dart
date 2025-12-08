@@ -8,6 +8,7 @@ class DisplayDateCubit extends Cubit<DisplayDateState> {
   DisplayDateCubit() : super(DisplayDateLoading());
 
   void displayAttendances(String nameCollection) async {
+    emit(DisplayDateLoading());
     var returnedData =
         await sl<GetListAttendancesUseCase>().call(params: nameCollection);
     returnedData.fold(

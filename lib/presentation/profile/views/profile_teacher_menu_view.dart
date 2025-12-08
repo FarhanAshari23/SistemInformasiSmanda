@@ -9,7 +9,7 @@ import '../../../common/widget/landing/succes.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/attendance/add_teacher_attendance.dart';
-import '../../manageAttendance/views/scan_barcode_view.dart';
+import 'scan_barcode_view.dart';
 import '../bloc/get_distace_state.dart';
 import '../bloc/get_distance_cubit.dart';
 import 'schedule_attendance_teacher_view.dart';

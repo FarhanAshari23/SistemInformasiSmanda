@@ -1,17 +1,14 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class TeacherEntity {
-  final String nama;
-  final String mengajar;
-  final String nip;
-  final String tanggalLahir;
-  final String waliKelas;
-  final String jabatan;
+  final String nama, mengajar, nip, tanggalLahir, waliKelas, jabatan;
   final int? gender;
   final File? image;
-  final String? email;
-  final String? password;
+  final String? email, password;
   final bool? isAttendance;
+  final Timestamp? timeIn, timeOut;
 
   TeacherEntity({
     required this.nama,
@@ -25,6 +22,8 @@ class TeacherEntity {
     this.password,
     this.image,
     this.isAttendance,
+    this.timeIn,
+    this.timeOut,
   });
 
   TeacherEntity copyWith({
@@ -39,6 +38,8 @@ class TeacherEntity {
     String? email,
     String? password,
     bool? isAttendance,
+    Timestamp? timeIn,
+    timeOut,
   }) {
     return TeacherEntity(
       nama: nama ?? this.nama,
@@ -52,6 +53,8 @@ class TeacherEntity {
       password: password ?? this.password,
       image: image ?? this.image,
       isAttendance: isAttendance ?? this.isAttendance,
+      timeIn: timeIn ?? this.timeIn,
+      timeOut: timeOut ?? this.timeOut,
     );
   }
 }

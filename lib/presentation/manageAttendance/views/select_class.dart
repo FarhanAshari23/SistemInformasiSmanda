@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/views/attendances_view.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/views/students_attendance_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/views/search_student_attendance.dart';
 
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
@@ -52,7 +52,7 @@ class SelectClass extends StatelessWidget {
                           nextPage: BlocProvider.value(
                             value: context.read<GetAllKelasCubit>()
                               ..displayAll(),
-                            child: AttendancesView(
+                            child: StudentAttendancesView(
                               date: date,
                               kelas: 10,
                             ),
@@ -63,7 +63,7 @@ class SelectClass extends StatelessWidget {
                           nextPage: BlocProvider.value(
                             value: context.read<GetAllKelasCubit>()
                               ..displayAll(),
-                            child: AttendancesView(
+                            child: StudentAttendancesView(
                               date: date,
                               kelas: 11,
                             ),
@@ -80,7 +80,7 @@ class SelectClass extends StatelessWidget {
                           nextPage: BlocProvider.value(
                             value: context.read<GetAllKelasCubit>()
                               ..displayAll(),
-                            child: AttendancesView(
+                            child: StudentAttendancesView(
                               date: date,
                               kelas: 12,
                             ),

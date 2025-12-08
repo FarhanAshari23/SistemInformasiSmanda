@@ -11,7 +11,7 @@ import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../bloc/get_teacher_attendance_cubit.dart';
 import '../bloc/get_teacher_attendance_state.dart';
-import '../bloc/select_attendance_cubit.dart';
+import '../../../common/bloc/attendance/select_attendance_cubit.dart';
 import '../bloc/select_date_cubit.dart';
 import '../bloc/select_timestamp_cubit.dart';
 
