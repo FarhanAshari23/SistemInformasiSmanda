@@ -38,7 +38,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
   late TextEditingController _waliKelasC;
   late TextEditingController _tanggalC;
   late TextEditingController _jabatanC;
-  late File? imageProfile;
+  File? imageProfile;
 
   @override
   void initState() {
@@ -197,6 +197,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                         context.read<ButtonStateCubit>().execute(
                               usecase: UpdateTeacherUsecase(),
                               params: TeacherEntity(
+                                oldNIP: widget.teacher.nip,
                                 nama: _namaC.text,
                                 mengajar: _mengajarC.text,
                                 nip: _nipC.text,

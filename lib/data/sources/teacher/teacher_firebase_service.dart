@@ -236,7 +236,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         final request = http.MultipartRequest("POST", url);
 
         request.fields['name'] = teacherReq.nama;
-        request.fields['nip'] = teacherReq.nip != '-'
+        request.fields['nip'] = teacherReq.oldNIP != '-'
             ? teacherReq.nip
             : teacherReq.tanggalLahir.toString();
 
@@ -281,8 +281,9 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
           FirebaseFirestore.instance.collection('Teachers');
       QuerySnapshot querySnapshot = await users
           .where(
-            teacherReq.nip == '-' ? "nama" : "NIP",
-            isEqualTo: teacherReq.nip == '-' ? teacherReq.nama : teacherReq.nip,
+            teacherReq.oldNIP == '-' ? "nama" : "NIP",
+            isEqualTo:
+                teacherReq.oldNIP == '-' ? teacherReq.nama : teacherReq.oldNIP,
           )
           .get();
       if (querySnapshot.docs.isNotEmpty) {
@@ -371,8 +372,10 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   @override
   Future<Either> getRoles() async {
     try {
-      var returnedData =
-          await FirebaseFirestore.instance.collection('Roles').get();
+      var returnedData = await FirebaseFirestore.instance
+          .collection('Roles')
+          .orderBy('role', descending: false)
+          .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
       return Left(e.toString());

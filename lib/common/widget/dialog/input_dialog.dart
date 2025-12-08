@@ -27,7 +27,7 @@ class InputDialog extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         child: SizedBox(
-          height: height * 0.28,
+          height: height * 0.3,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               vertical: 20,

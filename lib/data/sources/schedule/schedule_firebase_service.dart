@@ -95,8 +95,10 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   @override
   Future<Either> getActivities() async {
     try {
-      var returnedData =
-          await FirebaseFirestore.instance.collection('Activities').get();
+      var returnedData = await FirebaseFirestore.instance
+          .collection('Activities')
+          .orderBy('kegiatan', descending: false)
+          .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
     } catch (e) {
       return Left(e.toString());
