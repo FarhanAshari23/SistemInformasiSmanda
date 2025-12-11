@@ -86,8 +86,11 @@ class ProfileTeacher extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                CardProfile(
-                                  teacher: state.teacherEntity,
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4),
+                                  child: CardProfile(
+                                    teacher: state.teacherEntity,
+                                  ),
                                 ),
                                 Column(
                                   mainAxisSize: MainAxisSize.min,

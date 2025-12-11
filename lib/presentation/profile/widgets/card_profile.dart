@@ -30,7 +30,7 @@ class CardProfile extends StatelessWidget {
     final nipOrBirthDate =
         (nip != null && nip.isNotEmpty && nip != '-') ? nip : (birthDate ?? '');
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: width * 0.01),
+      margin: EdgeInsets.symmetric(horizontal: width * 0.015),
       padding: const EdgeInsets.only(bottom: 18, top: 18, right: 12, left: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),

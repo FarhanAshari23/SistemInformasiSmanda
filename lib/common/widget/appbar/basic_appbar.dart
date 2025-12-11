@@ -51,10 +51,8 @@ class BasicAppbar extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => ProfileInfoCubit()),
         BlocProvider(
-          create: (context) => ProfileInfoCubit()..getUser("Students"),
-        ),
-        BlocProvider(
-          create: (context) => ProfileInfoCubit()..getUser("Teachers"),
+          create: (context) => ProfileInfoCubit()
+            ..getUser(isProfileTeacherViewed ? "Teachers" : "Students"),
         ),
         BlocProvider(
           create: (context) => ButtonStateCubit(),

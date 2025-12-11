@@ -1,22 +1,23 @@
 String getFirstRealName(String fullName) {
   if (fullName.isEmpty) return '';
 
-  final List<String> prefixTitles = [
-    'Dr',
-    'Dr.',
-    'Dra',
-    'Drs',
-    'Drs.',
-    'H',
-    'H.',
-    'Hj',
-    'Hj.',
-    'Prof',
-    'Prof.',
-    'Ir',
-    'Ir.',
-    'Kha',
-    'Kha.'
+  final prefixTitles = [
+    'dr',
+    'dr.',
+    'dra',
+    'dra.',
+    'drs',
+    'drs.',
+    'h',
+    'h.',
+    'hj',
+    'hj.',
+    'prof',
+    'prof.',
+    'ir',
+    'ir.',
+    'kha',
+    'kha.',
   ];
 
   final parts = fullName.toLowerCase().split(RegExp(r'\s+'));

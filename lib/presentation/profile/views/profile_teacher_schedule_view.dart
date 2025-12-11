@@ -5,6 +5,7 @@ import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/get_schedu
 import 'package:new_sistem_informasi_smanda/presentation/profile/widgets/card_jadwal.dart';
 
 import '../../../common/helper/parse_time_schedule.dart';
+import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/schedule_teacher.dart';
 
 class ProfileTeacherScheduleView extends StatelessWidget {
@@ -26,9 +27,25 @@ class ProfileTeacherScheduleView extends StatelessWidget {
         }
         if (state is GetScheduleTeacherLoaded) {
           if (state.teacherSchedule.isEmpty) {
-            return Padding(
-              padding: EdgeInsets.only(top: height * 0.15),
-              child: const Center(child: Text('Tidak ada jadwal')),
+            return const Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.event_busy_rounded,
+                  color: AppColors.primary,
+                  size: 48,
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'Tidak ada jadwal',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
             );
           } else {
             List<ScheduleTeacherEntity> scheduleByDay = state.teacherSchedule
