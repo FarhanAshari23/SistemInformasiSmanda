@@ -44,6 +44,36 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
           firebaseFirestore.collection('Attendances');
       DateTime sekarang = DateTime.now();
       String formattedDate = DateFormat('dd-MM-yyyy').format(sekarang);
+      final studentQuery = await firebaseFirestore
+          .collection('Students')
+          .where(
+            'nisn',
+            isEqualTo: userAddReq.nisn,
+          )
+          .limit(1)
+          .get();
+
+      if (studentQuery.docs.isEmpty) {
+        return const Left("Data siswa tidak ditemukan");
+      }
+
+      final studentDoc = studentQuery.docs.first.reference;
+
+      final attendanceRef = studentDoc.collection('Attendances');
+      final todayAttendance = await attendanceRef.doc(formattedDate).get();
+
+      if (todayAttendance.exists) {
+        return const Left(
+          'Kehadiran anda sudah disimpan, silakan absen keesokan harinya',
+        );
+      }
+
+      final attendanceData = {
+        "createdAt": formattedDate,
+        "timestamp": Timestamp.now(),
+      };
+
+      await attendanceRef.doc(formattedDate).set(attendanceData);
       QuerySnapshot snapshot =
           await kehadiran.where('createdAt', isEqualTo: formattedDate).get();
       DocumentReference kehadiranDoc;
