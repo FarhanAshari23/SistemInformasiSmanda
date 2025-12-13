@@ -15,6 +15,7 @@ abstract class AttandanceFirebaseService {
   Future<Either> deleteAllAttendances();
   Future<Either> deleteMonthAttendances(ParamDeleteAttendance attendanceReq);
   Future<Either> getAttendanceStudents(ParamAttendanceEntity attendanceReq);
+  Future<Either> getAttendanceStudent(UserEntity attendanceReq);
   Future<Either> addStudentAttendances(UserEntity userAddReq);
   Future<Either> getAttendanceTeacher(TeacherEntity attendanceReq);
   Future<Either> getAttendanceAllTeacher(ParamAttendanceTeacher req);
@@ -379,6 +380,37 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       }
     } catch (e) {
       return left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> getAttendanceStudent(UserEntity attendanceReq) async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    CollectionReference kehadiran = firebaseFirestore.collection('Students');
+    try {
+      final attendanceQuery = await kehadiran
+          .where(
+            'nisn',
+            isEqualTo: attendanceReq.nisn,
+          )
+          .limit(1)
+          .get();
+      if (attendanceQuery.docs.isEmpty) {
+        return const Left("Data murid tidak ditemukan");
+      }
+
+      final attendanceDocId = attendanceQuery.docs.first.id;
+      final studentDoc = await kehadiran
+          .doc(attendanceDocId)
+          .collection('Attendances')
+          .orderBy("timestamp", descending: false)
+          .get();
+      if (studentDoc.docs.isEmpty) {
+        return const Left("Data kehadiran anda sudah dihapus");
+      }
+      return Right(studentDoc.docs.map((e) => e.data()).toList());
+    } catch (e) {
+      return Left("Something error: ${e.toString()}");
     }
   }
 }

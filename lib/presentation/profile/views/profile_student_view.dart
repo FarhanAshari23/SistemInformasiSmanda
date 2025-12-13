@@ -12,6 +12,7 @@ import 'package:new_sistem_informasi_smanda/presentation/profile/widgets/card_pr
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../bloc/get_attendance_student_cubit.dart';
 import '../bloc/jadwal_display_cubit.dart';
 import '../bloc/profile_info_cubit.dart';
 import '../bloc/profile_info_state.dart';
@@ -34,6 +35,9 @@ class ProfileStudentView extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ButtonStateCubit(),
+        ),
+        BlocProvider(
+          create: (context) => GetStudentAttendanceCubit(),
         ),
       ],
       child: Scaffold(
@@ -66,6 +70,8 @@ class ProfileStudentView extends StatelessWidget {
                           if (state is ProfileInfoLoading) {
                             return Container(
                               width: double.infinity,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: width * 0.015),
                               height: height * 0.2,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
@@ -92,6 +98,10 @@ class ProfileStudentView extends StatelessWidget {
                             );
                           }
                           if (state is ProfileInfoLoaded) {
+                            context
+                                .read<GetStudentAttendanceCubit>()
+                                .getAttendanceStudent(state.userEntity!);
+
                             return Expanded(
                               child: Column(
                                 children: [
@@ -148,7 +158,7 @@ class ProfileStudentView extends StatelessWidget {
                                                   ),
                                                   child: Center(
                                                     child: Icon(
-                                                      Icons.calendar_month,
+                                                      Icons.event,
                                                       color: state ==
                                                               TwoContainersState
                                                                   .containerOneSelected
@@ -202,7 +212,7 @@ class ProfileStudentView extends StatelessWidget {
                                                   ),
                                                   child: Center(
                                                     child: Icon(
-                                                      Icons.qr_code,
+                                                      Icons.calendar_month,
                                                       color: state ==
                                                               TwoContainersState
                                                                   .containerTwoSelected
@@ -230,9 +240,7 @@ class ProfileStudentView extends StatelessWidget {
                                                     .containerOneSelected
                                             ? const JadwalDaysSelection()
                                             : ProfileStudentQrView(
-                                                qrCodeData:
-                                                    state.userEntity?.nisn ??
-                                                        '');
+                                                student: state.userEntity);
                                       }),
                                     ),
                                   )

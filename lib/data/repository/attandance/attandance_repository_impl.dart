@@ -134,4 +134,22 @@ class AttandanceRepositoryImpl extends AttandanceRepository {
       },
     );
   }
+
+  @override
+  Future<Either> getAttendanceStudent(UserEntity attendanceReq) async {
+    var returnedData = await sl<AttandanceFirebaseService>()
+        .getAttendanceStudent(attendanceReq);
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          List.from(data)
+              .map((e) => AttendanceModel.fromMap(e).toEntity())
+              .toList(),
+        );
+      },
+    );
+  }
 }
