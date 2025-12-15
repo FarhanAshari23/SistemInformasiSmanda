@@ -96,6 +96,8 @@ class HomeView extends StatelessWidget {
                               context.watch<BarNavigationCubit>().state == index
                                   ? AppColors.primary
                                   : AppColors.tertiary,
+                          left: index == 0 ? 8 : 0,
+                          right: index == 3 ? 8 : 0,
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             child: Center(
