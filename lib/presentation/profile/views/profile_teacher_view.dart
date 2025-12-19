@@ -87,7 +87,7 @@ class ProfileTeacher extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 4),
+                                  padding: EdgeInsets.only(left: width * 0.005),
                                   child: CardProfile(
                                     teacher: state.teacherEntity,
                                   ),
@@ -111,7 +111,7 @@ class ProfileTeacher extends StatelessWidget {
                                             width: state ==
                                                     TwoContainersState
                                                         .containerOneSelected
-                                                ? width * 0.125
+                                                ? width * 0.12
                                                 : width * 0.09,
                                             height: height * 0.055,
                                             decoration: BoxDecoration(
@@ -159,7 +159,7 @@ class ProfileTeacher extends StatelessWidget {
                                             width: state ==
                                                     TwoContainersState
                                                         .containerTwoSelected
-                                                ? width * 0.125
+                                                ? width * 0.12
                                                 : width * 0.09,
                                             height: height * 0.055,
                                             decoration: BoxDecoration(

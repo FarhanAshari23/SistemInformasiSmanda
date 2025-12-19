@@ -37,6 +37,7 @@ class CardProfile extends StatelessWidget {
         color: AppColors.secondary,
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           NetworkPhoto(
             width: width * 0.3,
