@@ -23,7 +23,11 @@ import '../bloc/display_date_state.dart';
 import 'select_class.dart';
 
 class SeeAllDataAttandanceStudents extends StatefulWidget {
-  const SeeAllDataAttandanceStudents({super.key});
+  final bool isProfileTeacher;
+  const SeeAllDataAttandanceStudents({
+    super.key,
+    this.isProfileTeacher = false,
+  });
 
   @override
   State<SeeAllDataAttandanceStudents> createState() =>
@@ -190,111 +194,234 @@ class _SeeAllDataAttandanceStudentsState
                     return Container();
                   },
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Builder(builder: (context) {
-                        return BasicButton(
-                          onPressed: () {
-                            final outerContext = context;
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return BlocProvider.value(
-                                  value: outerContext.read<ButtonStateCubit>(),
-                                  child: Dialog(
-                                    backgroundColor: AppColors.inversePrimary,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    insetPadding: EdgeInsets.symmetric(
-                                      vertical: height * 0.2,
-                                      horizontal: 16,
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: width * 0.6,
-                                          height: height * 0.3,
-                                          decoration: const BoxDecoration(
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                  AppImages.splashDelete),
-                                              fit: BoxFit.fill,
+                Visibility(
+                  visible: !widget.isProfileTeacher,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Builder(builder: (context) {
+                          return BasicButton(
+                            onPressed: () {
+                              final outerContext = context;
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return BlocProvider.value(
+                                    value:
+                                        outerContext.read<ButtonStateCubit>(),
+                                    child: Dialog(
+                                      backgroundColor: AppColors.inversePrimary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      insetPadding: EdgeInsets.symmetric(
+                                        vertical: height * 0.2,
+                                        horizontal: 16,
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: width * 0.6,
+                                            height: height * 0.3,
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    AppImages.splashDelete),
+                                                fit: BoxFit.fill,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Text(
-                                            'Apakah anda yakin ingin menghapus kehadiran pada bulan ${displayedMonth.month} tahun ${displayedMonth.year}?',
-                                            style: const TextStyle(
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Text(
+                                              'Apakah anda yakin ingin menghapus kehadiran pada bulan ${displayedMonth.month} tahun ${displayedMonth.year}?',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w800,
+                                                color: AppColors.primary,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          SizedBox(height: height * 0.02),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: ButtonRole(
+                                                    onPressed: () {
+                                                      outerContext
+                                                          .read<
+                                                              ButtonStateCubit>()
+                                                          .execute(
+                                                            usecase:
+                                                                DeleteMonthAttendancesUsecase(),
+                                                            params:
+                                                                ParamDeleteAttendance(
+                                                              month:
+                                                                  displayedMonth
+                                                                      .month,
+                                                              year:
+                                                                  displayedMonth
+                                                                      .year,
+                                                            ),
+                                                          );
+                                                    },
+                                                    title: 'Hapus',
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: CustomInkWell(
+                                                        onTap: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                        borderRadius: 12,
+                                                        defaultColor:
+                                                            AppColors.primary,
+                                                        child: SizedBox(
+                                                          height:
+                                                              height * 0.085,
+                                                          child: const Center(
+                                                            child: Text(
+                                                              'Batal',
+                                                              style: TextStyle(
+                                                                color: AppColors
+                                                                    .inversePrimary,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            title: 'Hapus Bulan Ini',
+                          );
+                        }),
+                      ),
+                      Expanded(
+                        child: Builder(builder: (context) {
+                          return BasicButton(
+                            onPressed: () {
+                              final outerContext = context;
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return BlocProvider.value(
+                                    value:
+                                        outerContext.read<ButtonStateCubit>(),
+                                    child: Dialog(
+                                      backgroundColor: AppColors.inversePrimary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      insetPadding: EdgeInsets.symmetric(
+                                        vertical: height * 0.2,
+                                        horizontal: 16,
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: width * 0.6,
+                                            height: height * 0.3,
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    AppImages.splashDelete),
+                                                fit: BoxFit.fill,
+                                              ),
+                                            ),
+                                          ),
+                                          const Text(
+                                            'Apakah anda yakin ingin menghapus seluruh kehadiran ?',
+                                            style: TextStyle(
                                               fontWeight: FontWeight.w800,
                                               color: AppColors.primary,
                                             ),
                                             textAlign: TextAlign.center,
                                           ),
-                                        ),
-                                        SizedBox(height: height * 0.02),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: ButtonRole(
-                                                  onPressed: () {
-                                                    outerContext
-                                                        .read<
-                                                            ButtonStateCubit>()
-                                                        .execute(
-                                                          usecase:
-                                                              DeleteMonthAttendancesUsecase(),
-                                                          params:
-                                                              ParamDeleteAttendance(
-                                                            month:
-                                                                displayedMonth
-                                                                    .month,
-                                                            year: displayedMonth
-                                                                .year,
-                                                          ),
-                                                        );
-                                                  },
-                                                  title: 'Hapus',
+                                          SizedBox(height: height * 0.02),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: ButtonRole(
+                                                    onPressed: () {
+                                                      outerContext
+                                                          .read<
+                                                              ButtonStateCubit>()
+                                                          .execute(
+                                                            usecase:
+                                                                DeleteAttendancesUsecase(),
+                                                          );
+                                                    },
+                                                    title: 'Hapus',
+                                                  ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
+                                                Expanded(
                                                   child: Padding(
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: CustomInkWell(
-                                                      onTap: () =>
-                                                          Navigator.pop(
-                                                              context),
-                                                      borderRadius: 12,
-                                                      defaultColor:
-                                                          AppColors.primary,
-                                                      child: SizedBox(
-                                                        height: height * 0.085,
-                                                        child: const Center(
-                                                          child: Text(
-                                                            'Batal',
-                                                            style: TextStyle(
-                                                              color: AppColors
-                                                                  .inversePrimary,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: CustomInkWell(
+                                                        onTap: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                        borderRadius: 12,
+                                                        defaultColor:
+                                                            AppColors.primary,
+                                                        child: SizedBox(
+                                                          height:
+                                                              height * 0.085,
+                                                          child: const Center(
+                                                            child: Text(
+                                                              'Batal',
+                                                              style: TextStyle(
+                                                                color: AppColors
+                                                                    .inversePrimary,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
@@ -302,135 +429,22 @@ class _SeeAllDataAttandanceStudentsState
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          title: 'Hapus Bulan Ini',
-                        );
-                      }),
-                    ),
-                    Expanded(
-                      child: Builder(builder: (context) {
-                        return BasicButton(
-                          onPressed: () {
-                            final outerContext = context;
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return BlocProvider.value(
-                                  value: outerContext.read<ButtonStateCubit>(),
-                                  child: Dialog(
-                                    backgroundColor: AppColors.inversePrimary,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    insetPadding: EdgeInsets.symmetric(
-                                      vertical: height * 0.2,
-                                      horizontal: 16,
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: width * 0.6,
-                                          height: height * 0.3,
-                                          decoration: const BoxDecoration(
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                  AppImages.splashDelete),
-                                              fit: BoxFit.fill,
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                        const Text(
-                                          'Apakah anda yakin ingin menghapus seluruh kehadiran ?',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w800,
-                                            color: AppColors.primary,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        SizedBox(height: height * 0.02),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: ButtonRole(
-                                                  onPressed: () {
-                                                    outerContext
-                                                        .read<
-                                                            ButtonStateCubit>()
-                                                        .execute(
-                                                          usecase:
-                                                              DeleteAttendancesUsecase(),
-                                                        );
-                                                  },
-                                                  title: 'Hapus',
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: CustomInkWell(
-                                                      onTap: () =>
-                                                          Navigator.pop(
-                                                              context),
-                                                      borderRadius: 12,
-                                                      defaultColor:
-                                                          AppColors.primary,
-                                                      child: SizedBox(
-                                                        height: height * 0.085,
-                                                        child: const Center(
-                                                          child: Text(
-                                                            'Batal',
-                                                            style: TextStyle(
-                                                              color: AppColors
-                                                                  .inversePrimary,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          title: 'Hapus Semua',
-                        );
-                      }),
-                    ),
-                  ],
+                                  );
+                                },
+                              );
+                            },
+                            title: 'Hapus Semua',
+                          );
+                        }),
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),

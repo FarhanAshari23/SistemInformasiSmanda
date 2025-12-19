@@ -55,7 +55,7 @@ class CardBasic extends StatelessWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.w800,
                   color: AppColors.inversePrimary,
-                  fontSize: 16,
+                  fontSize: 14,
                 ),
               )
             ],

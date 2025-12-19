@@ -2,7 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teacher.dart';
 
+import '../../../presentation/profile/bloc/profile_info_cubit.dart';
+import '../../bloc/button/button.cubit.dart';
 import '../../bloc/upload_image/upload_image_cubit.dart';
 import '../../bloc/upload_image/upload_image_state.dart';
 import '../../helper/cache_manager.dart';
@@ -16,11 +19,13 @@ import '../../../domain/entities/auth/user.dart';
 class ChangePhotoView extends StatefulWidget {
   final UserEntity? user;
   final TeacherEntity? teacher;
+  final bool isProfileTeacher;
 
   const ChangePhotoView({
     super.key,
     this.user,
     this.teacher,
+    this.isProfileTeacher = false,
   });
 
   @override
@@ -99,8 +104,18 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => UploadImageCubit(),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => UploadImageCubit(),
+          ),
+          BlocProvider(
+            create: (context) => ButtonStateCubit(),
+          ),
+          BlocProvider(
+            create: (context) => ProfileInfoCubit(),
+          ),
+        ],
         child: SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -136,7 +151,7 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
                               child: BasicButton(
                                 onPressed: () =>
                                     context.read<UploadImageCubit>().pickImage(
-                                          "${_getName()}_${_getId()}",
+                                          "//${_getName()}_${_getId()}",
                                         ),
                                 title: "Ambil ulang",
                               ),
@@ -210,13 +225,32 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
               Builder(
                 builder: (context) {
                   return BasicButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      if (!imageLoaded) return;
                       final state = context.read<UploadImageCubit>().state;
                       if (state is UploadImageSuccess) {
-                        Navigator.pop(context, state.imageFile);
+                        if (widget.isProfileTeacher) {
+                          await context.read<ButtonStateCubit>().execute(
+                                usecase: UpdateTeacherUsecase(),
+                                params: TeacherEntity(
+                                  nama: widget.teacher!.nama,
+                                  mengajar: widget.teacher!.mengajar,
+                                  nip: widget.teacher!.nip,
+                                  tanggalLahir: widget.teacher!.tanggalLahir,
+                                  waliKelas: widget.teacher!.waliKelas,
+                                  jabatan: widget.teacher!.jabatan,
+                                  gender: widget.teacher!.gender,
+                                  image: state.imageFile,
+                                ),
+                              );
+                          Navigator.pop(context);
+                          context.read<ProfileInfoCubit>().getUser("Teachers");
+                        } else {
+                          Navigator.pop(context, state.imageFile);
+                        }
                       }
                     },
-                    title: "Simpan",
+                    title: imageLoaded ? "Simpan" : "Tunggu Sebentar...",
                   );
                 },
               ),

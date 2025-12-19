@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/presentation/profile/views/attendance_menu_view.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
@@ -69,7 +70,10 @@ class ProfileTeacherMenuView extends StatelessWidget {
           ),
         ],
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
           child: Column(
             children: [
               Row(
@@ -146,9 +150,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
                     onpressed: () {
                       AppNavigator.push(
                         context,
-                        ScheduleAttendanceTeacherView(
-                          teacher: teacher,
-                        ),
+                        AttendanceMenuView(teacher: teacher),
                       );
                     },
                     title: 'Lihat Data Absen',
