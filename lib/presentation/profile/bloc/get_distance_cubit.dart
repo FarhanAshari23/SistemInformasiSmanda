@@ -39,8 +39,8 @@ class GetDistanceCubit extends Cubit<GetDistanceState> {
     final allowed = await handleLocationPermission();
 
     if (!allowed) return;
-    // const LatLng target = LatLng(-5.148647396589983, 105.27443431769255);
-    const LatLng target = LatLng(-5.101879928775731, 105.32641136718615);
+    const LatLng target = LatLng(-5.148647396589983, 105.27443431769255);
+    // const LatLng target = LatLng(-5.101879928775731, 105.32641136718615); (ini koordinat rumah)
     try {
       // ambil lokasi user sekarang
       Position pos = await Geolocator.getCurrentPosition(
@@ -56,7 +56,7 @@ class GetDistanceCubit extends Cubit<GetDistanceState> {
 
       emit(
         GetDistanceLoaded(
-          isNear: distance <= 500,
+          isNear: distance <= 100,
         ),
       );
     } catch (e) {

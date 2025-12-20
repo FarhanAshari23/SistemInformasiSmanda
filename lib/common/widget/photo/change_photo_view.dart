@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
@@ -6,9 +5,9 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teach
 
 import '../../../presentation/profile/bloc/profile_info_cubit.dart';
 import '../../bloc/button/button.cubit.dart';
+import '../../bloc/button/button_state.dart';
 import '../../bloc/upload_image/upload_image_cubit.dart';
 import '../../bloc/upload_image/upload_image_state.dart';
-import '../../helper/cache_manager.dart';
 import '../appbar/basic_appbar.dart';
 import '../button/basic_button.dart';
 import '../inkwell/custom_inkwell.dart';
@@ -16,7 +15,7 @@ import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
 
-class ChangePhotoView extends StatefulWidget {
+class ChangePhotoView extends StatelessWidget {
   final UserEntity? user;
   final TeacherEntity? teacher;
   final bool isProfileTeacher;
@@ -28,26 +27,18 @@ class ChangePhotoView extends StatefulWidget {
     this.isProfileTeacher = false,
   });
 
-  @override
-  State<ChangePhotoView> createState() => _ChangePhotoViewState();
-}
-
-class _ChangePhotoViewState extends State<ChangePhotoView> {
-  bool imageLoaded = false;
-  bool imageFailed = false;
-
   String? _getName() {
-    if (widget.user != null) return widget.user!.nama;
-    if (widget.teacher != null) return widget.teacher!.nama;
+    if (user != null) return user!.nama;
+    if (teacher != null) return teacher!.nama;
     return null;
   }
 
   String? _getId() {
-    if (widget.user != null) return widget.user!.nisn;
-    if (widget.teacher != null) {
-      return widget.teacher!.nip != ""
-          ? widget.teacher!.nip
-          : widget.teacher!.tanggalLahir.toString();
+    if (user != null) return user!.nisn;
+    if (teacher != null) {
+      return teacher!.nip != ""
+          ? teacher!.nip
+          : teacher!.tanggalLahir.toString();
     }
     return null;
   }
@@ -57,207 +48,201 @@ class _ChangePhotoViewState extends State<ChangePhotoView> {
     final id = _getId();
     if (name == null || id == null) return null;
 
-    return widget.user != null
+    return user != null
         ? DisplayImage.displayImageStudent(name, id)
         : DisplayImage.displayImageTeacher(name, id);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    final url = _getImageUrl();
-    if (url == null || url.isEmpty) {
-      imageFailed = true;
-      return;
-    }
-
-    final provider = CachedNetworkImageProvider(
-      url,
-      cacheManager: FastCacheManager(),
-    );
-
-    final stream = provider.resolve(const ImageConfiguration());
-
-    stream.addListener(
-      ImageStreamListener(
-        (info, _) {
-          if (mounted) {
-            setState(() {
-              imageLoaded = true;
-            });
-          }
-        },
-        onError: (error, stackTrace) {
-          if (mounted) {
-            setState(() {
-              imageFailed = true;
-            });
-          }
-        },
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => UploadImageCubit(),
-          ),
-          BlocProvider(
-            create: (context) => ButtonStateCubit(),
-          ),
-          BlocProvider(
-            create: (context) => ProfileInfoCubit(),
-          ),
-        ],
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const BasicAppbar(
-                isBackViewed: true,
-                isProfileViewed: false,
-              ),
-              SizedBox(height: height * 0.1),
-              BlocBuilder<UploadImageCubit, UploadImageState>(
-                builder: (context, state) {
-                  if (state is UploadImageSuccess) {
-                    return Column(
-                      children: [
-                        Container(
-                          width: height * 0.35,
-                          height: height * 0.35,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: FileImage(state.imageFile),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Visibility(
-                          visible: !imageLoaded && imageFailed,
-                          child: Builder(builder: (context) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 48),
-                              child: BasicButton(
-                                onPressed: () =>
-                                    context.read<UploadImageCubit>().pickImage(
-                                          "//${_getName()}_${_getId()}",
-                                        ),
-                                title: "Ambil ulang",
-                              ),
-                            );
-                          }),
-                        ),
-                      ],
-                    );
-                  }
-                  if (imageFailed) {
-                    return CustomInkWell(
-                      borderRadius: 12,
-                      defaultColor: AppColors.secondary,
-                      onTap: () => context.read<UploadImageCubit>().pickImage(
-                            "${_getName()}_${_getId()}",
-                          ),
-                      child: SizedBox(
-                        width: height * 0.3,
-                        height: height * 0.3,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                              size: height * 0.1,
-                            ),
-                            const SizedBox(height: 16),
-                            const Text(
-                              "Ambil gambar",
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-                  return Container(
-                    width: height * 0.35,
-                    height: height * 0.35,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(_getImageUrl()!),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              Visibility(
-                visible: imageLoaded && !imageFailed,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 48),
-                  child: Builder(builder: (context) {
-                    return BasicButton(
-                      onPressed: () =>
-                          context.read<UploadImageCubit>().pickImage(
-                                "${_getName()}_${_getId()}",
-                              ),
-                      title: "Ambil ulang",
-                    );
-                  }),
-                ),
-              ),
-              const Spacer(),
-              Builder(
-                builder: (context) {
-                  return BasicButton(
-                    onPressed: () async {
-                      if (!imageLoaded) return;
-                      final state = context.read<UploadImageCubit>().state;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => UploadImageCubit(),
+        ),
+        BlocProvider(
+          create: (context) => ButtonStateCubit(),
+        ),
+      ],
+      child: Builder(builder: (context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          context.read<UploadImageCubit>().loadInitialImage(_getImageUrl());
+        });
+        return BlocListener<ButtonStateCubit, ButtonState>(
+          listener: (context, state) {
+            if (state is ButtonFailureState) {
+              var snackbar = SnackBar(
+                content: Text(state.errorMessage),
+                behavior: SnackBarBehavior.floating,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+            }
+            if (state is ButtonSuccessState) {
+              context.read<ProfileInfoCubit>().getUser("Teachers");
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Berhasil mengubah foto")),
+              );
+
+              Navigator.pop(context);
+            }
+          },
+          child: Scaffold(
+            body: SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const BasicAppbar(
+                    isBackViewed: true,
+                    isProfileViewed: false,
+                  ),
+                  SizedBox(height: height * 0.1),
+                  BlocBuilder<UploadImageCubit, UploadImageState>(
+                    builder: (context, state) {
                       if (state is UploadImageSuccess) {
-                        if (widget.isProfileTeacher) {
-                          await context.read<ButtonStateCubit>().execute(
-                                usecase: UpdateTeacherUsecase(),
-                                params: TeacherEntity(
-                                  nama: widget.teacher!.nama,
-                                  mengajar: widget.teacher!.mengajar,
-                                  nip: widget.teacher!.nip,
-                                  tanggalLahir: widget.teacher!.tanggalLahir,
-                                  waliKelas: widget.teacher!.waliKelas,
-                                  jabatan: widget.teacher!.jabatan,
-                                  gender: widget.teacher!.gender,
-                                  image: state.imageFile,
+                        return Column(
+                          children: [
+                            Container(
+                              key: ValueKey(state.imageFile.path +
+                                  DateTime.now().toString()),
+                              width: height * 0.35,
+                              height: height * 0.35,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: FileImage(state.imageFile),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Builder(builder: (context) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 48),
+                                child: BasicButton(
+                                  onPressed: () async {
+                                    context.read<UploadImageCubit>().pickImage(
+                                          "${_getName()}_${_getId()}",
+                                        );
+                                  },
+                                  title: "Ambil ulang",
                                 ),
                               );
-                          Navigator.pop(context);
-                          context.read<ProfileInfoCubit>().getUser("Teachers");
-                        } else {
-                          Navigator.pop(context, state.imageFile);
-                        }
+                            }),
+                          ],
+                        );
                       }
+                      if (state is UploadImageNetwork) {
+                        return Column(
+                          children: [
+                            Container(
+                              key: ValueKey(
+                                  state.imageUrl + DateTime.now().toString()),
+                              width: height * 0.35,
+                              height: height * 0.35,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(state.imageUrl),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Builder(builder: (context) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 48),
+                                child: BasicButton(
+                                  onPressed: () async {
+                                    context.read<UploadImageCubit>().pickImage(
+                                          "${_getName()}_${_getId()}",
+                                        );
+                                  },
+                                  title: "Ganti Foto",
+                                ),
+                              );
+                            }),
+                          ],
+                        );
+                      }
+                      return CustomInkWell(
+                        borderRadius: 12,
+                        defaultColor: AppColors.secondary,
+                        onTap: () async {
+                          await context.read<UploadImageCubit>().pickImage(
+                                "${_getName()}_${_getId()}",
+                              );
+                        },
+                        child: SizedBox(
+                          width: height * 0.3,
+                          height: height * 0.3,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                                size: height * 0.1,
+                              ),
+                              const SizedBox(height: 16),
+                              const Text(
+                                "Ambil gambar",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
                     },
-                    title: imageLoaded ? "Simpan" : "Tunggu Sebentar...",
-                  );
-                },
+                  ),
+                  const Spacer(),
+                  BlocBuilder<UploadImageCubit, UploadImageState>(
+                    builder: (context, state) {
+                      return BasicButton(
+                        title: "Simpan",
+                        buttonColor: state is UploadImageSuccess ||
+                                state is UploadImageNetwork
+                            ? AppColors.primary
+                            : Colors.grey,
+                        onPressed: () async {
+                          if (state is UploadImageInitial) return;
+                          if (state is UploadImageSuccess) {
+                            if (isProfileTeacher) {
+                              await context.read<ButtonStateCubit>().execute(
+                                    usecase: UpdateTeacherUsecase(),
+                                    params: TeacherEntity(
+                                      nama: teacher!.nama,
+                                      mengajar: teacher!.mengajar,
+                                      nip: teacher!.nip,
+                                      tanggalLahir: teacher!.tanggalLahir,
+                                      waliKelas: teacher!.waliKelas,
+                                      jabatan: teacher!.jabatan,
+                                      gender: teacher!.gender,
+                                      image: state.imageFile,
+                                    ),
+                                  );
+                            } else {
+                              Navigator.pop(context, state.imageFile);
+                            }
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

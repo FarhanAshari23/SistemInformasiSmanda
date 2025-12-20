@@ -7,10 +7,12 @@ import '../../../core/configs/theme/app_colors.dart';
 class BasicButton extends StatefulWidget {
   final VoidCallback onPressed;
   final String title;
+  final Color buttonColor;
   const BasicButton({
     super.key,
     required this.onPressed,
     required this.title,
+    this.buttonColor = AppColors.primary,
   });
 
   @override
@@ -34,7 +36,7 @@ class _BasicButtonState extends State<BasicButton> {
         padding: EdgeInsets.symmetric(vertical: height * 0.02),
         margin: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: _isPressed ? Colors.grey.shade200 : AppColors.primary,
+          color: _isPressed ? Colors.grey.shade200 : widget.buttonColor,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Center(

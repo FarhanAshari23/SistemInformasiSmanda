@@ -12,6 +12,18 @@ class UploadImageCubit extends Cubit<UploadImageState> {
 
   final ImagePicker _picker = ImagePicker();
 
+  void loadNetworkImage(String url) {
+    emit(UploadImageNetwork(url));
+  }
+
+  void loadInitialImage(String? url) {
+    if (url == null || url.isEmpty) {
+      emit(UploadImageFailure("Tidak berhasil mendapatkan gambar"));
+    } else {
+      emit(UploadImageNetwork(url));
+    }
+  }
+
   Future<void> pickImage(String filename) async {
     try {
       emit(UploadImageLoading());
@@ -40,7 +52,8 @@ class UploadImageCubit extends Cubit<UploadImageState> {
         return;
       }
 
-      final customName = "$filename$ext";
+      final customName =
+          "${filename}_${DateTime.now().millisecondsSinceEpoch}$ext";
       final appDir = await getApplicationDocumentsDirectory();
       final savePath = p.join(appDir.path, customName);
       final savedFile = await tempFile.copy(savePath);

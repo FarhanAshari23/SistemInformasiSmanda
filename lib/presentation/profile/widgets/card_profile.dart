@@ -116,9 +116,12 @@ class CardProfile extends StatelessWidget {
                                 value: context.read<ProfileInfoCubit>(),
                                 child: EditProfileStudentView(user: student!),
                               )
-                            : ChangePhotoView(
-                                teacher: teacher,
-                                isProfileTeacher: true,
+                            : BlocProvider.value(
+                                value: context.read<ProfileInfoCubit>(),
+                                child: ChangePhotoView(
+                                  teacher: teacher,
+                                  isProfileTeacher: true,
+                                ),
                               ),
                       ),
                       child: Padding(
