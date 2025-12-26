@@ -50,6 +50,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
         final isPickerVisible = cardState.isPickerVisible;
         final selectedStartTimeTemp = cardState.selectedStartTimeTemp;
         final selectedEndTimeTemp = cardState.selectedEndTimeTemp;
+        final FocusNode pelaksanaFocus = FocusNode();
 
         if (isAdding) {
           return Stack(
@@ -72,7 +73,8 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                         return DropdownMenu<String>(
                           width: width * 0.92,
                           enableFilter: true,
-                          requestFocusOnTap: true,
+                          requestFocusOnTap: false,
+                          focusNode: pelaksanaFocus,
                           inputDecorationTheme: const InputDecorationTheme(
                             fillColor: AppColors.tertiary,
                             filled: true,
