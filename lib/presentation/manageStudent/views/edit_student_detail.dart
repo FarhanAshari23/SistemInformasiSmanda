@@ -40,7 +40,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
   late TextEditingController _tanggalC;
   late TextEditingController _noHPC;
   late TextEditingController _alamatC;
-  late File? imageProfile;
+  File? imageProfile;
 
   @override
   void initState() {

@@ -106,31 +106,33 @@ class AckEkskulView extends StatelessWidget {
                                       ),
                                     ),
                                     builder: (context) {
-                                      return Container(
-                                        padding: const EdgeInsets.all(16),
-                                        width: double.infinity,
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              "Deskripsi:",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w900,
+                                      return SafeArea(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(16),
+                                          width: double.infinity,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Deskripsi:",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w900,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              ekskulCreateReq.deskripsi,
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500,
+                                              Text(
+                                                ekskulCreateReq.deskripsi,
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       );
                                     },
