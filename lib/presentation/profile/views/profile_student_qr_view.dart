@@ -50,74 +50,72 @@ class ProfileStudentQrView extends StatelessWidget {
             List<DateTime> highlightedDates = state.attendances
                 .map((a) => format.parse(a.createdAt))
                 .toList();
-            return Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: CalendarCarousel<Event>(
-                  onCalendarChanged: (p0) {},
-                  headerTextStyle: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.secondary,
-                    fontSize: 20,
-                  ),
-                  iconColor: AppColors.primary,
-                  weekendTextStyle: const TextStyle(
-                    color: Color(0xFFCD5C5C),
-                    fontWeight: FontWeight.w700,
-                  ),
-                  weekdayTextStyle: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  isScrollable: false,
-                  daysTextStyle: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  nextDaysTextStyle: const TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  prevDaysTextStyle: const TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  customDayBuilder: (
-                    bool isSelectable,
-                    int index,
-                    bool isSelectedDay,
-                    bool isToday,
-                    bool isPrevMonthDay,
-                    TextStyle textStyle,
-                    bool isNextMonthDay,
-                    bool isThisMonthDay,
-                    DateTime date,
-                  ) {
-                    if (highlightedDates.any((d) =>
-                        d.day == date.day &&
-                        d.month == date.month &&
-                        d.year == date.year)) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: currentTime.isAfter(targetTime)
-                              ? Colors.red
-                              : Colors.green,
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '${date.day}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: CalendarCarousel<Event>(
+                onCalendarChanged: (p0) {},
+                headerTextStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.secondary,
+                  fontSize: 20,
+                ),
+                iconColor: AppColors.primary,
+                weekendTextStyle: const TextStyle(
+                  color: Color(0xFFCD5C5C),
+                  fontWeight: FontWeight.w700,
+                ),
+                weekdayTextStyle: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                ),
+                isScrollable: false,
+                daysTextStyle: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                ),
+                nextDaysTextStyle: const TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w700,
+                ),
+                prevDaysTextStyle: const TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w700,
+                ),
+                customDayBuilder: (
+                  bool isSelectable,
+                  int index,
+                  bool isSelectedDay,
+                  bool isToday,
+                  bool isPrevMonthDay,
+                  TextStyle textStyle,
+                  bool isNextMonthDay,
+                  bool isThisMonthDay,
+                  DateTime date,
+                ) {
+                  if (highlightedDates.any((d) =>
+                      d.day == date.day &&
+                      d.month == date.month &&
+                      d.year == date.year)) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: currentTime.isAfter(targetTime)
+                            ? Colors.red
+                            : Colors.green,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${date.day}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      );
-                    }
-                    return null; // default style
-                  },
-                ),
+                      ),
+                    );
+                  }
+                  return null; // default style
+                },
               ),
             );
           }
