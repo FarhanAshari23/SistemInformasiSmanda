@@ -14,6 +14,7 @@ import '../inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
+import 'network_photo.dart';
 
 class ChangePhotoView extends StatelessWidget {
   final UserEntity? user;
@@ -135,20 +136,49 @@ class ChangePhotoView extends StatelessWidget {
                           ],
                         );
                       }
+                      if (state is UploadImageEmpty) {
+                        return CustomInkWell(
+                          borderRadius: 12,
+                          defaultColor: AppColors.secondary,
+                          onTap: () async {
+                            await context.read<UploadImageCubit>().pickImage(
+                                  "${_getName()}_${_getId()}",
+                                );
+                          },
+                          child: SizedBox(
+                            width: height * 0.3,
+                            height: height * 0.3,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: height * 0.1,
+                                ),
+                                const SizedBox(height: 16),
+                                const Text(
+                                  "Ambil gambar",
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
                       if (state is UploadImageNetwork) {
                         return Column(
                           children: [
-                            Container(
-                              key: ValueKey(
-                                  state.imageUrl + DateTime.now().toString()),
-                              width: height * 0.35,
-                              height: height * 0.35,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: NetworkImage(state.imageUrl),
-                                  fit: BoxFit.fill,
-                                ),
+                            ClipOval(
+                              child: NetworkPhoto(
+                                width: height * 0.3,
+                                height: height * 0.3,
+                                fallbackAsset: "",
+                                imageUrl: state.imageUrl,
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -169,38 +199,7 @@ class ChangePhotoView extends StatelessWidget {
                           ],
                         );
                       }
-                      return CustomInkWell(
-                        borderRadius: 12,
-                        defaultColor: AppColors.secondary,
-                        onTap: () async {
-                          await context.read<UploadImageCubit>().pickImage(
-                                "${_getName()}_${_getId()}",
-                              );
-                        },
-                        child: SizedBox(
-                          width: height * 0.3,
-                          height: height * 0.3,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                                size: height * 0.1,
-                              ),
-                              const SizedBox(height: 16),
-                              const Text(
-                                "Ambil gambar",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                      return const SizedBox();
                     },
                   ),
                   const Spacer(),

@@ -4,6 +4,8 @@ abstract class UploadImageState {}
 
 class UploadImageInitial extends UploadImageState {}
 
+class UploadImageEmpty extends UploadImageState {}
+
 class UploadImageLoading extends UploadImageState {}
 
 class UploadImageNetwork extends UploadImageState {

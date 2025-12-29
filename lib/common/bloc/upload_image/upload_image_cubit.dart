@@ -16,11 +16,15 @@ class UploadImageCubit extends Cubit<UploadImageState> {
     emit(UploadImageNetwork(url));
   }
 
-  void loadInitialImage(String? url) {
+  void loadInitialImage(String? url) async {
     if (url == null || url.isEmpty) {
       emit(UploadImageFailure("Tidak berhasil mendapatkan gambar"));
-    } else {
+    }
+    bool checkImage = await isUrlReachable(url!);
+    if (checkImage) {
       emit(UploadImageNetwork(url));
+    } else {
+      emit(UploadImageEmpty());
     }
   }
 
@@ -60,6 +64,19 @@ class UploadImageCubit extends Cubit<UploadImageState> {
       emit(UploadImageSuccess(savedFile));
     } catch (e) {
       emit(UploadImageFailure("Gagal memproses gambar: $e"));
+    }
+  }
+
+  Future<bool> isUrlReachable(String url) async {
+    try {
+      final uri = Uri.parse(url);
+
+      final request = await HttpClient().headUrl(uri);
+      final response = await request.close();
+
+      return response.statusCode >= 200 && response.statusCode < 400;
+    } catch (e) {
+      return false;
     }
   }
 }
