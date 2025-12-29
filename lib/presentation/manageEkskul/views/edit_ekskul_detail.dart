@@ -151,46 +151,48 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                   ),
                                 ),
                                 builder: (_) {
-                                  return Container(
-                                    padding: EdgeInsets.only(
-                                      bottom: MediaQuery.of(context)
-                                          .viewInsets
-                                          .bottom,
-                                    ),
-                                    width: double.infinity,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(height: 16),
-                                        const Padding(
-                                          padding: EdgeInsets.all(16.0),
-                                          child: Text(
-                                            "Deskripsi:",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w900,
+                                  return SafeArea(
+                                    child: Container(
+                                      padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom,
+                                      ),
+                                      width: double.infinity,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(height: 16),
+                                          const Padding(
+                                            padding: EdgeInsets.all(16.0),
+                                            child: Text(
+                                              "Deskripsi:",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w900,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 16,
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 16,
+                                            ),
+                                            child: TextField(
+                                              autocorrect: false,
+                                              maxLines: 7,
+                                              controller: _deskripsiC,
+                                            ),
                                           ),
-                                          child: TextField(
-                                            autocorrect: false,
-                                            maxLines: 7,
-                                            controller: _deskripsiC,
+                                          BasicButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            title: 'Simpan',
                                           ),
-                                        ),
-                                        BasicButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          title: 'Simpan',
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },
@@ -233,45 +235,48 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                     ),
                                   ),
                                   builder: (_) {
-                                    return Container(
-                                      padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom,
-                                      ),
-                                      width: double.infinity,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(height: 16),
-                                          const Padding(
-                                            padding: EdgeInsets.all(16.0),
-                                            child: Text(
-                                              "Nama ekskul:",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w900,
+                                    return SafeArea(
+                                      child: Container(
+                                        padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom,
+                                        ),
+                                        width: double.infinity,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 16),
+                                            const Padding(
+                                              padding: EdgeInsets.all(16.0),
+                                              child: Text(
+                                                "Nama ekskul:",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w900,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 16,
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 16,
+                                              ),
+                                              child: TextField(
+                                                autocorrect: false,
+                                                controller: _nameEkskulC,
+                                              ),
                                             ),
-                                            child: TextField(
-                                              autocorrect: false,
-                                              controller: _nameEkskulC,
+                                            BasicButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              title: 'Ubah',
                                             ),
-                                          ),
-                                          BasicButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            title: 'Ubah',
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     );
                                   },

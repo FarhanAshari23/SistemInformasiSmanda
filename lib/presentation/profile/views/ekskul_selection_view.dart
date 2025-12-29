@@ -67,6 +67,7 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                           ),
                         )
                         .toList();
+
                     final extraEkskul = (widget.initialEkskul)
                         .where((nama) => !fetchedEkskul.any(
                               (e) =>
@@ -76,7 +77,10 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                         .map((nama) =>
                             DisplayEkskul(namaEkskul: nama, isCustom: true))
                         .toList();
-                    final combinedEkskul = [...extraEkskul, ...fetchedEkskul];
+
+                    final combinedEkskul = extraEkskul.isEmpty
+                        ? [...fetchedEkskul] // kalau extraEkskul kosong
+                        : [...extraEkskul, ...fetchedEkskul]; // kalau ada extra
                     return Expanded(
                       child: Stack(
                         children: [
@@ -140,14 +144,11 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                                 onTap: () {
                                   final selected =
                                       context.read<SelectEkskulCubit>().state;
-                                  final customEkskul = combinedEkskul
-                                      .where((element) => element.isCustom)
-                                      .map((e) => e.namaEkskul)
-                                      .toList();
-                                  final endResult = {
-                                    ...customEkskul,
-                                    ...selected,
-                                  }.toList();
+
+                                  final String endResult = selected
+                                      .where((e) => e.trim().isNotEmpty)
+                                      .join(', ');
+
                                   Navigator.pop(
                                     context,
                                     endResult,

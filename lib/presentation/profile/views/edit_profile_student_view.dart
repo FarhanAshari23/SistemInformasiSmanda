@@ -44,7 +44,7 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
   late TextEditingController _noHPC;
   late TextEditingController _alamatC;
   late TextEditingController _ekskulC;
-  late File? imageProfile;
+  File? imageProfile;
 
   @override
   void initState() {
@@ -357,8 +357,7 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                             ),
                           );
                           if (result != null) {
-                            String hasil = result.join(", ");
-                            _ekskulC.text = hasil;
+                            _ekskulC.text = result.toString();
                           }
                         },
                         decoration: const InputDecoration(
