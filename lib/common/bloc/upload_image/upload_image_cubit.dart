@@ -1,16 +1,14 @@
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'upload_image_state.dart';
 
 class UploadImageCubit extends Cubit<UploadImageState> {
   UploadImageCubit() : super(UploadImageInitial());
-
-  final ImagePicker _picker = ImagePicker();
 
   void loadNetworkImage(String url) {
     emit(UploadImageNetwork(url));
@@ -31,28 +29,32 @@ class UploadImageCubit extends Cubit<UploadImageState> {
   Future<void> pickImage(String filename) async {
     try {
       emit(UploadImageLoading());
+      // if (Platform.isAndroid &&
+      //     (await DeviceInfoPlugin().androidInfo).version.sdkInt <= 32) {
+      //   // Android <= 12, SAF auto-granted, skip permission
+      // }
+      // final granted = await requestGalleryPermission();
+      // if (!granted) {
+      //   emit(UploadImageFailure("Izin galeri ditolak"));
+      //   return;
+      // }
 
-      final XFile? picked = await _picker.pickImage(
-        source: ImageSource.gallery,
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg'],
+        allowMultiple: false,
       );
 
-      if (picked == null) {
+      if (result == null || result.files.single.path == null) {
         emit(UploadImageInitial());
         return;
       }
 
-      final tempFile = File(picked.path);
-      final ext = p.extension(tempFile.path).toLowerCase();
+      final file = File(result.files.single.path!);
+      final ext = p.extension(file.path).toLowerCase();
 
-      if (ext != ".jpg") {
-        emit(UploadImageFailure("File harus berformat .jpg"));
-        return;
-      }
-
-      final mime = lookupMimeType(tempFile.path);
-
-      if (mime != "image/jpeg") {
-        emit(UploadImageFailure("File harus berupa JPEG (.jpg)"));
+      if (ext != '.jpg' && ext != '.jpeg') {
+        emit(UploadImageFailure("Hanya file JPG yang diperbolehkan"));
         return;
       }
 
@@ -60,7 +62,7 @@ class UploadImageCubit extends Cubit<UploadImageState> {
           "${filename}_${DateTime.now().millisecondsSinceEpoch}$ext";
       final appDir = await getApplicationDocumentsDirectory();
       final savePath = p.join(appDir.path, customName);
-      final savedFile = await tempFile.copy(savePath);
+      final savedFile = await file.copy(savePath);
       emit(UploadImageSuccess(savedFile));
     } catch (e) {
       emit(UploadImageFailure("Gagal memproses gambar: $e"));
@@ -78,5 +80,13 @@ class UploadImageCubit extends Cubit<UploadImageState> {
     } catch (e) {
       return false;
     }
+  }
+
+  Future<bool> requestGalleryPermission() async {
+    if (Platform.isAndroid) {
+      final status = await Permission.photos.request();
+      return status.isGranted;
+    }
+    return true; // iOS auto-handle
   }
 }
