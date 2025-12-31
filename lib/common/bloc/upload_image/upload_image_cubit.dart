@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'upload_image_state.dart';
 
@@ -29,16 +29,6 @@ class UploadImageCubit extends Cubit<UploadImageState> {
   Future<void> pickImage(String filename) async {
     try {
       emit(UploadImageLoading());
-      // if (Platform.isAndroid &&
-      //     (await DeviceInfoPlugin().androidInfo).version.sdkInt <= 32) {
-      //   // Android <= 12, SAF auto-granted, skip permission
-      // }
-      // final granted = await requestGalleryPermission();
-      // if (!granted) {
-      //   emit(UploadImageFailure("Izin galeri ditolak"));
-      //   return;
-      // }
-
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['jpg', 'jpeg'],
@@ -58,11 +48,13 @@ class UploadImageCubit extends Cubit<UploadImageState> {
         return;
       }
 
+      final File compressedFile = await compressImage(file);
+
       final customName =
           "${filename}_${DateTime.now().millisecondsSinceEpoch}$ext";
       final appDir = await getApplicationDocumentsDirectory();
       final savePath = p.join(appDir.path, customName);
-      final savedFile = await file.copy(savePath);
+      final savedFile = await compressedFile.copy(savePath);
       emit(UploadImageSuccess(savedFile));
     } catch (e) {
       emit(UploadImageFailure("Gagal memproses gambar: $e"));
@@ -82,11 +74,27 @@ class UploadImageCubit extends Cubit<UploadImageState> {
     }
   }
 
-  Future<bool> requestGalleryPermission() async {
-    if (Platform.isAndroid) {
-      final status = await Permission.photos.request();
-      return status.isGranted;
+  Future<File> compressImage(File file) async {
+    final dir = await getTemporaryDirectory();
+
+    final targetPath = p.join(
+      dir.path,
+      '${DateTime.now().millisecondsSinceEpoch}.jpg',
+    );
+
+    final compressed = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      targetPath,
+      quality: 75, // ⭐ sweet spot
+      minWidth: 1024,
+      minHeight: 1024,
+      format: CompressFormat.jpeg,
+    );
+
+    if (compressed == null) {
+      throw Exception('Gagal kompres gambar');
     }
-    return true; // iOS auto-handle
+
+    return File(compressed.path);
   }
 }
