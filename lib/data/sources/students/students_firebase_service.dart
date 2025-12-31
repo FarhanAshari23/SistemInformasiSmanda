@@ -75,7 +75,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         });
 
         final streamedResponse = await request.send().timeout(
-          const Duration(seconds: 5),
+          const Duration(seconds: 10),
           onTimeout: () {
             throw Exception("Timeout: Server tidak merespon.");
           },
