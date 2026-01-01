@@ -80,7 +80,6 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   @override
   Future<Either> createTeacher(TeacherEntity teacherCreationReq) async {
     String endpoint = ExecuteCRUD.uploadImageTeacher();
-    DocumentReference? teacherRef;
     try {
       if (teacherCreationReq.image != null) {
         Uri? url;
@@ -144,33 +143,28 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
 
       final keywords = generateKeywords(teacherCreationReq.nama);
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-      teacherRef = await firebaseFirestore.collection("Teachers").add(
-        {
-          "nama": teacherCreationReq.nama,
-          "NIP": teacherCreationReq.nip,
-          "email": teacherCreationReq.email,
-          "mengajar": teacherCreationReq.mengajar,
-          "tanggal_lahir": teacherCreationReq.tanggalLahir,
-          "wali_kelas": teacherCreationReq.waliKelas,
-          "jabatan_tambahan": teacherCreationReq.jabatan,
-          "gender": teacherCreationReq.gender,
-          "keywords": keywords,
-          "uid": newUid,
-        },
-      );
+      await firebaseFirestore.collection("Teachers").doc(newUid).set({
+        "nama": teacherCreationReq.nama,
+        "NIP": teacherCreationReq.nip,
+        "email": teacherCreationReq.email,
+        "mengajar": teacherCreationReq.mengajar,
+        "tanggal_lahir": teacherCreationReq.tanggalLahir,
+        "wali_kelas": teacherCreationReq.waliKelas,
+        "jabatan_tambahan": teacherCreationReq.jabatan,
+        "gender": teacherCreationReq.gender,
+        "keywords": keywords,
+        "uid": newUid,
+      });
 
       return const Right("Upload Teacher was succesfull");
     } on TimeoutException {
       return const Left(
           "Gagal terhubung dengan server, cobalah beberapa saat lagi");
     } on SocketException {
-      if (teacherRef != null) await teacherRef.delete();
       throw Exception("Tidak ada koneksi internet.");
     } on HttpException {
-      if (teacherRef != null) await teacherRef.delete();
       throw Exception("Kesalahan HTTP terjadi.");
     } on FormatException {
-      if (teacherRef != null) await teacherRef.delete();
       throw Exception("Format data tidak valid.");
     } catch (e) {
       return Left(e);
@@ -236,7 +230,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         final request = http.MultipartRequest("POST", url);
 
         request.fields['name'] = teacherReq.nama;
-        request.fields['nip'] = teacherReq.oldNIP != '-'
+        request.fields['nip'] = teacherReq.nip != '-'
             ? teacherReq.nip
             : teacherReq.tanggalLahir.toString();
 
@@ -277,27 +271,27 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         }
       }
 
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Teachers');
-      QuerySnapshot querySnapshot = await users
-          .where(
-            teacherReq.oldNIP == '-' ? "nama" : "NIP",
-            isEqualTo:
-                teacherReq.oldNIP == '-' ? teacherReq.nama : teacherReq.oldNIP,
-          )
-          .get();
-      if (querySnapshot.docs.isNotEmpty) {
-        String docId = querySnapshot.docs[0].id;
-        await users.doc(docId).update({
-          "NIP": teacherReq.nip,
-          "jabatan_tambahan": teacherReq.jabatan,
-          "mengajar": teacherReq.mengajar,
-          "tanggal_lahir": teacherReq.tanggalLahir,
-          "nama": teacherReq.nama,
-          "wali_kelas": teacherReq.waliKelas,
-        });
-        return right('Update Data Teacher Success');
+      final docRef =
+          FirebaseFirestore.instance.collection('Teachers').doc(teacherReq.uid);
+
+      final docSnap = await docRef.get();
+      if (!docSnap.exists) {
+        throw Left(
+            'Dokumen teacher dengan UID ${teacherReq.uid} tidak ditemukan!');
       }
+
+      final keywords = generateKeywords(teacherReq.nama);
+
+      await docRef.update({
+        "NIP": teacherReq.nip,
+        "jabatan_tambahan": teacherReq.jabatan,
+        "mengajar": teacherReq.mengajar,
+        "tanggal_lahir": teacherReq.tanggalLahir,
+        "nama": teacherReq.nama,
+        "wali_kelas": teacherReq.waliKelas,
+        "keywords": keywords,
+      });
+
       return const Right('Update Data Teacher Success');
     } on TimeoutException {
       return const Left(

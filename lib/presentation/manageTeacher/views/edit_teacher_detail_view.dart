@@ -105,6 +105,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
         child: BlocListener<ButtonStateCubit, ButtonState>(
           listener: (context, state) {
             if (state is ButtonFailureState) {
+              print(state.errorMessage);
               var snackbar = SnackBar(
                 content: Text(state.errorMessage),
                 behavior: SnackBarBehavior.floating,
@@ -113,8 +114,9 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
             }
             if (state is ButtonSuccessState) {
               context.read<TeacherCubit>().displayTeacher();
-              var snackbar = const SnackBar(
-                content: Text("Data Berhasil Diubah"),
+              print(state.successMessage);
+              var snackbar = SnackBar(
+                content: Text(state.successMessage),
               );
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
               Navigator.pop(context);
@@ -197,7 +199,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                         context.read<ButtonStateCubit>().execute(
                               usecase: UpdateTeacherUsecase(),
                               params: TeacherEntity(
-                                oldNIP: widget.teacher.nip,
+                                uid: widget.teacher.uid,
                                 nama: _namaC.text,
                                 mengajar: _mengajarC.text,
                                 nip: _nipC.text,

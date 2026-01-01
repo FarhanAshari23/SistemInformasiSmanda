@@ -9,6 +9,7 @@ class TeacherModel {
   final String tanggalLahir;
   final String waliKelas;
   final String jabatan;
+  final String uid;
   final int? gender;
   final Timestamp? timeIn, timeOut;
 
@@ -20,6 +21,7 @@ class TeacherModel {
     required this.waliKelas,
     required this.jabatan,
     required this.gender,
+    required this.uid,
     this.timeIn,
     this.timeOut,
   });
@@ -34,6 +36,7 @@ class TeacherModel {
       'jabatan_tambahan': jabatan,
       "gender": gender,
       "jam_masuk": timeIn,
+      "uid": uid,
       "jam_pulang": timeOut,
     };
   }
@@ -46,6 +49,7 @@ class TeacherModel {
         tanggalLahir: map["tanggal_lahir"] ?? '',
         waliKelas: map["wali_kelas"] ?? '',
         jabatan: map["jabatan_tambahan"] ?? '',
+        uid: map["uid"] ?? '',
         gender: map["gender"],
         timeIn: map['jam_masuk'],
         timeOut: map['jam_pulang']);
@@ -69,6 +73,7 @@ extension TeacherModelX on TeacherModel {
       gender: gender,
       timeIn: timeIn,
       timeOut: timeOut,
+      uid: uid,
     );
   }
 
@@ -83,6 +88,7 @@ extension TeacherModelX on TeacherModel {
       gender: entity.gender,
       timeIn: entity.timeIn,
       timeOut: entity.timeOut,
+      uid: entity.uid ?? '',
     );
   }
 }
