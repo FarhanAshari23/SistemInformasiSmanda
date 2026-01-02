@@ -108,7 +108,7 @@ class BasicAppbar extends StatelessWidget {
                                   builder: (context, state) {
                                     if (state is ProfileInfoLoading) {
                                       return const Text(
-                                        'Tunggu Sebentar...',
+                                        '...',
                                         style: TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w800,
@@ -139,7 +139,7 @@ class BasicAppbar extends StatelessWidget {
                                   return Row(
                                     children: [
                                       const Text(
-                                        'Tunggu Sebentar...',
+                                        '...',
                                         style: TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w800,
