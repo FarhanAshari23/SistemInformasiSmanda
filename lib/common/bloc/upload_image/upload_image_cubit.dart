@@ -85,7 +85,7 @@ class UploadImageCubit extends Cubit<UploadImageState> {
     final compressed = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
       targetPath,
-      quality: 75, // ⭐ sweet spot
+      quality: 75,
       minWidth: 1024,
       minHeight: 1024,
       format: CompressFormat.jpeg,

@@ -4,10 +4,16 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class FastCacheManager extends CacheManager {
-  FastCacheManager()
+  static final FastCacheManager instance = FastCacheManager._internal();
+
+  factory FastCacheManager() => instance;
+
+  FastCacheManager._internal()
       : super(
           Config(
             'fastCache',
+            stalePeriod: const Duration(days: 7),
+            maxNrOfCacheObjects: 200,
             fileService: HttpFileService(
               httpClient: TimeoutHttpClient(
                 http.Client(),

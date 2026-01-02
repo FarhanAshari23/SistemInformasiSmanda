@@ -30,7 +30,7 @@ class NetworkPhoto extends StatelessWidget {
 
     return CachedNetworkImage(
       imageUrl: finalUrl,
-      cacheManager: FastCacheManager(),
+      cacheManager: FastCacheManager.instance,
       imageBuilder: (context, provider) => Container(
         width: width,
         height: height,

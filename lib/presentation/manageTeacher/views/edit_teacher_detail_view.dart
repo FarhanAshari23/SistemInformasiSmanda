@@ -105,7 +105,6 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
         child: BlocListener<ButtonStateCubit, ButtonState>(
           listener: (context, state) {
             if (state is ButtonFailureState) {
-              print(state.errorMessage);
               var snackbar = SnackBar(
                 content: Text(state.errorMessage),
                 behavior: SnackBarBehavior.floating,
@@ -114,7 +113,6 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
             }
             if (state is ButtonSuccessState) {
               context.read<TeacherCubit>().displayTeacher();
-              print(state.successMessage);
               var snackbar = SnackBar(
                 content: Text(state.successMessage),
               );
