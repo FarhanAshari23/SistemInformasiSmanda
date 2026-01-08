@@ -19,7 +19,6 @@ abstract class AuthFirebaseService {
   Future<Either> forgotPassword(String email);
   Future<Either> checkEmailUsed(String email);
   Future<Either> logout();
-  Future<bool> isLoggedIn();
   Future<Either> getUser(String user);
   Future<Either> isAdmin();
   Future<Either> isRegister();
@@ -189,15 +188,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
     } on FirebaseAuthException catch (e) {
       return Left(e);
     }
-  }
-
-  @override
-  Future<bool> isLoggedIn() async {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) return true;
-
-    final user = await FirebaseAuth.instance.authStateChanges().first;
-    return user != null;
   }
 
   @override

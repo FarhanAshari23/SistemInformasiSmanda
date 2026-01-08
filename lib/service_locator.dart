@@ -35,7 +35,6 @@ import 'domain/usecases/auth/check_email_usecase.dart';
 import 'domain/usecases/auth/check_register.dart';
 import 'domain/usecases/auth/check_teacher_usecase.dart';
 import 'domain/usecases/auth/get_user.dart';
-import 'domain/usecases/auth/is_logged_in.dart';
 import 'domain/usecases/auth/signin.dart';
 import 'domain/usecases/auth/signup.dart';
 import 'domain/usecases/ekskul/create_ekskul.dart';
@@ -154,9 +153,6 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<SignUpUseCase>(
     SignUpUseCase(),
-  );
-  sl.registerSingleton<IsLoggedInUsecase>(
-    IsLoggedInUsecase(),
   );
   sl.registerSingleton<ForgotPasswordUsecase>(
     ForgotPasswordUsecase(),
