@@ -193,7 +193,11 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
 
   @override
   Future<bool> isLoggedIn() async {
-    final user = await FirebaseAuth.instance.authStateChanges().first;
+    final user = await FirebaseAuth.instance
+        .authStateChanges()
+        .skipWhile((user) => user == null)
+        .first;
+
     return user != null;
   }
 
