@@ -226,6 +226,7 @@ class ChangePhotoView extends StatelessWidget {
                                       jabatan: teacher!.jabatan,
                                       gender: teacher!.gender,
                                       image: state.imageFile,
+                                      uid: teacher!.uid,
                                     ),
                                   );
                             } else {
