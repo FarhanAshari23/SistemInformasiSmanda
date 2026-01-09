@@ -22,7 +22,7 @@ class SplashView extends StatelessWidget {
     return BlocListener<SplashCubit, SplashState>(
       listener: (context, state) async {
         if (state is UnAuthenticated) {
-          AppNavigator.push(context, LoginView());
+          AppNavigator.pushReplacement(context, LoginView());
         }
         if (state is Authenticated) {
           var resultTeacher = await sl<CheckTeacherUsecase>().call();
@@ -42,7 +42,7 @@ class SplashView extends StatelessWidget {
                       const HomeViewAdmin(),
                     );
                   } else {
-                    AppNavigator.push(
+                    AppNavigator.pushReplacement(
                       context,
                       const HomeView(),
                     );

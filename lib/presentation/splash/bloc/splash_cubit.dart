@@ -9,7 +9,7 @@ class SplashCubit extends Cubit<SplashState> {
   StreamSubscription<User?>? _authSubscription;
 
   void appStarted() {
-    _authSubscription = FirebaseAuth.instance.authStateChanges().listen((user) {
+    _authSubscription = FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
         emit(Authenticated());
       } else {
