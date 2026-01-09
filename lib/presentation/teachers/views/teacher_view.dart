@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/card/card_guru.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/card/card_guru_complete.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/teachers/views/teacher_detail.dart';
@@ -118,40 +119,67 @@ class TeacherView extends StatelessWidget {
                         ],
                       );
                     } else {
-                      return Expanded(
-                        child: GridView.builder(
-                          itemCount: selected.length,
-                          scrollDirection: Axis.vertical,
-                          padding: const EdgeInsets.only(
-                            left: 8,
-                            right: 8,
-                            bottom: 8,
-                          ),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 12.0,
-                            mainAxisSpacing: 12.0,
-                            mainAxisExtent: height * 0.25,
-                          ),
-                          itemBuilder: (context, index) {
-                            return CustomInkWell(
-                              onTap: () => AppNavigator.push(
-                                context,
-                                TeacherDetail(
-                                  teachers: selected[index],
+                      return tabIndex == 0
+                          ? Expanded(
+                              child: GridView.builder(
+                                itemCount: selected.length,
+                                scrollDirection: Axis.vertical,
+                                padding: const EdgeInsets.only(
+                                  left: 8,
+                                  right: 8,
+                                  bottom: 8,
                                 ),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 12.0,
+                                  mainAxisSpacing: 12.0,
+                                  mainAxisExtent: height * 0.25,
+                                ),
+                                itemBuilder: (context, index) {
+                                  return CustomInkWell(
+                                    onTap: () => AppNavigator.push(
+                                      context,
+                                      TeacherDetail(
+                                        teachers: selected[index],
+                                      ),
+                                    ),
+                                    borderRadius: 8,
+                                    defaultColor: AppColors.secondary,
+                                    child: CardGuru(
+                                      forceRefresh: false,
+                                      teacher: selected[index],
+                                    ),
+                                  );
+                                },
                               ),
-                              borderRadius: 8,
-                              defaultColor: AppColors.secondary,
-                              child: CardGuru(
-                                forceRefresh: false,
-                                teacher: selected[index],
+                            )
+                          : Expanded(
+                              child: ListView.separated(
+                                padding: const EdgeInsets.only(
+                                  left: 8,
+                                  right: 8,
+                                  bottom: 8,
+                                ),
+                                itemBuilder: (context, index) {
+                                  return CardGuruComplete(
+                                      onTap: () => AppNavigator.push(
+                                            context,
+                                            TeacherDetail(
+                                              teachers: selected[index],
+                                            ),
+                                          ),
+                                      teacher: selected[index],
+                                      forceRefresh: false,
+                                      desc: tabIndex == 1
+                                          ? "Kelas: ${selected[index].waliKelas}"
+                                          : "Jabatan: ${selected[index].jabatan}");
+                                },
+                                separatorBuilder: (context, index) =>
+                                    SizedBox(height: height * 0.01),
+                                itemCount: selected.length,
                               ),
                             );
-                          },
-                        ),
-                      );
                     }
                   }
                   return Container();

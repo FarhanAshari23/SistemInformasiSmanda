@@ -89,20 +89,20 @@ class _CardStaffState extends State<CardStaff> {
       onTap: () => AppNavigator.push(context, widget.page),
       borderRadius: 8,
       defaultColor: AppColors.secondary,
-      child: SizedBox(
-        width: width * 0.45,
-        height: height * 0.25,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              imageWidget,
-              SizedBox(height: height * 0.01),
-              SizedBox(
-                width: width * 0.4,
-                height: height * 0.06,
-                child: Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: imageWidget,
+            ),
+            SizedBox(height: height * 0.01),
+            Column(
+              children: [
+                Center(
                   child: Text(
                     widget.teacher.nama,
                     style: const TextStyle(
@@ -113,21 +113,21 @@ class _CardStaffState extends State<CardStaff> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              SizedBox(height: height * 0.01),
-              Text(
-                widget.content != null
-                    ? widget.content!
-                    : widget.teacher.jabatan,
-                style: const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.inversePrimary,
+                SizedBox(height: height * 0.01),
+                Text(
+                  widget.content != null
+                      ? widget.content!
+                      : widget.teacher.jabatan,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.inversePrimary,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );
