@@ -17,6 +17,9 @@ import 'service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await initializeDateFormatting('id_ID', null);
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
@@ -25,10 +28,6 @@ void main() async {
             (await getApplicationDocumentsDirectory()).path,
           ),
   );
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
   OneSignal.initialize('296eaeec-b95a-4c89-8bf6-116ffd5baa32');
   OneSignal.Notifications.requestPermission(true);
