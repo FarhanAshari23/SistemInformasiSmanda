@@ -63,4 +63,9 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either> isTeacher() async {
     return await sl<AuthFirebaseService>().isTeacher();
   }
+
+  @override
+  Future<bool> isLoggedIn() async {
+    return await sl<AuthFirebaseService>().isLoggedIn();
+  }
 }

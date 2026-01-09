@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/auth/is_logged_in_usecase.dart';
 import 'data/repository/attandance/attandance_repository_impl.dart';
 import 'data/repository/auth/auth_repository_impl.dart';
 import 'data/repository/ekskul/ekskul_repository.dart';
@@ -150,6 +151,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<IsRegisterUsecase>(
     IsRegisterUsecase(),
+  );
+  sl.registerSingleton<IsLoggedInUsecase>(
+    IsLoggedInUsecase(),
   );
   sl.registerSingleton<SignUpUseCase>(
     SignUpUseCase(),

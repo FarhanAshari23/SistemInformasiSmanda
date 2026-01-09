@@ -1,27 +1,17 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../domain/usecases/auth/is_logged_in_usecase.dart';
+import '../../../service_locator.dart';
 import 'splash_state.dart';
 
 class SplashCubit extends Cubit<SplashState> {
   SplashCubit() : super(DisplaySplash());
-  StreamSubscription<User?>? _authSubscription;
 
-  void appStarted() {
-    _authSubscription = FirebaseAuth.instance.userChanges().listen((user) {
-      if (user != null) {
-        emit(Authenticated());
-      } else {
-        emit(UnAuthenticated());
-      }
-      _authSubscription?.cancel();
-    });
-  }
-
-  @override
-  Future<void> close() {
-    _authSubscription?.cancel();
-    return super.close();
+  void appStarted() async {
+    var isLoggedIn = await sl<IsLoggedInUsecase>().call();
+    if (isLoggedIn) {
+      emit(Authenticated());
+    } else {
+      emit(UnAuthenticated());
+    }
   }
 }

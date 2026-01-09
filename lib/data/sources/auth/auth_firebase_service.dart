@@ -20,6 +20,7 @@ abstract class AuthFirebaseService {
   Future<Either> checkEmailUsed(String email);
   Future<Either> logout();
   Future<Either> getUser(String user);
+  Future<bool> isLoggedIn();
   Future<Either> isAdmin();
   Future<Either> isRegister();
   Future<Either> isTeacher();
@@ -275,6 +276,19 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       return right(isTeacher);
     } catch (e) {
       return left(e.toString());
+    }
+  }
+
+  @override
+  Future<bool> isLoggedIn() async {
+    try {
+      final user = await FirebaseAuth.instance
+          .authStateChanges()
+          .first
+          .timeout(const Duration(seconds: 3));
+      return user != null;
+    } catch (e) {
+      return FirebaseAuth.instance.currentUser != null;
     }
   }
 }
