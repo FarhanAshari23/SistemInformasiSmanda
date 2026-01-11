@@ -31,7 +31,7 @@ class AckAddTeacherView extends StatelessWidget {
       "Mengajar",
       "Tanggal Lahir",
       "Wali Kelas",
-      'Jabatan',
+      'Tugas Tambahan',
       "Gender",
     ];
     List<String> contentList = [

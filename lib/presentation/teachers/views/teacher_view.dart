@@ -52,7 +52,7 @@ class TeacherView extends StatelessWidget {
                         List<String> title = [
                           "Semua",
                           "Wali Kelas",
-                          "Jabatan Tambahan",
+                          "Tugas Tambahan",
                         ];
                         return CustomInkWell(
                           onTap: () {
@@ -173,7 +173,7 @@ class TeacherView extends StatelessWidget {
                                       forceRefresh: false,
                                       desc: tabIndex == 1
                                           ? "Kelas: ${selected[index].waliKelas}"
-                                          : "Jabatan: ${selected[index].jabatan}");
+                                          : "Tugas: ${selected[index].jabatan}");
                                 },
                                 separatorBuilder: (context, index) =>
                                     SizedBox(height: height * 0.01),

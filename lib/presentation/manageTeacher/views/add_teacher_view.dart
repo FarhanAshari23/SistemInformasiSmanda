@@ -60,7 +60,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
       'Wali kelas:',
       'NIP:',
       'Tanggal Lahir:',
-      'Jabatan Tambahan:'
+      'Tugas Tambahan:'
     ];
     List<TextEditingController> controller = [
       _namaC,
@@ -369,7 +369,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
         ],
       );
     } else if (index == 6) {
-      //jabatan_tambahan
+      //tugas_tambahan
       return TextField(
         controller: controller[index],
         readOnly: true,

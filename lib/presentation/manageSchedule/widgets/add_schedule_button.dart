@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/add_schedule_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_cubit.dart';
 
@@ -260,8 +261,10 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
+                      CustomInkWell(
+                        borderRadius: 12,
+                        defaultColor: AppColors.primary,
+                        onTap: () {
                           if (_kegiatanC.text.isEmpty ||
                               _durasiMulaiC.text.isEmpty ||
                               _durasiMulaiC.text.isEmpty ||
@@ -285,18 +288,40 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                             cubitAddSchedule.toggleAdding(widget.day);
                           }
                         },
-                        child: const Text("OK"),
+                        child: const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Text(
+                            "Simpan",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.inversePrimary,
+                            ),
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 8),
-                      TextButton(
-                        onPressed: () {
+                      CustomInkWell(
+                        borderRadius: 12,
+                        defaultColor: Colors.red,
+                        onTap: () {
                           _kegiatanC.clear();
                           _durasiMulaiC.clear();
                           _durasiSelesaiC.clear();
                           _pelaksanaC.clear();
                           cubitAddSchedule.toggleAdding(widget.day);
                         },
-                        child: const Text("Batal"),
+                        child: const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Text(
+                            "Batal",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.inversePrimary,
+                            ),
+                          ),
+                        ),
                       )
                     ],
                   )

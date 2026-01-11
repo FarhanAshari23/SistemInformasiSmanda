@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/roles/get_roles_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/roles/get_roles_state.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/dialog/input_dialog.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/create_roles_usecase.dart';
 
@@ -9,6 +10,7 @@ import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/teacher/delete_role_usecase.dart';
 import '../../../service_locator.dart';
@@ -48,7 +50,7 @@ class _ManageJabatanViewsState extends State<ManageJabatanViews> {
               if (state is ButtonSuccessState) {
                 context.read<GetRolesCubit>().displayRoles();
                 var snackbar = const SnackBar(
-                  content: Text("Jabatan baru berhasil ditambah"),
+                  content: Text("Tugas Tambahan baru berhasil ditambah"),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
                 _roleC.clear();
@@ -71,7 +73,7 @@ class _ManageJabatanViewsState extends State<ManageJabatanViews> {
                 const Padding(
                   padding: EdgeInsets.only(left: 18),
                   child: Text(
-                    'Daftar kegiatan:',
+                    'Daftar tugas tambahan:',
                     style: TextStyle(
                       fontSize: 16,
                       color: AppColors.secondary,
@@ -106,9 +108,9 @@ class _ManageJabatanViewsState extends State<ManageJabatanViews> {
                                       builder: (context) {
                                         return InputDialog(
                                           height: height,
-                                          title: 'Tambah jabatan',
+                                          title: 'Tambah tugas',
                                           controller: _roleC,
-                                          hintText: "Nama Jabatan",
+                                          hintText: "Nama Tugas",
                                           onTap: () {
                                             outerContext
                                                 .read<ButtonStateCubit>()
@@ -157,52 +159,59 @@ class _ManageJabatanViewsState extends State<ManageJabatanViews> {
                                       ),
                                     ),
                                   ),
-                                  Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () async {
-                                        var delete =
-                                            await sl<DeleteRoleUsecase>()
-                                                .call(params: activity.name);
-                                        return delete.fold(
-                                          (error) {
-                                            var snackbar = const SnackBar(
-                                              content: Text(
-                                                  "Gagal Menghapus jabatan, Coba Lagi"),
-                                            );
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackbar);
-                                          },
-                                          (r) {
-                                            var snackbar = const SnackBar(
-                                              content:
-                                                  Text("Data Berhasil Dihapus"),
-                                            );
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackbar);
-                                            context
-                                                .read<GetRolesCubit>()
-                                                .displayRoles();
-                                          },
-                                        );
-                                      },
-                                      borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(16),
-                                        bottomRight: Radius.circular(16),
-                                      ),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(12),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(16),
-                                            bottomRight: Radius.circular(16),
-                                          ),
-                                        ),
-                                        child: const Icon(
-                                          Icons.delete,
-                                          color: Colors.white,
-                                        ),
+                                  CustomInkWell(
+                                    right: 16,
+                                    defaultColor: Colors.red,
+                                    onTap: () async {
+                                      final outerContext = context;
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return BasicDialog(
+                                            width: height,
+                                            height: height,
+                                            splashImage: AppImages.splashDelete,
+                                            mainTitle:
+                                                "Apakah anda yakin ingin menghapus ${activity.name}",
+                                            buttonTitle: "Hapus",
+                                            onPressed: () async {
+                                              var delete =
+                                                  await sl<DeleteRoleUsecase>()
+                                                      .call(
+                                                          params:
+                                                              activity.name);
+                                              return delete.fold(
+                                                (error) {
+                                                  var snackbar = const SnackBar(
+                                                    content: Text(
+                                                        "Gagal Menghapus tugas tambahan, Coba Lagi"),
+                                                  );
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackbar);
+                                                },
+                                                (r) {
+                                                  Navigator.pop(context);
+                                                  var snackbar = SnackBar(
+                                                    content: Text(
+                                                        "Data ${activity.name} Berhasil Dihapus"),
+                                                  );
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackbar);
+                                                  outerContext
+                                                      .read<GetRolesCubit>()
+                                                      .displayRoles();
+                                                },
+                                              );
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(12),
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   )

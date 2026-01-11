@@ -12,7 +12,7 @@ import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/schedule/delete_jadwal_usecase.dart';
 import '../bloc/get_all_jadwal_cubit.dart';
 import '../bloc/get_all_jadwal_state.dart';
-import '../widgets/edit_schedule_detail.dart';
+import 'edit_schedule_detail.dart';
 
 class EditScheduleView extends StatelessWidget {
   const EditScheduleView({super.key});
@@ -131,7 +131,7 @@ class EditScheduleView extends StatelessWidget {
                                               BlocProvider.value(
                                                 value: context
                                                     .read<GetAllJadwalCubit>(),
-                                                child: EditScheduleDetail(
+                                                child: EditScheduleDetailView(
                                                   kelas: schedule.kelas,
                                                   schedule: schedule,
                                                 ),

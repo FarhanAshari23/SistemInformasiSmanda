@@ -70,7 +70,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
       'NIP:',
       'Wali kelas:',
       'Tanggal Lahir:',
-      'Jabatan Tambahan:'
+      'Tugas Tambahan:'
     ];
     List<TextEditingController> controller = [
       _namaC,

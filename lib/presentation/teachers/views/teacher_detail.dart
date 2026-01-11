@@ -147,7 +147,7 @@ class TeacherDetail extends StatelessWidget {
                                         const SizedBox(width: 8),
                                         Expanded(
                                           child: CardDetailSiswa(
-                                            title: 'Jabatan tambahan',
+                                            title: 'Tugas tambahan',
                                             content: teachers.jabatan,
                                           ),
                                         ),

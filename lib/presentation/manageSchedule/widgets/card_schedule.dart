@@ -71,272 +71,299 @@ class _CardScheduleState extends State<CardSchedule> {
         if (isEdit) {
           return Stack(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BlocBuilder<TeacherCubit, TeacherState>(
-                    builder: (context, state) {
-                      if (state is TeacherLoading) {
-                        return TextField(
-                          controller: _pelaksanaC,
-                          autocorrect: false,
-                          decoration: const InputDecoration(
-                            hintText: 'Pelaksana:',
-                          ),
-                        );
-                      }
-                      if (state is TeacherLoaded) {
-                        return DropdownMenu<String>(
-                          width: width * 0.92,
-                          enableFilter: true,
-                          requestFocusOnTap: false,
-                          focusNode: pelaksanaFocus,
-                          initialSelection: _pelaksanaC.text,
-                          inputDecorationTheme: const InputDecorationTheme(
-                            fillColor: AppColors.tertiary,
-                            filled: true,
-                            hintStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black, // <-- warna hint
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BlocBuilder<TeacherCubit, TeacherState>(
+                      builder: (context, state) {
+                        if (state is TeacherLoading) {
+                          return TextField(
+                            controller: _pelaksanaC,
+                            autocorrect: false,
+                            decoration: const InputDecoration(
+                              hintText: 'Pelaksana:',
                             ),
-                          ),
-                          menuHeight: 200,
-                          menuStyle: MenuStyle(
-                            padding: WidgetStateProperty.all(
-                              const EdgeInsets.symmetric(horizontal: 8),
-                            ),
-                            alignment: Alignment.bottomLeft,
-                            visualDensity: VisualDensity.compact,
-                            maximumSize: WidgetStateProperty.all(
-                              Size(width * 0.92, 200),
-                            ),
-                            shape: WidgetStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                          );
+                        }
+                        if (state is TeacherLoaded) {
+                          return DropdownMenu<String>(
+                            width: width * 0.92,
+                            enableFilter: true,
+                            requestFocusOnTap: false,
+                            focusNode: pelaksanaFocus,
+                            initialSelection: _pelaksanaC.text,
+                            inputDecorationTheme: const InputDecorationTheme(
+                              fillColor: AppColors.tertiary,
+                              filled: true,
+                              hintStyle: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black,
                               ),
                             ),
-                          ),
-                          hintText: "Pelaksana:",
-                          dropdownMenuEntries: state.teacher.map((doc) {
-                            final nama = doc.nama;
-                            return DropdownMenuEntry(
-                              value: nama,
-                              label: nama,
-                            );
-                          }).toList(),
-                          onSelected: (value) {
-                            context.read<TeacherCubit>().selectItem(value);
-                            _pelaksanaC.text = value!;
-                            FocusScope.of(context).unfocus();
-                          },
-                        );
-                      }
-                      return const SizedBox();
-                    },
-                  ),
-                  const SizedBox(height: 4),
-                  BlocBuilder<TeacherCubit, TeacherState>(
-                    builder: (context, state) {
-                      if (state is TeacherLoading) {
-                        return TextField(
-                          controller: _kegiatanC,
-                          autocorrect: false,
-                          decoration: const InputDecoration(
-                            hintText: 'Kegiatan:',
-                          ),
-                        );
-                      }
-                      if (state is TeacherLoaded) {
-                        final activities = state.selectedActivities;
-
-                        final entries = activities.isEmpty
-                            ? [
-                                const DropdownMenuEntry(
-                                  value: '',
-                                  label: 'Pilih guru terlebih dahulu',
-                                  enabled: false,
-                                )
-                              ]
-                            : activities
-                                .map((a) =>
-                                    DropdownMenuEntry(value: a, label: a))
-                                .toList();
-
-                        return DropdownMenu<String>(
-                          width: width * 0.92,
-                          initialSelection: _kegiatanC.text,
-                          inputDecorationTheme: const InputDecorationTheme(
-                            fillColor: AppColors.tertiary,
-                            filled: true,
-                            hintStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black, // <-- warna hint
-                            ),
-                          ),
-                          menuHeight: 200,
-                          menuStyle: MenuStyle(
-                            padding: WidgetStateProperty.all(
-                              const EdgeInsets.symmetric(horizontal: 8),
-                            ),
-                            alignment: Alignment.bottomLeft,
-                            visualDensity: VisualDensity.compact,
-                            maximumSize: WidgetStateProperty.all(
-                              Size(width * 0.92, 200),
-                            ),
-                            shape: WidgetStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                            menuHeight: 200,
+                            menuStyle: MenuStyle(
+                              padding: WidgetStateProperty.all(
+                                const EdgeInsets.symmetric(horizontal: 8),
+                              ),
+                              alignment: Alignment.bottomLeft,
+                              visualDensity: VisualDensity.compact,
+                              maximumSize: WidgetStateProperty.all(
+                                Size(width * 0.92, 200),
+                              ),
+                              shape: WidgetStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
                             ),
-                          ),
-                          hintText: 'Kegiatan:',
-                          dropdownMenuEntries: entries,
-                          onSelected: (value) {
-                            _kegiatanC.text = value!;
-                            FocusScope.of(context).unfocus();
-                          },
-                        );
-                      }
-                      return const SizedBox();
-                    },
-                  ),
-                  const SizedBox(height: 4),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 6),
-                    child: Text(
-                      'Durasi:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
+                            hintText: "Pelaksana:",
+                            dropdownMenuEntries: state.teacher.map((doc) {
+                              final nama = doc.nama;
+                              return DropdownMenuEntry(
+                                value: nama,
+                                label: nama,
+                              );
+                            }).toList(),
+                            onSelected: (value) {
+                              context.read<TeacherCubit>().selectItem(value);
+                              _pelaksanaC.text = value!;
+                              FocusScope.of(context).unfocus();
+                            },
+                          );
+                        }
+                        return const SizedBox();
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          readOnly: true,
-                          controller: _durasiMulaiC,
-                          decoration: const InputDecoration(
-                            hintText: 'Mulai:',
-                            suffixIcon: Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.black,
-                              size: 24,
+                    const SizedBox(height: 4),
+                    BlocBuilder<TeacherCubit, TeacherState>(
+                      builder: (context, state) {
+                        if (state is TeacherLoading) {
+                          return TextField(
+                            controller: _kegiatanC,
+                            autocorrect: false,
+                            decoration: const InputDecoration(
+                              hintText: 'Kegiatan:',
                             ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              statePicker = 'start';
-                            });
-                            cubitEditSchedule.showPicker(
-                                widget.index, widget.day);
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Text(
-                        '-',
+                          );
+                        }
+                        if (state is TeacherLoaded) {
+                          final activities = state.selectedActivities;
+
+                          final entries = activities.isEmpty
+                              ? [
+                                  const DropdownMenuEntry(
+                                    value: '',
+                                    label: 'Pilih guru terlebih dahulu',
+                                    enabled: false,
+                                  )
+                                ]
+                              : activities
+                                  .map((a) =>
+                                      DropdownMenuEntry(value: a, label: a))
+                                  .toList();
+
+                          return DropdownMenu<String>(
+                            width: width * 0.92,
+                            initialSelection: _kegiatanC.text,
+                            inputDecorationTheme: const InputDecorationTheme(
+                              fillColor: AppColors.tertiary,
+                              filled: true,
+                              hintStyle: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black, // <-- warna hint
+                              ),
+                            ),
+                            menuHeight: 200,
+                            menuStyle: MenuStyle(
+                              padding: WidgetStateProperty.all(
+                                const EdgeInsets.symmetric(horizontal: 8),
+                              ),
+                              alignment: Alignment.bottomLeft,
+                              visualDensity: VisualDensity.compact,
+                              maximumSize: WidgetStateProperty.all(
+                                Size(width * 0.92, 200),
+                              ),
+                              shape: WidgetStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                            hintText: 'Kegiatan:',
+                            dropdownMenuEntries: entries,
+                            onSelected: (value) {
+                              _kegiatanC.text = value!;
+                              FocusScope.of(context).unfocus();
+                            },
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 6),
+                      child: Text(
+                        'Durasi:',
                         style: TextStyle(
-                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primary,
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: TextField(
-                          readOnly: true,
-                          controller: _durasiSelesaiC,
-                          decoration: const InputDecoration(
-                            hintText: 'Selesai:',
-                            suffixIcon: Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.black,
-                              size: 24,
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            readOnly: true,
+                            controller: _durasiMulaiC,
+                            decoration: const InputDecoration(
+                              hintText: 'Mulai:',
+                              suffixIcon: Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.black,
+                                size: 24,
+                              ),
                             ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              statePicker = 'end';
-                            });
-                            cubitEditSchedule.showPicker(
-                                widget.index, widget.day);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              if (_kegiatanC.text.isEmpty ||
-                                  _durasiMulaiC.text.isEmpty ||
-                                  _durasiMulaiC.text.isEmpty ||
-                                  _pelaksanaC.text.isEmpty) {
-                                var snackbar = const SnackBar(
-                                  content:
-                                      Text("Tolong isi semua field yang ada"),
-                                  behavior: SnackBarBehavior.floating,
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackbar);
-                              } else {
-                                cubitCreateSchedule.editActivity(
-                                  widget.day,
-                                  widget.index,
-                                  _pelaksanaC.text,
-                                  _kegiatanC.text,
-                                  '${_durasiMulaiC.text} - ${_durasiSelesaiC.text}',
-                                );
-                              }
-                              cubitEditSchedule.toggleEdit(
+                            onTap: () {
+                              setState(() {
+                                statePicker = 'start';
+                              });
+                              cubitEditSchedule.showPicker(
                                   widget.index, widget.day);
                             },
-                            child: const Text("Simpan"),
                           ),
-                          const SizedBox(width: 8),
-                          TextButton(
-                            onPressed: () => cubitEditSchedule.toggleEdit(
-                                widget.index, widget.day),
-                            child: const Text("Batal"),
-                          )
-                        ],
-                      ),
-                      CustomInkWell(
-                        borderRadius: 12,
-                        defaultColor: Colors.red,
-                        onTap: () => cubitCreateSchedule.deleteActivity(
-                            widget.day, widget.index),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
+                        ),
+                        const SizedBox(width: 4),
+                        const Text(
+                          '-',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
                           ),
-                          child: const Center(
-                            child: Text(
-                              'Hapus',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w900,
-                                color: AppColors.inversePrimary,
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: TextField(
+                            readOnly: true,
+                            controller: _durasiSelesaiC,
+                            decoration: const InputDecoration(
+                              hintText: 'Selesai:',
+                              suffixIcon: Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.black,
+                                size: 24,
+                              ),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                statePicker = 'end';
+                              });
+                              cubitEditSchedule.showPicker(
+                                  widget.index, widget.day);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            CustomInkWell(
+                              borderRadius: 12,
+                              defaultColor: AppColors.primary,
+                              onTap: () {
+                                if (_kegiatanC.text.isEmpty ||
+                                    _durasiMulaiC.text.isEmpty ||
+                                    _durasiMulaiC.text.isEmpty ||
+                                    _pelaksanaC.text.isEmpty) {
+                                  var snackbar = const SnackBar(
+                                    content:
+                                        Text("Tolong isi semua field yang ada"),
+                                    behavior: SnackBarBehavior.floating,
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackbar);
+                                } else {
+                                  cubitCreateSchedule.editActivity(
+                                    widget.day,
+                                    widget.index,
+                                    _pelaksanaC.text,
+                                    _kegiatanC.text,
+                                    '${_durasiMulaiC.text} - ${_durasiSelesaiC.text}',
+                                  );
+                                }
+                                cubitEditSchedule.toggleEdit(
+                                    widget.index, widget.day);
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.all(12),
+                                child: Text(
+                                  "Simpan",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.inversePrimary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            CustomInkWell(
+                              borderRadius: 12,
+                              defaultColor: Colors.red.shade300,
+                              onTap: () => cubitEditSchedule.toggleEdit(
+                                  widget.index, widget.day),
+                              child: const Padding(
+                                padding: EdgeInsets.all(12),
+                                child: Text(
+                                  "Batal",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.inversePrimary,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        CustomInkWell(
+                          borderRadius: 12,
+                          defaultColor: Colors.red,
+                          onTap: () => cubitCreateSchedule.deleteActivity(
+                              widget.day, widget.index),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Hapus',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w900,
+                                  color: AppColors.inversePrimary,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  )
-                ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
               if (isPickerVisible)
                 Align(

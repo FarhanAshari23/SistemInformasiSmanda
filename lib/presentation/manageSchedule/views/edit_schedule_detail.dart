@@ -19,23 +19,23 @@ import '../bloc/create_schedule_cubit.dart';
 import '../bloc/create_schedule_state.dart';
 import '../../../common/bloc/activities/get_activities_cubit.dart';
 import '../bloc/edit_schedule_cubit.dart';
-import 'add_schedule_button.dart';
-import 'card_schedule.dart';
+import '../widgets/add_schedule_button.dart';
+import '../widgets/card_schedule.dart';
 
-class EditScheduleDetail extends StatefulWidget {
+class EditScheduleDetailView extends StatefulWidget {
   final String kelas;
   final ScheduleEntity schedule;
-  const EditScheduleDetail({
+  const EditScheduleDetailView({
     super.key,
     required this.kelas,
     required this.schedule,
   });
 
   @override
-  State<EditScheduleDetail> createState() => _EditScheduleDetailState();
+  State<EditScheduleDetailView> createState() => _EditScheduleDetailState();
 }
 
-class _EditScheduleDetailState extends State<EditScheduleDetail> {
+class _EditScheduleDetailState extends State<EditScheduleDetailView> {
   late TextEditingController _kelasC;
 
   @override
@@ -190,7 +190,6 @@ class _EditScheduleDetailState extends State<EditScheduleDetail> {
                                         ),
                                       ),
                                       const SizedBox(height: 8),
-                                      // Daftar aktivitas
                                       Column(
                                         children: [
                                           for (int i = 0;

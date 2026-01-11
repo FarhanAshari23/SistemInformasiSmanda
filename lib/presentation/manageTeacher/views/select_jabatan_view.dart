@@ -40,7 +40,7 @@ class SelectJabatanView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          'Pilih pelajaran yang diajar',
+                          'Pilih tugas tambahan:',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
