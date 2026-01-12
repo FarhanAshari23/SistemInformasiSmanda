@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:new_sistem_informasi_smanda/data/models/teacher/teacher.dart';
 import 'package:new_sistem_informasi_smanda/data/sources/teacher/teacher_firebase_service.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/schedule/role.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/repository/teacher/teacher.dart';
 
@@ -139,5 +140,10 @@ class TeacherRepositoryImpl extends TeacherRepository {
   @override
   Future<Either> getScheduleTeacher(String name) async {
     return await sl<TeacherFirebaseService>().getScheduleTeacher(name);
+  }
+
+  @override
+  Future<Either> updateRoles(RoleEntity role) async {
+    return await sl<TeacherFirebaseService>().updateRoles(role);
   }
 }

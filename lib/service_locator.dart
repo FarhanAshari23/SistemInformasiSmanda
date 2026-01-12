@@ -47,6 +47,7 @@ import 'domain/usecases/news/get_news.dart';
 import 'domain/usecases/news/update_news.dart';
 import 'domain/usecases/schedule/create_activity_usecase.dart';
 import 'domain/usecases/schedule/get_all_jadwal.dart';
+import 'domain/usecases/schedule/update_activity_usecase.dart';
 import 'domain/usecases/students/accept_student_register_usecase.dart';
 import 'domain/usecases/students/delete_all_student_account_usecase.dart';
 import 'domain/usecases/students/delete_student_by_class.dart';
@@ -65,6 +66,7 @@ import 'domain/usecases/teacher/get_schedule_teacher_usecase.dart';
 import 'domain/usecases/teacher/get_teacher.dart';
 import 'domain/usecases/teacher/get_teacher_by_name.dart';
 import 'domain/usecases/teacher/get_waka.dart';
+import 'domain/usecases/teacher/update_role_usecase.dart';
 import 'domain/usecases/teacher/update_teacher.dart';
 
 import 'domain/usecases/auth/forgot_password_usecase.dart';
@@ -196,6 +198,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<DeleteRoleUsecase>(
     DeleteRoleUsecase(),
+  );
+  sl.registerSingleton<UpdateRoleUsecase>(
+    UpdateRoleUsecase(),
   );
   sl.registerSingleton<GetRolesUsecase>(
     GetRolesUsecase(),
@@ -329,6 +334,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<GetActivitiesUsecase>(
     GetActivitiesUsecase(),
+  );
+  sl.registerSingleton<UpdateActivityUsecase>(
+    UpdateActivityUsecase(),
   );
   sl.registerSingleton<UpdateScheduleUsecase>(
     UpdateScheduleUsecase(),

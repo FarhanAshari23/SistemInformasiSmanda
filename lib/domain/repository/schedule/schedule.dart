@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../entities/kelas/kelas.dart';
+import '../../entities/schedule/activity.dart';
 import '../../entities/schedule/schedule.dart';
 
 abstract class ScheduleRepository {
@@ -13,5 +14,6 @@ abstract class ScheduleRepository {
   Future<Either> deleteJadwal(String kelas);
   Future<Either> deleteKelas(String kelas);
   Future<Either> deleteActivity(String activity);
+  Future<Either> updateActivity(ActivityEntity activity);
   Future<Either> createActivities(String kegiatan);
 }

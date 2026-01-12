@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../domain/entities/kelas/kelas.dart';
+import '../../../domain/entities/schedule/activity.dart';
 import '../../../domain/entities/schedule/schedule.dart';
 
 abstract class ScheduleFirebaseService {
@@ -18,6 +19,7 @@ abstract class ScheduleFirebaseService {
   Future<Either> deleteJadwal(String kelas);
   Future<Either> deleteKelas(String kelas);
   Future<Either> deleteActivity(String activity);
+  Future<Either> updateActivity(ActivityEntity activity);
 }
 
 class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
@@ -243,6 +245,23 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
         await doc.reference.delete();
       }
       return const Right('Delete Data Kegiatan Success');
+    } catch (e) {
+      return Left('Something wrong: $e');
+    }
+  }
+
+  @override
+  Future<Either> updateActivity(ActivityEntity activity) async {
+    try {
+      CollectionReference item =
+          FirebaseFirestore.instance.collection('Activities');
+      QuerySnapshot querySnapshot =
+          await item.where('kegiatan', isEqualTo: activity.oldName).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        final docId = querySnapshot.docs.first.id;
+        item.doc(docId).update({"kegiatan": activity.name});
+      }
+      return const Right('Update Data Kegiatan Success');
     } catch (e) {
       return Left('Something wrong: $e');
     }

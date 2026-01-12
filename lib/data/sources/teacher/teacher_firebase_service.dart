@@ -12,6 +12,7 @@ import 'package:path/path.dart';
 
 import '../../../common/helper/execute_crud.dart';
 import '../../../common/helper/generate_keyword.dart';
+import '../../../domain/entities/schedule/role.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../models/teacher/schedule_teacher.dart';
 
@@ -23,6 +24,7 @@ abstract class TeacherFirebaseService {
   Future<Either> getScheduleTeacher(String name);
   Future<Either> createRoles(String role);
   Future<Either> deleteRole(String role);
+  Future<Either> updateRoles(RoleEntity role);
   Future<Either> getRoles();
   Future<Either> getKepalaSekolah();
   Future<Either> getWaka();
@@ -405,6 +407,22 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       return Right(result);
     } catch (e) {
       return Left("Something wrong: $e");
+    }
+  }
+
+  @override
+  Future<Either> updateRoles(RoleEntity role) async {
+    try {
+      CollectionReference item = FirebaseFirestore.instance.collection('Roles');
+      QuerySnapshot querySnapshot =
+          await item.where('role', isEqualTo: role.oldName).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        final docId = querySnapshot.docs.first.id;
+        item.doc(docId).update({"role": role.name});
+      }
+      return const Right('Update Data Tugas Tambahan Success');
+    } catch (e) {
+      return Left('Something wrong: $e');
     }
   }
 }

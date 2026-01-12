@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/schedule/activity.dart';
 
 import '../../../domain/entities/kelas/kelas.dart';
 import '../../../domain/entities/schedule/schedule.dart';
@@ -95,5 +96,10 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
   @override
   Future<Either> deleteActivity(String activity) async {
     return await sl<ScheduleFirebaseService>().deleteActivity(activity);
+  }
+
+  @override
+  Future<Either> updateActivity(ActivityEntity activity) async {
+    return await sl<ScheduleFirebaseService>().updateActivity(activity);
   }
 }
