@@ -12,7 +12,9 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/schedule/role.dart';
 import '../../../domain/usecases/teacher/delete_role_usecase.dart';
+import '../../../domain/usecases/teacher/update_role_usecase.dart';
 import '../../../service_locator.dart';
 
 class ManageJabatanViews extends StatefulWidget {
@@ -135,87 +137,118 @@ class _ManageJabatanViewsState extends State<ManageJabatanViews> {
                               );
                             }
                             final activity = state.roles[index];
-                            return Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: AppColors.primary,
-                              ),
-                              margin: const EdgeInsets.symmetric(
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
                                 vertical: 4,
                                 horizontal: 16,
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(12),
-                                    child: Text(
-                                      activity.name,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.inversePrimary,
-                                      ),
-                                    ),
-                                  ),
-                                  CustomInkWell(
-                                    right: 16,
-                                    defaultColor: Colors.red,
-                                    onTap: () async {
-                                      final outerContext = context;
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return BasicDialog(
-                                            width: height,
-                                            height: height,
-                                            splashImage: AppImages.splashDelete,
-                                            mainTitle:
-                                                "Apakah anda yakin ingin menghapus ${activity.name}",
-                                            buttonTitle: "Hapus",
-                                            onPressed: () async {
-                                              var delete =
-                                                  await sl<DeleteRoleUsecase>()
-                                                      .call(
-                                                          params:
-                                                              activity.name);
-                                              return delete.fold(
-                                                (error) {
-                                                  var snackbar = const SnackBar(
-                                                    content: Text(
-                                                        "Gagal Menghapus tugas tambahan, Coba Lagi"),
-                                                  );
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(snackbar);
-                                                },
-                                                (r) {
-                                                  Navigator.pop(context);
-                                                  var snackbar = SnackBar(
-                                                    content: Text(
-                                                        "Data ${activity.name} Berhasil Dihapus"),
-                                                  );
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(snackbar);
-                                                  outerContext
-                                                      .read<GetRolesCubit>()
-                                                      .displayRoles();
-                                                },
-                                              );
-                                            },
-                                          );
+                              child: CustomInkWell(
+                                borderRadius: 16,
+                                defaultColor: AppColors.primary,
+                                onTap: () {
+                                  final outerContext = context;
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      final TextEditingController tugasOldC =
+                                          TextEditingController(
+                                              text: activity.name);
+                                      return InputDialog(
+                                        height: height,
+                                        controller: tugasOldC,
+                                        onTap: () {
+                                          outerContext
+                                              .read<ButtonStateCubit>()
+                                              .execute(
+                                                  usecase: UpdateRoleUsecase(),
+                                                  params: RoleEntity(
+                                                    oldName: activity.name,
+                                                    name: tugasOldC.text,
+                                                  ));
                                         },
+                                        title: 'Ubah tugas',
+                                        buttonTitle: "Ubah",
+                                        hintText: "Nama Tugas",
                                       );
                                     },
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(12),
-                                      child: Icon(
-                                        Icons.delete,
-                                        color: Colors.white,
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Text(
+                                        activity.name,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.inversePrimary,
+                                        ),
                                       ),
                                     ),
-                                  )
-                                ],
+                                    CustomInkWell(
+                                      right: 16,
+                                      defaultColor: Colors.red,
+                                      onTap: () async {
+                                        final outerContext = context;
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return BasicDialog(
+                                              width: height,
+                                              height: height,
+                                              splashImage:
+                                                  AppImages.splashDelete,
+                                              mainTitle:
+                                                  "Apakah anda yakin ingin menghapus ${activity.name}",
+                                              buttonTitle: "Hapus",
+                                              onPressed: () async {
+                                                var delete = await sl<
+                                                        DeleteRoleUsecase>()
+                                                    .call(
+                                                        params: activity.name);
+                                                return delete.fold(
+                                                  (error) {
+                                                    var snackbar =
+                                                        const SnackBar(
+                                                      content: Text(
+                                                          "Gagal Menghapus tugas tambahan, Coba Lagi"),
+                                                    );
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackbar);
+                                                  },
+                                                  (r) {
+                                                    Navigator.pop(context);
+                                                    var snackbar = SnackBar(
+                                                      content: Text(
+                                                          "Data ${activity.name} Berhasil Dihapus"),
+                                                    );
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackbar);
+                                                    outerContext
+                                                        .read<GetRolesCubit>()
+                                                        .displayRoles();
+                                                  },
+                                                );
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(12),
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             );
                           },

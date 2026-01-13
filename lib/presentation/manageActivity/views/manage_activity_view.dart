@@ -11,6 +11,8 @@ import '../../../common/bloc/button/button_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/dialog/input_dialog.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/schedule/activity.dart';
+import '../../../domain/usecases/schedule/update_activity_usecase.dart';
 import '../../../service_locator.dart';
 
 class ManageActivityView extends StatefulWidget {
@@ -134,33 +136,62 @@ class _ManageActivityViewState extends State<ManageActivityView> {
                               );
                             }
                             final activity = state.activities[index];
-                            return Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: AppColors.primary,
-                              ),
-                              margin: const EdgeInsets.symmetric(
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
                                 vertical: 4,
                                 horizontal: 16,
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(12),
-                                    child: Text(
-                                      activity.name,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.inversePrimary,
+                              child: CustomInkWell(
+                                borderRadius: 16,
+                                defaultColor: AppColors.primary,
+                                onTap: () {
+                                  final outerContext = context;
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      final TextEditingController kegiatanOldC =
+                                          TextEditingController(
+                                              text: activity.name);
+                                      return InputDialog(
+                                        height: height,
+                                        controller: kegiatanOldC,
+                                        onTap: () {
+                                          outerContext
+                                              .read<ButtonStateCubit>()
+                                              .execute(
+                                                usecase:
+                                                    UpdateActivityUsecase(),
+                                                params: ActivityEntity(
+                                                  oldName: activity.name,
+                                                  name: kegiatanOldC.text,
+                                                ),
+                                              );
+                                        },
+                                        title: 'Ubah kegiatan',
+                                        buttonTitle: "Ubah",
+                                        hintText: "Nama Kegiatan",
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 12),
+                                      child: Text(
+                                        activity.name,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.inversePrimary,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
+                                    CustomInkWell(
+                                      right: 16,
+                                      defaultColor: Colors.red,
                                       onTap: () async {
                                         var delete =
                                             await sl<DeleteActivityUsecase>()
@@ -187,27 +218,16 @@ class _ManageActivityViewState extends State<ManageActivityView> {
                                           },
                                         );
                                       },
-                                      borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(16),
-                                        bottomRight: Radius.circular(16),
-                                      ),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(12),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(16),
-                                            bottomRight: Radius.circular(16),
-                                          ),
-                                        ),
-                                        child: const Icon(
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(12),
+                                        child: Icon(
                                           Icons.delete,
                                           color: Colors.white,
                                         ),
                                       ),
-                                    ),
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                             );
                           },
