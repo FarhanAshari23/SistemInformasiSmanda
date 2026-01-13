@@ -65,7 +65,7 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
         highlightColor: Colors.grey.shade100,
         child: Container(
           width: width * 0.285,
-          height: height * 0.135,
+          height: height * 0.15,
           color: Colors.grey,
         ),
       );
@@ -74,14 +74,14 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
         imageUrl: imageUrl,
         fallbackAsset: fallbackAsset,
         width: width * 0.285,
-        height: height * 0.135,
+        height: height * 0.15,
         forceRefresh: false,
       );
     } else {
       imageWidget = Image.asset(
         fallbackAsset,
         width: width * 0.285,
-        height: height * 0.135,
+        height: height * 0.15,
         fit: BoxFit.cover,
       );
     }
@@ -98,10 +98,11 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
-                    borderRadius: const BorderRadius.horizontal(
-                      left: Radius.circular(12),
-                    ),
-                    child: imageWidget),
+                  borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(12),
+                  ),
+                  child: imageWidget,
+                ),
                 SizedBox(width: width * 0.05),
                 Expanded(
                   child: Padding(
