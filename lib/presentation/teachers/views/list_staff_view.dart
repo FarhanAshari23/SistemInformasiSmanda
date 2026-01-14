@@ -29,7 +29,7 @@ class ListStaffView extends StatelessWidget {
                   color: AppColors.primary,
                 ),
               ),
-              SizedBox(height: height * 0.03),
+              const SizedBox(height: 12),
               BlocBuilder<GetTendikCubit, TeacherState>(
                 builder: (context, state) {
                   if (state is TeacherLoading) {
@@ -42,7 +42,8 @@ class ListStaffView extends StatelessWidget {
                       child: GridView.builder(
                         itemCount: state.teacher.length,
                         scrollDirection: Axis.vertical,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 12.0,

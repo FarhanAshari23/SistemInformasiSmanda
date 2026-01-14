@@ -38,8 +38,6 @@ class _CardScheduleState extends State<CardSchedule> {
   void initState() {
     super.initState();
     DividedRangeTime range = DividedRangeTime.fromString(widget.schedule.jam);
-    _pelaksanaC.text = widget.schedule.pelaksana;
-    _kegiatanC.text = widget.schedule.kegiatan;
     _durasiMulaiC.text = range.start;
     _durasiSelesaiC.text = range.end;
   }
@@ -93,7 +91,6 @@ class _CardScheduleState extends State<CardSchedule> {
                             enableFilter: true,
                             requestFocusOnTap: false,
                             focusNode: pelaksanaFocus,
-                            initialSelection: _pelaksanaC.text,
                             inputDecorationTheme: const InputDecorationTheme(
                               fillColor: AppColors.tertiary,
                               filled: true,
@@ -167,7 +164,6 @@ class _CardScheduleState extends State<CardSchedule> {
 
                           return DropdownMenu<String>(
                             width: width * 0.92,
-                            initialSelection: _kegiatanC.text,
                             inputDecorationTheme: const InputDecorationTheme(
                               fillColor: AppColors.tertiary,
                               filled: true,
