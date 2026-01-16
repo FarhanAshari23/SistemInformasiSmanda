@@ -70,15 +70,18 @@ class CardEditTeacher extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: width * 0.4,
-                        height: bodyHeight * 0.04,
-                        child: Text(
-                          teacher.nip,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
+                      Visibility(
+                        visible: teacher.nip != '-',
+                        child: SizedBox(
+                          width: width * 0.4,
+                          height: bodyHeight * 0.04,
+                          child: Text(
+                            teacher.nip,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
                           ),
                         ),
                       )

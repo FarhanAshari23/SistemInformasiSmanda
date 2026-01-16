@@ -104,6 +104,9 @@ class AckAddTeacherView extends StatelessWidget {
                           content: contentList[index],
                           image: teacherCreationReq.image,
                         );
+                      }
+                      if (contentList[index].isEmpty) {
+                        return const SizedBox();
                       } else {
                         return CardAck(
                           title: titleList[index],

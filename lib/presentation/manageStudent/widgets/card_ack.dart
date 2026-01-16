@@ -71,6 +71,7 @@ class CardAck extends StatelessWidget {
               child: Center(
                 child: Text(
                   title,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     color: AppColors.inversePrimary,

@@ -100,7 +100,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
               ),
               SizedBox(height: height * 0.04),
               const Text(
-                'Masukan informasi yang sesuai pada kolom berikut:',
+                'Masukan informasi yang sesuai pada kolom berikut:\n(Kosongkan email jika tidak ingin membuat akun)',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
@@ -137,7 +137,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                         const SnackBar(
                           backgroundColor: Colors.red,
                           content: Text(
-                            'Tolong isi semua kolom yang sudah disediakan',
+                            'Tolong isi minimal kolom nama dan tanggal lahir',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -154,7 +154,8 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                         AckAddTeacherView(
                           teacherCreationReq: TeacherEntity(
                             nama: _namaC.text,
-                            email: _emailC.text,
+                            email:
+                                _emailC.text.isNotEmpty ? _emailC.text : null,
                             password: password,
                             mengajar:
                                 _mengajarC.text.isEmpty ? '-' : _mengajarC.text,

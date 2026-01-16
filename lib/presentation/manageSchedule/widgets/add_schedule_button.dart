@@ -58,6 +58,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   BlocBuilder<TeacherCubit, TeacherState>(
                     builder: (context, state) {
@@ -363,10 +364,46 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
             ],
           );
         }
-        return TextButton.icon(
-          onPressed: () => cubitAddSchedule.toggleAdding(widget.day),
-          icon: const Icon(Icons.add),
-          label: const Text("Tambah aktivitas"),
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+              children: List.generate(
+            3,
+            (index) {
+              return TextButton.icon(
+                onPressed: () {
+                  switch (index) {
+                    case 0:
+                      cubitAddSchedule.toggleAdding(widget.day);
+                    case 1:
+                      cubitCreateSchedule.addActivity(
+                        widget.day,
+                        "Seluruh Siswa",
+                        "Istirahat",
+                        '10:15 - 10:30',
+                      );
+                    case 2:
+                      cubitCreateSchedule.addActivity(
+                        widget.day,
+                        "Seluruh Siswa",
+                        "Ishoma",
+                        '12:00 - 12:30',
+                      );
+                      break;
+                    default:
+                  }
+                },
+                icon: const Icon(Icons.add),
+                label: Text(
+                  index == 0
+                      ? "Tambah Aktivitas"
+                      : index == 1
+                          ? "Tambah Istirahat"
+                          : "Tambah Ishoma",
+                ),
+              );
+            },
+          )),
         );
       },
     );

@@ -55,10 +55,8 @@ class CreateScheduleCubit extends Cubit<CreateScheduleState> {
   ) {
     final updated = Map<String, List<DayEntity>>.from(state.schedules);
     final schedules = List<DayEntity>.from(updated[day]!);
-    schedules[index] = DayEntity(
-        jam: durasi,
-        kegiatan: kegiatan,
-        pelaksana: pelaksana); // ganti dengan nama baru
+    schedules[index] =
+        DayEntity(jam: durasi, kegiatan: kegiatan, pelaksana: pelaksana);
     updated[day] = schedules;
     emit(state.copyWith(schedules: updated));
   }

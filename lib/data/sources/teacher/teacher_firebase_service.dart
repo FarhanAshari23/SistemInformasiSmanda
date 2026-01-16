@@ -82,6 +82,8 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   @override
   Future<Either> createTeacher(TeacherEntity teacherCreationReq) async {
     String endpoint = ExecuteCRUD.uploadImageTeacher();
+    final firestore = FirebaseFirestore.instance;
+    String docId;
     try {
       if (teacherCreationReq.image != null) {
         Uri? url;
@@ -128,34 +130,38 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
           throw Exception("Response server bukan JSON valid: $responseBody");
         }
       }
-      final FirebaseApp secondaryApp = await Firebase.initializeApp(
-        name: 'SecondaryApp',
-        options: Firebase.app().options,
-      );
-
-      final FirebaseAuth secondaryAuth =
-          FirebaseAuth.instanceFor(app: secondaryApp);
-
-      final userCredential = await secondaryAuth.createUserWithEmailAndPassword(
-        email: teacherCreationReq.email ?? '',
-        password: teacherCreationReq.password ?? '',
-      );
-
-      final newUid = userCredential.user?.uid;
 
       final keywords = generateKeywords(teacherCreationReq.nama);
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-      await firebaseFirestore.collection("Teachers").doc(newUid).set({
+
+      if (teacherCreationReq.email != null) {
+        final secondaryApp = await Firebase.initializeApp(
+          name: 'SecondaryApp',
+          options: Firebase.app().options,
+        );
+
+        final secondaryAuth = FirebaseAuth.instanceFor(app: secondaryApp);
+
+        final userCredential =
+            await secondaryAuth.createUserWithEmailAndPassword(
+          email: teacherCreationReq.email!,
+          password: teacherCreationReq.password!,
+        );
+
+        docId = userCredential.user!.uid;
+      } else {
+        docId = firestore.collection("Teachers").doc().id;
+      }
+
+      await firestore.collection("Teachers").doc(docId).set({
         "nama": teacherCreationReq.nama,
         "NIP": teacherCreationReq.nip,
-        "email": teacherCreationReq.email,
         "mengajar": teacherCreationReq.mengajar,
         "tanggal_lahir": teacherCreationReq.tanggalLahir,
         "wali_kelas": teacherCreationReq.waliKelas,
         "jabatan_tambahan": teacherCreationReq.jabatan,
         "gender": teacherCreationReq.gender,
         "keywords": keywords,
-        "uid": newUid,
+        "uid": docId,
       });
 
       return const Right("Upload Teacher was succesfull");

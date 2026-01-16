@@ -19,14 +19,10 @@ class CardJadwal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Container(
-      width: double.infinity,
-      height: height * 0.15,
       padding: const EdgeInsets.symmetric(
         horizontal: 12,
-        vertical: 16,
+        vertical: 8,
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -37,80 +33,89 @@ class CardJadwal extends StatelessWidget {
         ),
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(width: isTeacher ? 8 : 0),
-              Container(
-                padding: const EdgeInsets.all(24),
-                margin: const EdgeInsets.only(right: 4),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.secondary,
-                ),
-                child: Center(
-                  child: Text(
-                    urutan.toString(),
-                    style: const TextStyle(
-                      color: AppColors.inversePrimary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(width: isTeacher ? 8 : 0),
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  margin: const EdgeInsets.only(right: 4),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.secondary,
+                  ),
+                  child: Center(
+                    child: Text(
+                      urutan.toString(),
+                      style: const TextStyle(
+                        color: AppColors.inversePrimary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(width: isTeacher ? 16 : 0),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          isTeacher
-                              ? Icons.watch_later_rounded
-                              : Icons.person_3,
-                          color: AppColors.primary,
-                          size: 20,
-                        ),
-                        SizedBox(width: width * 0.01),
-                        Text(
-                          pelaksana,
-                          style: const TextStyle(
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            isTeacher
+                                ? Icons.watch_later_rounded
+                                : Icons.person_3,
                             color: AppColors.primary,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w900,
+                            size: 20,
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_today,
-                          color: AppColors.primary,
-                          size: 20,
-                        ),
-                        SizedBox(width: width * 0.01),
-                        Text(
-                          kegiatan,
-                          style: const TextStyle(
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              pelaksana,
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w900,
+                              ),
+                              softWrap: true,
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.calendar_today,
                             color: AppColors.primary,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w900,
+                            size: 20,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              kegiatan,
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w900,
+                              ),
+                              softWrap: true,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Center(
             child: Padding(
