@@ -19,6 +19,7 @@ import '../bloc/create_schedule_cubit.dart';
 import '../bloc/create_schedule_state.dart';
 import '../../../common/bloc/activities/get_activities_cubit.dart';
 import '../bloc/edit_schedule_cubit.dart';
+import '../bloc/edit_schedule_state.dart';
 import '../widgets/add_schedule_button.dart';
 import '../widgets/card_schedule.dart';
 
@@ -169,49 +170,60 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                     }
                     return BlocBuilder<CreateScheduleCubit,
                         CreateScheduleState>(
-                      builder: (context, state) {
-                        return Expanded(
-                          child: ListView(
-                            children: state.schedules.keys.map((day) {
-                              return Card(
-                                margin: const EdgeInsets.all(8),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        day,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.primary,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Column(
+                      builder: (context, createState) {
+                        return BlocBuilder<EditScheduleCubit,
+                            EditScheduleState>(
+                          builder: (context, editState) {
+                            return Expanded(
+                              child: ListView(
+                                physics: editState.isAnyPickerVisible
+                                    ? const NeverScrollableScrollPhysics()
+                                    : const BouncingScrollPhysics(),
+                                children: createState.schedules.keys.map((day) {
+                                  return Card(
+                                    margin: const EdgeInsets.all(8),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          for (int i = 0;
-                                              i < state.schedules[day]!.length;
-                                              i++)
-                                            CardSchedule(
-                                              day: day,
-                                              index: i,
-                                              schedule:
-                                                  state.schedules[day]![i],
+                                          Text(
+                                            day,
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.primary,
                                             ),
-                                          AddScheduleButton(
-                                            day: day,
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Column(
+                                            children: [
+                                              for (int i = 0;
+                                                  i <
+                                                      createState
+                                                          .schedules[day]!
+                                                          .length;
+                                                  i++)
+                                                CardSchedule(
+                                                  day: day,
+                                                  index: i,
+                                                  schedule: createState
+                                                      .schedules[day]![i],
+                                                ),
+                                              AddScheduleButton(
+                                                day: day,
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            );
+                          },
                         );
                       },
                     );

@@ -43,6 +43,19 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
     final cubitAddSchedule = context.read<AddScheduleCubit>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    List<String> hintButton = [
+      "Tambah Aktivitas",
+      "Tambah Upacara",
+      "Tambah Istirahat (Senin)",
+      "Tambah Istirahat",
+      "Tambah Ishoma (Senin)",
+      "Tambah Ishoma",
+      "Tambah Ishoma (Jumat)",
+      "Tambah Ishoma (Jumat Religi)",
+      "Tambah Jumat Religi",
+      "Tambah Jumat Literasi/Bersih",
+      "Tambah Guru Belajar",
+    ];
 
     return BlocBuilder<AddScheduleCubit, AddScheduleState>(
       builder: (context, state) {
@@ -83,7 +96,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                             hintStyle: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w300,
-                              color: Colors.black, // <-- warna hint
+                              color: Colors.black,
                             ),
                           ),
                           menuHeight: 200,
@@ -368,7 +381,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
           scrollDirection: Axis.horizontal,
           child: Row(
               children: List.generate(
-            3,
+            11,
             (index) {
               return TextButton.icon(
                 onPressed: () {
@@ -379,15 +392,71 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                       cubitCreateSchedule.addActivity(
                         widget.day,
                         "Seluruh Siswa",
-                        "Istirahat",
-                        '10:15 - 10:30',
+                        "Upacara Bendera",
+                        '07:15 - 08:15',
                       );
                     case 2:
                       cubitCreateSchedule.addActivity(
                         widget.day,
                         "Seluruh Siswa",
+                        "Istirahat",
+                        '09:45 - 10:15',
+                      );
+                    case 3:
+                      cubitCreateSchedule.addActivity(
+                        widget.day,
+                        "Seluruh Siswa",
+                        "Istirahat",
+                        '10:15 - 10:30',
+                      );
+                    case 4:
+                      cubitCreateSchedule.addActivity(
+                        widget.day,
+                        "Seluruh Siswa",
                         "Ishoma",
-                        '12:00 - 12:30',
+                        '11:45 - 12:40',
+                      );
+                    case 5:
+                      cubitCreateSchedule.addActivity(
+                        widget.day,
+                        "Seluruh Siswa",
+                        "Ishoma",
+                        '12:00 - 12:40',
+                      );
+                    case 6:
+                      cubitCreateSchedule.addActivity(
+                        widget.day,
+                        "Seluruh Siswa",
+                        "Ishoma",
+                        '11:45 - 13:00',
+                      );
+                    case 7:
+                      cubitCreateSchedule.addActivity(
+                        widget.day,
+                        "Seluruh Siswa",
+                        "Ishoma",
+                        '11:45 - 12:45',
+                      );
+                    case 8:
+                      cubitCreateSchedule.addActivity(
+                        widget.day,
+                        "Seluruh Siswa",
+                        "Jumat Religi",
+                        '07:15 - 08:00',
+                      );
+                    case 9:
+                      cubitCreateSchedule.addActivity(
+                        widget.day,
+                        "Seluruh Siswa",
+                        "Jumat Literasi/Bersih",
+                        '14:30 - 15:00',
+                      );
+                    case 10:
+                      cubitCreateSchedule.addActivity(
+                        widget.day,
+                        "Seluruh Siswa",
+                        "Guru Belajar",
+                        '15:00 - 15:30',
                       );
                       break;
                     default:
@@ -395,11 +464,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                 },
                 icon: const Icon(Icons.add),
                 label: Text(
-                  index == 0
-                      ? "Tambah Aktivitas"
-                      : index == 1
-                          ? "Tambah Istirahat"
-                          : "Tambah Ishoma",
+                  hintButton[index],
                 ),
               );
             },

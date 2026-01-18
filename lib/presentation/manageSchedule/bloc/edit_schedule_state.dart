@@ -16,4 +16,15 @@ class EditScheduleState {
   CardScheduleState getCardState(int index, String day) {
     return cardStates[day]?[index] ?? const CardScheduleState();
   }
+
+  bool get isAnyPickerVisible {
+    for (final dayMap in cardStates.values) {
+      for (final card in dayMap.values) {
+        if (card.isPickerVisible) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }
