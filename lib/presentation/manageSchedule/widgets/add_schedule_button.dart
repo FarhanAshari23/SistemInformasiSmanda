@@ -460,13 +460,6 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                         "Jumat Literasi/Bersih",
                         '14:30 - 15:00',
                       );
-                    case 10:
-                      cubitCreateSchedule.addActivity(
-                        widget.day,
-                        "Seluruh Siswa",
-                        "Guru Belajar",
-                        '15:00 - 15:30',
-                      );
                       break;
                     default:
                   }
