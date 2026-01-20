@@ -8,6 +8,7 @@ import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/bloc/teacher/teacher_state.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../bloc/add_schedule_state.dart';
+import '../bloc/schedule_picker_cubit.dart';
 import 'duration_picker.dart';
 
 class AddScheduleButton extends StatefulWidget {
@@ -236,6 +237,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                             setState(() {
                               statePicker = 'start';
                             });
+                            context.read<PickerCubit>().show();
                             cubitAddSchedule.showPicker(widget.day);
                           },
                         ),
@@ -266,6 +268,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                             setState(() {
                               statePicker = 'end';
                             });
+                            context.read<PickerCubit>().show();
                             cubitAddSchedule.showPicker(widget.day);
                           },
                         ),
@@ -369,9 +372,15 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                           _durasiSelesaiC.text = formattedTime;
                         }
                       }
+                      context.read<PickerCubit>().hide();
+
                       cubitAddSchedule.hidePicker(widget.day);
                     },
-                    batal: () => cubitAddSchedule.hidePicker(widget.day),
+                    batal: () {
+                      context.read<PickerCubit>().hide();
+
+                      cubitAddSchedule.hidePicker(widget.day);
+                    },
                   ),
                 ),
             ],

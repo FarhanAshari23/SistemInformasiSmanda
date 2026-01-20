@@ -19,7 +19,7 @@ import '../bloc/create_schedule_cubit.dart';
 import '../bloc/create_schedule_state.dart';
 import '../../../common/bloc/activities/get_activities_cubit.dart';
 import '../bloc/edit_schedule_cubit.dart';
-import '../bloc/edit_schedule_state.dart';
+import '../bloc/schedule_picker_cubit.dart';
 import '../widgets/add_schedule_button.dart';
 import '../widgets/card_schedule.dart';
 
@@ -76,6 +76,9 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
         ),
         BlocProvider(
           create: (context) => AddScheduleCubit(),
+        ),
+        BlocProvider(
+          create: (context) => PickerCubit(),
         ),
       ],
       child: BlocListener<ButtonStateCubit, ButtonState>(
@@ -171,12 +174,11 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                     return BlocBuilder<CreateScheduleCubit,
                         CreateScheduleState>(
                       builder: (context, createState) {
-                        return BlocBuilder<EditScheduleCubit,
-                            EditScheduleState>(
-                          builder: (context, editState) {
+                        return BlocBuilder<PickerCubit, String>(
+                          builder: (context, pickerState) {
                             return Expanded(
                               child: ListView(
-                                physics: editState.isAnyPickerVisible
+                                physics: pickerState == "show"
                                     ? const NeverScrollableScrollPhysics()
                                     : const BouncingScrollPhysics(),
                                 children: createState.schedules.keys.map((day) {

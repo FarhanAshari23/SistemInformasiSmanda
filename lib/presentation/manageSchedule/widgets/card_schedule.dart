@@ -10,6 +10,7 @@ import '../../../domain/entities/schedule/day.dart';
 import '../bloc/create_schedule_cubit.dart';
 import '../bloc/edit_schedule_cubit.dart';
 import '../bloc/edit_schedule_state.dart';
+import '../bloc/schedule_picker_cubit.dart';
 import 'duration_picker.dart';
 
 class CardSchedule extends StatefulWidget {
@@ -231,6 +232,7 @@ class _CardScheduleState extends State<CardSchedule> {
                               setState(() {
                                 statePicker = 'start';
                               });
+                              context.read<PickerCubit>().show();
                               cubitEditSchedule.showPicker(
                                   widget.index, widget.day);
                             },
@@ -262,6 +264,7 @@ class _CardScheduleState extends State<CardSchedule> {
                               setState(() {
                                 statePicker = 'end';
                               });
+                              context.read<PickerCubit>().show();
                               cubitEditSchedule.showPicker(
                                   widget.index, widget.day);
                             },
@@ -391,10 +394,13 @@ class _CardScheduleState extends State<CardSchedule> {
                           _durasiSelesaiC.text = formattedTime;
                         }
                       }
+                      context.read<PickerCubit>().hide();
                       cubitEditSchedule.hidePicker(widget.index, widget.day);
                     },
-                    batal: () =>
-                        cubitEditSchedule.hidePicker(widget.index, widget.day),
+                    batal: () {
+                      context.read<PickerCubit>().hide();
+                      cubitEditSchedule.hidePicker(widget.index, widget.day);
+                    },
                   ),
                 ),
             ],

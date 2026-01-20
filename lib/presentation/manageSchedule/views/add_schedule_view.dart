@@ -8,6 +8,7 @@ import 'package:new_sistem_informasi_smanda/domain/entities/kelas/kelas.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/schedule/schedule.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_state.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/activities/get_activities_cubit.dart';
+import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/schedule_picker_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/add_schedule_button.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/card_schedule.dart';
 
@@ -21,7 +22,6 @@ import '../bloc/add_schedule_cubit.dart';
 import '../bloc/class_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
 import '../bloc/edit_schedule_cubit.dart';
-import '../bloc/edit_schedule_state.dart';
 
 class AddScheduleView extends StatefulWidget {
   const AddScheduleView({super.key});
@@ -63,6 +63,9 @@ class _AddScheduleViewState extends State<AddScheduleView> {
         ),
         BlocProvider(
           create: (context) => EditScheduleCubit(),
+        ),
+        BlocProvider(
+          create: (context) => PickerCubit(),
         ),
       ],
       child: BlocListener<ButtonStateCubit, ButtonState>(
@@ -170,12 +173,11 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                     return BlocBuilder<CreateScheduleCubit,
                         CreateScheduleState>(
                       builder: (context, createState) {
-                        return BlocBuilder<EditScheduleCubit,
-                            EditScheduleState>(
-                          builder: (context, editState) {
+                        return BlocBuilder<PickerCubit, String>(
+                          builder: (context, pickerState) {
                             return Expanded(
                               child: ListView(
-                                physics: editState.isAnyPickerVisible
+                                physics: pickerState == "show"
                                     ? const NeverScrollableScrollPhysics()
                                     : const BouncingScrollPhysics(),
                                 children: createState.schedules.keys.map((day) {
