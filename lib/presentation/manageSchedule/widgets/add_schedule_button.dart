@@ -55,7 +55,6 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
       "Tambah Ishoma (Jumat Religi)",
       "Tambah Jumat Religi",
       "Tambah Jumat Literasi/Bersih",
-      "Tambah Guru Belajar",
     ];
 
     return BlocBuilder<AddScheduleCubit, AddScheduleState>(
@@ -390,7 +389,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
           scrollDirection: Axis.horizontal,
           child: Row(
               children: List.generate(
-            11,
+            10,
             (index) {
               return TextButton.icon(
                 onPressed: () {

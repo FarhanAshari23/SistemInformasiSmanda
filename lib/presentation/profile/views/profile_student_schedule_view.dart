@@ -75,7 +75,7 @@ class ProfileStudentScheduleView extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 8),
                                   const Text(
-                                    Notes.noteFriday,
+                                    Notes.noteFridayStudents,
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
