@@ -10,6 +10,7 @@ import '../../../common/bloc/button/button_state.dart';
 import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
+import '../../../common/widget/dialog/confirmation_dialog.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/schedule/schedule.dart';
@@ -104,167 +105,180 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
             });
           }
         },
-        child: Scaffold(
-          body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const BasicAppbar(
-                  isBackViewed: true,
-                  isProfileViewed: false,
-                ),
-                const SizedBox(height: 8),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    'Masukan informasi yang sesuai pada kolom berikut:',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                      color: AppColors.primary,
-                    ),
-                    textAlign: TextAlign.center,
+        child: PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (didPop) return;
+            final bool shouldPop =
+                await ConfirmationDialog.showBackDialog(context) ?? false;
+
+            if (shouldPop && context.mounted) {
+              Navigator.of(context).pop();
+            }
+          },
+          child: Scaffold(
+            body: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const BasicAppbar(
+                    isBackViewed: true,
+                    isProfileViewed: false,
                   ),
-                ),
-                const SizedBox(height: 16),
-                BlocBuilder<ClassFieldCubit, String>(
-                  builder: (context, state) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: TextField(
-                        controller: _kelasC,
-                        autocorrect: false,
-                        onChanged: (value) {
-                          context.read<ClassFieldCubit>().updateText(value);
-                        },
-                        decoration: const InputDecoration(
-                          hintText: "Nama Kelas:",
-                        ),
+                  const SizedBox(height: 8),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      'Masukan informasi yang sesuai pada kolom berikut:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: AppColors.primary,
                       ),
-                    );
-                  },
-                ),
-                BlocBuilder<ClassFieldCubit, String>(
-                  builder: (context, state) {
-                    if (state.isEmpty) {
-                      return Expanded(
-                        child: ListView(
-                          padding: const EdgeInsets.all(16),
-                          children: [
-                            const SizedBox(height: 24),
-                            Image.asset(
-                              AppImages.emptyRegistrationChara,
-                              width: 200,
-                              height: 200,
-                            ),
-                            const SizedBox(height: 16),
-                            const Text(
-                              'Data nama kelas masih kosong harap isi terlebih dahulu',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                          ],
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  BlocBuilder<ClassFieldCubit, String>(
+                    builder: (context, state) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: TextField(
+                          controller: _kelasC,
+                          autocorrect: false,
+                          onChanged: (value) {
+                            context.read<ClassFieldCubit>().updateText(value);
+                          },
+                          decoration: const InputDecoration(
+                            hintText: "Nama Kelas:",
+                          ),
                         ),
                       );
-                    }
-                    return BlocBuilder<CreateScheduleCubit,
-                        CreateScheduleState>(
-                      builder: (context, createState) {
-                        return BlocBuilder<PickerCubit, String>(
-                          builder: (context, pickerState) {
-                            return Expanded(
-                              child: ListView(
-                                physics: pickerState == "show"
-                                    ? const NeverScrollableScrollPhysics()
-                                    : const BouncingScrollPhysics(),
-                                children: createState.schedules.keys.map((day) {
-                                  return Card(
-                                    margin: const EdgeInsets.all(8),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            day,
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.primary,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Column(
-                                            children: [
-                                              for (int i = 0;
-                                                  i <
-                                                      createState
-                                                          .schedules[day]!
-                                                          .length;
-                                                  i++)
-                                                CardSchedule(
-                                                  day: day,
-                                                  index: i,
-                                                  schedule: createState
-                                                      .schedules[day]![i],
-                                                ),
-                                              AddScheduleButton(
-                                                day: day,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
+                    },
+                  ),
+                  BlocBuilder<ClassFieldCubit, String>(
+                    builder: (context, state) {
+                      if (state.isEmpty) {
+                        return Expanded(
+                          child: ListView(
+                            padding: const EdgeInsets.all(16),
+                            children: [
+                              const SizedBox(height: 24),
+                              Image.asset(
+                                AppImages.emptyRegistrationChara,
+                                width: 200,
+                                height: 200,
                               ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
-                Builder(builder: (context) {
-                  final cubit = context.read<CreateScheduleCubit>();
-                  return BasicButton(
-                    onPressed: () async {
-                      final allEmpty = cubit.state.schedules.values.every(
-                        (list) => list.isEmpty,
-                      );
-                      if (allEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            backgroundColor: Colors.red,
-                            content: Text(
-                              'Tolong isi semua card jadwal yang sudah tersedia',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                              const SizedBox(height: 16),
+                              const Text(
+                                'Data nama kelas masih kosong harap isi terlebih dahulu',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.primary,
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         );
-                      } else {
-                        context.read<ButtonStateCubit>().execute(
-                              usecase: UpdateScheduleUsecase(),
-                              params: ScheduleEntity(
-                                oldNamaKelas: widget.kelas,
-                                kelas: _kelasC.text,
-                                hari: cubit.state.schedules,
-                              ),
-                            );
                       }
+                      return BlocBuilder<CreateScheduleCubit,
+                          CreateScheduleState>(
+                        builder: (context, createState) {
+                          return BlocBuilder<PickerCubit, String>(
+                            builder: (context, pickerState) {
+                              return Expanded(
+                                child: ListView(
+                                  physics: pickerState == "show"
+                                      ? const NeverScrollableScrollPhysics()
+                                      : const BouncingScrollPhysics(),
+                                  children:
+                                      createState.schedules.keys.map((day) {
+                                    return Card(
+                                      margin: const EdgeInsets.all(8),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              day,
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: AppColors.primary,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Column(
+                                              children: [
+                                                for (int i = 0;
+                                                    i <
+                                                        createState
+                                                            .schedules[day]!
+                                                            .length;
+                                                    i++)
+                                                  CardSchedule(
+                                                    day: day,
+                                                    index: i,
+                                                    schedule: createState
+                                                        .schedules[day]![i],
+                                                  ),
+                                                AddScheduleButton(
+                                                  day: day,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      );
                     },
-                    title: 'Ubah Jadwal',
-                  );
-                }),
-              ],
+                  ),
+                  Builder(builder: (context) {
+                    final cubit = context.read<CreateScheduleCubit>();
+                    return BasicButton(
+                      onPressed: () async {
+                        final allEmpty = cubit.state.schedules.values.every(
+                          (list) => list.isEmpty,
+                        );
+                        if (allEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                'Tolong isi semua card jadwal yang sudah tersedia',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          context.read<ButtonStateCubit>().execute(
+                                usecase: UpdateScheduleUsecase(),
+                                params: ScheduleEntity(
+                                  oldNamaKelas: widget.kelas,
+                                  kelas: _kelasC.text,
+                                  hari: cubit.state.schedules,
+                                ),
+                              );
+                        }
+                      },
+                      title: 'Ubah Jadwal',
+                    );
+                  }),
+                ],
+              ),
             ),
           ),
         ),
