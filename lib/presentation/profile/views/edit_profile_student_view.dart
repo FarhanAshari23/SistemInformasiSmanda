@@ -491,6 +491,7 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                                     .read<GenderSelectionCubit>()
                                     .selectedIndex,
                                 imageFile: imageProfile,
+                                oldNisn: widget.user?.nisn ?? '',
                               ),
                             );
                       }

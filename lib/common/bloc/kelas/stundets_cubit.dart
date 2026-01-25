@@ -16,7 +16,7 @@ class StudentsDisplayCubit extends Cubit<StudentsDisplayState> {
     );
     returnedData.fold(
       (error) {
-        emit(StudentsDisplayFailure());
+        emit(StudentsDisplayFailure(errorMessage: error.toString()));
       },
       (data) {
         emit(StudentsDisplayLoaded(students: data));
@@ -29,7 +29,7 @@ class StudentsDisplayCubit extends Cubit<StudentsDisplayState> {
     var returnedData = await GetStudentsWithKelas().call(params: params);
     returnedData.fold(
       (error) {
-        emit(StudentsDisplayFailure());
+        emit(StudentsDisplayFailure(errorMessage: error.toString()));
       },
       (data) {
         emit(StudentsDisplayLoaded(students: data));

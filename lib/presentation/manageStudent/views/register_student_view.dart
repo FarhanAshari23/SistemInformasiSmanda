@@ -128,6 +128,10 @@ class RegisterStudentView extends StatelessWidget {
                                 .displayStudentRegistration();
                           },
                           child: ListView.separated(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
                             itemBuilder: (context, index) {
                               if (index == 0) {
                                 return Align(
@@ -207,31 +211,23 @@ class RegisterStudentView extends StatelessWidget {
                               } else {
                                 final dataIndex = index - 1;
                                 final students = state.students[dataIndex];
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  child: CustomInkWell(
-                                    borderRadius: 16,
-                                    defaultColor: AppColors.secondary,
-                                    onTap: () => AppNavigator.push(
-                                      context,
-                                      RegisterAccountDetailView(
-                                        user: students,
-                                      ),
+                                return CustomInkWell(
+                                  borderRadius: 16,
+                                  defaultColor: AppColors.secondary,
+                                  onTap: () => AppNavigator.push(
+                                    context,
+                                    RegisterAccountDetailView(
+                                      user: students,
                                     ),
-                                    child: Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 8),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 16,
-                                      ),
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
@@ -255,78 +251,78 @@ class RegisterStudentView extends StatelessWidget {
                                               ),
                                             ],
                                           ),
-                                          Row(
-                                            children: [
-                                              CustomInkWell(
-                                                borderRadius: 999,
-                                                defaultColor: AppColors.primary,
-                                                onTap: () {
-                                                  context
-                                                      .read<ButtonStateCubit>()
-                                                      .execute(
-                                                        usecase:
-                                                            UpdateStudentRegisterUsecase(),
-                                                        params: students,
-                                                      );
-                                                },
-                                                child: const SizedBox(
-                                                  width: 32,
-                                                  height: 32,
-                                                  child: Icon(
-                                                    Icons.check,
-                                                    color: Colors.white,
-                                                  ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            CustomInkWell(
+                                              borderRadius: 999,
+                                              defaultColor: AppColors.primary,
+                                              onTap: () {
+                                                context
+                                                    .read<ButtonStateCubit>()
+                                                    .execute(
+                                                      usecase:
+                                                          UpdateStudentRegisterUsecase(),
+                                                      params: students,
+                                                    );
+                                              },
+                                              child: const SizedBox(
+                                                width: 32,
+                                                height: 32,
+                                                child: Icon(
+                                                  Icons.check,
+                                                  color: Colors.white,
                                                 ),
                                               ),
-                                              const SizedBox(width: 16),
-                                              CustomInkWell(
-                                                borderRadius: 999,
-                                                defaultColor: Colors.red,
-                                                onTap: () async {
-                                                  var result = await sl<
-                                                          DeleteStudentUsecase>()
-                                                      .call(params: students);
-                                                  result.fold(
-                                                    (error) {
-                                                      var snackbar = SnackBar(
-                                                        content: Text(
-                                                            "Gagal Mengubah Data: $error"),
-                                                      );
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              snackbar);
-                                                    },
-                                                    (r) {
-                                                      context
-                                                          .read<
-                                                              GetStudentRegistrationCubit>()
-                                                          .displayStudentRegistration();
-                                                      var snackbar =
-                                                          const SnackBar(
-                                                        content: Text(
-                                                            "Akun berhasil dihapus"),
-                                                      );
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              snackbar);
-                                                    },
-                                                  );
-                                                },
-                                                child: const SizedBox(
-                                                  width: 32,
-                                                  height: 32,
-                                                  child: Icon(
-                                                    Icons.delete,
-                                                    color: Colors.white,
-                                                  ),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            CustomInkWell(
+                                              borderRadius: 999,
+                                              defaultColor: Colors.red,
+                                              onTap: () async {
+                                                var result = await sl<
+                                                        DeleteStudentUsecase>()
+                                                    .call(params: students);
+                                                result.fold(
+                                                  (error) {
+                                                    var snackbar = SnackBar(
+                                                      content: Text(
+                                                          "Gagal Mengubah Data: $error"),
+                                                    );
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackbar);
+                                                  },
+                                                  (r) {
+                                                    context
+                                                        .read<
+                                                            GetStudentRegistrationCubit>()
+                                                        .displayStudentRegistration();
+                                                    var snackbar =
+                                                        const SnackBar(
+                                                      content: Text(
+                                                          "Akun berhasil dihapus"),
+                                                    );
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackbar);
+                                                  },
+                                                );
+                                              },
+                                              child: const SizedBox(
+                                                width: 32,
+                                                height: 32,
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  color: Colors.white,
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 );

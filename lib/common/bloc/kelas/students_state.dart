@@ -11,4 +11,8 @@ class StudentsDisplayLoaded extends StudentsDisplayState {
   StudentsDisplayLoaded({required this.students});
 }
 
-class StudentsDisplayFailure extends StudentsDisplayState {}
+class StudentsDisplayFailure extends StudentsDisplayState {
+  final String errorMessage;
+
+  StudentsDisplayFailure({required this.errorMessage});
+}

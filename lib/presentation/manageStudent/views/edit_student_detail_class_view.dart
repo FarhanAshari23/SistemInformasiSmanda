@@ -199,8 +199,9 @@ class EditStudentDetailClassView extends StatelessWidget {
                                   );
                           }
                           if (state is StudentsDisplayFailure) {
-                            return const Center(
-                              child: Text('Something wrongs'),
+                            return Center(
+                              child: Text(
+                                  'Something wrongs: ${state.errorMessage}'),
                             );
                           }
                           return Container();

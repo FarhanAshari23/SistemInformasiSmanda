@@ -3,7 +3,7 @@ import 'dart:io';
 class UpdateUserReq {
   final String nama;
   final String kelas;
-  final String nisn;
+  final String nisn, oldNisn;
   final String tanggalLahir;
   final String noHp;
   final String alamat;
@@ -22,6 +22,7 @@ class UpdateUserReq {
     required this.ekskul,
     required this.agama,
     required this.gender,
+    required this.oldNisn,
     this.imageFile,
   });
 }

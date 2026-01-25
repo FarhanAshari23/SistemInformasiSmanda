@@ -35,6 +35,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       var returnedData = await FirebaseFirestore.instance
           .collection("Students")
           .where("kelas", isEqualTo: kelas)
+          .where("is_register", isEqualTo: true)
           .orderBy('nama')
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
@@ -100,7 +101,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       CollectionReference users =
           FirebaseFirestore.instance.collection('Students');
       QuerySnapshot querySnapshot =
-          await users.where('nisn', isEqualTo: updateUserReq.nisn).get();
+          await users.where('nisn', isEqualTo: updateUserReq.oldNisn).get();
       if (querySnapshot.docs.isNotEmpty) {
         String docId = querySnapshot.docs[0].id;
         await users.doc(docId).update({
@@ -197,6 +198,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       var returnedData = await FirebaseFirestore.instance
           .collection("Students")
           .where("isAdmin", isEqualTo: false)
+          .where("is_register", isEqualTo: true)
           .where("keywords", arrayContains: name)
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
