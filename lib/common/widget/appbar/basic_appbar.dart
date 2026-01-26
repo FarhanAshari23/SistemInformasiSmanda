@@ -138,20 +138,9 @@ class BasicAppbar extends StatelessWidget {
                                 if (state is ProfileInfoLoading) {
                                   return Row(
                                     children: [
-                                      const Text(
-                                        '...',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w800,
-                                          color: AppColors.inversePrimary,
-                                        ),
-                                      ),
                                       SizedBox(width: width * 0.02),
                                       GestureDetector(
-                                        onTap: () => AppNavigator.push(
-                                          context,
-                                          const ProfileStudentView(),
-                                        ),
+                                        onTap: () {},
                                         child: Container(
                                           width: width * 0.105,
                                           height: height * 0.065,

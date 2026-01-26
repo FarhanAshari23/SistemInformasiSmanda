@@ -48,8 +48,6 @@ class RegisterStudentView extends StatelessWidget {
                   content: Text("Data Berhasil Diubah"),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
-
-                Navigator.pop(context);
               }
               if (state is ButtonFailureState) {
                 var snackbar = SnackBar(

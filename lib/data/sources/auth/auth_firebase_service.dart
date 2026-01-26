@@ -246,7 +246,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           .get();
       if (murid.docs.isNotEmpty) {
         return const Left(
-          'Email ini sudah dipakai, silakan akses lupa password untuk mengganti password anda',
+          'Email ini sudah digunakan',
         );
       } else {
         return const Right('Ini aman');
