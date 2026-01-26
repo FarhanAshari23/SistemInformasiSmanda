@@ -49,9 +49,9 @@ class UploadImageCubit extends Cubit<UploadImageState> {
       }
 
       final File compressedFile = await compressImage(file);
-
+      final customName = "$filename$ext";
       final appDir = await getApplicationDocumentsDirectory();
-      final savePath = p.join(appDir.path, filename);
+      final savePath = p.join(appDir.path, customName);
       final savedFile = await compressedFile.copy(savePath);
       emit(UploadImageSuccess(savedFile));
     } catch (e) {
