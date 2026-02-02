@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:intl/intl.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_attendance_teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
 import '../../../domain/entities/attandance/param_attendance.dart';
-import '../../../domain/entities/attandance/param_attendance_teacher.dart';
 import '../../../domain/entities/attandance/param_delete_attendance.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../models/auth/user.dart';
 import '../../models/teacher/teacher.dart';
 
 abstract class AttandanceFirebaseService {
-  Future<Either> getListAttendanceDate(String nameCollection);
+  Future<Either> getListStudentAttendancesDate();
+  Future<Either> getListTeacherAttendancesDate();
+  Future<Either> getListTeacherCompletionsDate();
   Future<Either> deleteAllAttendances();
   Future<Either> deleteMonthAttendances(ParamDeleteAttendance attendanceReq);
   Future<Either> getAttendanceStudents(ParamAttendanceEntity attendanceReq);
@@ -25,10 +27,41 @@ abstract class AttandanceFirebaseService {
 
 class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   @override
-  Future<Either> getListAttendanceDate(String nameCollection) async {
+  Future<Either> getListStudentAttendancesDate() async {
     try {
       var returnedData = await FirebaseFirestore.instance
-          .collection(nameCollection)
+          .collection("Attendances")
+          .where("is_student", isEqualTo: true)
+          .orderBy('timestamp', descending: true)
+          .get();
+      return Right(returnedData.docs.map((e) => e.data()).toList());
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> getListTeacherAttendancesDate() async {
+    try {
+      var returnedData = await FirebaseFirestore.instance
+          .collection("Attendances")
+          .where("is_student", isEqualTo: false)
+          .where('is_teacher_completions', isEqualTo: false)
+          .orderBy('timestamp', descending: true)
+          .get();
+      return Right(returnedData.docs.map((e) => e.data()).toList());
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> getListTeacherCompletionsDate() async {
+    try {
+      var returnedData = await FirebaseFirestore.instance
+          .collection("Attendances")
+          .where("is_student", isEqualTo: false)
+          .where('is_teacher_completions', isEqualTo: true)
           .orderBy('timestamp', descending: true)
           .get();
       return Right(returnedData.docs.map((e) => e.data()).toList());
@@ -72,6 +105,8 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       final attendanceData = {
         "createdAt": formattedDate,
         "timestamp": Timestamp.now(),
+        'is_student': true,
+        'is_teacher_completions': false
       };
 
       await attendanceRef.doc(formattedDate).set(attendanceData);
@@ -83,6 +118,8 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
           {
             "createdAt": formattedDate,
             "timestamp": Timestamp.now(),
+            'is_student': true,
+            'is_teacher_completions': false
           },
         );
       } else {
@@ -101,7 +138,6 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       final userModel = UserModelX.fromEntity(userAddReq);
       final userData = userModel.toMap();
 
-      // Tambahkan jam masuk sekarang
       userData['jam_masuk'] = Timestamp.now();
 
       await murid.add(userData);
@@ -120,6 +156,8 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
           FirebaseFirestore.instance.collection('Attendances');
       QuerySnapshot snapshot = await kehadiran
           .where('createdAt', isEqualTo: attendanceReq.date)
+          .where('is_student', isEqualTo: true)
+          .where('is_teacher_completions', isEqualTo: false)
           .get();
       if (snapshot.docs.isNotEmpty) {
         String attendanceId = snapshot.docs.first.id;
@@ -145,6 +183,8 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
           FirebaseFirestore.instance.collection('Attendances');
       QuerySnapshot snapshot = await kehadiran
           .where('createdAt', isEqualTo: attendanceReq.date)
+          .where('is_student', isEqualTo: true)
+          .where('is_teacher_completions', isEqualTo: false)
           .get();
       if (snapshot.docs.isNotEmpty) {
         String attendanceId = snapshot.docs.first.id;
@@ -166,7 +206,10 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   @override
   Future<Either> deleteAllAttendances() async {
     final firestore = FirebaseFirestore.instance;
-    final collection = firestore.collection('Attendances');
+    final collection = firestore
+        .collection('Attendances')
+        .where('is_student', isEqualTo: true)
+        .where('is_teacher_completions', isEqualTo: false);
 
     try {
       QuerySnapshot snapshot = await collection.get();
@@ -207,7 +250,10 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   Future<Either> deleteMonthAttendances(
       ParamDeleteAttendance attendanceReq) async {
     final firestore = FirebaseFirestore.instance;
-    final collection = firestore.collection('Attendances');
+    final collection = firestore
+        .collection('Attendances')
+        .where('is_student', isEqualTo: true)
+        .where('is_teacher_completions', isEqualTo: false);
 
     final firstDay = DateTime(attendanceReq.year, attendanceReq.month, 1);
     final lastDay =
@@ -294,13 +340,13 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
 
       await attendanceRef.doc(formattedDate).set(attendanceData);
 
-      final teacherAttendances = firestore.collection(
-          teacherAddReq.isAttendance ?? false
-              ? 'TeachersAttendances'
-              : 'TeachersCompletions');
+      final teacherAttendances = firestore.collection("Attendances");
 
       final dateQuery = await teacherAttendances
           .where("createdAt", isEqualTo: formattedDate)
+          .where('is_student', isEqualTo: false)
+          .where('is_teacher_completions',
+              isEqualTo: teacherAddReq.isAttendance ?? false ? false : true)
           .limit(1)
           .get();
 
@@ -367,9 +413,12 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   Future<Either> getAttendanceAllTeacher(ParamAttendanceTeacher req) async {
     try {
       CollectionReference kehadiran =
-          FirebaseFirestore.instance.collection(req.nameCollection);
-      QuerySnapshot snapshot =
-          await kehadiran.where('createdAt', isEqualTo: req.date).get();
+          FirebaseFirestore.instance.collection("Attendances");
+      QuerySnapshot snapshot = await kehadiran
+          .where('createdAt', isEqualTo: req.date)
+          .where('is_student', isEqualTo: false)
+          .where('is_teacher_completions', isEqualTo: req.isAttendance)
+          .get();
       if (snapshot.docs.isNotEmpty) {
         String attendanceId = snapshot.docs.first.id;
         QuerySnapshot teachers =

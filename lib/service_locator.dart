@@ -30,7 +30,9 @@ import 'domain/usecases/attendance/get_attendance_name_usecase.dart';
 import 'domain/usecases/attendance/get_attendance_student_usecase.dart';
 import 'domain/usecases/attendance/get_attendance_students.dart';
 import 'domain/usecases/attendance/get_attendance_teacher_usecase.dart';
-import 'domain/usecases/attendance/get_list_attendances.dart';
+import 'domain/usecases/attendance/get_list_attendaces_teacher_usecase.dart';
+import 'domain/usecases/attendance/get_list_attendances_student.dart';
+import 'domain/usecases/attendance/get_list_completions_teacher_usecase.dart';
 import 'domain/usecases/auth/check_admin.dart';
 import 'domain/usecases/auth/check_email_usecase.dart';
 import 'domain/usecases/auth/check_register.dart';
@@ -288,8 +290,14 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<AddStudentAttendanceUseCase>(
     AddStudentAttendanceUseCase(),
   );
-  sl.registerSingleton<GetListAttendancesUseCase>(
-    GetListAttendancesUseCase(),
+  sl.registerSingleton<GetListStudentAttendancesUseCase>(
+    GetListStudentAttendancesUseCase(),
+  );
+  sl.registerSingleton<GetListTeacherAttendancesUseCase>(
+    GetListTeacherAttendancesUseCase(),
+  );
+  sl.registerSingleton<GetListTeacherCompletionsUseCase>(
+    GetListTeacherCompletionsUseCase(),
   );
   sl.registerSingleton<GetAttendanceStudentsUsecase>(
     GetAttendanceStudentsUsecase(),

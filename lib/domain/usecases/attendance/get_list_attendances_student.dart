@@ -4,9 +4,9 @@ import 'package:new_sistem_informasi_smanda/domain/repository/attandance/attanda
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
 
-class GetListAttendancesUseCase implements Usecase<Either, String> {
+class GetListStudentAttendancesUseCase implements Usecase<Either, dynamic> {
   @override
-  Future<Either> call({String? params}) async {
-    return await sl<AttandanceRepository>().getListAttendanceDate(params!);
+  Future<Either> call({dynamic params}) async {
+    return await sl<AttandanceRepository>().getListStudentAttendancesDate();
   }
 }

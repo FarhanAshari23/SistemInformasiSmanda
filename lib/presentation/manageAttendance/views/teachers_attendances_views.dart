@@ -56,6 +56,9 @@ class TeachersAttendancesViews extends StatelessWidget {
                           ),
                         );
                 }
+                if (state is AttendanceTeacherFailure) {
+                  return Text(state.errorMessage);
+                }
                 return Container();
               },
             ),

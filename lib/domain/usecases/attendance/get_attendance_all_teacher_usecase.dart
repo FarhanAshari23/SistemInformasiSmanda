@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_attendance_teacher.dart';
 
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
-import '../../entities/attandance/param_attendance_teacher.dart';
 import '../../repository/attandance/attandance.dart';
 
 class GetAttendanceAllTeacherUsecase

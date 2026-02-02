@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_attendance_teacher.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/bloc/attendance_teacher_cubit.dart';
 
 import '../../../common/bloc/attendance/select_attendance_cubit.dart';
@@ -12,6 +11,7 @@ import '../../../common/helper/check_same_date.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/attandance/param_attendance_teacher.dart';
 import '../bloc/display_date_cubit.dart';
 import '../bloc/display_date_state.dart';
 import 'teachers_attendances_views.dart';
@@ -35,7 +35,7 @@ class _SeeAllDataAttendanceTeacherState
         providers: [
           BlocProvider(
             create: (context) =>
-                DisplayDateCubit()..displayAttendances('TeachersAttendances'),
+                DisplayDateCubit()..displayTeacherAttendances(),
           ),
           BlocProvider(
             create: (context) => SelectAttendanceCubit(),
@@ -61,13 +61,21 @@ class _SeeAllDataAttendanceTeacherState
                           left: index == 0 ? 12 : 0,
                           right: index == 1 ? 12 : 0,
                           onTap: () {
-                            context
-                                .read<SelectAttendanceCubit>()
-                                .stateAttendance(index);
-                            context.read<DisplayDateCubit>().displayAttendances(
-                                index == 0
-                                    ? 'TeachersAttendances'
-                                    : 'TeachersCompletions');
+                            if (index == 0) {
+                              context
+                                  .read<SelectAttendanceCubit>()
+                                  .stateAttendance(index);
+                              context
+                                  .read<DisplayDateCubit>()
+                                  .displayTeacherAttendances();
+                            } else {
+                              context
+                                  .read<SelectAttendanceCubit>()
+                                  .stateAttendance(index);
+                              context
+                                  .read<DisplayDateCubit>()
+                                  .displayTeacherCompletions();
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsets.all(8),
@@ -120,7 +128,7 @@ class _SeeAllDataAttendanceTeacherState
                               final state =
                                   context.read<SelectAttendanceCubit>().state;
                               String formatted =
-                                  DateFormat('dd-M-yyyy').format(date);
+                                  DateFormat('dd-MM-yyyy').format(date);
                               AppNavigator.push(
                                 context,
                                 BlocProvider.value(
@@ -128,9 +136,7 @@ class _SeeAllDataAttendanceTeacherState
                                     ..displayAttendanceTeacher(
                                       ParamAttendanceTeacher(
                                         date: formatted,
-                                        nameCollection: state == 0
-                                            ? "TeachersAttendances"
-                                            : "TeachersCompletions",
+                                        isAttendance: state == 0 ? false : true,
                                       ),
                                     ),
                                   child: TeachersAttendancesViews(

@@ -46,7 +46,7 @@ class _SeeAllDataAttandanceStudentsState
         providers: [
           BlocProvider(
             create: (context) =>
-                DisplayDateCubit()..displayAttendances('Attendances'),
+                DisplayDateCubit()..displayStudentAttendances(),
           ),
           BlocProvider(
             create: (context) => ButtonStateCubit(),
@@ -55,9 +55,7 @@ class _SeeAllDataAttandanceStudentsState
         child: BlocListener<ButtonStateCubit, ButtonState>(
           listener: (context, state) {
             if (state is ButtonSuccessState) {
-              context
-                  .read<DisplayDateCubit>()
-                  .displayAttendances('Attendances');
+              context.read<DisplayDateCubit>().displayStudentAttendances();
               var snackbar = const SnackBar(
                 content: Text("Data Berhasil dihapus"),
               );

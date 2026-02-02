@@ -1,8 +1,9 @@
 class ParamAttendanceTeacher {
-  final String date, nameCollection;
+  final String date;
+  final bool isAttendance;
 
   ParamAttendanceTeacher({
     required this.date,
-    required this.nameCollection,
+    required this.isAttendance,
   });
 }
