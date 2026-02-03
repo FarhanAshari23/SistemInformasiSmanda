@@ -1,7 +1,7 @@
 name: new_sistem_informasi_smanda
 description: "A new Flutter project."
 publish_to: "none"
-version: 1.2.0+36
+version: 1.2.0+37
 
 environment:
   sdk: ">=3.4.0 <4.0.0"

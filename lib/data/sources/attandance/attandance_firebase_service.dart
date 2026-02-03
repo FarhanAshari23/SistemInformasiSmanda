@@ -356,6 +356,9 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
         todayDoc = await teacherAttendances.add({
           "createdAt": formattedDate,
           "timestamp": Timestamp.now(),
+          'is_student': false,
+          'is_teacher_completions':
+              teacherAddReq.isAttendance ?? false ? false : true
         });
       } else {
         todayDoc = dateQuery.docs.first.reference;
