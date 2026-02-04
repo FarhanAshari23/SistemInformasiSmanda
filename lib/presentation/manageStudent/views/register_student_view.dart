@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_all_student_account_usecase.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
@@ -11,6 +12,7 @@ import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/students/accept_student_register_usecase.dart';
+import '../../../domain/usecases/students/create_excell_students_usecase.dart';
 import '../../../domain/usecases/students/delete_student.dart';
 import '../../../domain/usecases/students/update_all_student_account_usecase.dart';
 import '../../../service_locator.dart';
@@ -44,8 +46,8 @@ class RegisterStudentView extends StatelessWidget {
                 context
                     .read<GetStudentRegistrationCubit>()
                     .displayStudentRegistration();
-                var snackbar = const SnackBar(
-                  content: Text("Data Berhasil Diubah"),
+                var snackbar = SnackBar(
+                  content: Text(state.successMessage),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
               }
@@ -113,6 +115,14 @@ class RegisterStudentView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                                BasicButton(
+                                  onPressed: () => context
+                                      .read<ButtonStateCubit>()
+                                      .execute(
+                                        usecase: CreateExcellStudentsUsecase(),
+                                      ),
+                                  title: "Unduh Data Siswa",
+                                )
                               ],
                             ),
                           ),
@@ -201,6 +211,41 @@ class RegisterStudentView extends StatelessWidget {
                                               },
                                             );
                                           },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              } else if (index == state.students.length + 1) {
+                                return CustomInkWell(
+                                  borderRadius: 12,
+                                  defaultColor: AppColors.primary,
+                                  onTap: () => context
+                                      .read<ButtonStateCubit>()
+                                      .execute(
+                                        usecase: CreateExcellStudentsUsecase(),
+                                      ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 12.0,
+                                      vertical: 8.0,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Unduh Data Siswa",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.inversePrimary,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Icon(
+                                          Icons.download,
+                                          color: AppColors.inversePrimary,
                                         ),
                                       ],
                                     ),
@@ -328,7 +373,7 @@ class RegisterStudentView extends StatelessWidget {
                             },
                             separatorBuilder: (context, index) =>
                                 SizedBox(height: height * 0.01),
-                            itemCount: state.students.length + 1,
+                            itemCount: state.students.length + 2,
                           ),
                         ),
                       );

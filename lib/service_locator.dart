@@ -51,6 +51,7 @@ import 'domain/usecases/schedule/create_activity_usecase.dart';
 import 'domain/usecases/schedule/get_all_jadwal.dart';
 import 'domain/usecases/schedule/update_activity_usecase.dart';
 import 'domain/usecases/students/accept_student_register_usecase.dart';
+import 'domain/usecases/students/create_excell_students_usecase.dart';
 import 'domain/usecases/students/delete_all_student_account_usecase.dart';
 import 'domain/usecases/students/delete_student_by_class.dart';
 import 'domain/usecases/students/get_all_kelas_usecase.dart';
@@ -261,6 +262,9 @@ Future<void> initializeDependecies() async {
 
   sl.registerSingleton<DeleteAllStudentAccountUsecase>(
     DeleteAllStudentAccountUsecase(),
+  );
+  sl.registerSingleton<CreateExcellStudentsUsecase>(
+    CreateExcellStudentsUsecase(),
   );
 
   //ekskul

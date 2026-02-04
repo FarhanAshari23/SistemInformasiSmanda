@@ -4,11 +4,15 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:new_sistem_informasi_smanda/common/helper/obscure_email.dart';
 import 'package:path/path.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 import '../../../common/helper/execute_crud.dart';
 import '../../../domain/entities/auth/user.dart';
@@ -26,6 +30,7 @@ abstract class StudentsFirebaseService {
   Future<Either> searchStudentByNISN(String nisnStudent);
   Future<Either> deleteStudentByClass(String kelas);
   Future<Either> getStudentsByname(String name);
+  Future<Either> createExcellForStudentData();
 }
 
 class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
@@ -488,6 +493,69 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       return const Left("Kesalahan HTTP terjadi.");
     } catch (e) {
       return Left('Something wrong: $e');
+    }
+  }
+
+  @override
+  Future<Either> createExcellForStudentData() async {
+    final Workbook workbook = Workbook();
+    final Worksheet sheet = workbook.worksheets[0];
+    DateTime now = DateTime.now();
+    String formatted = DateFormat('d MMMM yyyy HH:mm').format(now);
+    try {
+      var returnedData = await FirebaseFirestore.instance
+          .collection("Students")
+          .where("is_register", isEqualTo: true)
+          .where("nama", isNotEqualTo: "admin")
+          .orderBy('kelas')
+          .get();
+      List<Map<String, dynamic>> students =
+          returnedData.docs.map((e) => e.data()).toList();
+
+      sheet
+          .getRangeByName('A1')
+          .setText("Data diunduh pada tanggal: $formatted");
+      sheet.getRangeByName('A2').setText('Nama');
+      sheet.getRangeByName('B2').setText('Email');
+      sheet.getRangeByName('C2').setText('Kelas');
+      final headerStyle = workbook.styles.add('HeaderStyle');
+      final defaultStyle = workbook.styles.add('DefaultStyle');
+      headerStyle.bold = true;
+      defaultStyle.bold = true;
+      headerStyle.backColor = '#E0E0E0';
+      sheet.getRangeByName('A1').cellStyle = defaultStyle;
+      sheet.getRangeByName('A2:C2').cellStyle = headerStyle;
+
+      for (var i = 0; i < students.length; i++) {
+        sheet.getRangeByName('A${i + 3}').setText(students[i]['nama']);
+        sheet
+            .getRangeByName('B${i + 3}')
+            .setText(maskEmail(students[i]['email']));
+        sheet.getRangeByName('C${i + 3}').setText(students[i]['kelas']);
+      }
+      sheet.autoFitColumn(1);
+      sheet.autoFitColumn(2);
+      sheet.autoFitColumn(3);
+
+      final List<int> bytes = workbook.saveAsStream();
+      workbook.dispose();
+
+      final String? selectedDirectory =
+          await FilePicker.platform.getDirectoryPath(
+        dialogTitle: 'Pilih folder untuk menyimpan Excel',
+      );
+
+      if (selectedDirectory == null) {
+        return const Left("Pilihi directory dulu");
+      }
+
+      final String filePath = '$selectedDirectory/daftar_akun_siswa.xlsx';
+
+      final File file = File(filePath);
+      await file.writeAsBytes(bytes, flush: true);
+      return Right("Data excel berhasil di simpan di: $filePath");
+    } catch (e) {
+      return Left(e.toString());
     }
   }
 }

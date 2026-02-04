@@ -15,4 +15,5 @@ abstract class StudentRepository {
   Future<Either> getStudentByRegister();
   Future<Either> deleteStudentByClass(String kelas);
   Future<Either> getStudentsByname(String name);
+  Future<Either> createExcellForStudentData();
 }
