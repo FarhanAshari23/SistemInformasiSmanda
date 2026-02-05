@@ -551,7 +551,6 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
         return left('Date cant be found');
       }
     } catch (e) {
-      print(e.toString());
       return left(e.toString());
     }
   }
