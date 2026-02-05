@@ -18,4 +18,5 @@ abstract class AttandanceRepository {
   Future<Either> getAttendanceAllTeacher(ParamAttendanceTeacher req);
   Future<Either> addStudentAttendances(UserEntity userAddReq);
   Future<Either> addTeacherAttendances(TeacherEntity teacherAddReq);
+  Future<Either> downloadAttendanceTeachers(ParamAttendanceTeacher req);
 }

@@ -141,6 +141,7 @@ class _SeeAllDataAttendanceTeacherState
                                     ),
                                   child: TeachersAttendancesViews(
                                     isAttendace: state == 0 ? true : false,
+                                    date: formatted,
                                   ),
                                 ),
                               );

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_attendance_teacher.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 import '../../../domain/entities/attandance/param_attendance.dart';
 import '../../../domain/entities/attandance/param_delete_attendance.dart';
@@ -23,6 +27,7 @@ abstract class AttandanceFirebaseService {
   Future<Either> getAttendanceAllTeacher(ParamAttendanceTeacher req);
   Future<Either> addTeacherAttendances(TeacherEntity teacherAddReq);
   Future<Either> searchStudentAttendance(ParamAttendanceEntity attendanceReq);
+  Future<Either> downloadAttendanceTeachers(ParamAttendanceTeacher req);
 }
 
 class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
@@ -463,6 +468,91 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       return Right(studentDoc.docs.map((e) => e.data()).toList());
     } catch (e) {
       return Left("Something error: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<Either> downloadAttendanceTeachers(ParamAttendanceTeacher req) async {
+    final Workbook workbook = Workbook();
+    final Worksheet sheet = workbook.worksheets[0];
+
+    try {
+      CollectionReference kehadiran =
+          FirebaseFirestore.instance.collection("Attendances");
+      QuerySnapshot snapshot = await kehadiran
+          .where('createdAt', isEqualTo: req.date)
+          .where('is_student', isEqualTo: false)
+          .where('is_teacher_completions', isEqualTo: !req.isAttendance)
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        String attendanceId = snapshot.docs.first.id;
+        var teachers =
+            await kehadiran.doc(attendanceId).collection('Teachers').get();
+        List<Map<String, dynamic>> teacher =
+            teachers.docs.map((e) => e.data()).toList();
+
+        sheet.getRangeByName('A1').setText('No');
+        sheet.getRangeByName('B1').setText('Nama');
+        sheet
+            .getRangeByName('C1')
+            .setText('Jam ${req.isAttendance ? "Masuk" : "Pulang"}');
+
+        final headerStyle = workbook.styles.add('HeaderStyle');
+        headerStyle.bold = true;
+        headerStyle.backColor = '#E0E0E0';
+        sheet.getRangeByName('A1:C1').cellStyle = headerStyle;
+
+        for (var i = 0; i < teacher.length; i++) {
+          Timestamp? timestamp;
+
+          if (req.isAttendance) {
+            timestamp = teacher[i]['jam_masuk'];
+          } else {
+            timestamp = teacher[i]['jam_pulang'];
+          }
+
+          String formattedDate = '-';
+
+          if (timestamp != null) {
+            DateTime dateTime = timestamp.toDate();
+            formattedDate = DateFormat(
+              'd MMMM yyyy HH:mm',
+              'id_ID',
+            ).format(dateTime);
+          }
+          sheet.getRangeByName('A${i + 2}').setText("${i + 1}");
+          sheet.getRangeByName('B${i + 2}').setText(teacher[i]['nama']);
+          sheet.getRangeByName('C${i + 2}').setText(formattedDate);
+        }
+
+        sheet.autoFitColumn(1);
+        sheet.autoFitColumn(2);
+        sheet.autoFitColumn(3);
+
+        final List<int> bytes = workbook.saveAsStream();
+        workbook.dispose();
+
+        final String? selectedDirectory =
+            await FilePicker.platform.getDirectoryPath(
+          dialogTitle: 'Pilih folder untuk menyimpan Excel',
+        );
+
+        if (selectedDirectory == null) {
+          return const Left("Pilihi directory dulu");
+        }
+
+        final String filePath =
+            '$selectedDirectory/data_${req.isAttendance ? "kehadiran" : "pulang"}_guru${req.date}.xlsx';
+
+        final File file = File(filePath);
+        await file.writeAsBytes(bytes, flush: true);
+        return Right("Data excel berhasil di simpan di: $filePath");
+      } else {
+        return left('Date cant be found');
+      }
+    } catch (e) {
+      print(e.toString());
+      return left(e.toString());
     }
   }
 }

@@ -188,4 +188,10 @@ class AttandanceRepositoryImpl extends AttandanceRepository {
       },
     );
   }
+
+  @override
+  Future<Either> downloadAttendanceTeachers(ParamAttendanceTeacher req) async {
+    return await sl<AttandanceFirebaseService>()
+        .downloadAttendanceTeachers(req);
+  }
 }
