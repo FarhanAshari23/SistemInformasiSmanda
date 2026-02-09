@@ -197,8 +197,6 @@ class _ManageJabatanViewsState extends State<ManageJabatanViews> {
                                           context: context,
                                           builder: (context) {
                                             return BasicDialog(
-                                              width: height,
-                                              height: height,
                                               splashImage:
                                                   AppImages.splashDelete,
                                               mainTitle:

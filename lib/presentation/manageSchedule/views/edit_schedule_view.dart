@@ -142,8 +142,6 @@ class EditScheduleView extends StatelessWidget {
                                             context: context,
                                             builder: (context) {
                                               return BasicDialog(
-                                                width: width,
-                                                height: height,
                                                 splashImage:
                                                     AppImages.splashDelete,
                                                 mainTitle:

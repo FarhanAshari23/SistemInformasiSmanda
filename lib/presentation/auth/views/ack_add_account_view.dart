@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/landing/succes.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/signup.dart';
@@ -58,13 +57,16 @@ class AckAddStudentView extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
             if (state is ButtonSuccessState) {
-              AppNavigator.push(
+              Navigator.pushAndRemoveUntil(
                 context,
-                SuccesPage(
-                  page: LoginView(),
-                  title:
-                      "Akun berhasil dibuat. Tunggu admin menyetujui akun anda untuk bisa digunakan dan jangan lupa update ekskul anda di halaman profile",
+                MaterialPageRoute(
+                  builder: (context) => SuccesPage(
+                    page: LoginView(),
+                    title:
+                        "Akun berhasil dibuat. Tunggu admin menyetujui akun anda untuk bisa digunakan dan jangan lupa update ekskul anda di halaman profile",
+                  ),
                 ),
+                (route) => route.isFirst,
               );
             }
           },

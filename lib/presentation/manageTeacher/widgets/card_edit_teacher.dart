@@ -108,8 +108,6 @@ class CardEditTeacher extends StatelessWidget {
                     context: context,
                     builder: (_) {
                       return BasicDialog(
-                        width: width,
-                        height: bodyHeight,
                         splashImage: AppImages.splashDelete,
                         mainTitle:
                             'Apakah anda yakin ingin menghapus data ${teacher.nama}?',

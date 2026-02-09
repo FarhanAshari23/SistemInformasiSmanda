@@ -134,8 +134,6 @@ class CardEkskulEdit extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return BasicDialog(
-                        width: width,
-                        height: height,
                         splashImage: AppImages.splashDelete,
                         mainTitle:
                             'Apakah anda yakin ingin menghapus data ${ekskul.namaEkskul}?',

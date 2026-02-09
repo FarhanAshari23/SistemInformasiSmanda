@@ -9,12 +9,14 @@ import '../appbar/basic_appbar.dart';
 class SuccesPage extends StatelessWidget {
   final String title;
   final bool isPop;
+  final Function()? onTap;
   final Widget page;
   const SuccesPage({
     super.key,
     required this.page,
     required this.title,
     this.isPop = false,
+    this.onTap,
   });
 
   @override

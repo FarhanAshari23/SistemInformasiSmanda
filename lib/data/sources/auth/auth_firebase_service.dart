@@ -246,7 +246,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           .get();
       if (murid.docs.isNotEmpty) {
         return const Left(
-          'Email ini sudah digunakan',
+          'Email ini sudah digunakan. Kemungkinan akun anda sedang dalam proses pengecekan. Harap bersabar atau silakan hubungi admin',
         );
       } else {
         return const Right('Ini aman');

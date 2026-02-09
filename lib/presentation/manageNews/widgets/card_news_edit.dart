@@ -85,8 +85,6 @@ class CardNewsEdit extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     return BasicDialog(
-                      height: bodyHeight,
-                      width: width,
                       splashImage: AppImages.splashDelete,
                       mainTitle:
                           'Apakah anda yakin ingin menghapus data ${news.title}?',

@@ -4,13 +4,10 @@ import '../../../core/configs/theme/app_colors.dart';
 import '../button/basic_button.dart';
 
 class BasicDialog extends StatelessWidget {
-  final double width, height;
   final String splashImage, buttonTitle, mainTitle;
   final Function() onPressed;
   const BasicDialog({
     super.key,
-    required this.width,
-    required this.height,
     required this.splashImage,
     required this.mainTitle,
     required this.buttonTitle,
@@ -19,6 +16,8 @@ class BasicDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.height;
     return Dialog(
       backgroundColor: AppColors.inversePrimary,
       shape: RoundedRectangleBorder(

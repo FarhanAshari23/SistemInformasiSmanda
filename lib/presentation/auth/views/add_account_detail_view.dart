@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_display_state.dart';
+import 'package:new_sistem_informasi_smanda/common/helper/capitalize_name.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
@@ -140,6 +141,7 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                     SizedBox(height: height * 0.01),
                     TextField(
                       controller: _nisnC,
+                      keyboardType: TextInputType.number,
                       autocorrect: false,
                       decoration: InputDecoration(
                         hintText: 'NISN:',
@@ -399,7 +401,7 @@ class _AddStudentDetailViewState extends State<AddStudentDetailView> {
                       );
                     } else {
                       final cubit = context.read<GetAllKelasCubit>().state;
-                      widget.userCreationReq.nama = _namaC.text;
+                      widget.userCreationReq.nama = capitalizeName(_namaC.text);
                       widget.userCreationReq.keywords = _namaC.text;
                       widget.userCreationReq.kelas =
                           cubit is KelasDisplayLoaded ? cubit.selected : '';

@@ -78,7 +78,6 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
     List<UserEntity> roleEntity = [
       selectedKetua,
@@ -400,8 +399,6 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                       context: context,
                                       builder: (context) {
                                         return BasicDialog(
-                                          width: width,
-                                          height: height,
                                           splashImage: AppImages.notfound,
                                           mainTitle:
                                               'Apakah anda yakin ingin mengeluarkan ${anggota.nama} dari ekskul ${widget.ekskul.namaEkskul}?',

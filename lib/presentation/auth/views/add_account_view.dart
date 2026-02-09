@@ -35,11 +35,31 @@ class AddStudentView extends StatelessWidget {
         child: BlocListener<ButtonStateCubit, ButtonState>(
           listener: (context, state) {
             if (state is ButtonFailureState) {
-              var snackbar = SnackBar(
-                content: Text(state.errorMessage),
-                behavior: SnackBarBehavior.floating,
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text(
+                      'Email terpakai',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    content: Text(
+                      state.errorMessage,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text(
+                          'Ya, saya mengerti',
+                          style: TextStyle(fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               );
-              ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
             if (state is ButtonSuccessState) {
               AppNavigator.push(

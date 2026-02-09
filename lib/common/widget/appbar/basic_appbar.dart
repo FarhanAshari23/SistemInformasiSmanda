@@ -203,8 +203,6 @@ class BasicAppbar extends StatelessWidget {
                                         context: context,
                                         builder: (context) {
                                           return BasicDialog(
-                                            width: width,
-                                            height: height,
                                             buttonTitle: 'Keluar',
                                             mainTitle:
                                                 'Apakah Anda Yakin Ingin Keluar dari Aplikasi?',
