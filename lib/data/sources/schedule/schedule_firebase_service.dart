@@ -64,7 +64,7 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   Future<Either> createClass(KelasEntity kelasReq) async {
     try {
       final kelasRef = FirebaseFirestore.instance.collection('Kelas');
-      final firstPart = kelasReq.kelas.trim().split(' ').first;
+      final firstPart = kelasReq.className.trim().split(' ').first;
       final tingkat = int.tryParse(firstPart) ?? 0;
       if (tingkat == 0) {
         throw Exception(
@@ -83,7 +83,7 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
       }
 
       await kelasRef.add({
-        'class': kelasReq.kelas,
+        'class': kelasReq.className,
         'degree': tingkat,
         'order': lastUrutan + 1,
       });

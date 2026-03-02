@@ -50,10 +50,10 @@ class EditStudentDetailClassView extends StatelessWidget {
                       StudentsDisplayCubit(usecase: GetStudentsWithKelas())
                         ..displayStudentsInit(
                           params: kelas == 10
-                              ? kelasSepuluh[0].kelas
+                              ? kelasSepuluh[0].className
                               : kelas == 11
-                                  ? kelasSebelas[0].kelas
-                                  : kelasDuabelas[0].kelas,
+                                  ? kelasSebelas[0].className
+                                  : kelasDuabelas[0].className,
                         ),
                 ),
                 BlocProvider(
@@ -114,12 +114,13 @@ class EditStudentDetailClassView extends StatelessWidget {
                                             .read<KelasNavigationCubit>()
                                             .state;
                                         final String currentClass = kelas == 10
-                                            ? kelasSepuluh[selectedIndex].kelas
+                                            ? kelasSepuluh[selectedIndex]
+                                                .className
                                             : kelas == 11
                                                 ? kelasSebelas[selectedIndex]
-                                                    .kelas
+                                                    .className
                                                 : kelasDuabelas[selectedIndex]
-                                                    .kelas;
+                                                    .className;
                                         if (index == 0) {
                                           return CustomInkWell(
                                             borderRadius: 16,

@@ -354,14 +354,14 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   @override
   Future<Either> getAllKelas() async {
     try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection('Kelas')
-          .orderBy('degree')
-          .orderBy('order')
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
+      final response = await Network.apiClient.get("/classes");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 

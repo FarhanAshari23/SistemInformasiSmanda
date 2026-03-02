@@ -45,10 +45,10 @@ class KelasDetailView extends StatelessWidget {
                       StudentsDisplayCubit(usecase: GetStudentsWithKelas())
                         ..displayStudentsInit(
                           params: kelas == 10
-                              ? kelasSepuluh[0].kelas
+                              ? kelasSepuluh[0].className
                               : kelas == 11
-                                  ? kelasSebelas[0].kelas
-                                  : kelasDuabelas[0].kelas,
+                                  ? kelasSebelas[0].className
+                                  : kelasDuabelas[0].className,
                         ),
                 ),
                 BlocProvider(

@@ -149,7 +149,6 @@ class HomeViewAdmin extends StatelessWidget {
                       return Text(state.students[0].name ?? '');
                     }
                     if (state is StudentsDisplayFailure) {
-                      print(state.errorMessage);
                       return Text("Terjadi kesalahan: ${state.errorMessage}");
                     }
                     return const SizedBox();

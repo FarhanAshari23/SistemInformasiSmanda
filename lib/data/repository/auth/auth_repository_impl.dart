@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/signin_user_req.dart';
-import 'package:new_sistem_informasi_smanda/data/models/auth/user_creation_req.dart';
 import 'package:new_sistem_informasi_smanda/data/sources/auth/auth_firebase_service.dart';
 import 'package:new_sistem_informasi_smanda/domain/repository/auth/auth.dart';
 
+import '../../../domain/entities/auth/user_golang.dart';
 import '../../../service_locator.dart';
 import '../../models/auth/user.dart';
 import '../../models/teacher/teacher.dart';
@@ -35,7 +35,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either> signUp(UserCreationReq userCreationReq) async {
+  Future<Either> signUp(UserGolang userCreationReq) async {
     return await sl<AuthFirebaseService>().signUp(userCreationReq);
   }
 

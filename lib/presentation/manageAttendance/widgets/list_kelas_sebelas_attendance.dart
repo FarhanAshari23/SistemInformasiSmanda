@@ -45,7 +45,7 @@ class ListKelasSebelasAttendance extends StatelessWidget {
                           .displayAttendanceStudent(
                             params: ParamAttendanceEntity(
                               date: date,
-                              kelas: kelas[index].kelas,
+                              kelas: kelas[index].className,
                             ),
                           );
                     },
@@ -61,7 +61,7 @@ class ListKelasSebelasAttendance extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          kelas[index].kelas,
+                          kelas[index].className,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,

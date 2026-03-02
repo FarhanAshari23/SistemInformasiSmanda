@@ -266,10 +266,13 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                           context.read<ButtonStateCubit>().execute(
                                 usecase: CreateClassUsecase(),
                                 params: KelasEntity(
-                                  kelas: _kelasC.text,
-                                  order: 0,
-                                  degree: 0,
-                                ),
+                                    className: _kelasC.text,
+                                    sequence: 0,
+                                    degree: 0,
+                                    teacherId: 1,
+                                    teacherName: '',
+                                    teacherNip: '',
+                                    totalStudent: 0),
                               );
                         }
                       },

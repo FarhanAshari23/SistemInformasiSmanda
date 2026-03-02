@@ -10,7 +10,6 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_admin.dar
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_register.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_teacher_usecase.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/bloc/password_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/views/add_account_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/button_role.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_admin.dart';
@@ -19,6 +18,7 @@ import '../../../data/models/auth/signin_user_req.dart';
 import '../../../domain/usecases/auth/signin.dart';
 import '../../../service_locator.dart';
 import '../../profile/views/profile_teacher_view.dart';
+import 'add_account_detail_view.dart';
 import 'forget_password_view.dart';
 
 class LoginView extends StatelessWidget {
@@ -195,7 +195,7 @@ class LoginView extends StatelessWidget {
                       TextButton(
                         onPressed: () => AppNavigator.push(
                           context,
-                          AddStudentView(),
+                          const AddAccountView(),
                         ),
                         child: const Text(
                           'Buat Akun',

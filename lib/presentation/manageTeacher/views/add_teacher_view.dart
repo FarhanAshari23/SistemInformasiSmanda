@@ -200,7 +200,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
         builder: (context, state) {
           if (state is KelasDisplayLoaded) {
             final entries = state.kelas.map((doc) {
-              final kelas = doc.kelas;
+              final kelas = doc.className;
               return DropdownMenuEntry(
                 value: kelas,
                 label: kelas,

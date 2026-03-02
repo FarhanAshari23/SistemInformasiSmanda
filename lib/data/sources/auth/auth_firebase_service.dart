@@ -10,12 +10,13 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 
 import '../../../common/helper/execute_crud.dart';
-import '../../../common/helper/generate_keyword.dart';
-import '../../models/auth/user_creation_req.dart';
+import '../../../core/networks/network.dart';
+import '../../../domain/entities/auth/user_golang.dart';
+import '../../models/auth/user_golang.dart';
 
 abstract class AuthFirebaseService {
   Future<Either> signin(SignInUserReq signinUserReq);
-  Future<Either> signUp(UserCreationReq murid);
+  Future<Either> signUp(UserGolang murid);
   Future<Either> forgotPassword(String email);
   Future<Either> checkEmailUsed(String email);
   Future<Either> logout();
@@ -90,10 +91,8 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   }
 
   @override
-  Future<Either> signUp(UserCreationReq murid) async {
-    final keywords = generateKeywords(murid.nama ?? '');
+  Future<Either> signUp(UserGolang murid) async {
     String endpoint = ExecuteCRUD.uploadImageStudent();
-    DocumentReference? studentRef;
     try {
       if (murid.imageFile != null) {
         Uri? url;
@@ -141,40 +140,26 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         }
       }
 
-      //create in firebase
       final key = encrypt.Key.fromUtf8('1234567890123456');
       final iv = encrypt.IV.fromSecureRandom(16);
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
       final encryptedPassword = encrypter.encrypt(murid.password!, iv: iv);
-      studentRef = await FirebaseFirestore.instance.collection('Students').add(
-        {
-          'email': murid.email,
-          'nama': murid.nama,
-          'kelas': murid.kelas,
-          'nisn': murid.nisn,
-          'tanggal_lahir': murid.tanggalLahir,
-          'No_HP': murid.noHP,
-          'alamat': murid.address,
-          'ekskul': murid.ekskul,
-          'gender': murid.gender,
-          'isAdmin': murid.isAdmin,
-          'agama': murid.agama,
-          'password': encryptedPassword.base64,
-          'is_register': murid.isRegister,
-          'keywords': keywords,
-          'iv': iv.base64,
-        },
-      );
 
-      return Right('Signup was succesfull, $json');
+      final model = UserGolangModelX.fromEntity(
+          murid.copyWith(password: encryptedPassword.base64, iv: iv.base64));
+
+      final response =
+          await Network.apiClient.post("/student", body: model.toMap());
+
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      return Right("Buat akun sukses: ${response.message}");
     } on SocketException {
-      if (studentRef != null) await studentRef.delete();
       throw Exception("Tidak ada koneksi internet.");
     } on HttpException {
-      if (studentRef != null) await studentRef.delete();
       throw Exception("Kesalahan HTTP terjadi.");
     } on FormatException {
-      if (studentRef != null) await studentRef.delete();
       throw Exception("Format data tidak valid.");
     } catch (e) {
       return Left("Something Error: $e");

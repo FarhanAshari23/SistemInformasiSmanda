@@ -38,7 +38,7 @@ class UserGolangModel {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    final Map<String, dynamic> data = {
       'id': id,
       'nisn': nisn,
       'name': name,
@@ -48,13 +48,22 @@ class UserGolangModel {
       'address': address,
       'mobile_num': mobileNum,
       'gender': gender,
-      'birth_date': birthDate.toIso8601String(),
+      'birth_date': birthDate.toUtc().toIso8601String(),
       'email': email,
       'password': password,
       'is_register': isRegister,
       'is_admin': isAdmin,
       'iv': iv,
     };
+
+    data.removeWhere((key, value) {
+      if (value == null) return true;
+      if (value == 0) return true;
+      if (value is String && value.isEmpty) return true;
+      return false;
+    });
+
+    return data;
   }
 
   factory UserGolangModel.fromMap(Map<String, dynamic> map) {
