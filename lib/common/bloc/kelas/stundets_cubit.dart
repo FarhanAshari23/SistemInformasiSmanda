@@ -24,6 +24,21 @@ class StudentsDisplayCubit extends Cubit<StudentsDisplayState> {
     );
   }
 
+  void displayStudentsGolang({dynamic params}) async {
+    emit(StudentsDisplayLoading());
+    var returnedData = await usecase.call(
+      params: params,
+    );
+    returnedData.fold(
+      (error) {
+        emit(StudentsDisplayFailure(errorMessage: error.toString()));
+      },
+      (data) {
+        emit(StudentsDisplayLoadedGolang(students: data));
+      },
+    );
+  }
+
   void displayStudentsInit({required String params}) async {
     emit(StudentsDisplayLoading());
     var returnedData = await GetStudentsWithKelas().call(params: params);

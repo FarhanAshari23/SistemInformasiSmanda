@@ -6,6 +6,7 @@ import 'package:new_sistem_informasi_smanda/domain/repository/students/students.
 
 import '../../../domain/entities/auth/user.dart';
 import '../../../service_locator.dart';
+import '../../models/auth/user_golang.dart';
 import '../../models/kelas/class.dart';
 
 class StudentsRepositoryImpl extends StudentRepository {
@@ -135,5 +136,25 @@ class StudentsRepositoryImpl extends StudentRepository {
   @override
   Future<Either> createExcellForStudentData() async {
     return await sl<StudentsFirebaseService>().createExcellForStudentData();
+  }
+
+  @override
+  Future<Either> getAllStudentGolang() async {
+    var returnedData =
+        await sl<StudentsFirebaseService>().getAllStudentGolang();
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          List.from(data)
+              .map(
+                (e) => UserGolangModel.fromMap(e).toEntity(),
+              )
+              .toList(),
+        );
+      },
+    );
   }
 }

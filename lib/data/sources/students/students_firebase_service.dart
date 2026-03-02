@@ -15,6 +15,7 @@ import 'package:path/path.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 import '../../../common/helper/execute_crud.dart';
+import '../../../core/networks/network.dart';
 import '../../../domain/entities/auth/user.dart';
 import '../../models/auth/update_user.dart';
 
@@ -31,6 +32,7 @@ abstract class StudentsFirebaseService {
   Future<Either> deleteStudentByClass(String kelas);
   Future<Either> getStudentsByname(String name);
   Future<Either> createExcellForStudentData();
+  Future<Either> getAllStudentGolang();
 }
 
 class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
@@ -556,6 +558,20 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       return Right("Data excel berhasil di simpan di: $filePath");
     } catch (e) {
       return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> getAllStudentGolang() async {
+    try {
+      final response = await Network.apiClient.get("/students");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
+    } catch (e) {
+      return Left("Something error: ${e.toString()}");
     }
   }
 }
