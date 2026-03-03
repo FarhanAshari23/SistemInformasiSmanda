@@ -1,13 +1,12 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/data/models/auth/update_user.dart';
-import 'package:new_sistem_informasi_smanda/data/models/auth/user.dart';
-import 'package:new_sistem_informasi_smanda/data/sources/students/students_firebase_service.dart';
-import 'package:new_sistem_informasi_smanda/domain/repository/students/students.dart';
 
-import '../../../domain/entities/auth/user.dart';
+import '../../../domain/repository/students/students.dart';
 import '../../../service_locator.dart';
+import '../../models/auth/update_user.dart';
+import '../../models/auth/user.dart';
 import '../../models/auth/user_golang.dart';
 import '../../models/kelas/class.dart';
+import '../../sources/students/students_firebase_service.dart';
 
 class StudentsRepositoryImpl extends StudentRepository {
   @override
@@ -36,8 +35,8 @@ class StudentsRepositoryImpl extends StudentRepository {
   }
 
   @override
-  Future<Either> deleteStudent(UserEntity user) async {
-    return await sl<StudentsFirebaseService>().deleteStudent(user);
+  Future<Either> deleteStudent(int studentId) async {
+    return await sl<StudentsFirebaseService>().deleteStudent(studentId);
   }
 
   @override
@@ -91,7 +90,7 @@ class StudentsRepositoryImpl extends StudentRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => UserModel.fromMap(e).toEntity(),
+                (e) => UserGolangModel.fromMap(e).toEntity(),
               )
               .toList(),
         );
@@ -100,8 +99,8 @@ class StudentsRepositoryImpl extends StudentRepository {
   }
 
   @override
-  Future<Either> acceptStudentAccount(UserEntity student) async {
-    return await sl<StudentsFirebaseService>().acceptStudentAccount(student);
+  Future<Either> acceptStudentAccount(int studentId) async {
+    return await sl<StudentsFirebaseService>().acceptStudentAccount(studentId);
   }
 
   @override

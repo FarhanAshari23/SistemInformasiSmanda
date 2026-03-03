@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/auth/user_golang.dart';
 import '../widgets/card_ack.dart';
 
 class RegisterAccountDetailView extends StatelessWidget {
-  final UserEntity user;
+  final UserGolang user;
   const RegisterAccountDetailView({
     super.key,
     required this.user,
@@ -28,14 +28,14 @@ class RegisterAccountDetailView extends StatelessWidget {
       'Agama',
     ];
     List<dynamic> contentList = [
-      user.nama,
-      user.kelas,
+      user.name,
+      user.nameClass,
       user.nisn,
-      user.tanggalLahir,
-      user.noHP,
-      user.alamat,
+      user.birthDate,
+      user.mobileNum,
+      user.address,
       user.gender == 1 ? 'Laki-Laki' : 'Perempuan',
-      user.agama,
+      user.religion,
     ];
     return Scaffold(
       body: SafeArea(

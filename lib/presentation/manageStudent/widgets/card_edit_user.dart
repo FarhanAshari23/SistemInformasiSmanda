@@ -112,7 +112,7 @@ class CardEditUser extends StatelessWidget {
                         buttonTitle: "Hapus",
                         onPressed: () async {
                           var delete = await sl<DeleteStudentUsecase>()
-                              .call(params: student);
+                              .call(params: student.gender);
                           return delete.fold(
                             (error) {
                               var snackbar = const SnackBar(

@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_all_student_account_usecase.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/dialog/choose_dialog.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/students/accept_student_register_usecase.dart';
 import '../../../domain/usecases/students/create_excell_students_usecase.dart';
+import '../../../domain/usecases/students/delete_all_student_account_usecase.dart';
 import '../../../domain/usecases/students/delete_student.dart';
 import '../../../domain/usecases/students/update_all_student_account_usecase.dart';
-import '../../../service_locator.dart';
 import '../bloc/get_student_registration_cubit.dart';
 import '../bloc/get_student_registration_state.dart';
 import '../widgets/button_all.dart';
@@ -84,50 +83,6 @@ class RegisterStudentView extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (state is StudentsRegistrationLoaded) {
-                      if (state.students.isEmpty) {
-                        return Expanded(
-                          child: RefreshIndicator(
-                            onRefresh: () async {
-                              context
-                                  .read<GetStudentRegistrationCubit>()
-                                  .displayStudentRegistration();
-                            },
-                            child: ListView(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-                              children: [
-                                SizedBox(height: height * 0.15),
-                                Center(
-                                  child: Image.asset(
-                                    AppImages.emptyRegistrationChara,
-                                    width: height * 0.2,
-                                    height: height * 0.2,
-                                  ),
-                                ),
-                                const Center(
-                                  child: Text(
-                                    'Tidak ada akun yang harus di konfirmasi',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                ),
-                                BasicButton(
-                                  onPressed: () => context
-                                      .read<ButtonStateCubit>()
-                                      .execute(
-                                        usecase: CreateExcellStudentsUsecase(),
-                                      ),
-                                  title: "Unduh Data Siswa",
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      }
                       return Expanded(
                         child: RefreshIndicator(
                           onRefresh: () async {
@@ -275,7 +230,7 @@ class RegisterStudentView extends StatelessWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                students.nama ?? '',
+                                                students.name ?? '',
                                                 style: const TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w700,
@@ -308,7 +263,7 @@ class RegisterStudentView extends StatelessWidget {
                                                     .execute(
                                                       usecase:
                                                           UpdateStudentRegisterUsecase(),
-                                                      params: students,
+                                                      params: students.id,
                                                     );
                                               },
                                               child: const SizedBox(
@@ -324,35 +279,14 @@ class RegisterStudentView extends StatelessWidget {
                                             CustomInkWell(
                                               borderRadius: 999,
                                               defaultColor: Colors.red,
-                                              onTap: () async {
-                                                var result = await sl<
-                                                        DeleteStudentUsecase>()
-                                                    .call(params: students);
-                                                result.fold(
-                                                  (error) {
-                                                    var snackbar = SnackBar(
-                                                      content: Text(
-                                                          "Gagal Mengubah Data: $error"),
+                                              onTap: () {
+                                                context
+                                                    .read<ButtonStateCubit>()
+                                                    .execute(
+                                                      usecase:
+                                                          DeleteStudentUsecase(),
+                                                      params: students.id,
                                                     );
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(snackbar);
-                                                  },
-                                                  (r) {
-                                                    context
-                                                        .read<
-                                                            GetStudentRegistrationCubit>()
-                                                        .displayStudentRegistration();
-                                                    var snackbar =
-                                                        const SnackBar(
-                                                      content: Text(
-                                                          "Akun berhasil dihapus"),
-                                                    );
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(snackbar);
-                                                  },
-                                                );
                                               },
                                               child: const SizedBox(
                                                 width: 32,
@@ -379,7 +313,48 @@ class RegisterStudentView extends StatelessWidget {
                       );
                     }
                     if (state is StudentsRegistrationFailure) {
-                      return Text(state.toString());
+                      return Expanded(
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            context
+                                .read<GetStudentRegistrationCubit>()
+                                .displayStudentRegistration();
+                          },
+                          child: ListView(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                            ),
+                            children: [
+                              SizedBox(height: height * 0.15),
+                              Center(
+                                child: Image.asset(
+                                  AppImages.emptyRegistrationChara,
+                                  width: height * 0.2,
+                                  height: height * 0.2,
+                                ),
+                              ),
+                              const Center(
+                                child: Text(
+                                  'Tidak ada akun yang harus di konfirmasi',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                              BasicButton(
+                                onPressed: () => context
+                                    .read<ButtonStateCubit>()
+                                    .execute(
+                                      usecase: CreateExcellStudentsUsecase(),
+                                    ),
+                                title: "Unduh Data Siswa",
+                              )
+                            ],
+                          ),
+                        ),
+                      );
                     }
                     return const SizedBox();
                   },

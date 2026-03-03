@@ -11,7 +11,9 @@ class GetStudentRegistrationCubit extends Cubit<StudentsRegistrationState> {
     var returnedData = await sl<GetStudentsRegisterUsecase>().call();
     returnedData.fold(
       (error) {
-        return emit(StudentsRegistrationFailure());
+        return emit(
+          StudentsRegistrationFailure(errorMessage: error.toString()),
+        );
       },
       (data) {
         return emit(StudentsRegistrationLoaded(students: data));

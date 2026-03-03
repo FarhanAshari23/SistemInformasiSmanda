@@ -68,23 +68,23 @@ class UserGolangModel {
 
   factory UserGolangModel.fromMap(Map<String, dynamic> map) {
     return UserGolangModel(
+      id: map['id'] ?? 0,
+      nisn: map['nisn'] ?? '',
+      name: map['name'] ?? '',
+      kelasId: map['kelas_id'] ?? 0,
+      nameClass: map['name_class'] ?? '',
+      religion: map['religion'] ?? '',
       address: map['address'] ?? '',
+      mobileNum: map['mobile_num'] ?? '',
+      gender: map['gender'] ?? 0,
       birthDate: map['birth_date'] != null && map['birth_date'] != ''
           ? DateTime.parse(map['birth_date'])
           : DateTime(2000, 1, 1),
       email: map['email'] ?? '',
-      gender: map['gender'] ?? '',
-      id: map['id'] ?? '',
-      isAdmin: map['is_admin'] ?? '',
-      isRegister: map['is_register'] ?? '',
-      iv: map['iv'] ?? '',
-      kelasId: map['kelas_id'] ?? '',
-      mobileNum: map['mobile_num'] ?? '',
-      name: map['name'] ?? '',
-      nameClass: map['name_class'] ?? '',
-      nisn: map['nisn'] ?? '',
-      password: map['password'] ?? '',
-      religion: map['religion'] ?? '',
+      password: map['password'],
+      isRegister: map['is_register'] ?? false,
+      isAdmin: map['is_admin'] ?? false,
+      iv: map['iv'],
     );
   }
 

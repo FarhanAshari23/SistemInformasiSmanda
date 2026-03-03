@@ -10,24 +10,24 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/obscure_email.dart';
 import 'package:path/path.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 import '../../../common/helper/execute_crud.dart';
+import '../../../common/helper/obscure_email.dart';
 import '../../../core/networks/network.dart';
-import '../../../domain/entities/auth/user.dart';
 import '../../models/auth/update_user.dart';
+import '../../models/auth/user_golang.dart';
 
 abstract class StudentsFirebaseService {
   Future<Either> getStudentsByClass(String kelas);
-  Future<Either> acceptStudentAccount(UserEntity student);
+  Future<Either> acceptStudentAccount(int studentId);
   Future<Either> acceptAllStudentAccount();
   Future<Either> deleteAllStudentAccount();
   Future<Either> getAllKelas();
   Future<Either> getStudentByRegister();
   Future<Either> updateStudent(UpdateUserReq updateUserReq);
-  Future<Either> deleteStudent(UserEntity user);
+  Future<Either> deleteStudent(int studentId);
   Future<Either> searchStudentByNISN(String nisnStudent);
   Future<Either> deleteStudentByClass(String kelas);
   Future<Either> getStudentsByname(String name);
@@ -140,7 +140,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   }
 
   @override
-  Future<Either> deleteStudent(UserEntity user) async {
+  Future<Either> deleteStudent(int studentId) async {
     String endpoint = ExecuteCRUD.deleteImageStudent();
     Uri? url;
     try {
@@ -150,9 +150,14 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
     }
 
     try {
+      final responseGet = await Network.apiClient.get("/student/$studentId");
+      if (responseGet.statusCode == 500) {
+        return left("Connection error: ${responseGet.data}");
+      }
+      final data = UserGolangModel.fromMap(responseGet.data['data']);
       final response = await http.post(url, body: {
-        "name": user.nama,
-        "nisn": user.nisn,
+        "name": data.name,
+        "nisn": data.nisn,
       }).timeout(const Duration(seconds: 5));
 
       if (response.statusCode != 200 && response.statusCode != 404) {
@@ -170,12 +175,9 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
     }
 
     try {
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Students');
-      QuerySnapshot querySnapshot =
-          await users.where('nisn', isEqualTo: user.nisn).get();
-      for (var doc in querySnapshot.docs) {
-        await doc.reference.delete();
+      final responseGet = await Network.apiClient.delete("/student/$studentId");
+      if (responseGet.statusCode == 500) {
+        return left("Connection error: ${responseGet.data}");
       }
       return const Right('Delete Data Student Success');
     } catch (e) {
@@ -281,35 +283,30 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   @override
   Future<Either> getStudentByRegister() async {
     try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Students")
-          .where("is_register", isEqualTo: false)
-          .orderBy(FieldPath.documentId, descending: true)
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
+      final response = await Network.apiClient.get("/students/unregister");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
   @override
-  Future<Either> acceptStudentAccount(UserEntity student) async {
+  Future<Either> acceptStudentAccount(int studentId) async {
     try {
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Students');
-      QuerySnapshot querySnapshot =
-          await users.where('nisn', isEqualTo: student.nisn).get();
-      if (querySnapshot.docs.isEmpty) {
-        return const Left('Student not found');
+      final response = await Network.apiClient.get("/student/$studentId");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      final doc = querySnapshot.docs.first;
-      final data = doc.data() as Map<String, dynamic>;
+      final data = UserGolangModel.fromMap(response.data['data']);
 
-      final key = encrypt.Key.fromUtf8(
-          '1234567890123456'); // sama dengan key di signUp()
-      final iv = encrypt.IV.fromBase64(data['iv']);
+      final key = encrypt.Key.fromUtf8('1234567890123456');
+      final iv = encrypt.IV.fromBase64(data.iv);
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
-      final decryptedPassword = encrypter.decrypt64(data['password'], iv: iv);
+      final decryptedPassword = encrypter.decrypt64(data.password, iv: iv);
 
       final FirebaseApp secondaryApp = await Firebase.initializeApp(
         name: 'SecondaryApp',
@@ -319,23 +316,18 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       final FirebaseAuth secondaryAuth =
           FirebaseAuth.instanceFor(app: secondaryApp);
 
-      final userCredential = await secondaryAuth.createUserWithEmailAndPassword(
-        email: data['email'],
+      await secondaryAuth.createUserWithEmailAndPassword(
+        email: data.email,
         password: decryptedPassword,
       );
 
-      final newUid = userCredential.user?.uid;
+      final updateRegister =
+          await Network.apiClient.put("/student/$studentId/register");
+      if (updateRegister.statusCode == 500) {
+        return left("Connection error: ${updateRegister.message}");
+      }
 
-      await users.doc(doc.id).update({
-        "is_register": true,
-        "uid": newUid,
-        'password': FieldValue.delete(),
-        'iv': FieldValue.delete(),
-      });
-
-      await secondaryApp.delete();
-
-      return right('Update Student Account Success');
+      return const Right("Accept student account succes");
     } on FirebaseAuthException catch (e) {
       String message = '';
       if (e.code == "weak-password") {
@@ -368,14 +360,16 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   @override
   Future<Either> acceptAllStudentAccount() async {
     try {
-      final CollectionReference users =
-          FirebaseFirestore.instance.collection('Students');
-      final QuerySnapshot querySnapshot =
-          await users.where('is_register', isEqualTo: false).get();
+      final response = await Network.apiClient.get("/students/unregister");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
 
-      if (querySnapshot.docs.isEmpty) {
+      if (response.statusCode == 404) {
         return const Right('No Students to Update');
       }
+
+      final dataList = response.data['data'] as List<Map<String, dynamic>>;
 
       final FirebaseApp secondaryApp = await Firebase.initializeApp(
         name: 'SecondaryApp',
@@ -389,27 +383,25 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       final key = encrypt.Key.fromUtf8('1234567890123456');
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
 
-      for (final doc in querySnapshot.docs) {
-        final data = doc.data() as Map<String, dynamic>;
+      for (final doc in dataList) {
+        final data = UserGolangModel.fromMap(doc);
 
         try {
-          final iv = encrypt.IV.fromBase64(data['iv']);
+          final iv = encrypt.IV.fromBase64(data.iv);
           final decryptedPassword = encrypter.decrypt64(
-            data['password'],
+            data.password,
             iv: iv,
           );
-          final userCredential =
-              await secondaryAuth.createUserWithEmailAndPassword(
-            email: data['email'],
+
+          await secondaryAuth.createUserWithEmailAndPassword(
+            email: data.email,
             password: decryptedPassword,
           );
-          final newUid = userCredential.user?.uid;
-          await users.doc(doc.id).update({
-            "is_register": true,
-            'uid': newUid,
-            'password': FieldValue.delete(),
-            'iv': FieldValue.delete(),
-          });
+          final updateRegister =
+              await Network.apiClient.put("/student/${data.id}/register");
+          if (updateRegister.statusCode == 500) {
+            return left("Connection error: ${updateRegister.message}");
+          }
         } on FirebaseAuthException catch (e) {
           String message = '';
           if (e.code == "weak-password") {
@@ -420,10 +412,10 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
             message = "Firebase Auth Error: ${e.message}";
           }
           return Left(
-            "Something error with register account ${data['email']}: $message",
+            "Something error with register account ${data.email}: $message",
           );
         } catch (e) {
-          return Left('Error on ${data['email']}: $e');
+          return Left('Error on ${data.email}: $e');
         }
       }
       await secondaryApp.delete();
@@ -435,8 +427,6 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
 
   @override
   Future<Either> deleteAllStudentAccount() async {
-    final firestore = FirebaseFirestore.instance;
-    final collection = firestore.collection('Students');
     String endpoint = ExecuteCRUD.deleteMultipleImageStudent();
     final List<Map<String, String>> studentsPayload = [];
     try {
@@ -447,24 +437,27 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         return Left("URL tidak valid: $endpoint");
       }
 
-      QuerySnapshot snapshot =
-          await collection.where('is_register', isEqualTo: false).get();
-      if (snapshot.docs.isEmpty) {
-        return const Left(
-          "Maaf, tidak ada akun registrasi yang harus dihapus",
-        );
+      final response = await Network.apiClient.get("/students/unregister");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
 
-      for (var doc in snapshot.docs) {
-        final data = doc.data() as Map<String, dynamic>;
+      if (response.statusCode == 404) {
+        return const Right('No Students to Update');
+      }
+
+      final dataList = response.data['data'] as List<Map<String, dynamic>>;
+
+      for (var doc in dataList) {
+        final data = UserGolangModel.fromMap(doc);
 
         studentsPayload.add({
-          "name": data["nama"],
-          "nisn": data["nisn"],
+          "name": data.name,
+          "nisn": data.nisn,
         });
       }
 
-      final response = await http
+      final responsePhoto = await http
           .post(
             url,
             headers: {
@@ -477,14 +470,16 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
           )
           .timeout(const Duration(seconds: 5));
 
-      if (response.statusCode != 200) {
-        return Left("Upload gagal (status: ${response.statusCode})");
+      if (responsePhoto.statusCode != 200) {
+        return Left("Upload gagal (status: ${responsePhoto.statusCode})");
       }
 
-      for (var doc in snapshot.docs) {
-        await doc.reference.delete();
-        snapshot = await collection.get();
+      final responseDelete =
+          await Network.apiClient.delete("/student/unregister");
+      if (responseDelete.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
+
       return const Right('Semua data akun registrasi telah dihapus');
     } on TimeoutException {
       return const Left(
