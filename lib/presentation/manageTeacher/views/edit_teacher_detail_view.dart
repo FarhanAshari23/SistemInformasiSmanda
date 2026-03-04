@@ -9,19 +9,16 @@ import '../../../common/bloc/activities/get_activities_cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
-import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/box_gender.dart';
-import '../../../common/widget/dropdown/app_dropdown_field.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
-import '../../../domain/usecases/teacher/update_teacher.dart';
+// import '../../../domain/usecases/teacher/update_teacher.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../../common/widget/photo/change_photo_view.dart';
 import 'select_jabatan_view.dart';
-import 'select_mengajar_view.dart';
 
 class EditTeacherDetailView extends StatefulWidget {
   final TeacherEntity teacher;
@@ -33,9 +30,7 @@ class EditTeacherDetailView extends StatefulWidget {
 
 class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
   late TextEditingController _namaC;
-  late TextEditingController _mengajarC;
   late TextEditingController _nipC;
-  late TextEditingController _waliKelasC;
   late TextEditingController _tanggalC;
   late TextEditingController _jabatanC;
   File? imageProfile;
@@ -44,9 +39,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
   void initState() {
     super.initState();
     _namaC = TextEditingController(text: widget.teacher.nama);
-    _mengajarC = TextEditingController(text: widget.teacher.mengajar);
     _nipC = TextEditingController(text: widget.teacher.nip);
-    _waliKelasC = TextEditingController(text: widget.teacher.waliKelas);
     _tanggalC = TextEditingController(text: widget.teacher.tanggalLahir);
     _jabatanC = TextEditingController(text: widget.teacher.jabatan);
   }
@@ -55,9 +48,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
   void dispose() {
     super.dispose();
     _namaC.dispose();
-    _mengajarC.dispose();
     _nipC.dispose();
-    _waliKelasC.dispose();
     _tanggalC.dispose();
     _jabatanC.dispose();
   }
@@ -66,17 +57,13 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
   Widget build(BuildContext context) {
     List<String> hinttext = [
       'Nama:',
-      'Mengajar:',
       'NIP:',
-      'Wali kelas:',
       'Tanggal Lahir:',
       'Tugas Tambahan:'
     ];
     List<TextEditingController> controller = [
       _namaC,
-      _mengajarC,
       _nipC,
-      _waliKelasC,
       _tanggalC,
       _jabatanC,
     ];
@@ -165,8 +152,6 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                             width: width,
                             height: height,
                             hinttext: hinttext,
-                            initMengajar: _mengajarC.text,
-                            initWaliKelas: _waliKelasC.text,
                             controller: controller,
                           ),
                         );
@@ -179,7 +164,6 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                     onPressed: () async {
                       if (_namaC.text.isEmpty ||
                           _nipC.text.isEmpty ||
-                          _mengajarC.text.isEmpty ||
                           _tanggalC.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -193,26 +177,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                           ),
                         );
                       } else {
-                        final cubit = context.read<GetAllKelasCubit>().state;
-                        context.read<ButtonStateCubit>().execute(
-                              usecase: UpdateTeacherUsecase(),
-                              params: TeacherEntity(
-                                uid: widget.teacher.uid,
-                                nama: _namaC.text,
-                                mengajar: _mengajarC.text,
-                                nip: _nipC.text,
-                                tanggalLahir: _tanggalC.text,
-                                waliKelas: cubit is KelasDisplayLoaded &&
-                                        cubit.selected == null
-                                    ? '-'
-                                    : (cubit as KelasDisplayLoaded).selected!,
-                                jabatan: _jabatanC.text,
-                                gender: context
-                                    .read<GenderSelectionCubit>()
-                                    .selectedIndex,
-                                image: imageProfile,
-                              ),
-                            );
+                        // final cubit = context.read<GetAllKelasCubit>().state;
                       }
                     },
                     title: 'Ubah',
@@ -233,79 +198,9 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
     required double height,
     required List<String> hinttext,
     required List<TextEditingController> controller,
-    required String initWaliKelas,
-    required String initMengajar,
   }) {
     if (index == 3) {
-      // Dropdown Wali Kelas
-      return BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
-        builder: (context, state) {
-          if (state is KelasDisplayLoading) {
-            return TextField(
-              controller: _waliKelasC,
-              autocorrect: false,
-              decoration: const InputDecoration(
-                hintText: 'kelas:',
-              ),
-            );
-          }
-          if (state is KelasDisplayLoaded) {
-            final entries = state.kelas.map((doc) {
-              final kelas = doc.className;
-              return DropdownMenuEntry(
-                value: kelas,
-                label: kelas,
-              );
-            }).toList();
-            entries.add(
-              const DropdownMenuEntry<String>(
-                value: "-", // ini yang nanti ke-save
-                label: "Bukan Wali Kelas",
-              ),
-            );
-            return AppDropdownField(
-              width: width * 0.92,
-              hint: widget.teacher.waliKelas,
-              items: entries,
-              initSelection: initWaliKelas,
-              onSelected: (value) {
-                context.read<GetAllKelasCubit>().selectItem(value);
-              },
-            );
-          }
-          return const SizedBox();
-        },
-      );
     } else if (index == 1) {
-      // Dropdown Mengajar
-      return TextField(
-        controller: controller[index],
-        readOnly: true,
-        decoration: InputDecoration(
-          hintText: hinttext[index],
-          suffixIcon: IconButton(
-            onPressed: () {
-              controller[index].text = '';
-            },
-            icon: const Icon(
-              Icons.delete_forever_rounded,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        onTap: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SelectMengajarView(),
-            ),
-          );
-          if (result != null) {
-            String hasil = result.join(", ");
-            controller[index].text = hasil;
-          }
-        },
-      );
     } else if (index == 4) {
       // Tanggal Picker
       return TextField(

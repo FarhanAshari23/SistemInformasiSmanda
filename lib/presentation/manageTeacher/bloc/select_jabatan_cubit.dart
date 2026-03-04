@@ -1,15 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/teacher/role.dart';
 
-class SelectJabatanCubit extends Cubit<List<String>> {
+class SelectJabatanCubit extends Cubit<List<RoleEntity>> {
   SelectJabatanCubit() : super([]);
 
-  void toggleJabatan(String jabatan) {
-    final current = List<String>.from(state);
+  void toggleJabatan(RoleEntity activity) {
+    final current = List<RoleEntity>.from(state);
 
-    if (current.contains(jabatan)) {
-      current.remove(jabatan); // kalau sudah ada → hapus
+    final index = current.indexWhere((element) => element.id == activity.id);
+
+    if (index != -1) {
+      current.removeAt(index);
     } else {
-      current.add(jabatan); // kalau belum ada → tambah
+      current.add(activity);
     }
 
     emit(current);

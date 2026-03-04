@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/roles/get_roles_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/roles/get_roles_state.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/teacher/role.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/bloc/select_jabatan_cubit.dart';
 
 import '../../../common/widget/appbar/basic_appbar.dart';
@@ -23,7 +24,7 @@ class SelectJabatanView extends StatelessWidget {
             create: (context) => GetRolesCubit()..displayRoles(),
           ),
         ],
-        child: BlocBuilder<SelectJabatanCubit, List<String>>(
+        child: BlocBuilder<SelectJabatanCubit, List<RoleEntity>>(
           builder: (context, selectedRoles) {
             return SafeArea(
               child: Column(
@@ -89,8 +90,8 @@ class SelectJabatanView extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             itemBuilder: (context, index) {
                               final roles = state.roles[index];
-                              final isSelected =
-                                  selectedRoles.contains(roles.name);
+                              final isSelected = selectedRoles
+                                  .any((element) => element.id == roles.id);
                               return Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 4),
@@ -102,7 +103,7 @@ class SelectJabatanView extends StatelessWidget {
                                   onTap: () {
                                     context
                                         .read<SelectJabatanCubit>()
-                                        .toggleJabatan(roles.name);
+                                        .toggleJabatan(roles);
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(16),

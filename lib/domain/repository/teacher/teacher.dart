@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
 
-import '../../entities/schedule/role.dart';
+import '../../entities/teacher/role.dart';
+import '../../entities/teacher/teacher_golang.dart';
 
 abstract class TeacherRepository {
-  Future<Either> createTeacher(TeacherEntity teacherCreationReq);
+  Future<Either> createTeacher(TeacherGolangEntity teacherCreationReq);
   Future<Either> updateTeacher(TeacherEntity teacherReq);
   Future<Either> deleteTeacher(TeacherEntity teacherReq);
   Future<Either> getTeacherByName(String name);

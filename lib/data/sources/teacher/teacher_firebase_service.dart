@@ -13,12 +13,14 @@ import 'package:path/path.dart';
 import '../../../common/helper/execute_crud.dart';
 import '../../../common/helper/generate_keyword.dart';
 import '../../../core/networks/network.dart';
-import '../../../domain/entities/schedule/role.dart';
+import '../../../domain/entities/teacher/role.dart';
 import '../../../domain/entities/teacher/teacher.dart';
+import '../../../domain/entities/teacher/teacher_golang.dart';
 import '../../models/teacher/schedule_teacher.dart';
+import '../../models/teacher/teacher_golang.dart';
 
 abstract class TeacherFirebaseService {
-  Future<Either> createTeacher(TeacherEntity teacherCreationReq);
+  Future<Either> createTeacher(TeacherGolangEntity teacherCreationReq);
   Future<Either> updateTeacher(TeacherEntity teacherReq);
   Future<Either> deleteTeacher(TeacherEntity teacherReq);
   Future<Either> getTeacherByName(String name);
@@ -81,12 +83,10 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   }
 
   @override
-  Future<Either> createTeacher(TeacherEntity teacherCreationReq) async {
+  Future<Either> createTeacher(TeacherGolangEntity teacherCreationReq) async {
     String endpoint = ExecuteCRUD.uploadImageTeacher();
-    final firestore = FirebaseFirestore.instance;
-    String docId;
     try {
-      if (teacherCreationReq.image != null) {
+      if (teacherCreationReq.imageFile != null) {
         Uri? url;
         try {
           url = Uri.parse(endpoint);
@@ -99,8 +99,8 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         request.files.add(
           await http.MultipartFile.fromPath(
             'image',
-            teacherCreationReq.image?.path ?? '',
-            filename: basename(teacherCreationReq.image?.path ?? ''),
+            teacherCreationReq.imageFile?.path ?? '',
+            filename: basename(teacherCreationReq.imageFile?.path ?? ''),
           ),
         );
 
@@ -132,40 +132,26 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         }
       }
 
-      final keywords = generateKeywords(teacherCreationReq.nama);
+      final secondaryApp = await Firebase.initializeApp(
+        name: 'SecondaryApp',
+        options: Firebase.app().options,
+      );
 
-      if (teacherCreationReq.email != null) {
-        final secondaryApp = await Firebase.initializeApp(
-          name: 'SecondaryApp',
-          options: Firebase.app().options,
-        );
+      final secondaryAuth = FirebaseAuth.instanceFor(app: secondaryApp);
 
-        final secondaryAuth = FirebaseAuth.instanceFor(app: secondaryApp);
+      await secondaryAuth.createUserWithEmailAndPassword(
+        email: teacherCreationReq.email!,
+        password: teacherCreationReq.password!,
+      );
 
-        final userCredential =
-            await secondaryAuth.createUserWithEmailAndPassword(
-          email: teacherCreationReq.email!,
-          password: teacherCreationReq.password!,
-        );
+      final model = TeacherGolangModelX.fromEntity(teacherCreationReq);
+      final response =
+          await Network.apiClient.post("/teacher", body: model.toMap());
 
-        docId = userCredential.user!.uid;
-      } else {
-        docId = firestore.collection("Teachers").doc().id;
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-
-      await firestore.collection("Teachers").doc(docId).set({
-        "nama": teacherCreationReq.nama,
-        "NIP": teacherCreationReq.nip,
-        "mengajar": teacherCreationReq.mengajar,
-        "tanggal_lahir": teacherCreationReq.tanggalLahir,
-        "wali_kelas": teacherCreationReq.waliKelas,
-        "jabatan_tambahan": teacherCreationReq.jabatan,
-        "gender": teacherCreationReq.gender,
-        "keywords": keywords,
-        "uid": docId,
-      });
-
-      return const Right("Upload Teacher was succesfull");
+      return const Right("Buat akun guru sukses");
     } on TimeoutException {
       return const Left(
           "Gagal terhubung dengan server, cobalah beberapa saat lagi");

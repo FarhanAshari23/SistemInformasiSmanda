@@ -37,7 +37,6 @@ class UserGolang {
     this.imageFile,
   });
 
-  // Method copyWith untuk modifikasi data spesifik (misal: password)
   UserGolang copyWith({
     int? id,
     String? nisn,

@@ -1,4 +1,4 @@
-import 'package:new_sistem_informasi_smanda/domain/entities/schedule/role.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/teacher/role.dart';
 
 abstract class GetRolesState {}
 

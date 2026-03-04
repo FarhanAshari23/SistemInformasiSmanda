@@ -3,22 +3,21 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher_golang.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/create_teacher.dart';
 
+import '../../../common/bloc/button/button_state.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
-import '../../../common/bloc/kelas/kelas_display_state.dart';
-import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/card/box_gender.dart';
-import '../../../common/widget/dropdown/app_dropdown_field.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../common/widget/photo/add_photo_view.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/teacher/teacher.dart';
-import 'ack_add_teacher_view.dart';
+import '../../../domain/entities/teacher/role.dart';
 import 'select_jabatan_view.dart';
-import 'select_mengajar_view.dart';
 
 class AddTeacherView extends StatefulWidget {
   const AddTeacherView({
@@ -32,21 +31,20 @@ class AddTeacherView extends StatefulWidget {
 class _AddTeacherViewState extends State<AddTeacherView> {
   final TextEditingController _namaC = TextEditingController();
   final TextEditingController _emailC = TextEditingController();
-  final TextEditingController _mengajarC = TextEditingController();
   final TextEditingController _nipC = TextEditingController();
-  final TextEditingController _waliKelasC = TextEditingController();
   final TextEditingController _tanggalC = TextEditingController();
   final TextEditingController _jabatanC = TextEditingController();
   File? imageProfile;
+  late DateTime birthDate;
+  List<int> id = [];
+  DateFormat formatter = DateFormat("d MMMM y", "id_ID");
 
   @override
   void dispose() {
     super.dispose();
     _namaC.dispose();
     _emailC.dispose();
-    _mengajarC.dispose();
     _nipC.dispose();
-    _waliKelasC.dispose();
     _tanggalC.dispose();
     _jabatanC.dispose();
   }
@@ -56,8 +54,6 @@ class _AddTeacherViewState extends State<AddTeacherView> {
     List<String> hinttext = [
       'Nama:',
       'Email:',
-      'Mengajar:',
-      'Wali kelas:',
       'NIP:',
       'Tanggal Lahir:',
       'Tugas Tambahan:'
@@ -65,8 +61,6 @@ class _AddTeacherViewState extends State<AddTeacherView> {
     List<TextEditingController> controller = [
       _namaC,
       _emailC,
-      _mengajarC,
-      _waliKelasC,
       _nipC,
       _tanggalC,
       _jabatanC,
@@ -82,104 +76,105 @@ class _AddTeacherViewState extends State<AddTeacherView> {
           BlocProvider(
             create: (context) => GenderSelectionCubit(),
           ),
+          BlocProvider(
+            create: (context) => ButtonStateCubit(),
+          ),
         ],
-        child: SafeArea(
-          child: Column(
-            children: [
-              const BasicAppbar(
-                isBackViewed: true,
-                isProfileViewed: false,
-              ),
-              const Text(
-                'TAMBAH DATA GURU',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.primary,
+        child: BlocListener<ButtonStateCubit, ButtonState>(
+          listener: (context, state) {
+            if (state is ButtonFailureState) {
+              var snackbar = SnackBar(
+                content: Text(state.errorMessage),
+                behavior: SnackBarBehavior.floating,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+            }
+            if (state is ButtonSuccessState) {
+              var snackbar = SnackBar(
+                content: Text(state.successMessage),
+                behavior: SnackBarBehavior.floating,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              Navigator.pop(context);
+            }
+          },
+          child: SafeArea(
+            child: Column(
+              children: [
+                const BasicAppbar(
+                  isBackViewed: true,
+                  isProfileViewed: false,
                 ),
-              ),
-              SizedBox(height: height * 0.04),
-              const Text(
-                'Masukan informasi yang sesuai pada kolom berikut:\n(Kosongkan email jika tidak ingin membuat akun)',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: AppColors.primary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: height * 0.02),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: List.generate(8, (index) {
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: height * 0.01),
-                        child: _buildFieldByIndex(
-                          context: context,
-                          index: index,
-                          width: width,
-                          height: height,
-                          hinttext: hinttext,
-                          controller: controller,
-                        ),
-                      );
-                    }),
+                const Text(
+                  'TAMBAH DATA GURU',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
                   ),
                 ),
-              ),
-              Builder(builder: (context) {
-                return BasicButton(
-                  onPressed: () {
-                    if (_namaC.text.isEmpty || _tanggalC.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text(
-                            'Tolong isi minimal kolom nama dan tanggal lahir',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                SizedBox(height: height * 0.02),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: List.generate(6, (index) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: height * 0.01),
+                          child: _buildFieldByIndex(
+                            context: context,
+                            index: index,
+                            width: width,
+                            height: height,
+                            hinttext: hinttext,
+                            controller: controller,
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+                Builder(builder: (context) {
+                  return BasicButton(
+                    onPressed: () {
+                      if (_namaC.text.isEmpty || _tanggalC.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              'Tolong isi minimal kolom nama dan tanggal lahir',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    } else {
-                      final cubit = context.read<GetAllKelasCubit>().state;
-                      DateTime date = DateFormat("d MMMM yyyy", "id_ID")
-                          .parse(_tanggalC.text);
-                      String password = DateFormat("ddMMyyyy").format(date);
-                      AppNavigator.push(
-                        context,
-                        AckAddTeacherView(
-                          teacherCreationReq: TeacherEntity(
-                            nama: _namaC.text,
-                            email:
-                                _emailC.text.isNotEmpty ? _emailC.text : null,
-                            password: password,
-                            mengajar:
-                                _mengajarC.text.isEmpty ? '-' : _mengajarC.text,
-                            nip: _nipC.text.isEmpty ? '-' : _nipC.text,
-                            tanggalLahir: _tanggalC.text,
-                            waliKelas: cubit is KelasDisplayLoaded &&
-                                    cubit.selected == null
-                                ? '-'
-                                : (cubit as KelasDisplayLoaded).selected!,
-                            jabatan:
-                                _jabatanC.text.isEmpty ? '-' : _jabatanC.text,
-                            gender: context
-                                .read<GenderSelectionCubit>()
-                                .selectedIndex,
-                            image: imageProfile,
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                  title: 'Lanjut',
-                );
-              }),
-            ],
+                        );
+                      } else {
+                        DateTime date = DateFormat("d MMMM yyyy", "id_ID")
+                            .parse(_tanggalC.text);
+                        String password = DateFormat("ddMMyyyy").format(date);
+                        context.read<ButtonStateCubit>().execute(
+                              usecase: CreateTeacherUseCase(),
+                              params: TeacherGolangEntity(
+                                email: _emailC.text,
+                                name: _namaC.text,
+                                nip: _nipC.text,
+                                password: password,
+                                tasksId: id,
+                                birthDate: birthDate,
+                                gender: context
+                                    .read<GenderSelectionCubit>()
+                                    .selectedIndex,
+                                imageFile: imageProfile,
+                              ),
+                            );
+                      }
+                    },
+                    title: 'Lanjut',
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       ),
@@ -195,75 +190,6 @@ class _AddTeacherViewState extends State<AddTeacherView> {
     required List<TextEditingController> controller,
   }) {
     if (index == 3) {
-      // Dropdown Wali Kelas
-      return BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
-        builder: (context, state) {
-          if (state is KelasDisplayLoaded) {
-            final entries = state.kelas.map((doc) {
-              final kelas = doc.className;
-              return DropdownMenuEntry(
-                value: kelas,
-                label: kelas,
-              );
-            }).toList();
-            entries.add(
-              const DropdownMenuEntry<String>(
-                value: "-", // ini yang nanti ke-save
-                label: "Bukan Wali Kelas",
-              ),
-            );
-            return AppDropdownField(
-                width: width * 0.92,
-                hint: 'Wali Kelas:',
-                items: entries,
-                onSelected: (value) {
-                  context.read<GetAllKelasCubit>().selectItem(value);
-                  FocusScope.of(context).unfocus();
-                });
-          }
-          if (state is KelasDisplayLoading) {
-            return TextField(
-              controller: controller[index],
-              decoration: InputDecoration(
-                hintText: hinttext[index],
-              ),
-            );
-          }
-          return const SizedBox();
-        },
-      );
-    } else if (index == 2) {
-      // Dropdown Mengajar
-      return TextField(
-        controller: controller[index],
-        readOnly: true,
-        decoration: InputDecoration(
-          hintText: hinttext[index],
-          suffixIcon: IconButton(
-            onPressed: () {
-              controller[index].text = '';
-            },
-            icon: const Icon(
-              Icons.delete_forever_rounded,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        onTap: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SelectMengajarView(),
-            ),
-          );
-          if (result != null) {
-            String hasil = result.join(", ");
-            controller[index].text = hasil;
-          }
-        },
-      );
-    } else if (index == 5) {
-      // Tanggal Picker
       return TextField(
         controller: controller[index],
         readOnly: true,
@@ -278,12 +204,48 @@ class _AddTeacherViewState extends State<AddTeacherView> {
           if (picked != null) {
             controller[index].text =
                 DateFormat("d MMMM y", "id_ID").format(picked);
+            setState(() {
+              birthDate = picked;
+            });
           }
         },
         decoration: InputDecoration(hintText: hinttext[index]),
       );
-    } else if (index == 7) {
-      // Gender Selection
+    } else if (index == 4) {
+      return TextField(
+        controller: controller[index],
+        readOnly: true,
+        decoration: InputDecoration(
+          hintText: hinttext[index],
+          suffixIcon: IconButton(
+            onPressed: () {
+              controller[index].text = '';
+              id.clear();
+            },
+            icon: const Icon(
+              Icons.delete_forever_rounded,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        onTap: () async {
+          List<RoleEntity>? result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SelectJabatanView(),
+            ),
+          );
+          if (result != null) {
+            List<String> name = [];
+            for (var i = 0; i < result.length; i++) {
+              name.add(result[i].name);
+              id.add(result[i].id);
+            }
+            controller[index].text = name.join(", ");
+          }
+        },
+      );
+    } else if (index == 5) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -369,38 +331,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
           )
         ],
       );
-    } else if (index == 6) {
-      //tugas_tambahan
-      return TextField(
-        controller: controller[index],
-        readOnly: true,
-        decoration: InputDecoration(
-          hintText: hinttext[index],
-          suffixIcon: IconButton(
-            onPressed: () {
-              controller[index].text = '';
-            },
-            icon: const Icon(
-              Icons.delete_forever_rounded,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        onTap: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SelectJabatanView(),
-            ),
-          );
-          if (result != null) {
-            String hasil = result.join(", ");
-            controller[index].text = hasil;
-          }
-        },
-      );
     }
-
     // Default TextField
     return TextField(
       controller: controller[index],

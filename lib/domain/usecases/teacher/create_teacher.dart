@@ -2,12 +2,12 @@ import 'package:dartz/dartz.dart';
 
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
-import '../../entities/teacher/teacher.dart';
+import '../../entities/teacher/teacher_golang.dart';
 import '../../repository/teacher/teacher.dart';
 
-class CreateTeacherUseCase implements Usecase<Either, TeacherEntity> {
+class CreateTeacherUseCase implements Usecase<Either, TeacherGolangEntity> {
   @override
-  Future<Either> call({TeacherEntity? params}) async {
+  Future<Either> call({TeacherGolangEntity? params}) async {
     return await sl<TeacherRepository>().createTeacher(params!);
   }
 }

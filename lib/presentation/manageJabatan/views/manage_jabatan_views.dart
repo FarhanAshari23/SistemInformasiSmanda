@@ -12,7 +12,7 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/schedule/role.dart';
+import '../../../domain/entities/teacher/role.dart';
 import '../../../domain/usecases/teacher/delete_role_usecase.dart';
 import '../../../domain/usecases/teacher/update_role_usecase.dart';
 import '../../../service_locator.dart';

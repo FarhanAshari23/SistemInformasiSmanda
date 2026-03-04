@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../../../domain/entities/schedule/role.dart';
+import '../../../domain/entities/teacher/role.dart';
 
 class RoleModel {
   final String name;
