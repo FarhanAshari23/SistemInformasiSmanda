@@ -13,7 +13,7 @@ abstract class TeacherRepository {
   Future<Either> getRoles();
   Future<Either> createRoles(String role);
   Future<Either> updateRoles(RoleEntity role);
-  Future<Either> deleteRole(String role);
+  Future<Either> deleteRole(int idRole);
   Future<Either> getKepalaSekolah();
   Future<Either> getWaka();
   Future<Either> getHonor();

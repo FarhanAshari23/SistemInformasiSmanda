@@ -1,9 +1,9 @@
 class ActivityEntity {
-  final String? oldName;
+  final int id;
   final String name;
 
   ActivityEntity({
     required this.name,
-    this.oldName,
+    required this.id,
   });
 }

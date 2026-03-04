@@ -118,8 +118,8 @@ class TeacherRepositoryImpl extends TeacherRepository {
   }
 
   @override
-  Future<Either> deleteRole(String role) async {
-    return await sl<TeacherFirebaseService>().deleteRole(role);
+  Future<Either> deleteRole(int idRole) async {
+    return await sl<TeacherFirebaseService>().deleteRole(idRole);
   }
 
   @override

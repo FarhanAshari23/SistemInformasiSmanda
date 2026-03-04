@@ -149,12 +149,12 @@ class _ManageActivityViewState extends State<ManageActivityView> {
                                   showDialog(
                                     context: context,
                                     builder: (context) {
-                                      final TextEditingController kegiatanOldC =
+                                      final TextEditingController kegiatanC =
                                           TextEditingController(
                                               text: activity.name);
                                       return InputDialog(
                                         height: height,
-                                        controller: kegiatanOldC,
+                                        controller: kegiatanC,
                                         onTap: () {
                                           outerContext
                                               .read<ButtonStateCubit>()
@@ -162,8 +162,8 @@ class _ManageActivityViewState extends State<ManageActivityView> {
                                                 usecase:
                                                     UpdateActivityUsecase(),
                                                 params: ActivityEntity(
-                                                  oldName: activity.name,
-                                                  name: kegiatanOldC.text,
+                                                  id: activity.id,
+                                                  name: kegiatanC.text,
                                                 ),
                                               );
                                         },
@@ -195,7 +195,7 @@ class _ManageActivityViewState extends State<ManageActivityView> {
                                       onTap: () async {
                                         var delete =
                                             await sl<DeleteActivityUsecase>()
-                                                .call(params: activity.name);
+                                                .call(params: activity.id);
                                         return delete.fold(
                                           (error) {
                                             var snackbar = const SnackBar(

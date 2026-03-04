@@ -12,6 +12,7 @@ import 'package:path/path.dart';
 
 import '../../../common/helper/execute_crud.dart';
 import '../../../common/helper/generate_keyword.dart';
+import '../../../core/networks/network.dart';
 import '../../../domain/entities/schedule/role.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../models/teacher/schedule_teacher.dart';
@@ -23,7 +24,7 @@ abstract class TeacherFirebaseService {
   Future<Either> getTeacherByName(String name);
   Future<Either> getScheduleTeacher(String name);
   Future<Either> createRoles(String role);
-  Future<Either> deleteRole(String role);
+  Future<Either> deleteRole(int idRole);
   Future<Either> updateRoles(RoleEntity role);
   Future<Either> getRoles();
   Future<Either> getKepalaSekolah();
@@ -344,43 +345,41 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   @override
   Future<Either> createRoles(String role) async {
     try {
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-      await firebaseFirestore.collection("Roles").add(
-        {
-          "role": role,
-        },
-      );
-      return const Right("Upload role was succesfull");
+      final response =
+          await Network.apiClient.post("/task", body: {"name": role});
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      return const Right("Tugas tambahan berhasil dibuat");
     } catch (e) {
-      return Left('Something Wrong: $e');
+      return Left("Something error: ${e.toString()}");
     }
   }
 
   @override
-  Future<Either> deleteRole(String role) async {
+  Future<Either> deleteRole(int idRole) async {
     try {
-      CollectionReference item = FirebaseFirestore.instance.collection('Roles');
-      QuerySnapshot querySnapshot =
-          await item.where('role', isEqualTo: role).get();
-      for (var doc in querySnapshot.docs) {
-        await doc.reference.delete();
+      final response = await Network.apiClient.delete("/task/$idRole");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      return const Right('Delete Data Role Success');
+      return const Right("Tugas tambahan berhasil dihapus");
     } catch (e) {
-      return Left('Something wrong: $e');
+      return Left("Something error: ${e.toString()}");
     }
   }
 
   @override
   Future<Either> getRoles() async {
     try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection('Roles')
-          .orderBy('role', descending: false)
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
+      final response = await Network.apiClient.get("/tasks");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
@@ -419,16 +418,14 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   @override
   Future<Either> updateRoles(RoleEntity role) async {
     try {
-      CollectionReference item = FirebaseFirestore.instance.collection('Roles');
-      QuerySnapshot querySnapshot =
-          await item.where('role', isEqualTo: role.oldName).get();
-      if (querySnapshot.docs.isNotEmpty) {
-        final docId = querySnapshot.docs.first.id;
-        item.doc(docId).update({"role": role.name});
+      final response = await Network.apiClient
+          .put("/task/${role.id}", body: {"name": role.name});
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      return const Right('Update Data Tugas Tambahan Success');
+      return const Right("Tugas tambahan berhasil diubah");
     } catch (e) {
-      return Left('Something wrong: $e');
+      return Left("Something error: ${e.toString()}");
     }
   }
 }

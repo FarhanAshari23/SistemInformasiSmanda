@@ -4,18 +4,24 @@ import '../../../domain/entities/schedule/role.dart';
 
 class RoleModel {
   final String name;
+  final int id;
 
-  RoleModel({required this.name});
+  RoleModel({
+    required this.name,
+    required this.id,
+  });
 
   Map<String, dynamic> toMap() {
     return {
-      'role': name,
+      'id': id,
+      'name': name,
     };
   }
 
   factory RoleModel.fromMap(Map<String, dynamic> map) {
     return RoleModel(
-      name: map["role"] ?? '',
+      name: map["name"] ?? '',
+      id: map['id'] ?? 0,
     );
   }
 
@@ -27,6 +33,9 @@ class RoleModel {
 
 extension RoleModelX on RoleModel {
   RoleEntity toEntity() {
-    return RoleEntity(name: name);
+    return RoleEntity(
+      name: name,
+      id: id,
+    );
   }
 }

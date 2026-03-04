@@ -1,9 +1,9 @@
 class RoleEntity {
+  final int id;
   final String name;
-  final String? oldName;
 
   RoleEntity({
     required this.name,
-    this.oldName,
+    required this.id,
   });
 }

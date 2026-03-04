@@ -150,20 +150,20 @@ class _ManageJabatanViewsState extends State<ManageJabatanViews> {
                                   showDialog(
                                     context: context,
                                     builder: (context) {
-                                      final TextEditingController tugasOldC =
+                                      final TextEditingController tugasC =
                                           TextEditingController(
                                               text: activity.name);
                                       return InputDialog(
                                         height: height,
-                                        controller: tugasOldC,
+                                        controller: tugasC,
                                         onTap: () {
                                           outerContext
                                               .read<ButtonStateCubit>()
                                               .execute(
                                                   usecase: UpdateRoleUsecase(),
                                                   params: RoleEntity(
-                                                    oldName: activity.name,
-                                                    name: tugasOldC.text,
+                                                    id: activity.id,
+                                                    name: tugasC.text,
                                                   ));
                                         },
                                         title: 'Ubah tugas',
@@ -205,8 +205,7 @@ class _ManageJabatanViewsState extends State<ManageJabatanViews> {
                                               onPressed: () async {
                                                 var delete = await sl<
                                                         DeleteRoleUsecase>()
-                                                    .call(
-                                                        params: activity.name);
+                                                    .call(params: activity.id);
                                                 return delete.fold(
                                                   (error) {
                                                     var snackbar =

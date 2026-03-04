@@ -4,18 +4,24 @@ import 'package:new_sistem_informasi_smanda/domain/entities/schedule/activity.da
 
 class ActivityModel {
   final String name;
+  final int id;
 
-  ActivityModel({required this.name});
+  ActivityModel({
+    required this.name,
+    required this.id,
+  });
 
   Map<String, dynamic> toMap() {
     return {
-      'kegiatan': name,
+      'name': name,
+      'id': id,
     };
   }
 
   factory ActivityModel.fromMap(Map<String, dynamic> map) {
     return ActivityModel(
-      name: map["kegiatan"] ?? '',
+      name: map["name"] ?? '',
+      id: map["id"] ?? 0,
     );
   }
 
@@ -27,6 +33,9 @@ class ActivityModel {
 
 extension ActivityModelX on ActivityModel {
   ActivityEntity toEntity() {
-    return ActivityEntity(name: name);
+    return ActivityEntity(
+      name: name,
+      id: id,
+    );
   }
 }

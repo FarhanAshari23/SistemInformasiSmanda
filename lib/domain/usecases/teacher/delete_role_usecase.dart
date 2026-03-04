@@ -4,9 +4,9 @@ import 'package:new_sistem_informasi_smanda/domain/repository/teacher/teacher.da
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
 
-class DeleteRoleUsecase implements Usecase<Either, String> {
+class DeleteRoleUsecase implements Usecase<Either, int> {
   @override
-  Future<Either> call({String? params}) async {
+  Future<Either> call({int? params}) async {
     return await sl<TeacherRepository>().deleteRole(params!);
   }
 }

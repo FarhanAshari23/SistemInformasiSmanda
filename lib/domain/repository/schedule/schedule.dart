@@ -13,7 +13,7 @@ abstract class ScheduleRepository {
   Future<Either> updateJadwal(ScheduleEntity scheduleReq);
   Future<Either> deleteJadwal(String kelas);
   Future<Either> deleteKelas(String kelas);
-  Future<Either> deleteActivity(String activity);
+  Future<Either> deleteActivity(int idActivity);
   Future<Either> updateActivity(ActivityEntity activity);
   Future<Either> createActivities(String kegiatan);
 }

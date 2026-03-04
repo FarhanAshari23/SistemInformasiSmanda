@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../core/networks/network.dart';
 import '../../../domain/entities/kelas/kelas.dart';
 import '../../../domain/entities/schedule/activity.dart';
 import '../../../domain/entities/schedule/schedule.dart';
@@ -18,7 +19,7 @@ abstract class ScheduleFirebaseService {
   Future<Either> updateJadwal(ScheduleEntity scheduleReq);
   Future<Either> deleteJadwal(String kelas);
   Future<Either> deleteKelas(String kelas);
-  Future<Either> deleteActivity(String activity);
+  Future<Either> deleteActivity(int idActivity);
   Future<Either> updateActivity(ActivityEntity activity);
 }
 
@@ -97,13 +98,14 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   @override
   Future<Either> getActivities() async {
     try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection('Activities')
-          .orderBy('kegiatan', descending: false)
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
+      final response = await Network.apiClient.get("/subjects");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
@@ -207,14 +209,14 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   @override
   Future<Either> createActivities(String kegiatan) async {
     try {
-      final kelasRef = FirebaseFirestore.instance.collection('Activities');
-      await kelasRef.add({
-        'kegiatan': kegiatan,
-      });
-
-      return const Right('Data kegiatan berhasil ditambahkan');
+      final response =
+          await Network.apiClient.post("/subject", body: {"name": kegiatan});
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      return const Right("Mata Pelajaran berhasil dibuat");
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
@@ -235,35 +237,29 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   }
 
   @override
-  Future<Either> deleteActivity(String activity) async {
+  Future<Either> deleteActivity(int idActivity) async {
     try {
-      CollectionReference item =
-          FirebaseFirestore.instance.collection('Activities');
-      QuerySnapshot querySnapshot =
-          await item.where('kegiatan', isEqualTo: activity).get();
-      for (var doc in querySnapshot.docs) {
-        await doc.reference.delete();
+      final response = await Network.apiClient.delete("/subject/$idActivity");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      return const Right('Delete Data Kegiatan Success');
+      return const Right("Mata Pelajaran berhasil dihapus");
     } catch (e) {
-      return Left('Something wrong: $e');
+      return Left("Something error: ${e.toString()}");
     }
   }
 
   @override
   Future<Either> updateActivity(ActivityEntity activity) async {
     try {
-      CollectionReference item =
-          FirebaseFirestore.instance.collection('Activities');
-      QuerySnapshot querySnapshot =
-          await item.where('kegiatan', isEqualTo: activity.oldName).get();
-      if (querySnapshot.docs.isNotEmpty) {
-        final docId = querySnapshot.docs.first.id;
-        item.doc(docId).update({"kegiatan": activity.name});
+      final response = await Network.apiClient
+          .put("/subject/${activity.id}", body: {"name": activity.name});
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      return const Right('Update Data Kegiatan Success');
+      return const Right("Mata Pelajaran berhasil diubah");
     } catch (e) {
-      return Left('Something wrong: $e');
+      return Left("Something error: ${e.toString()}");
     }
   }
 }

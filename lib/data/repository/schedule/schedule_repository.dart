@@ -94,8 +94,8 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
   }
 
   @override
-  Future<Either> deleteActivity(String activity) async {
-    return await sl<ScheduleFirebaseService>().deleteActivity(activity);
+  Future<Either> deleteActivity(int idActivity) async {
+    return await sl<ScheduleFirebaseService>().deleteActivity(idActivity);
   }
 
   @override
