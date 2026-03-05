@@ -9,7 +9,6 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 
-import '../../../common/helper/execute_crud.dart';
 import '../../../core/networks/network.dart';
 import '../../../domain/entities/auth/user_golang.dart';
 import '../../models/auth/user_golang.dart';
@@ -92,10 +91,28 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
 
   @override
   Future<Either> signUp(UserGolang murid) async {
-    String endpoint = ExecuteCRUD.uploadImageStudent();
     try {
+      final key = encrypt.Key.fromUtf8('1234567890123456');
+      final iv = encrypt.IV.fromSecureRandom(16);
+      final encrypter = encrypt.Encrypter(encrypt.AES(key));
+      final encryptedPassword = encrypter.encrypt(murid.password!, iv: iv);
+
+      final model = UserGolangModelX.fromEntity(
+          murid.copyWith(password: encryptedPassword.base64, iv: iv.base64));
+
+      final response =
+          await Network.apiClient.post("/student", body: model.toMap());
+
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+
+      final data = UserGolangModel.fromMap(response.data['data']);
+
       if (murid.imageFile != null) {
         Uri? url;
+        String endpoint =
+            "http://192.168.18.3:3000/api/student/${data.id}/photo";
         try {
           url = Uri.parse(endpoint);
         } catch (_) {
@@ -115,6 +132,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         request.headers.addAll({
           "Accept": "application/json",
           "Content-Type": "multipart/form-data",
+          "x-api-key": "RAHASIA"
         });
 
         final streamedResponse = await request.send().timeout(
@@ -127,6 +145,8 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         final responseBody = await streamedResponse.stream.bytesToString();
 
         if (streamedResponse.statusCode != 200) {
+          print(
+              "Upload gagal (status: ${streamedResponse.statusCode}). Responsenya: $responseBody");
           throw Exception(
             "Upload gagal (status: ${streamedResponse.statusCode}). "
             "Response: $responseBody",
@@ -140,20 +160,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         }
       }
 
-      final key = encrypt.Key.fromUtf8('1234567890123456');
-      final iv = encrypt.IV.fromSecureRandom(16);
-      final encrypter = encrypt.Encrypter(encrypt.AES(key));
-      final encryptedPassword = encrypter.encrypt(murid.password!, iv: iv);
-
-      final model = UserGolangModelX.fromEntity(
-          murid.copyWith(password: encryptedPassword.base64, iv: iv.base64));
-
-      final response =
-          await Network.apiClient.post("/student", body: model.toMap());
-
-      if (response.statusCode == 500) {
-        return left("Connection error: ${response.message}");
-      }
       return Right("Buat akun sukses: ${response.message}");
     } on SocketException {
       throw Exception("Tidak ada koneksi internet.");

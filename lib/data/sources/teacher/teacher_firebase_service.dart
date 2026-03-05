@@ -84,10 +84,30 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
 
   @override
   Future<Either> createTeacher(TeacherGolangEntity teacherCreationReq) async {
-    String endpoint = ExecuteCRUD.uploadImageTeacher();
     try {
+      final secondaryApp = await Firebase.initializeApp(
+        name: 'SecondaryApp',
+        options: Firebase.app().options,
+      );
+
+      final secondaryAuth = FirebaseAuth.instanceFor(app: secondaryApp);
+
+      await secondaryAuth.createUserWithEmailAndPassword(
+        email: teacherCreationReq.email!,
+        password: teacherCreationReq.password!,
+      );
+
+      final model = TeacherGolangModelX.fromEntity(teacherCreationReq);
+      final response =
+          await Network.apiClient.post("/teacher", body: model.toMap());
+
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+
       if (teacherCreationReq.imageFile != null) {
         Uri? url;
+        String endpoint = "http://192.168.18.3:3000/api/teacher/photo";
         try {
           url = Uri.parse(endpoint);
         } catch (_) {
@@ -107,6 +127,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         request.headers.addAll({
           "Accept": "application/json",
           "Content-Type": "multipart/form-data",
+          "x-api-key": "RAHASIA"
         });
 
         final streamedResponse = await request.send().timeout(
@@ -132,25 +153,6 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         }
       }
 
-      final secondaryApp = await Firebase.initializeApp(
-        name: 'SecondaryApp',
-        options: Firebase.app().options,
-      );
-
-      final secondaryAuth = FirebaseAuth.instanceFor(app: secondaryApp);
-
-      await secondaryAuth.createUserWithEmailAndPassword(
-        email: teacherCreationReq.email!,
-        password: teacherCreationReq.password!,
-      );
-
-      final model = TeacherGolangModelX.fromEntity(teacherCreationReq);
-      final response =
-          await Network.apiClient.post("/teacher", body: model.toMap());
-
-      if (response.statusCode == 500) {
-        return left("Connection error: ${response.message}");
-      }
       return const Right("Buat akun guru sukses");
     } on TimeoutException {
       return const Left(

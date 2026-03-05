@@ -118,7 +118,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
-                      children: List.generate(6, (index) {
+                      children: List.generate(7, (index) {
                         return Padding(
                           padding: EdgeInsets.only(bottom: height * 0.01),
                           child: _buildFieldByIndex(
@@ -294,15 +294,15 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => AddPhotoView(
-                        name: controller[0].text,
-                        id: controller[2].text.isEmpty
-                            ? controller[2].text
-                            : controller[4].text,
+                        name: _namaC.text,
+                        id: _nipC.text.isEmpty ? _tanggalC.text : _nipC.text,
                       ),
                     ),
                   );
                   if (result != null) {
-                    imageProfile = result;
+                    setState(() {
+                      imageProfile = result;
+                    });
                   }
                 },
                 child: SizedBox(
@@ -331,6 +331,31 @@ class _AddTeacherViewState extends State<AddTeacherView> {
           )
         ],
       );
+    } else if (index == 6) {
+      return imageProfile != null
+          ? Row(
+              children: [
+                const Text(
+                  'Tampilan Foto: ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: AppColors.primary,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  width: width * 0.2,
+                  height: width * 0.2,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: FileImage(imageProfile!), fit: BoxFit.fill),
+                  ),
+                )
+              ],
+            )
+          : const SizedBox();
     }
     // Default TextField
     return TextField(
