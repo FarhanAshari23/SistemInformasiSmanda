@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
@@ -8,13 +9,13 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/teacher/teacher.dart';
+import '../../../domain/entities/teacher/teacher_golang.dart';
 import '../../../domain/usecases/teacher/delete_teacher.dart';
 import '../../../service_locator.dart';
 import '../views/edit_teacher_detail_view.dart';
 
 class CardEditTeacher extends StatelessWidget {
-  final TeacherEntity teacher;
+  final TeacherGolangEntity teacher;
   const CardEditTeacher({
     super.key,
     required this.teacher,
@@ -27,6 +28,7 @@ class CardEditTeacher extends StatelessWidget {
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
+    String formattedDate = DateFormat('d MMMM yyyy').format(teacher.birthDate!);
     return Container(
       width: width * 0.7,
       height: bodyHeight * 0.175,
@@ -48,8 +50,8 @@ class CardEditTeacher extends StatelessWidget {
                       ? AppImages.guruLaki
                       : AppImages.guruPerempuan,
                   imageUrl: DisplayImage.displayImageTeacher(
-                    teacher.nama,
-                    teacher.nip != '-' ? teacher.nip : teacher.tanggalLahir,
+                    teacher.name ?? '',
+                    teacher.nip != '-' ? teacher.nip! : formattedDate,
                   ),
                 ),
                 SizedBox(width: width * 0.05),
@@ -62,7 +64,7 @@ class CardEditTeacher extends StatelessWidget {
                         width: width * 0.465,
                         height: bodyHeight * 0.06,
                         child: Text(
-                          teacher.nama,
+                          teacher.name ?? '',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w900,
@@ -76,7 +78,7 @@ class CardEditTeacher extends StatelessWidget {
                           width: width * 0.4,
                           height: bodyHeight * 0.04,
                           child: Text(
-                            teacher.nip,
+                            teacher.nip ?? '',
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -110,11 +112,11 @@ class CardEditTeacher extends StatelessWidget {
                       return BasicDialog(
                         splashImage: AppImages.splashDelete,
                         mainTitle:
-                            'Apakah anda yakin ingin menghapus data ${teacher.nama}?',
+                            'Apakah anda yakin ingin menghapus data ${teacher.name}?',
                         buttonTitle: 'Hapus',
                         onPressed: () async {
                           var delete = await sl<DeleteTeacherUsecase>()
-                              .call(params: teacher);
+                              .call(params: teacher.id);
                           return delete.fold(
                             (error) {
                               var snackbar = SnackBar(
@@ -128,7 +130,9 @@ class CardEditTeacher extends StatelessWidget {
                               var snackbar = const SnackBar(
                                 content: Text("Data Berhasil Dihapus"),
                               );
-                              context.read<TeacherCubit>().displayTeacher();
+                              context
+                                  .read<TeacherCubit>()
+                                  .displayTeacherGolang();
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackbar);
                               Navigator.pop(context);

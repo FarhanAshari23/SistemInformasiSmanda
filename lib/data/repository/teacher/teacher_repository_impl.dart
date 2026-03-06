@@ -8,6 +8,7 @@ import 'package:new_sistem_informasi_smanda/domain/repository/teacher/teacher.da
 import '../../../domain/entities/teacher/teacher_golang.dart';
 import '../../../service_locator.dart';
 import '../../models/teacher/role.dart';
+import '../../models/teacher/teacher_golang.dart';
 
 class TeacherRepositoryImpl extends TeacherRepository {
   @override
@@ -54,7 +55,7 @@ class TeacherRepositoryImpl extends TeacherRepository {
       (data) {
         return Right(
           List.from(data)
-              .map((e) => TeacherModel.fromMap(e).toEntity())
+              .map((e) => TeacherGolangModel.fromMap(e).toEntity())
               .toList(),
         );
       },
@@ -67,8 +68,8 @@ class TeacherRepositoryImpl extends TeacherRepository {
   }
 
   @override
-  Future<Either> deleteTeacher(TeacherEntity teacherReq) async {
-    return await sl<TeacherFirebaseService>().deleteTeacher(teacherReq);
+  Future<Either> deleteTeacher(int teacherId) async {
+    return await sl<TeacherFirebaseService>().deleteTeacher(teacherId);
   }
 
   @override

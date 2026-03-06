@@ -20,6 +20,18 @@ class TeacherCubit extends Cubit<TeacherState> {
     );
   }
 
+  void displayTeacherGolang({dynamic params}) async {
+    var returnedData = await sl<GetTeacher>().call();
+    returnedData.fold(
+      (error) {
+        return emit(TeacherFailure(errorMessage: error));
+      },
+      (data) {
+        return emit(TeacherGolangLoaded(teachers: data));
+      },
+    );
+  }
+
   void selectItem(String? value) {
     final currentState = state;
     if (currentState is TeacherLoaded) {

@@ -22,7 +22,7 @@ import '../../models/teacher/teacher_golang.dart';
 abstract class TeacherFirebaseService {
   Future<Either> createTeacher(TeacherGolangEntity teacherCreationReq);
   Future<Either> updateTeacher(TeacherEntity teacherReq);
-  Future<Either> deleteTeacher(TeacherEntity teacherReq);
+  Future<Either> deleteTeacher(int teacherId);
   Future<Either> getTeacherByName(String name);
   Future<Either> getScheduleTeacher(String name);
   Future<Either> createRoles(String role);
@@ -71,14 +71,14 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   @override
   Future<Either> getTeacher() async {
     try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Teachers")
-          .where('mengajar', isNotEqualTo: 'Tenaga Kependidikan')
-          .orderBy('nama')
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
+      final response = await Network.apiClient.get("/teachers");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
@@ -172,46 +172,15 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   }
 
   @override
-  Future<Either> deleteTeacher(TeacherEntity teacherReq) async {
-    String endpoint = ExecuteCRUD.deleteImageTeacher();
+  Future<Either> deleteTeacher(int teacherId) async {
     try {
-      Uri? url;
-      try {
-        url = Uri.parse(endpoint);
-      } catch (_) {
-        return Left("URL tidak valid: $endpoint");
-      }
-
-      final response = await http.post(url, body: {
-        "name": teacherReq.nama,
-        "nip": teacherReq.nip != '-' ? teacherReq.nip : teacherReq.tanggalLahir,
-      }).timeout(const Duration(seconds: 5));
-
-      if (response.statusCode != 200 && response.statusCode != 404) {
-        return Left("Upload gagal (status: ${response.statusCode})");
-      }
-
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Teachers');
-      QuerySnapshot querySnapshot = await users
-          .where(
-            teacherReq.nip == '-' ? "nama" : "NIP",
-            isEqualTo: teacherReq.nip == '-' ? teacherReq.nama : teacherReq.nip,
-          )
-          .get();
-      for (var doc in querySnapshot.docs) {
-        await doc.reference.delete();
+      final responseGet = await Network.apiClient.delete("/teacher/$teacherId");
+      if (responseGet.statusCode == 500) {
+        return left("Connection error: ${responseGet.data}");
       }
       return const Right('Delete Data Teacher Success');
-    } on TimeoutException {
-      return const Left(
-          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
-    } on SocketException {
-      return const Left("Tidak ada koneksi internet.");
-    } on HttpException {
-      return const Left("Kesalahan HTTP terjadi.");
     } catch (e) {
-      return Left('Something Wrong : $e');
+      return Left(e.toString());
     }
   }
 
@@ -310,13 +279,14 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   @override
   Future<Either> getTeacherByName(String name) async {
     try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Teachers")
-          .where("keywords", arrayContains: name)
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
+      final response = await Network.apiClient.get("/teachersName/$name");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<Map<String, dynamic>>;
+      return Right(dataList);
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 

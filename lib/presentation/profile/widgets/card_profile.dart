@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
-import '../../../common/widget/photo/change_photo_view.dart';
+// import '../../../common/widget/photo/change_photo_view.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -111,18 +111,10 @@ class CardProfile extends StatelessWidget {
                       defaultColor: AppColors.primary,
                       onTap: () => AppNavigator.push(
                         context,
-                        student != null
-                            ? BlocProvider.value(
-                                value: context.read<ProfileInfoCubit>(),
-                                child: EditProfileStudentView(user: student!),
-                              )
-                            : BlocProvider.value(
-                                value: context.read<ProfileInfoCubit>(),
-                                child: ChangePhotoView(
-                                  teacher: teacher,
-                                  isProfileTeacher: true,
-                                ),
-                              ),
+                        BlocProvider.value(
+                          value: context.read<ProfileInfoCubit>(),
+                          child: EditProfileStudentView(user: student!),
+                        ),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8),

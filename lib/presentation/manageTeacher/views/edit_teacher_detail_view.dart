@@ -14,14 +14,15 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/box_gender.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/teacher/teacher.dart';
 // import '../../../domain/usecases/teacher/update_teacher.dart';
+import '../../../domain/entities/teacher/role.dart';
+import '../../../domain/entities/teacher/teacher_golang.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../../common/widget/photo/change_photo_view.dart';
 import 'select_jabatan_view.dart';
 
 class EditTeacherDetailView extends StatefulWidget {
-  final TeacherEntity teacher;
+  final TeacherGolangEntity teacher;
   const EditTeacherDetailView({super.key, required this.teacher});
 
   @override
@@ -34,14 +35,18 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
   late TextEditingController _tanggalC;
   late TextEditingController _jabatanC;
   File? imageProfile;
+  List<int> id = [];
 
   @override
   void initState() {
+    String formattedDate =
+        DateFormat('d MMMM yyyy').format(widget.teacher.birthDate!);
     super.initState();
-    _namaC = TextEditingController(text: widget.teacher.nama);
+    _namaC = TextEditingController(text: widget.teacher.name);
     _nipC = TextEditingController(text: widget.teacher.nip);
-    _tanggalC = TextEditingController(text: widget.teacher.tanggalLahir);
-    _jabatanC = TextEditingController(text: widget.teacher.jabatan);
+    _tanggalC = TextEditingController(text: formattedDate);
+    _jabatanC =
+        TextEditingController(text: widget.teacher.tasksName!.join(","));
   }
 
   @override
@@ -143,7 +148,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
-                      children: List.generate(7, (index) {
+                      children: List.generate(5, (index) {
                         return Padding(
                           padding: EdgeInsets.only(bottom: height * 0.01),
                           child: _buildFieldByIndex(
@@ -199,10 +204,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
     required List<String> hinttext,
     required List<TextEditingController> controller,
   }) {
-    if (index == 3) {
-    } else if (index == 1) {
-    } else if (index == 4) {
-      // Tanggal Picker
+    if (index == 2) {
       return TextField(
         controller: _tanggalC,
         readOnly: true,
@@ -239,7 +241,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
           hintText: 'Tanggal Lahir:',
         ),
       );
-    } else if (index == 5) {
+    } else if (index == 3) {
       return TextField(
         controller: controller[index],
         readOnly: true,
@@ -256,20 +258,23 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
           ),
         ),
         onTap: () async {
-          final result = await Navigator.push(
+          List<RoleEntity>? result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const SelectJabatanView(),
             ),
           );
           if (result != null) {
-            String hasil = result.join(", ");
-            controller[index].text = hasil;
+            List<String> name = [];
+            for (var i = 0; i < result.length; i++) {
+              name.add(result[i].name);
+              id.add(result[i].id);
+            }
+            controller[index].text = name.join(", ");
           }
         },
       );
-    } else if (index == 6) {
-      // Gender Selection
+    } else if (index == 4) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.end,

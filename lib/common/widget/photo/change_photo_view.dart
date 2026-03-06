@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teacher.dart';
+// import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teacher.dart';
 
+import '../../../domain/entities/teacher/teacher_golang.dart';
 import '../../../presentation/profile/bloc/profile_info_cubit.dart';
 import '../../bloc/button/button.cubit.dart';
 import '../../bloc/button/button_state.dart';
@@ -12,13 +14,12 @@ import '../appbar/basic_appbar.dart';
 import '../button/basic_button.dart';
 import '../inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/entities/auth/user.dart';
 import 'network_photo.dart';
 
 class ChangePhotoView extends StatelessWidget {
   final UserEntity? user;
-  final TeacherEntity? teacher;
+  final TeacherGolangEntity? teacher;
   final bool isProfileTeacher;
 
   const ChangePhotoView({
@@ -30,16 +31,16 @@ class ChangePhotoView extends StatelessWidget {
 
   String? _getName() {
     if (user != null) return user!.nama;
-    if (teacher != null) return teacher!.nama;
+    if (teacher != null) return teacher!.name;
     return null;
   }
 
   String? _getId() {
     if (user != null) return user!.nisn;
     if (teacher != null) {
-      return teacher!.nip != ""
-          ? teacher!.nip
-          : teacher!.tanggalLahir.toString();
+      String formattedDate =
+          DateFormat('d MMMM yyyy').format(teacher!.birthDate!);
+      return teacher!.nip != "" ? teacher!.nip : formattedDate;
     }
     return null;
   }
@@ -215,20 +216,20 @@ class ChangePhotoView extends StatelessWidget {
                           if (state is UploadImageInitial) return;
                           if (state is UploadImageSuccess) {
                             if (isProfileTeacher) {
-                              await context.read<ButtonStateCubit>().execute(
-                                    usecase: UpdateTeacherUsecase(),
-                                    params: TeacherEntity(
-                                      nama: teacher!.nama,
-                                      mengajar: teacher!.mengajar,
-                                      nip: teacher!.nip,
-                                      tanggalLahir: teacher!.tanggalLahir,
-                                      waliKelas: teacher!.waliKelas,
-                                      jabatan: teacher!.jabatan,
-                                      gender: teacher!.gender,
-                                      image: state.imageFile,
-                                      uid: teacher!.uid,
-                                    ),
-                                  );
+                              // await context.read<ButtonStateCubit>().execute(
+                              //       usecase: UpdateTeacherUsecase(),
+                              //       params: TeacherEntity(
+                              //         nama: teacher!.nama,
+                              //         mengajar: teacher!.mengajar,
+                              //         nip: teacher!.nip,
+                              //         tanggalLahir: teacher!.tanggalLahir,
+                              //         waliKelas: teacher!.waliKelas,
+                              //         jabatan: teacher!.jabatan,
+                              //         gender: teacher!.gender,
+                              //         image: state.imageFile,
+                              //         uid: teacher!.uid,
+                              //       ),
+                              //     );
                             } else {
                               Navigator.pop(context, state.imageFile);
                             }

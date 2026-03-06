@@ -7,7 +7,7 @@ import '../../entities/teacher/teacher_golang.dart';
 abstract class TeacherRepository {
   Future<Either> createTeacher(TeacherGolangEntity teacherCreationReq);
   Future<Either> updateTeacher(TeacherEntity teacherReq);
-  Future<Either> deleteTeacher(TeacherEntity teacherReq);
+  Future<Either> deleteTeacher(int teacherId);
   Future<Either> getTeacherByName(String name);
   Future<Either> getScheduleTeacher(String name);
   Future<Either> getTeacher();

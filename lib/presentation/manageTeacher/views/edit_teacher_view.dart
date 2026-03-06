@@ -17,7 +17,7 @@ class EditTeacherView extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: BlocProvider(
-          create: (context) => TeacherCubit()..displayTeacher(),
+          create: (context) => TeacherCubit()..displayTeacherGolang(),
           child: Column(
             children: [
               const BasicAppbar(
@@ -43,7 +43,7 @@ class EditTeacherView extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  if (state is TeacherLoaded) {
+                  if (state is TeacherGolangLoaded) {
                     return Expanded(
                       child: ListView.separated(
                         scrollDirection: Axis.vertical,
@@ -53,13 +53,17 @@ class EditTeacherView extends StatelessWidget {
                           bottom: 8,
                         ),
                         itemBuilder: (context, index) {
-                          return CardEditTeacher(teacher: state.teacher[index]);
+                          return CardEditTeacher(
+                              teacher: state.teachers[index]);
                         },
                         separatorBuilder: (context, index) =>
                             SizedBox(height: height * 0.02),
-                        itemCount: state.teacher.length,
+                        itemCount: state.teachers.length,
                       ),
                     );
+                  }
+                  if (state is TeacherFailure) {
+                    return Text(state.errorMessage);
                   }
                   return Container();
                 },

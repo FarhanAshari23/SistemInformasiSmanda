@@ -1,4 +1,5 @@
 import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher_golang.dart';
 
 abstract class TeacherState {}
 
@@ -25,6 +26,14 @@ class TeacherLoaded extends TeacherState {
       selectedActivities: selectedActivities ?? this.selectedActivities,
     );
   }
+}
+
+class TeacherGolangLoaded extends TeacherState {
+  final List<TeacherGolangEntity> teachers;
+
+  TeacherGolangLoaded({
+    required this.teachers,
+  });
 }
 
 class TeacherFailure extends TeacherState {
