@@ -105,9 +105,12 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         return left("Connection error: ${response.message}");
       }
 
+      final data = TeacherGolangModel.fromMap(response.data['data']);
+
       if (teacherCreationReq.imageFile != null) {
         Uri? url;
-        String endpoint = "http://192.168.18.3:3000/api/teacher/photo";
+        String endpoint =
+            "http://192.168.18.3:3000/api/teacher/${data.id}/photo";
         try {
           url = Uri.parse(endpoint);
         } catch (_) {
@@ -164,7 +167,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
     } on FormatException {
       throw Exception("Format data tidak valid.");
     } catch (e) {
-      return Left(e);
+      return Left("Something Error: $e");
     }
   }
 

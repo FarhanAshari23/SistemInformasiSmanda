@@ -57,8 +57,14 @@ class TeacherGolangModel {
           : DateTime(2000, 1, 1),
       email: map['email'] ?? '',
       waliKelas: map['wali_kelas'] ?? '',
-      tasksId: map['additional_tasks'] ?? '',
-      tasksName: map['tugas_tambahan'] ?? [],
+      tasksId: map['additional_tasks'] != null
+          ? List<int>.from(map['additional_tasks'])
+          : null,
+      tasksName: map['tugas_tambahan'] != null
+          ? List<String>.from(map['tugas_tambahan'] is String
+              ? [map['tugas_tambahan']]
+              : map['tugas_tambahan'])
+          : [],
     );
   }
 

@@ -145,8 +145,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         final responseBody = await streamedResponse.stream.bytesToString();
 
         if (streamedResponse.statusCode != 200) {
-          print(
-              "Upload gagal (status: ${streamedResponse.statusCode}). Responsenya: $responseBody");
           throw Exception(
             "Upload gagal (status: ${streamedResponse.statusCode}). "
             "Response: $responseBody",
