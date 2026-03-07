@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 import 'api_exception.dart';
 import 'api_response.dart';
 
@@ -76,6 +78,52 @@ class ApiClient {
     );
   }
 
+  Future<ApiResponse<dynamic>> postMultipart(
+    String endpoint, {
+    required File file,
+    String fieldName = 'image',
+    Map<String, String>? fields,
+  }) async {
+    final uri = Uri.parse("$baseUrl$endpoint");
+
+    try {
+      if (kDebugMode) {
+        debugPrint("🚀 [MULTIPART POST] $uri");
+        debugPrint("📁 File: ${file.path}");
+      }
+
+      final request = http.MultipartRequest("POST", uri);
+
+      request.headers.addAll(_headers());
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          fieldName,
+          file.path,
+          filename: basename(file.path),
+        ),
+      );
+
+      if (fields != null) {
+        request.fields.addAll(fields);
+      }
+
+      final streamedResponse = await request.send().timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw ApiException(message: "Timeout: Server tidak merespon.");
+        },
+      );
+
+      final response = await http.Response.fromStream(streamedResponse);
+
+      return _handleResponse(response);
+    } catch (e) {
+      if (e is ApiException) rethrow;
+      throw ApiException(message: e.toString());
+    }
+  }
+
   Future<ApiResponse<dynamic>> _request({
     required String method,
     required String endpoint,
@@ -92,31 +140,40 @@ class ApiClient {
 
       late http.Response response;
 
+      const timeoutDuration = Duration(seconds: 15);
+
       switch (method) {
         case "GET":
-          response =
-              await http.get(uri, headers: _headers(contentType: contentType));
+          response = await http
+              .get(uri, headers: _headers(contentType: contentType))
+              .timeout(timeoutDuration);
           break;
         case "POST":
-          response = await http.post(
-            uri,
-            headers: _headers(contentType: contentType),
-            body: body != null ? jsonEncode(body) : null,
-          );
+          response = await http
+              .post(
+                uri,
+                headers: _headers(contentType: contentType),
+                body: body != null ? jsonEncode(body) : null,
+              )
+              .timeout(timeoutDuration);
           break;
         case "PUT":
-          response = await http.put(
-            uri,
-            headers: _headers(contentType: contentType),
-            body: body != null ? jsonEncode(body) : null,
-          );
+          response = await http
+              .put(
+                uri,
+                headers: _headers(contentType: contentType),
+                body: body != null ? jsonEncode(body) : null,
+              )
+              .timeout(timeoutDuration);
           break;
         case "DELETE":
-          response = await http.delete(
-            uri,
-            headers: _headers(contentType: contentType),
-            body: body != null ? jsonEncode(body) : null,
-          );
+          response = await http
+              .delete(
+                uri,
+                headers: _headers(contentType: contentType),
+                body: body != null ? jsonEncode(body) : null,
+              )
+              .timeout(timeoutDuration);
           break;
         default:
           throw ApiException(message: "Unsupported HTTP method");

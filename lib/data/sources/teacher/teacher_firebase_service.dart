@@ -108,64 +108,13 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       final data = TeacherGolangModel.fromMap(response.data['data']);
 
       if (teacherCreationReq.imageFile != null) {
-        Uri? url;
-        String endpoint =
-            "http://192.168.18.3:3000/api/teacher/${data.id}/photo";
-        try {
-          url = Uri.parse(endpoint);
-        } catch (_) {
-          throw Exception("URL tidak valid: $endpoint");
-        }
-
-        final request = http.MultipartRequest("POST", url);
-
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'image',
-            teacherCreationReq.imageFile?.path ?? '',
-            filename: basename(teacherCreationReq.imageFile?.path ?? ''),
-          ),
+        Network.apiClient.postMultipart(
+          "/teacher/${data.id}/photo",
+          file: teacherCreationReq.imageFile!,
         );
-
-        request.headers.addAll({
-          "Accept": "application/json",
-          "Content-Type": "multipart/form-data",
-          "x-api-key": "RAHASIA"
-        });
-
-        final streamedResponse = await request.send().timeout(
-          const Duration(seconds: 5),
-          onTimeout: () {
-            throw Exception("Timeout: Server tidak merespon.");
-          },
-        );
-
-        final responseBody = await streamedResponse.stream.bytesToString();
-
-        if (streamedResponse.statusCode != 200) {
-          throw Exception(
-            "Upload gagal (status: ${streamedResponse.statusCode}). "
-            "Response: $responseBody",
-          );
-        }
-
-        try {
-          jsonDecode(responseBody);
-        } catch (_) {
-          throw Exception("Response server bukan JSON valid: $responseBody");
-        }
       }
 
       return const Right("Buat akun guru sukses");
-    } on TimeoutException {
-      return const Left(
-          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
-    } on SocketException {
-      throw Exception("Tidak ada koneksi internet.");
-    } on HttpException {
-      throw Exception("Kesalahan HTTP terjadi.");
-    } on FormatException {
-      throw Exception("Format data tidak valid.");
     } catch (e) {
       return Left("Something Error: $e");
     }

@@ -1,13 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_sistem_informasi_smanda/data/models/auth/signin_user_req.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 
 import '../../../core/networks/network.dart';
 import '../../../domain/entities/auth/user_golang.dart';
@@ -110,61 +105,13 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       final data = UserGolangModel.fromMap(response.data['data']);
 
       if (murid.imageFile != null) {
-        Uri? url;
-        String endpoint =
-            "http://192.168.18.3:3000/api/student/${data.id}/photo";
-        try {
-          url = Uri.parse(endpoint);
-        } catch (_) {
-          throw Exception("URL tidak valid: $endpoint");
-        }
-
-        final request = http.MultipartRequest("POST", url);
-
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'image',
-            murid.imageFile?.path ?? '',
-            filename: basename(murid.imageFile?.path ?? ''),
-          ),
+        Network.apiClient.postMultipart(
+          "/student/${data.id}/photo",
+          file: murid.imageFile!,
         );
-
-        request.headers.addAll({
-          "Accept": "application/json",
-          "Content-Type": "multipart/form-data",
-          "x-api-key": "RAHASIA"
-        });
-
-        final streamedResponse = await request.send().timeout(
-          const Duration(seconds: 15),
-          onTimeout: () {
-            throw Exception("Timeout: Server tidak merespon.");
-          },
-        );
-
-        final responseBody = await streamedResponse.stream.bytesToString();
-
-        if (streamedResponse.statusCode != 200) {
-          throw Exception(
-            "Upload gagal (status: ${streamedResponse.statusCode}). "
-            "Response: $responseBody",
-          );
-        }
-
-        try {
-          jsonDecode(responseBody);
-        } catch (_) {
-          throw Exception("Response server bukan JSON valid: $responseBody");
-        }
       }
 
       return Right("Buat akun sukses: ${response.message}");
-    } on SocketException {
-      throw Exception("Tidak ada koneksi internet.");
-    } on HttpException {
-      throw Exception("Kesalahan HTTP terjadi.");
-    } on FormatException {
-      throw Exception("Format data tidak valid.");
     } catch (e) {
       return Left("Something Error: $e");
     }
