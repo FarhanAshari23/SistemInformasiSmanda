@@ -17,6 +17,7 @@ import '../../../core/configs/theme/app_colors.dart';
 // import '../../../domain/usecases/teacher/update_teacher.dart';
 import '../../../domain/entities/teacher/role.dart';
 import '../../../domain/entities/teacher/teacher_golang.dart';
+import '../../../domain/usecases/teacher/update_teacher.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../../common/widget/photo/change_photo_view.dart';
 import 'select_jabatan_view.dart';
@@ -40,7 +41,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
   @override
   void initState() {
     String formattedDate =
-        DateFormat('d MMMM yyyy').format(widget.teacher.birthDate!);
+        DateFormat('d MMMM yyyy', "id_ID").format(widget.teacher.birthDate!);
     super.initState();
     _namaC = TextEditingController(text: widget.teacher.name);
     _nipC = TextEditingController(text: widget.teacher.nip);
@@ -104,7 +105,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
             if (state is ButtonSuccessState) {
-              context.read<TeacherCubit>().displayTeacher();
+              context.read<TeacherCubit>().displayTeacherGolang();
               var snackbar = SnackBar(
                 content: Text(state.successMessage),
               );
@@ -182,7 +183,22 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                           ),
                         );
                       } else {
-                        // final cubit = context.read<GetAllKelasCubit>().state;
+                        DateTime date = DateFormat("d MMMM yyyy", "id_ID")
+                            .parse(_tanggalC.text);
+                        context.read<ButtonStateCubit>().execute(
+                              usecase: UpdateTeacherUsecase(),
+                              params: TeacherGolangEntity(
+                                id: widget.teacher.id,
+                                name: _namaC.text,
+                                nip: _nipC.text,
+                                tasksId: id,
+                                birthDate: date,
+                                gender: context
+                                    .read<GenderSelectionCubit>()
+                                    .selectedIndex,
+                                imageFile: imageProfile,
+                              ),
+                            );
                       }
                     },
                     title: 'Ubah',

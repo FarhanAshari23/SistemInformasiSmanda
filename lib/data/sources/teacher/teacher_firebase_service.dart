@@ -1,27 +1,20 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:http/http.dart' as http;
-import 'package:new_sistem_informasi_smanda/domain/entities/teacher/schedule_teacher.dart';
-import 'package:path/path.dart';
 
-import '../../../common/helper/execute_crud.dart';
-import '../../../common/helper/generate_keyword.dart';
 import '../../../core/networks/network.dart';
 import '../../../domain/entities/teacher/role.dart';
-import '../../../domain/entities/teacher/teacher.dart';
+import '../../../domain/entities/teacher/schedule_teacher.dart';
 import '../../../domain/entities/teacher/teacher_golang.dart';
 import '../../models/teacher/schedule_teacher.dart';
 import '../../models/teacher/teacher_golang.dart';
 
 abstract class TeacherFirebaseService {
   Future<Either> createTeacher(TeacherGolangEntity teacherCreationReq);
-  Future<Either> updateTeacher(TeacherEntity teacherReq);
+  Future<Either> updateTeacher(TeacherGolangEntity teacherReq);
   Future<Either> deleteTeacher(int teacherId);
   Future<Either> getTeacherByName(String name);
   Future<Either> getScheduleTeacher(String name);
@@ -134,92 +127,21 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   }
 
   @override
-  Future<Either> updateTeacher(TeacherEntity teacherReq) async {
-    String endpoint = ExecuteCRUD.updateImageTeacher();
+  Future<Either> updateTeacher(TeacherGolangEntity teacherReq) async {
     try {
-      if (teacherReq.image != null) {
-        Uri? url;
-        try {
-          url = Uri.parse(endpoint);
-        } catch (_) {
-          throw Exception("URL tidak valid: $endpoint");
-        }
-
-        final request = http.MultipartRequest("POST", url);
-
-        request.fields['name'] = teacherReq.nama;
-        request.fields['nip'] = teacherReq.nip != '-'
-            ? teacherReq.nip
-            : teacherReq.tanggalLahir.toString();
-
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            "photo",
-            teacherReq.image?.path ?? '',
-            filename: basename(teacherReq.image?.path ?? ''),
-            contentType: http.MediaType("image", "jpg"),
-          ),
+      final model = TeacherGolangModelX.fromEntity(teacherReq);
+      if (teacherReq.imageFile != null) {
+        Network.apiClient.postMultipart(
+          "/teacher/${teacherReq.id}/photo",
+          file: teacherReq.imageFile!,
         );
-
-        request.headers.addAll({
-          "Accept": "application/json",
-          "Content-Type": "multipart/form-data",
-        });
-
-        final streamedResponse = await request.send().timeout(
-          const Duration(seconds: 5),
-          onTimeout: () {
-            throw Exception("Timeout: Server tidak merespon.");
-          },
-        );
-
-        final responseBody = await streamedResponse.stream.bytesToString();
-
-        if (streamedResponse.statusCode != 200) {
-          throw Exception(
-            "Upload gagal (status: ${streamedResponse.statusCode}). "
-            "Response: $responseBody",
-          );
-        }
-
-        try {
-          jsonDecode(responseBody);
-        } catch (_) {
-          throw Exception("Response server bukan JSON valid: $responseBody");
-        }
       }
-
-      final docRef =
-          FirebaseFirestore.instance.collection('Teachers').doc(teacherReq.uid);
-
-      final docSnap = await docRef.get();
-      if (!docSnap.exists) {
-        throw Left(
-            'Dokumen teacher dengan UID ${teacherReq.uid} tidak ditemukan!');
+      final response = await Network.apiClient
+          .put("/teacher/${teacherReq.id}", body: model.toMap());
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-
-      final keywords = generateKeywords(teacherReq.nama);
-
-      await docRef.update({
-        "NIP": teacherReq.nip,
-        "jabatan_tambahan": teacherReq.jabatan,
-        "mengajar": teacherReq.mengajar,
-        "tanggal_lahir": teacherReq.tanggalLahir,
-        "nama": teacherReq.nama,
-        "wali_kelas": teacherReq.waliKelas,
-        "keywords": keywords,
-      });
-
-      return const Right('Update Data Teacher Success');
-    } on TimeoutException {
-      return const Left(
-          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
-    } on SocketException {
-      throw Exception("Tidak ada koneksi internet.");
-    } on HttpException {
-      throw Exception("Kesalahan HTTP terjadi.");
-    } on FormatException {
-      throw Exception("Format data tidak valid.");
+      return const Right("Mata Pelajaran berhasil diubah");
     } catch (e) {
       return Left(e.toString());
     }

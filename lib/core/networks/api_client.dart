@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -180,6 +181,10 @@ class ApiClient {
       }
 
       return _handleResponse(response);
+    } on SocketException {
+      throw ApiException(message: "Tidak ada koneksi internet.");
+    } on TimeoutException {
+      throw ApiException(message: "Waktu koneksi habis. Silakan coba lagi.");
     } catch (e) {
       throw ApiException(message: e.toString());
     }
