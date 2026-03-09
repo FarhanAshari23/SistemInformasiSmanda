@@ -154,7 +154,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
-      final dataList = response.data['data'] as List<Map<String, dynamic>>;
+      final dataList = response.data['data'] as List<dynamic>;
       return Right(dataList);
     } catch (e) {
       return Left("Something error: ${e.toString()}");

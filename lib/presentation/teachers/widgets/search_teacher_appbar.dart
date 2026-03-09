@@ -3,9 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/presentation/teachers/blocs/get_teacher_cubit.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
+import '../../manageNews/bloc/select_teacher_name_cubit.dart';
 
 class SearchTeacherAppbar extends StatelessWidget {
-  SearchTeacherAppbar({super.key});
+  final bool isTeacherGolang;
+  SearchTeacherAppbar({
+    super.key,
+    this.isTeacherGolang = false,
+  });
 
   final TextEditingController searchC = TextEditingController();
 
@@ -52,11 +57,17 @@ class SearchTeacherAppbar extends StatelessWidget {
                   controller: searchC,
                   onChanged: (value) {
                     if (value.isEmpty) {
-                      context.read<GetTeacherCubit>().displayInitial();
+                      isTeacherGolang
+                          ? context.read<GetTeacherNameCubit>().displayInitial()
+                          : context.read<GetTeacherCubit>().displayInitial();
                     } else {
-                      context
-                          .read<GetTeacherCubit>()
-                          .displayTeacher(params: value);
+                      isTeacherGolang
+                          ? context
+                              .read<GetTeacherNameCubit>()
+                              .displayTeacher(params: value)
+                          : context
+                              .read<GetTeacherCubit>()
+                              .displayTeacher(params: value);
                     }
                   },
                   decoration: const InputDecoration(

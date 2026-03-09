@@ -16,8 +16,10 @@ class NewsFirebaseServiceImpl extends NewsFirebaseService {
   Future<Either> createNews(NewsEntity createNewsReq) async {
     try {
       final model = NewsModelX.fromEntity(createNewsReq);
+      final body = model.toMap();
+      body.remove('created_at');
       final response =
-          await Network.apiClient.post("/announcement", body: model.toMap());
+          await Network.apiClient.post("/announcement", body: body);
 
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");

@@ -1,0 +1,115 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
+
+import '../../../core/configs/assets/app_images.dart';
+import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/teacher/teacher_golang.dart';
+import '../../helper/cache_state_image.dart';
+import '../../helper/display_image.dart';
+import '../photo/network_photo.dart';
+
+class CardGuruGolang extends StatefulWidget {
+  final TeacherGolangEntity teacher;
+  final bool forceRefresh;
+  const CardGuruGolang({
+    super.key,
+    required this.teacher,
+    this.forceRefresh = false,
+  });
+
+  @override
+  State<CardGuruGolang> createState() => _CardGuruGolangState();
+}
+
+class _CardGuruGolangState extends State<CardGuruGolang> {
+  late String imageUrl;
+  bool? isReachable;
+
+  @override
+  void initState() {
+    super.initState();
+    imageUrl = DisplayImage.displayImageTeacher(
+        widget.teacher.name!,
+        widget.teacher.nip != null
+            ? widget.teacher.nip!
+            : DateFormat('d MMMM yyyy').format(widget.teacher.birthDate!));
+    _checkUrl();
+  }
+
+  Future<void> _checkUrl() async {
+    final reachable = await CacheStateImage.checkUrl(imageUrl);
+    if (mounted) {
+      setState(() {
+        isReachable = reachable;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    String fallbackAsset = widget.teacher.gender == 1
+        ? AppImages.guruLaki
+        : AppImages.guruPerempuan;
+    Widget imageWidget;
+
+    if (isReachable == null) {
+      imageWidget = Shimmer.fromColors(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
+        child: Container(
+          width: width * 0.285,
+          height: height * 0.135,
+          color: Colors.grey,
+        ),
+      );
+    } else if (isReachable == true) {
+      imageWidget = NetworkPhoto(
+        imageUrl: imageUrl,
+        fallbackAsset: fallbackAsset,
+        width: width * 0.285,
+        height: height * 0.135,
+        forceRefresh: false,
+      );
+    } else {
+      imageWidget = Image.asset(
+        fallbackAsset,
+        width: width * 0.285,
+        height: height * 0.135,
+        fit: BoxFit.cover,
+      );
+    }
+
+    return SizedBox(
+      width: width * 0.45,
+      height: height * 0.25,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            imageWidget,
+            SizedBox(height: height * 0.01),
+            SizedBox(
+              width: width * 0.385,
+              height: height * 0.06,
+              child: Center(
+                child: Text(
+                  widget.teacher.name ?? '',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.inversePrimary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

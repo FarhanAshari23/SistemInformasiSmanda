@@ -8,15 +8,16 @@ import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/landing/succes.dart';
-import '../../../common/widget/searchbar/search_teachers_views.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/kelas/kelas.dart';
 import '../../../domain/entities/news/news.dart';
+import '../../../domain/entities/teacher/teacher_golang.dart';
 import '../../../domain/usecases/news/create_news.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../home/views/home_view_admin.dart';
 import '../widgets/field_news.dart';
 import 'select_kelas_view.dart';
+import 'select_teacher_view.dart';
 
 class AddNewsView extends StatefulWidget {
   const AddNewsView({super.key});
@@ -31,6 +32,7 @@ class _AddNewsViewState extends State<AddNewsView> {
   final TextEditingController _contentC = TextEditingController();
   final TextEditingController _toC = TextEditingController();
   List<int> classid = [];
+  late int teacherId;
 
   @override
   void dispose() {
@@ -164,33 +166,40 @@ class _AddNewsViewState extends State<AddNewsView> {
                                     ),
                                     SizedBox(
                                       width: width * 0.45,
-                                      child: TextField(
-                                        controller: _toC,
-                                        maxLines: 2,
-                                        readOnly: true,
-                                        decoration: const InputDecoration(
-                                          hintText: "Untuk siapa..",
-                                        ),
-                                        onTap: () async {
-                                          List<KelasEntity>? result =
-                                              await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const SearchTeachersViews(),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            "Dari Siapa Pengumuman ini?",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.primary,
                                             ),
-                                          );
-                                          if (result != null) {
-                                            List<String> name = [];
-                                            for (var i = 0;
-                                                i < result.length;
-                                                i++) {
-                                              name.add(result[i].className);
-                                              classid.add(result[i].id!);
-                                            }
-                                            _toC.text = name.join(", ");
-                                          }
-                                        },
+                                          ),
+                                          SizedBox(height: height * 0.01),
+                                          TextField(
+                                            controller: _fromC,
+                                            maxLines: 2,
+                                            readOnly: true,
+                                            decoration: const InputDecoration(
+                                              hintText: "Dari siapa..",
+                                            ),
+                                            onTap: () async {
+                                              TeacherGolangEntity result =
+                                                  await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const SelectTeacherView(),
+                                                ),
+                                              );
+                                              teacherId = result.id ?? 0;
+                                              _fromC.text = result.name ?? '';
+                                            },
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
@@ -243,6 +252,7 @@ class _AddNewsViewState extends State<AddNewsView> {
                                     description: _contentC.text,
                                     classId: classid,
                                     isGlobal: isGlobal,
+                                    teacherId: teacherId,
                                   ),
                                 );
                           }
