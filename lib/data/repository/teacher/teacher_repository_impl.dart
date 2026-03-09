@@ -88,7 +88,7 @@ class TeacherRepositoryImpl extends TeacherRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => TeacherModel.fromMap(e).toEntity(),
+                (e) => TeacherGolangModel.fromMap(e).toEntity(),
               )
               .toList(),
         );

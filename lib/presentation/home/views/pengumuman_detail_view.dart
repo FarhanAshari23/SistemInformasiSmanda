@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/news/news.dart';
+
+import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/news/news.dart';
 
 class PengumumanDetailView extends StatelessWidget {
   final NewsEntity newsEntity;
@@ -15,10 +16,8 @@ class PengumumanDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final timestamp = newsEntity.createdAt;
-    final DateTime dateTime = timestamp!.toDate();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String formattedDate = formatter.format(dateTime);
+    final String formattedDate = formatter.format(newsEntity.createdAt!);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -83,7 +82,7 @@ class PengumumanDetailView extends StatelessWidget {
                                     ),
                                     SizedBox(height: height * 0.01),
                                     Text(
-                                      newsEntity.title,
+                                      newsEntity.title ?? '',
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -107,7 +106,7 @@ class PengumumanDetailView extends StatelessWidget {
                               scrollDirection: Axis.vertical,
                               children: [
                                 Text(
-                                  'Dari ${newsEntity.from} untuk ${newsEntity.to}',
+                                  'Dari ${newsEntity.teacherName} untuk ${newsEntity.isGlobal! ? "Semua Kelas" : newsEntity.className!}',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -116,7 +115,7 @@ class PengumumanDetailView extends StatelessWidget {
                                 ),
                                 SizedBox(height: height * 0.01),
                                 Text(
-                                  newsEntity.content,
+                                  newsEntity.description ?? '',
                                   style: const TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,

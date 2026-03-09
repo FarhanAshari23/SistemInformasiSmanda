@@ -7,7 +7,7 @@ import 'package:new_sistem_informasi_smanda/service_locator.dart';
 
 class NewsRepositoryImpl extends NewsRepository {
   @override
-  Future<Either> createNews(NewsModel createNewsReq) async {
+  Future<Either> createNews(NewsEntity createNewsReq) async {
     return await sl<NewsFirebaseService>().createNews(createNewsReq);
   }
 
@@ -27,8 +27,8 @@ class NewsRepositoryImpl extends NewsRepository {
   }
 
   @override
-  Future<Either> deleteNews(String uidNews) async {
-    return await sl<NewsFirebaseService>().deleteNews(uidNews);
+  Future<Either> deleteNews(int idNews) async {
+    return await sl<NewsFirebaseService>().deleteNews(idNews);
   }
 
   @override

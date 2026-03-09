@@ -30,9 +30,10 @@ class _EditNewsViewDetailState extends State<EditNewsViewDetail> {
   @override
   void initState() {
     _titleC = TextEditingController(text: widget.news.title);
-    _fromC = TextEditingController(text: widget.news.from);
-    _contentC = TextEditingController(text: widget.news.content);
-    _toC = TextEditingController(text: widget.news.to);
+    _fromC = TextEditingController(text: widget.news.teacherName);
+    _contentC = TextEditingController(text: widget.news.description);
+    _toC = TextEditingController(
+        text: widget.news.isGlobal! ? "Semua Kelas" : widget.news.className!);
     super.initState();
   }
 
@@ -138,9 +139,7 @@ class _EditNewsViewDetailState extends State<EditNewsViewDetail> {
                   var result = await sl<UpdateNewsUsecase>().call(
                     params: NewsEntity(
                       title: _titleC.text,
-                      content: _contentC.text,
-                      from: _fromC.text,
-                      to: _toC.text,
+                      description: _contentC.text,
                     ),
                   );
                   result.fold(

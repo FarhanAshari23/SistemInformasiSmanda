@@ -1,19 +1,47 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class NewsEntity {
-  String? uIdNews;
-  Timestamp? createdAt;
-  final String title;
-  final String content;
-  final String from;
-  final String to;
+  int? newsId;
+  int? teacherId;
+  List<int>? classId;
+  DateTime? createdAt;
+  String? title;
+  String? description;
+  String? teacherName;
+  String? className;
+  bool? isGlobal;
 
   NewsEntity({
-    this.uIdNews,
+    this.newsId,
+    this.teacherId,
+    this.classId,
     this.createdAt,
-    required this.title,
-    required this.content,
-    required this.from,
-    required this.to,
+    this.title,
+    this.description,
+    this.teacherName,
+    this.className,
+    this.isGlobal,
   });
+
+  NewsEntity copyWith({
+    int? newsId,
+    int? teacherId,
+    List<int>? classId,
+    DateTime? createdAt,
+    String? title,
+    String? description,
+    String? teacherName,
+    String? className,
+    bool? isGlobal,
+  }) {
+    return NewsEntity(
+      newsId: newsId ?? this.newsId,
+      teacherId: teacherId ?? this.teacherId,
+      classId: classId ?? this.classId,
+      createdAt: createdAt ?? this.createdAt,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      teacherName: teacherName ?? this.teacherName,
+      className: className ?? this.className,
+      isGlobal: isGlobal ?? this.isGlobal,
+    );
+  }
 }

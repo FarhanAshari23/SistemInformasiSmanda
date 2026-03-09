@@ -40,9 +40,11 @@ class PengumumanScreen extends StatelessWidget {
                           newsEntity: state.news[index],
                         ),
                       ),
-                      title: state.news[index].title,
-                      from: state.news[index].from,
-                      to: state.news[index].to,
+                      title: state.news[index].title ?? '',
+                      from: state.news[index].teacherName ?? '',
+                      to: state.news[index].isGlobal!
+                          ? 'Semua Kelas'
+                          : state.news[index].className ?? '',
                     );
                   },
                 ),

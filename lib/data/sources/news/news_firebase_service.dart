@@ -1,32 +1,28 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/data/models/news/news.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/news/news.dart';
+
+import '../../../core/networks/network.dart';
+import '../../../domain/entities/news/news.dart';
+import '../../models/news/news.dart';
 
 abstract class NewsFirebaseService {
-  Future<Either> createNews(NewsModel createNewsReq);
+  Future<Either> createNews(NewsEntity createNewsReq);
   Future<Either> updateNews(NewsEntity updateNewsReq);
-  Future<Either> deleteNews(String uidNews);
+  Future<Either> deleteNews(int idNews);
   Future<Either> getNews();
 }
 
 class NewsFirebaseServiceImpl extends NewsFirebaseService {
   @override
-  Future<Either> createNews(NewsModel createNewsReq) async {
+  Future<Either> createNews(NewsEntity createNewsReq) async {
     try {
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-      DocumentReference documentReference =
-          await firebaseFirestore.collection("News").add(
-        {
-          "createdAt": createNewsReq.createdAt,
-          "title": createNewsReq.title,
-          "content": createNewsReq.content,
-          "from": createNewsReq.from,
-          "to": createNewsReq.to
-        },
-      );
-      await documentReference.update({'uIdNews': documentReference.id});
-      return const Right("Upload news was succesfull");
+      final model = NewsModelX.fromEntity(createNewsReq);
+      final response =
+          await Network.apiClient.post("/announcement", body: model.toMap());
+
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      return const Right("Pengumuman berhasil dibuat");
     } catch (e) {
       return Left(e.toString());
     }
@@ -35,46 +31,40 @@ class NewsFirebaseServiceImpl extends NewsFirebaseService {
   @override
   Future<Either> getNews() async {
     try {
-      var returnedData =
-          await FirebaseFirestore.instance.collection("News").get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
+      final response = await Network.apiClient.get("/announcements");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<Map<String, dynamic>>;
+      return Right(dataList);
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
   @override
-  Future<Either> deleteNews(String uidNews) async {
+  Future<Either> deleteNews(int idNews) async {
     try {
-      CollectionReference users = FirebaseFirestore.instance.collection('News');
-      QuerySnapshot querySnapshot =
-          await users.where('uIdNews', isEqualTo: uidNews).get();
-      for (var doc in querySnapshot.docs) {
-        await doc.reference.delete();
+      final response = await Network.apiClient.delete("/announcement/$idNews");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      return const Right('Delete Data News Success');
+      return const Right("Data pengumuman berhasil dihapus");
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
   @override
   Future<Either> updateNews(NewsEntity updateNewsReq) async {
     try {
-      CollectionReference users = FirebaseFirestore.instance.collection('News');
-      QuerySnapshot querySnapshot =
-          await users.where('uIdNews', isEqualTo: updateNewsReq.uIdNews).get();
-      if (querySnapshot.docs.isNotEmpty) {
-        String docId = querySnapshot.docs[0].id;
-        await users.doc(docId).update({
-          "content": updateNewsReq.content,
-          "from": updateNewsReq.from,
-          "title": updateNewsReq.title,
-          "to": updateNewsReq.to,
-        });
-        return right('Update Data News Success');
+      final model = NewsModelX.fromEntity(updateNewsReq);
+      final response = await Network.apiClient
+          .put("/announcement/${updateNewsReq.newsId}", body: model.toMap());
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      return const Right('Update Data News Success');
+      return const Right("Pengumuman berhasil diubah");
     } catch (e) {
       return Left(e.toString());
     }

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/teacher/role.dart';
+
+import '../../../domain/entities/teacher/role.dart';
 
 class SelectJabatanCubit extends Cubit<List<RoleEntity>> {
   SelectJabatanCubit() : super([]);

@@ -170,7 +170,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                             );
                       }
                     },
-                    title: 'Lanjut',
+                    title: 'Simpan',
                   );
                 }),
               ],

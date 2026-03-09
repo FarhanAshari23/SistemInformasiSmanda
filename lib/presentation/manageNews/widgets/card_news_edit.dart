@@ -40,7 +40,7 @@ class CardNewsEdit extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  news.title,
+                  news.title ?? '',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w900,
@@ -52,7 +52,7 @@ class CardNewsEdit extends StatelessWidget {
                   width: width * 0.7,
                   height: bodyHeight * 0.06,
                   child: Text(
-                    'Dari ${news.from} untuk ${news.to}',
+                    'Dari ${news.teacherName} untuk ${news.isGlobal! ? "Semua Kelas" : news.className}',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -91,7 +91,7 @@ class CardNewsEdit extends StatelessWidget {
                       buttonTitle: 'Hapus',
                       onPressed: () async {
                         var delete = await sl<DeleteNewsUsecase>()
-                            .call(params: news.uIdNews);
+                            .call(params: news.newsId);
                         return delete.fold(
                           (error) {
                             var snackbar = const SnackBar(
