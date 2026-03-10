@@ -37,7 +37,7 @@ class NewsFirebaseServiceImpl extends NewsFirebaseService {
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
-      final dataList = response.data['data'] as List<Map<String, dynamic>>;
+      final dataList = response.data['data'] as List<dynamic>;
       return Right(dataList);
     } catch (e) {
       return Left("Something error: ${e.toString()}");
@@ -61,8 +61,10 @@ class NewsFirebaseServiceImpl extends NewsFirebaseService {
   Future<Either> updateNews(NewsEntity updateNewsReq) async {
     try {
       final model = NewsModelX.fromEntity(updateNewsReq);
+      final body = model.toMap();
+      body.remove("created_at");
       final response = await Network.apiClient
-          .put("/announcement/${updateNewsReq.newsId}", body: model.toMap());
+          .put("/announcement/${updateNewsReq.newsId}", body: body);
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }

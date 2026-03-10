@@ -4,6 +4,7 @@ class NewsModel {
   final int newsId;
   final int teacherId;
   final List<int> classId;
+  final List<int> classIds;
   final DateTime createdAt;
   final String title;
   final String description;
@@ -21,6 +22,7 @@ class NewsModel {
     required this.description,
     required this.teacherName,
     required this.isGlobal,
+    required this.classIds,
   });
 
   Map<String, dynamic> toMap() {
@@ -28,6 +30,7 @@ class NewsModel {
       'id': newsId,
       'teacher_id': teacherId,
       'class_id': classId,
+      'class_ids': classIds,
       'class_name': className,
       'created_at': createdAt.toUtc(),
       'title': title,
@@ -49,11 +52,15 @@ class NewsModel {
 
   factory NewsModel.fromMap(Map<String, dynamic> map) {
     return NewsModel(
-      classId: map['class_id'] ?? [],
+      classId: map['class_id'] != null ? List<int>.from(map['class_id']) : [],
+      classIds:
+          map['class_ids'] != null ? List<int>.from(map['class_ids']) : [],
       teacherId: map['teacher_id'] ?? 0,
       className: map['class_name'] ?? "",
       newsId: map["id"] ?? 0,
-      createdAt: map["created_at"] ?? DateTime.now().toUtc(),
+      createdAt: map["created_at"] != null
+          ? DateTime.parse(map["created_at"])
+          : DateTime.now().toUtc(),
       title: map['title'] ?? "",
       description: map["description"] ?? '',
       teacherName: map["teacher_name"] ?? "",
@@ -74,12 +81,14 @@ extension NewsModelX on NewsModel {
       teacherId: teacherId,
       teacherName: teacherName,
       title: title,
+      classIds: classIds,
     );
   }
 
   static NewsModel fromEntity(NewsEntity entity) {
     return NewsModel(
       classId: entity.classId ?? [],
+      classIds: entity.classIds ?? [],
       className: entity.className ?? '',
       createdAt: entity.createdAt ?? DateTime.now().toUtc(),
       description: entity.description ?? '',

@@ -2,6 +2,7 @@ class NewsEntity {
   int? newsId;
   int? teacherId;
   List<int>? classId;
+  List<int>? classIds;
   DateTime? createdAt;
   String? title;
   String? description;
@@ -19,12 +20,14 @@ class NewsEntity {
     this.teacherName,
     this.className,
     this.isGlobal,
+    this.classIds,
   });
 
   NewsEntity copyWith({
     int? newsId,
     int? teacherId,
     List<int>? classId,
+    List<int>? classIds,
     DateTime? createdAt,
     String? title,
     String? description,
@@ -42,6 +45,7 @@ class NewsEntity {
       teacherName: teacherName ?? this.teacherName,
       className: className ?? this.className,
       isGlobal: isGlobal ?? this.isGlobal,
+      classIds: classIds ?? this.classIds,
     );
   }
 }

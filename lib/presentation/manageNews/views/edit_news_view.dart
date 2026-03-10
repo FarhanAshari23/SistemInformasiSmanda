@@ -60,6 +60,9 @@ class EditNewsView extends StatelessWidget {
                               },
                             );
                           }
+                          if (state is NewsFailure) {
+                            return Text(state.errorMessage);
+                          }
                           return Container();
                         },
                       ),
