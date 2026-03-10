@@ -12,6 +12,7 @@ import '../../../domain/entities/news/news.dart';
 import '../../../domain/entities/teacher/teacher_golang.dart';
 import '../../../domain/usecases/news/update_news.dart';
 import '../../auth/widgets/button_role.dart';
+import '../../home/bloc/news_cubit.dart';
 import '../widgets/field_news.dart';
 import 'select_kelas_view.dart';
 import 'select_teacher_view.dart';
@@ -84,6 +85,7 @@ class _EditNewsViewDetailState extends State<EditNewsViewDetail> {
                 content: Text("Data pengumuman berhasil diubah"),
                 behavior: SnackBarBehavior.floating,
               );
+              context.read<NewsCubit>().displayNews();
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
               Navigator.pop(context);
             }
@@ -239,8 +241,6 @@ class _EditNewsViewDetailState extends State<EditNewsViewDetail> {
                     if (state is KelasDisplayLoaded) {
                       return ButtonRole(
                         onPressed: () {
-                          print("DEBUG UI - Teacher ID: ${teacherId}");
-                          print("DEBUG UI - Class IDs: ${classid}");
                           if (_titleC.text.isEmpty ||
                               _contentC.text.isEmpty ||
                               _fromC.text.isEmpty ||
