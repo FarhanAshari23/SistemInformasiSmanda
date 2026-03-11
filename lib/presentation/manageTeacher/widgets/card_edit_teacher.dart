@@ -9,13 +9,13 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/teacher/teacher_golang.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/teacher/delete_teacher.dart';
 import '../../../service_locator.dart';
 import '../views/edit_teacher_detail_view.dart';
 
 class CardEditTeacher extends StatelessWidget {
-  final TeacherGolangEntity teacher;
+  final TeacherEntity teacher;
   const CardEditTeacher({
     super.key,
     required this.teacher,
@@ -130,9 +130,7 @@ class CardEditTeacher extends StatelessWidget {
                               var snackbar = const SnackBar(
                                 content: Text("Data Berhasil Dihapus"),
                               );
-                              context
-                                  .read<TeacherCubit>()
-                                  .displayTeacherGolang();
+                              context.read<TeacherCubit>().displayTeacher();
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackbar);
                               Navigator.pop(context);

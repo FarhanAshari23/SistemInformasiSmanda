@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
 
 import '../../../common/helper/display_image.dart';
@@ -39,10 +40,11 @@ class StaffDetail extends StatelessWidget {
                           ? AppImages.tendikLaki
                           : AppImages.tendikPerempuan,
                       imageUrl: DisplayImage.displayImageTeacher(
-                        teachers.nama,
-                        teachers.nip != '-'
-                            ? teachers.nip
-                            : teachers.tanggalLahir,
+                        teachers.name ?? '',
+                        teachers.nip != null
+                            ? teachers.nip!
+                            : DateFormat('d MMMM yyyy', "id_ID")
+                                .format(teachers.birthDate!),
                       ),
                     ),
                     Align(
@@ -86,7 +88,7 @@ class StaffDetail extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                teachers.nama,
+                                teachers.name ?? '',
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w800,
@@ -94,7 +96,7 @@ class StaffDetail extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                teachers.nip,
+                                teachers.nip ?? '',
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -102,28 +104,10 @@ class StaffDetail extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: bodyHeight * 0.02),
-                              SizedBox(
-                                width: double.infinity,
-                                height: bodyHeight * 0.3,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: CardDetailSiswa(
-                                        title: 'Tanggal Lahir',
-                                        content: teachers.tanggalLahir,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 16),
-                                    Expanded(
-                                      child: CardDetailSiswa(
-                                        title: 'Pekerjaan',
-                                        content: teachers.mengajar,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              CardDetailSiswa(
+                                title: 'Tanggal Lahir',
+                                content: DateFormat('d MMMM yyyy', "id_ID")
+                                    .format(teachers.birthDate!),
                               ),
                             ],
                           ),

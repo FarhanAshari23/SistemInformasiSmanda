@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageTeacher/widgets/card_edit_teacher.dart';
 
+import '../../../common/bloc/teacher/teacher_cubit.dart';
+import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../common/bloc/teacher/teacher_state.dart';
+import '../widgets/card_edit_teacher.dart';
 
 class EditTeacherView extends StatelessWidget {
   const EditTeacherView({super.key});
@@ -17,7 +17,7 @@ class EditTeacherView extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: BlocProvider(
-          create: (context) => TeacherCubit()..displayTeacherGolang(),
+          create: (context) => TeacherCubit()..displayTeacher(),
           child: Column(
             children: [
               const BasicAppbar(
@@ -43,7 +43,7 @@ class EditTeacherView extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  if (state is TeacherGolangLoaded) {
+                  if (state is TeacherLoaded) {
                     return Expanded(
                       child: ListView.separated(
                         scrollDirection: Axis.vertical,

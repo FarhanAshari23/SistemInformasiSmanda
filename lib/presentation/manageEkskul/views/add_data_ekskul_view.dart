@@ -137,7 +137,7 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                         setState(() {
                           if (index == 1 && result is TeacherEntity) {
                             _selectedPembina = result;
-                            _namePembinaC.text = result.nama;
+                            _namePembinaC.text = result.name ?? '';
                           } else if (result is UserEntity) {
                             switch (index) {
                               case 2:

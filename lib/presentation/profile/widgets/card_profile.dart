@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
@@ -28,10 +29,11 @@ class CardProfile extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     final nip = teacher?.nip;
-    final birthDate = teacher?.tanggalLahir;
+    final birthDate = teacher?.birthDate;
 
-    final nipOrBirthDate =
-        (nip != null && nip.isNotEmpty && nip != '-') ? nip : (birthDate ?? '');
+    final nipOrBirthDate = (nip != null && nip.isNotEmpty)
+        ? nip
+        : (DateFormat('d MMMM yyyy', "id_ID").format(birthDate!));
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: width * 0.015),
       child: CustomInkWell(
@@ -67,8 +69,8 @@ class CardProfile extends StatelessWidget {
                         student?.nisn ?? '',
                       )
                     : DisplayImage.displayImageTeacher(
-                        teacher?.nama ?? '',
-                        nipOrBirthDate,
+                        teacher?.name ?? '',
+                        nipOrBirthDate.toString(),
                       ),
               ),
               Padding(
@@ -84,7 +86,7 @@ class CardProfile extends StatelessWidget {
                           width: width * 0.45,
                           height: height * 0.055,
                           child: Text(
-                            (student != null ? student?.nama : teacher?.nama) ??
+                            (student != null ? student?.nama : teacher?.name) ??
                                 '',
                             style: const TextStyle(
                               color: AppColors.inversePrimary,

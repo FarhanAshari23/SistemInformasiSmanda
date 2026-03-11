@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_teacher.dart';
 
 import '../../../domain/entities/teacher/teacher.dart';
+import '../../../domain/usecases/teacher/get_teacher.dart';
 import '../../../service_locator.dart';
 import 'teacher_state.dart';
 
@@ -15,19 +15,7 @@ class TeacherCubit extends Cubit<TeacherState> {
         return emit(TeacherFailure(errorMessage: error));
       },
       (data) {
-        return emit(TeacherLoaded(teacher: data));
-      },
-    );
-  }
-
-  void displayTeacherGolang({dynamic params}) async {
-    var returnedData = await sl<GetTeacher>().call();
-    returnedData.fold(
-      (error) {
-        return emit(TeacherFailure(errorMessage: error));
-      },
-      (data) {
-        return emit(TeacherGolangLoaded(teachers: data));
+        return emit(TeacherLoaded(teachers: data));
       },
     );
   }
@@ -36,24 +24,20 @@ class TeacherCubit extends Cubit<TeacherState> {
     final currentState = state;
     if (currentState is TeacherLoaded) {
       // cari guru berdasarkan nama
-      final teacher = currentState.teacher.firstWhere(
-        (t) => t.nama == value,
+      final teacher = currentState.teachers.firstWhere(
+        (t) => t.name == value,
         orElse: () => TeacherEntity(
-          nama: '',
-          mengajar: '',
-          nip: '',
-          jabatan: '',
-          tanggalLahir: '',
-          waliKelas: '',
+          birthDate: DateTime.now(),
+          email: '',
           gender: 0,
+          name: '',
+          nip: '',
+          waliKelas: '',
         ),
       );
 
       // ubah string menjadi list (pisah berdasarkan koma)
-      final activities = teacher.mengajar
-          .split(',')
-          .map((e) => e.trim()) // hapus spasi di setiap sisi
-          .toList();
+      final activities = teacher.tasksName;
 
       emit(currentState.copyWith(
         selected: value,

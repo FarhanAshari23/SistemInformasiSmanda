@@ -14,16 +14,15 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/box_gender.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
-// import '../../../domain/usecases/teacher/update_teacher.dart';
 import '../../../domain/entities/teacher/role.dart';
-import '../../../domain/entities/teacher/teacher_golang.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/teacher/update_teacher.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../../common/widget/photo/change_photo_view.dart';
 import 'select_jabatan_view.dart';
 
 class EditTeacherDetailView extends StatefulWidget {
-  final TeacherGolangEntity teacher;
+  final TeacherEntity teacher;
   const EditTeacherDetailView({super.key, required this.teacher});
 
   @override
@@ -105,7 +104,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
             if (state is ButtonSuccessState) {
-              context.read<TeacherCubit>().displayTeacherGolang();
+              context.read<TeacherCubit>().displayTeacher();
               var snackbar = SnackBar(
                 content: Text(state.successMessage),
               );
@@ -187,7 +186,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                             .parse(_tanggalC.text);
                         context.read<ButtonStateCubit>().execute(
                               usecase: UpdateTeacherUsecase(),
-                              params: TeacherGolangEntity(
+                              params: TeacherEntity(
                                 id: widget.teacher.id,
                                 name: _namaC.text,
                                 nip: _nipC.text,

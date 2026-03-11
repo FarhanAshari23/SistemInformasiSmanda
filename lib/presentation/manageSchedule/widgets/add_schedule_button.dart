@@ -116,8 +116,8 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                             ),
                           ),
                           hintText: 'Pelaksana:',
-                          dropdownMenuEntries: state.teacher.map((doc) {
-                            final nama = doc.nama;
+                          dropdownMenuEntries: state.teachers.map((doc) {
+                            final nama = doc.name!;
                             return DropdownMenuEntry(
                               value: nama,
                               label: nama,

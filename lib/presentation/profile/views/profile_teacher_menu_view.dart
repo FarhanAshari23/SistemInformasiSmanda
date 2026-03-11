@@ -90,11 +90,11 @@ class ProfileTeacherMenuView extends StatelessWidget {
                         final state = distanceCubit.state;
 
                         if (state is GetDistanceLoaded && state.isNear) {
-                          final updatedTeacher =
-                              teacher.copyWith(isAttendance: true);
+                          // final updatedTeacher =
+                          //     teacher.copyWith(isAttendance: true);
                           buttonCubit.execute(
                             usecase: AddTeacherAttendanceUseCase(),
-                            params: updatedTeacher,
+                            params: true,
                           );
                         } else {
                           messenger.showSnackBar(
@@ -120,11 +120,11 @@ class ProfileTeacherMenuView extends StatelessWidget {
                         final state = distanceCubit.state;
 
                         if (state is GetDistanceLoaded && state.isNear) {
-                          final updatedTeacher =
-                              teacher.copyWith(isAttendance: false);
+                          // final updatedTeacher =
+                          //     teacher.copyWith(isAttendance: false);
                           buttonCubit.execute(
                             usecase: AddTeacherAttendanceUseCase(),
-                            params: updatedTeacher,
+                            params: false,
                           );
                         } else {
                           messenger.showSnackBar(

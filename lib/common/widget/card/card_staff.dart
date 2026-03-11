@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:shimmer/shimmer.dart';
@@ -35,10 +36,10 @@ class _CardStaffState extends State<CardStaff> {
   void initState() {
     super.initState();
     imageUrl = DisplayImage.displayImageTeacher(
-        widget.teacher.nama,
-        widget.teacher.nip != "-"
-            ? widget.teacher.nip
-            : widget.teacher.tanggalLahir);
+        widget.teacher.name!,
+        widget.teacher.nip != null
+            ? widget.teacher.nip!
+            : DateFormat('d MMMM yyyy').format(widget.teacher.birthDate!));
     _checkUrl();
   }
 
@@ -104,7 +105,7 @@ class _CardStaffState extends State<CardStaff> {
               children: [
                 Center(
                   child: Text(
-                    widget.teacher.nama,
+                    widget.teacher.name ?? '',
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
@@ -117,7 +118,7 @@ class _CardStaffState extends State<CardStaff> {
                 Text(
                   widget.content != null
                       ? widget.content!
-                      : widget.teacher.jabatan,
+                      : widget.teacher.tasksName!.join(","),
                   style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,

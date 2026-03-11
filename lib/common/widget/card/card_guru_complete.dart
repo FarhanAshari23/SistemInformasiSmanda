@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/configs/assets/app_images.dart';
@@ -34,10 +35,10 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
   void initState() {
     super.initState();
     imageUrl = DisplayImage.displayImageTeacher(
-        widget.teacher.nama,
+        widget.teacher.name!,
         widget.teacher.nip != "-"
-            ? widget.teacher.nip
-            : widget.teacher.tanggalLahir);
+            ? widget.teacher.nip!
+            : DateFormat('d MMMM yyyy').format(widget.teacher.birthDate!));
     _checkUrl();
   }
 
@@ -112,7 +113,7 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          widget.teacher.nama,
+                          widget.teacher.name ?? '',
                           maxLines: 2,
                           style: const TextStyle(
                             fontSize: 16,

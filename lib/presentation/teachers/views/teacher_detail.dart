@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -41,10 +42,11 @@ class TeacherDetail extends StatelessWidget {
                           ? AppImages.guruLaki
                           : AppImages.guruPerempuan,
                       imageUrl: DisplayImage.displayImageTeacher(
-                        teachers.nama,
-                        teachers.nip != '-'
-                            ? teachers.nip
-                            : teachers.tanggalLahir,
+                        teachers.name!,
+                        teachers.nip != null
+                            ? teachers.nip!
+                            : DateFormat('d MMMM yyyy', "id_ID")
+                                .format(teachers.birthDate!),
                       ),
                     ),
                     Align(
@@ -90,7 +92,7 @@ class TeacherDetail extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              teachers.nama,
+                              teachers.name ?? '',
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w800,
@@ -99,7 +101,7 @@ class TeacherDetail extends StatelessWidget {
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              teachers.nip,
+                              teachers.nip ?? '',
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -119,39 +121,28 @@ class TeacherDetail extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: CardDetailSiswa(
-                                          title: 'Tanggal Lahir',
-                                          content: teachers.tanggalLahir,
+                                          title: 'Wali Kelas',
+                                          content: teachers.waliKelas ?? '',
                                         ),
                                       ),
                                       const SizedBox(width: 8),
                                       Expanded(
                                         child: CardDetailSiswa(
-                                          title: 'Mengajar',
-                                          content: teachers.mengajar,
+                                          title: 'Tugas tambahan',
+                                          content: teachers.tasksName != null
+                                              ? teachers.tasksName!.join(",")
+                                              : "-",
                                         ),
                                       ),
                                     ],
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 4),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Expanded(
-                                          child: CardDetailSiswa(
-                                            title: 'Wali Kelas',
-                                            content: teachers.waliKelas,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: CardDetailSiswa(
-                                            title: 'Tugas tambahan',
-                                            content: teachers.jabatan,
-                                          ),
-                                        ),
-                                      ],
+                                    child: CardDetailSiswa(
+                                      title: 'Tanggal Lahir',
+                                      content:
+                                          DateFormat('d MMMM yyyy', "id_ID")
+                                              .format(teachers.birthDate!),
                                     ),
                                   ),
                                 ],

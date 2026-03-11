@@ -1,63 +1,52 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class TeacherEntity {
-  final String nama, mengajar, nip, tanggalLahir, waliKelas, jabatan;
-  final int? gender;
-  final File? image;
-  final String? email, password, uid;
-  final bool? isAttendance;
-  final Timestamp? timeIn, timeOut;
+  int? id, gender;
+  List<int>? tasksId;
+  List<String>? tasksName;
+  String? waliKelas, name, nip, email, password;
+  DateTime? birthDate;
+  File? imageFile;
 
   TeacherEntity({
-    required this.nama,
-    required this.mengajar,
-    required this.nip,
-    required this.tanggalLahir,
-    required this.waliKelas,
-    required this.jabatan,
-    required this.gender,
+    this.id,
+    this.gender,
+    this.tasksId,
+    this.waliKelas,
+    this.name,
+    this.nip,
     this.email,
+    this.birthDate,
+    this.tasksName,
+    this.imageFile,
     this.password,
-    this.image,
-    this.isAttendance,
-    this.timeIn,
-    this.timeOut,
-    this.uid,
   });
 
   TeacherEntity copyWith({
-    String? nama,
-    String? mengajar,
-    String? nip,
-    String? tanggalLahir,
-    String? waliKelas,
-    String? uid,
-    String? jabatan,
+    int? id,
     int? gender,
-    File? image,
+    List<int>? tasksId,
+    String? waliKelas,
+    String? name,
+    String? nip,
     String? email,
     String? password,
-    bool? isAttendance,
-    Timestamp? timeIn,
-    timeOut,
+    DateTime? birthDate,
+    List<String>? tasksName,
+    File? imageFile,
   }) {
     return TeacherEntity(
-      nama: nama ?? this.nama,
-      mengajar: mengajar ?? this.mengajar,
-      nip: nip ?? this.nip,
-      tanggalLahir: tanggalLahir ?? this.tanggalLahir,
-      waliKelas: waliKelas ?? this.waliKelas,
-      jabatan: jabatan ?? this.jabatan,
+      id: id ?? this.id,
       gender: gender ?? this.gender,
+      tasksId: tasksId ?? this.tasksId,
+      waliKelas: waliKelas ?? this.waliKelas,
+      name: name ?? this.name,
+      nip: nip ?? this.nip,
       email: email ?? this.email,
+      birthDate: birthDate ?? this.birthDate,
+      tasksName: tasksName ?? this.tasksName,
+      imageFile: imageFile ?? this.imageFile,
       password: password ?? this.password,
-      image: image ?? this.image,
-      isAttendance: isAttendance ?? this.isAttendance,
-      timeIn: timeIn ?? this.timeIn,
-      timeOut: timeOut ?? this.timeOut,
-      uid: uid ?? this.uid,
     );
   }
 }

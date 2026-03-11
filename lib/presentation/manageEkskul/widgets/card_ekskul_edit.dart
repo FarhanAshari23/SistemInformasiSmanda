@@ -46,7 +46,7 @@ class CardEkskulEdit extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  crossAxisAlignment: ekskul.pembina.nama.length > 25
+                  crossAxisAlignment: ekskul.pembina.name!.length > 25
                       ? CrossAxisAlignment.start
                       : CrossAxisAlignment.center,
                   children: [
@@ -66,7 +66,7 @@ class CardEkskulEdit extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        ekskul.pembina.nama,
+                        ekskul.pembina.name ?? '',
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,

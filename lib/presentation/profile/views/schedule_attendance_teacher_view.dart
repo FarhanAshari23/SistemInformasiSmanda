@@ -31,7 +31,7 @@ class ScheduleAttendanceTeacherView extends StatelessWidget {
           BlocProvider(
             create: (_) => GetTeacherAttendanceCubit()
               ..getAttendanceTeacher(
-                teacher.copyWith(isAttendance: true),
+                teacher.copyWith(),
               ),
           ),
           BlocProvider(create: (_) => SelectTimestampCubit()),
@@ -57,13 +57,7 @@ class _MainContent extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return BlocListener<SelectAttendanceCubit, int>(
       listener: (context, state) {
-        final updatedTeacher = teacher.copyWith(
-          isAttendance: state == 0 ? true : false,
-        );
-
-        context
-            .read<GetTeacherAttendanceCubit>()
-            .getAttendanceTeacher(updatedTeacher);
+        context.read<GetTeacherAttendanceCubit>().getAttendanceTeacher(teacher);
       },
       child: SafeArea(
         child: Column(

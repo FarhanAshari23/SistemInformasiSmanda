@@ -35,7 +35,7 @@ class ProfileTeacher extends StatelessWidget {
           if (state is ProfileInfoLoaded) {
             context
                 .read<GetScheduleTeacherCubit>()
-                .getScheduleTeacher(state.teacherEntity?.nama ?? '');
+                .getScheduleTeacher(state.teacherEntity?.name ?? '');
           }
         },
         child: Scaffold(

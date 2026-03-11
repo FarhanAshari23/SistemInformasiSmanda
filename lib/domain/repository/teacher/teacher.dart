@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 
 import '../../entities/teacher/role.dart';
-import '../../entities/teacher/teacher_golang.dart';
+import '../../entities/teacher/teacher.dart';
 
 abstract class TeacherRepository {
-  Future<Either> createTeacher(TeacherGolangEntity teacherCreationReq);
-  Future<Either> updateTeacher(TeacherGolangEntity teacherReq);
+  Future<Either> createTeacher(TeacherEntity teacherCreationReq);
+  Future<Either> updateTeacher(TeacherEntity teacherReq);
   Future<Either> deleteTeacher(int teacherId);
   Future<Either> getTeacherByName(String name);
   Future<Either> getScheduleTeacher(String name);
@@ -14,7 +14,4 @@ abstract class TeacherRepository {
   Future<Either> createRoles(String role);
   Future<Either> updateRoles(RoleEntity role);
   Future<Either> deleteRole(int idRole);
-  Future<Either> getKepalaSekolah();
-  Future<Either> getWaka();
-  Future<Either> getHonor();
 }

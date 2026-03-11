@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../common/widget/card/card_guru_golang.dart';
+import '../../../common/widget/card/card_guru.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../common/widget/landing/not_found.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/teacher/teacher_golang.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/teacher/get_teacher_by_name.dart';
 import '../../teachers/widgets/search_teacher_appbar.dart';
 import '../bloc/select_teacher_name_cubit.dart';
@@ -58,7 +58,7 @@ class SelectTeacherView extends StatelessWidget {
     );
   }
 
-  Widget _teachers(List<TeacherGolangEntity> teachers, double height) {
+  Widget _teachers(List<TeacherEntity> teachers, double height) {
     return GridView.builder(
       itemCount: teachers.length,
       padding: const EdgeInsets.all(16),
@@ -73,7 +73,7 @@ class SelectTeacherView extends StatelessWidget {
           onTap: () => Navigator.pop(context, teachers[index]),
           borderRadius: 8,
           defaultColor: AppColors.secondary,
-          child: CardGuruGolang(
+          child: CardGuru(
             teacher: teachers[index],
           ),
         );

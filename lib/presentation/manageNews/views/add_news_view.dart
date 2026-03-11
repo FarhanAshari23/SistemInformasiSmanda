@@ -11,7 +11,7 @@ import '../../../common/widget/landing/succes.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/kelas/kelas.dart';
 import '../../../domain/entities/news/news.dart';
-import '../../../domain/entities/teacher/teacher_golang.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/news/create_news.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../home/views/home_view_admin.dart';
@@ -187,7 +187,7 @@ class _AddNewsViewState extends State<AddNewsView> {
                                               hintText: "Dari siapa..",
                                             ),
                                             onTap: () async {
-                                              TeacherGolangEntity result =
+                                              TeacherEntity result =
                                                   await Navigator.push(
                                                 context,
                                                 MaterialPageRoute(

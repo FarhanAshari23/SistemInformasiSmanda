@@ -49,7 +49,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
   void initState() {
     super.initState();
     _nameEkskulC = TextEditingController(text: widget.ekskul.namaEkskul);
-    _namePembinaC = TextEditingController(text: widget.ekskul.pembina.nama);
+    _namePembinaC = TextEditingController(text: widget.ekskul.pembina.name);
     _nameKetuaC = TextEditingController(text: widget.ekskul.ketua.nama);
     _nameWakilC = TextEditingController(text: widget.ekskul.wakilKetua.nama);
     _nameSekretarisC =

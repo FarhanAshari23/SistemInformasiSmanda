@@ -8,59 +8,24 @@ import 'package:firebase_core/firebase_core.dart';
 import '../../../core/networks/network.dart';
 import '../../../domain/entities/teacher/role.dart';
 import '../../../domain/entities/teacher/schedule_teacher.dart';
-import '../../../domain/entities/teacher/teacher_golang.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../models/teacher/schedule_teacher.dart';
-import '../../models/teacher/teacher_golang.dart';
+import '../../models/teacher/teacher.dart';
 
 abstract class TeacherFirebaseService {
-  Future<Either> createTeacher(TeacherGolangEntity teacherCreationReq);
-  Future<Either> updateTeacher(TeacherGolangEntity teacherReq);
+  Future<Either> createTeacher(TeacherEntity teacherCreationReq);
+  Future<Either> updateTeacher(TeacherEntity teacherReq);
   Future<Either> deleteTeacher(int teacherId);
+  Future<Either> getTeacher();
   Future<Either> getTeacherByName(String name);
   Future<Either> getScheduleTeacher(String name);
   Future<Either> createRoles(String role);
   Future<Either> deleteRole(int idRole);
   Future<Either> updateRoles(RoleEntity role);
   Future<Either> getRoles();
-  Future<Either> getKepalaSekolah();
-  Future<Either> getWaka();
-  Future<Either> getTeacher();
-  Future<Either> getHonor();
 }
 
 class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
-  @override
-  Future<Either> getKepalaSekolah() async {
-    try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Teachers")
-          .where("jabatan_tambahan", isEqualTo: 'Kepala Sekolah')
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
-    } catch (e) {
-      return Left(e.toString());
-    }
-  }
-
-  @override
-  Future<Either> getWaka() async {
-    try {
-      var returnedData =
-          await FirebaseFirestore.instance.collection("Teachers").get();
-
-      final result = returnedData.docs
-          .where((doc) {
-            final jabatan = (doc.data()["jabatan_tambahan"] ?? "").toString();
-            return jabatan.contains("Wakil Kepala Sekolah");
-          })
-          .map((doc) => doc.data())
-          .toList();
-      return Right(result);
-    } catch (e) {
-      return Left(e.toString());
-    }
-  }
-
   @override
   Future<Either> getTeacher() async {
     try {
@@ -76,7 +41,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   }
 
   @override
-  Future<Either> createTeacher(TeacherGolangEntity teacherCreationReq) async {
+  Future<Either> createTeacher(TeacherEntity teacherCreationReq) async {
     try {
       final secondaryApp = await Firebase.initializeApp(
         name: 'SecondaryApp',
@@ -90,7 +55,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         password: teacherCreationReq.password!,
       );
 
-      final model = TeacherGolangModelX.fromEntity(teacherCreationReq);
+      final model = TeacherModelX.fromEntity(teacherCreationReq);
       final response =
           await Network.apiClient.post("/teacher", body: model.toMap());
 
@@ -98,7 +63,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         return left("Connection error: ${response.message}");
       }
 
-      final data = TeacherGolangModel.fromMap(response.data['data']);
+      final data = TeacherModel.fromMap(response.data['data']);
 
       if (teacherCreationReq.imageFile != null) {
         Network.apiClient.postMultipart(
@@ -127,9 +92,9 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   }
 
   @override
-  Future<Either> updateTeacher(TeacherGolangEntity teacherReq) async {
+  Future<Either> updateTeacher(TeacherEntity teacherReq) async {
     try {
-      final model = TeacherGolangModelX.fromEntity(teacherReq);
+      final model = TeacherModelX.fromEntity(teacherReq);
       if (teacherReq.imageFile != null) {
         Network.apiClient.postMultipart(
           "/teacher/${teacherReq.id}/photo",
@@ -158,19 +123,6 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       return Right(dataList);
     } catch (e) {
       return Left("Something error: ${e.toString()}");
-    }
-  }
-
-  @override
-  Future<Either> getHonor() async {
-    try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Teachers")
-          .where("mengajar", isEqualTo: 'Tenaga Kependidikan')
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
-    } catch (e) {
-      return Left(e.toString());
     }
   }
 

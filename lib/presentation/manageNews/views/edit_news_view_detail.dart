@@ -9,7 +9,7 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/kelas/kelas.dart';
 import '../../../domain/entities/news/news.dart';
-import '../../../domain/entities/teacher/teacher_golang.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/news/update_news.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../home/bloc/news_cubit.dart';
@@ -202,7 +202,7 @@ class _EditNewsViewDetailState extends State<EditNewsViewDetail> {
                                               hintText: "Dari siapa..",
                                             ),
                                             onTap: () async {
-                                              TeacherGolangEntity result =
+                                              TeacherEntity result =
                                                   await Navigator.push(
                                                 context,
                                                 MaterialPageRoute(

@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 // import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teacher.dart';
 
-import '../../../domain/entities/teacher/teacher_golang.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../presentation/profile/bloc/profile_info_cubit.dart';
 import '../../bloc/button/button.cubit.dart';
 import '../../bloc/button/button_state.dart';
@@ -19,7 +19,7 @@ import 'network_photo.dart';
 
 class ChangePhotoView extends StatelessWidget {
   final UserEntity? user;
-  final TeacherGolangEntity? teacher;
+  final TeacherEntity? teacher;
   final bool isProfileTeacher;
 
   const ChangePhotoView({

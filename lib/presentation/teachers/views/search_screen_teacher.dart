@@ -38,7 +38,7 @@ class SearchScreenTeacher extends StatelessWidget {
                     }
                     if (state is GetTeacherLoaded) {
                       state.teachers.removeWhere(
-                          (element) => element.nama == "Seluruh Siswa");
+                          (element) => element.name == "Seluruh Siswa");
                       return state.teachers.isEmpty
                           ? const NotFound(objek: 'Guru')
                           : SizedBox(

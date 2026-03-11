@@ -317,7 +317,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
             teacherAddReq.nip != '-' ? 'NIP' : 'nama',
             isEqualTo: teacherAddReq.nip != '-'
                 ? teacherAddReq.nip
-                : teacherAddReq.nama,
+                : teacherAddReq.name,
           )
           .limit(1)
           .get();
@@ -328,8 +328,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
 
       final teacherDoc = teacherQuery.docs.first.reference;
 
-      final attendanceRef = teacherDoc.collection(
-          teacherAddReq.isAttendance ?? false ? 'Attendances' : 'Completions');
+      final attendanceRef = teacherDoc.collection('Attendances');
       final todayAttendance = await attendanceRef.doc(formattedDate).get();
 
       if (todayAttendance.exists) {
@@ -350,8 +349,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       final dateQuery = await teacherAttendances
           .where("createdAt", isEqualTo: formattedDate)
           .where('is_student', isEqualTo: false)
-          .where('is_teacher_completions',
-              isEqualTo: teacherAddReq.isAttendance ?? false ? false : true)
+          .where('is_teacher_completions', isEqualTo: true)
           .limit(1)
           .get();
 
@@ -362,8 +360,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
           "createdAt": formattedDate,
           "timestamp": Timestamp.now(),
           'is_student': false,
-          'is_teacher_completions':
-              teacherAddReq.isAttendance ?? false ? false : true
+          'is_teacher_completions': true
         });
       } else {
         todayDoc = dateQuery.docs.first.reference;
@@ -371,9 +368,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
 
       final teacherModel = TeacherModelX.fromEntity(teacherAddReq);
       final teacherData = teacherModel.toMap();
-      teacherData[teacherAddReq.isAttendance ?? false
-          ? 'jam_masuk'
-          : 'jam_pulang'] = Timestamp.now();
+      teacherData['jam_pulang'] = Timestamp.now();
       await todayDoc.collection("Teachers").add(teacherData);
 
       return right('Attendance record success!');
@@ -392,7 +387,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
             attendanceReq.nip != '-' ? 'NIP' : 'nama',
             isEqualTo: attendanceReq.nip != '-'
                 ? attendanceReq.nip
-                : attendanceReq.nama,
+                : attendanceReq.name,
           )
           .limit(1)
           .get();
@@ -403,9 +398,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       final attendanceDocId = attendanceQuery.docs.first.id;
       final teacherDoc = await kehadiran
           .doc(attendanceDocId)
-          .collection(attendanceReq.isAttendance ?? false
-              ? 'Attendances'
-              : 'Completions')
+          .collection('Completions')
           .orderBy("timestamp", descending: false)
           .get();
       if (teacherDoc.docs.isEmpty) {

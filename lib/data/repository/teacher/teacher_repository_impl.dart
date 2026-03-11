@@ -1,49 +1,14 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/data/models/teacher/teacher.dart';
-import 'package:new_sistem_informasi_smanda/data/sources/teacher/teacher_firebase_service.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/teacher/role.dart';
-import 'package:new_sistem_informasi_smanda/domain/repository/teacher/teacher.dart';
 
-import '../../../domain/entities/teacher/teacher_golang.dart';
+import '../../../domain/entities/teacher/role.dart';
+import '../../../domain/entities/teacher/teacher.dart';
+import '../../../domain/repository/teacher/teacher.dart';
 import '../../../service_locator.dart';
 import '../../models/teacher/role.dart';
-import '../../models/teacher/teacher_golang.dart';
+import '../../models/teacher/teacher.dart';
+import '../../sources/teacher/teacher_firebase_service.dart';
 
 class TeacherRepositoryImpl extends TeacherRepository {
-  @override
-  Future<Either> getKepalaSekolah() async {
-    var returnedData = await sl<TeacherFirebaseService>().getKepalaSekolah();
-    return returnedData.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(
-          List.from(data)
-              .map((e) => TeacherModel.fromMap(e).toEntity())
-              .toList(),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<Either> getWaka() async {
-    var returnedData = await sl<TeacherFirebaseService>().getWaka();
-    return returnedData.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(
-          List.from(data)
-              .map((e) => TeacherModel.fromMap(e).toEntity())
-              .toList(),
-        );
-      },
-    );
-  }
-
   @override
   Future<Either> getTeacher() async {
     var returnedData = await sl<TeacherFirebaseService>().getTeacher();
@@ -54,7 +19,7 @@ class TeacherRepositoryImpl extends TeacherRepository {
       (data) {
         return Right(
           List.from(data)
-              .map((e) => TeacherGolangModel.fromMap(e).toEntity())
+              .map((e) => TeacherModel.fromMap(e).toEntity())
               .toList(),
         );
       },
@@ -62,7 +27,7 @@ class TeacherRepositoryImpl extends TeacherRepository {
   }
 
   @override
-  Future<Either> createTeacher(TeacherGolangEntity teacherCreationReq) async {
+  Future<Either> createTeacher(TeacherEntity teacherCreationReq) async {
     return await sl<TeacherFirebaseService>().createTeacher(teacherCreationReq);
   }
 
@@ -72,7 +37,7 @@ class TeacherRepositoryImpl extends TeacherRepository {
   }
 
   @override
-  Future<Either> updateTeacher(TeacherGolangEntity teacherReq) async {
+  Future<Either> updateTeacher(TeacherEntity teacherReq) async {
     return await sl<TeacherFirebaseService>().updateTeacher(teacherReq);
   }
 
@@ -88,25 +53,8 @@ class TeacherRepositoryImpl extends TeacherRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => TeacherGolangModel.fromMap(e).toEntity(),
+                (e) => TeacherModel.fromMap(e).toEntity(),
               )
-              .toList(),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<Either> getHonor() async {
-    var returnedData = await sl<TeacherFirebaseService>().getHonor();
-    return returnedData.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(
-          List.from(data)
-              .map((e) => TeacherModel.fromMap(e).toEntity())
               .toList(),
         );
       },

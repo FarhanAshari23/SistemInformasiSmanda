@@ -30,10 +30,10 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
   void initState() {
     super.initState();
     imageUrl = DisplayImage.displayImageTeacher(
-        widget.teacher.nama,
-        widget.teacher.nip != "-"
-            ? widget.teacher.nip
-            : widget.teacher.tanggalLahir);
+        widget.teacher.name!,
+        widget.teacher.nip != null
+            ? widget.teacher.nip!
+            : DateFormat('d MMMM yyyy').format(widget.teacher.birthDate!));
     _checkUrl();
   }
 
@@ -54,9 +54,7 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
 
-    DateTime dateTime = widget.isAttendance
-        ? widget.teacher.timeIn!.toDate()
-        : widget.teacher.timeOut!.toDate();
+    DateTime dateTime = DateTime.now();
     String time = DateFormat('HH:mm').format(dateTime);
     final parts = time.split(':');
     final hour = int.parse(parts[0]);
@@ -135,7 +133,7 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
                         child: RichText(
                           textAlign: TextAlign.left,
                           text: TextSpan(
-                            text: '${widget.teacher.nama}\n',
+                            text: '${widget.teacher.name}\n',
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
                               color: AppColors.primary,

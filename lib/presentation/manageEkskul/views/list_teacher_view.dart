@@ -46,7 +46,7 @@ class ListTeacherView extends StatelessWidget {
                             width: double.infinity,
                             height: height * 0.7,
                             child: GridView.builder(
-                              itemCount: state.teacher.length,
+                              itemCount: state.teachers.length,
                               scrollDirection: Axis.vertical,
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
@@ -59,12 +59,12 @@ class ListTeacherView extends StatelessWidget {
                                 return CustomInkWell(
                                   onTap: () => Navigator.pop(
                                     context,
-                                    state.teacher[index].nama,
+                                    state.teachers[index].name,
                                   ),
                                   borderRadius: 8,
                                   defaultColor: AppColors.secondary,
                                   child: CardGuru(
-                                    teacher: state.teacher[index],
+                                    teacher: state.teachers[index],
                                   ),
                                 );
                               },

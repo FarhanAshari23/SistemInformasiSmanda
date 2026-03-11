@@ -1,4 +1,4 @@
-import '../../../domain/entities/teacher/teacher_golang.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 
 abstract class GetTeacherNameState {}
 
@@ -7,7 +7,7 @@ class GetTeacherNameInitial extends GetTeacherNameState {}
 class GetTeacherNameLoading extends GetTeacherNameState {}
 
 class GetTeacherNameLoaded extends GetTeacherNameState {
-  final List<TeacherGolangEntity> teachers;
+  final List<TeacherEntity> teachers;
   GetTeacherNameLoaded({required this.teachers});
 }
 

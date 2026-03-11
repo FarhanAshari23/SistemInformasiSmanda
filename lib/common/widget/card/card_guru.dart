@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/configs/assets/app_images.dart';
@@ -14,7 +15,7 @@ class CardGuru extends StatefulWidget {
   const CardGuru({
     super.key,
     required this.teacher,
-    this.forceRefresh = true,
+    this.forceRefresh = false,
   });
 
   @override
@@ -29,10 +30,10 @@ class _CardGuruState extends State<CardGuru> {
   void initState() {
     super.initState();
     imageUrl = DisplayImage.displayImageTeacher(
-        widget.teacher.nama,
-        widget.teacher.nip != "-"
-            ? widget.teacher.nip
-            : widget.teacher.tanggalLahir);
+        widget.teacher.name!,
+        widget.teacher.nip != null
+            ? widget.teacher.nip!
+            : DateFormat('d MMMM yyyy').format(widget.teacher.birthDate!));
     _checkUrl();
   }
 
@@ -96,7 +97,7 @@ class _CardGuruState extends State<CardGuru> {
               height: height * 0.06,
               child: Center(
                 child: Text(
-                  widget.teacher.nama,
+                  widget.teacher.name ?? '',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,

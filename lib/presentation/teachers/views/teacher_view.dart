@@ -92,12 +92,13 @@ class TeacherView extends StatelessWidget {
                   if (state is TeacherLoaded) {
                     final tabIndex = context.watch<BarNavigationCubit>().state;
 
-                    final all = state.teacher;
+                    final all = state.teachers;
                     final wali = all.where((e) => e.waliKelas != '-').toList();
-                    final jabatan = all.where((e) => e.jabatan != '-').toList();
+                    final jabatan =
+                        all.where((e) => e.tasksName != []).toList();
 
                     final selected = [all, wali, jabatan][tabIndex]
-                        .where((e) => e.nama != "Seluruh Siswa")
+                        .where((e) => e.name != "Seluruh Siswa")
                         .toList();
                     if (selected.isEmpty) {
                       return Column(
@@ -173,7 +174,7 @@ class TeacherView extends StatelessWidget {
                                       forceRefresh: false,
                                       desc: tabIndex == 1
                                           ? "Kelas: ${selected[index].waliKelas}"
-                                          : "Tugas: ${selected[index].jabatan}");
+                                          : "Tugas: ${selected[index].tasksName!.join(",")}");
                                 },
                                 separatorBuilder: (context, index) =>
                                     SizedBox(height: height * 0.01),

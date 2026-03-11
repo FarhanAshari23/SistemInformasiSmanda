@@ -36,7 +36,7 @@ class AttendanceMenuView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CardBasic(
-                  title: "Diri Sendiri\n(${teacher.nama})",
+                  title: "Diri Sendiri\n(${teacher.name})",
                   image: AppImages.teacher,
                   onpressed: () => AppNavigator.push(
                     context,

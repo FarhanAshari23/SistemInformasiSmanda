@@ -36,8 +36,8 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
       );
       await firebaseFirestore.collection("Ekskuls").add(model.toMap());
 
-      final namaPembina = ekskulCreationReq.pembina.nama.trim();
-      final nipPembina = ekskulCreationReq.pembina.nip.trim();
+      final namaPembina = ekskulCreationReq.pembina.name!.trim();
+      final nipPembina = ekskulCreationReq.pembina.nip!.trim();
       final namaEkskul = ekskulCreationReq.namaEkskul.trim();
 
       if (namaPembina.isNotEmpty) {

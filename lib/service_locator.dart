@@ -65,12 +65,9 @@ import 'domain/usecases/students/update_user.dart';
 import 'domain/usecases/teacher/create_teacher.dart';
 import 'domain/usecases/teacher/delete_role_usecase.dart';
 import 'domain/usecases/teacher/delete_teacher.dart';
-import 'domain/usecases/teacher/get_honor.dart';
-import 'domain/usecases/teacher/get_kepala_sekolah.dart';
 import 'domain/usecases/teacher/get_schedule_teacher_usecase.dart';
 import 'domain/usecases/teacher/get_teacher.dart';
 import 'domain/usecases/teacher/get_teacher_by_name.dart';
-import 'domain/usecases/teacher/get_waka.dart';
 import 'domain/usecases/teacher/update_role_usecase.dart';
 import 'domain/usecases/teacher/update_teacher.dart';
 
@@ -175,16 +172,6 @@ Future<void> initializeDependecies() async {
   //teacher
   sl.registerSingleton<CreateTeacherUseCase>(
     CreateTeacherUseCase(),
-  );
-
-  sl.registerSingleton<GetKepalaSekolah>(
-    GetKepalaSekolah(),
-  );
-  sl.registerSingleton<GetWaka>(
-    GetWaka(),
-  );
-  sl.registerSingleton<GetHonor>(
-    GetHonor(),
   );
   sl.registerSingleton<GetTeacher>(
     GetTeacher(),

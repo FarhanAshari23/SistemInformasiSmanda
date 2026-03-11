@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/assets/app_images.dart';
@@ -53,10 +54,11 @@ class CardAnggota extends StatelessWidget {
                   ? DisplayImage.displayImageStudent(
                       murid?.nama ?? '', murid?.nisn ?? '')
                   : DisplayImage.displayImageTeacher(
-                      pembina?.nama ?? '',
+                      pembina?.name ?? '',
                       pembina?.nip != '-'
                           ? pembina?.nip ?? ''
-                          : pembina?.tanggalLahir ?? '',
+                          : DateFormat('d MMMM yyyy')
+                              .format(pembina!.birthDate!),
                     ),
             ),
             const SizedBox(width: 12),

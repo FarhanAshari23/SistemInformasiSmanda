@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
@@ -38,8 +39,11 @@ class CardKepalaSekolah extends StatelessWidget {
                   ? AppImages.guruLaki
                   : AppImages.guruPerempuan,
               imageUrl: DisplayImage.displayImageTeacher(
-                teacher.nama,
-                teacher.nip != '-' ? teacher.nip : teacher.tanggalLahir,
+                teacher.name ?? '',
+                teacher.nip != null
+                    ? teacher.nip!
+                    : DateFormat('d MMMM yyyy', "id_ID")
+                        .format(teacher.birthDate!),
               ),
             ),
             const SizedBox(width: 8),
@@ -49,7 +53,7 @@ class CardKepalaSekolah extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    teacher.nama,
+                    teacher.name ?? '',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -58,7 +62,7 @@ class CardKepalaSekolah extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    teacher.nip,
+                    teacher.nip ?? '',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w800,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
@@ -39,10 +40,10 @@ class _CardAnggotaEkskulState extends State<CardAnggotaEkskul> {
         ? DisplayImage.displayImageStudent(
             widget.murid?.nama ?? '', widget.murid?.nisn ?? '')
         : DisplayImage.displayImageTeacher(
-            widget.pembina?.nama ?? '',
+            widget.pembina?.name ?? '',
             widget.pembina?.nip != '-'
                 ? widget.pembina?.nip ?? ''
-                : widget.pembina?.tanggalLahir ?? '');
+                : DateFormat('d MMMM yyyy').format(widget.pembina!.birthDate!));
     _checkUrl();
   }
 
@@ -119,7 +120,7 @@ class _CardAnggotaEkskulState extends State<CardAnggotaEkskul> {
         SizedBox(height: height * 0.01),
         Text(
           widget.pembina != null
-              ? widget.pembina?.nama ?? ''
+              ? widget.pembina?.name ?? ''
               : widget.murid?.nama ?? '',
           style: const TextStyle(
             fontWeight: FontWeight.bold,

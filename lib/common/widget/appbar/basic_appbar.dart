@@ -118,7 +118,7 @@ class BasicAppbar extends StatelessWidget {
                                     }
                                     if (state is ProfileInfoLoaded) {
                                       String nickname = getFirstRealName(
-                                          state.teacherEntity?.nama ?? '');
+                                          state.teacherEntity?.name ?? '');
                                       return Text(
                                         'Selamat $greeting $nickname!',
                                         style: const TextStyle(

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher_golang.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/create_teacher.dart';
 
 import '../../../common/bloc/button/button_state.dart';
@@ -17,6 +16,7 @@ import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../common/widget/photo/add_photo_view.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/role.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import 'select_jabatan_view.dart';
 
 class AddTeacherView extends StatefulWidget {
@@ -155,7 +155,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                         String password = DateFormat("ddMMyyyy").format(date);
                         context.read<ButtonStateCubit>().execute(
                               usecase: CreateTeacherUseCase(),
-                              params: TeacherGolangEntity(
+                              params: TeacherEntity(
                                 email: _emailC.text,
                                 name: _namaC.text,
                                 nip: _nipC.text,
