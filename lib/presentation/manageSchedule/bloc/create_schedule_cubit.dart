@@ -19,15 +19,22 @@ class CreateScheduleCubit extends Cubit<CreateScheduleState> {
         );
 
   void addActivity(
-    String day,
-    String pelaksana,
-    String kegiatan,
-    String durasi,
+    String? day,
+    String? startTime,
+    String? endTime,
+    int? teacherId,
+    int? subjectId,
   ) {
     final updated = Map<String, List<DayEntity>>.from(state.schedules);
-    updated[day] = [
+    updated[day!] = [
       ...updated[day]!,
-      DayEntity(jam: durasi, kegiatan: kegiatan, pelaksana: pelaksana)
+      DayEntity(
+        day: day,
+        endTime: endTime,
+        startTime: startTime,
+        subjectId: subjectId,
+        teacherId: teacherId,
+      )
     ];
     emit(state.copyWith(schedules: updated));
   }
@@ -47,17 +54,25 @@ class CreateScheduleCubit extends Cubit<CreateScheduleState> {
   }
 
   void editActivity(
-    String day,
+    String? day,
     int index,
-    String pelaksana,
-    String kegiatan,
-    String durasi,
+    String? startTime,
+    String? endTime,
+    int? teacherId,
+    int? subjectId,
+    int? classId,
   ) {
     final updated = Map<String, List<DayEntity>>.from(state.schedules);
     final schedules = List<DayEntity>.from(updated[day]!);
-    schedules[index] =
-        DayEntity(jam: durasi, kegiatan: kegiatan, pelaksana: pelaksana);
-    updated[day] = schedules;
+    schedules[index] = DayEntity(
+      classId: classId,
+      day: day,
+      endTime: endTime,
+      startTime: startTime,
+      subjectId: subjectId,
+      teacherId: teacherId,
+    );
+    updated[day!] = schedules;
     emit(state.copyWith(schedules: updated));
   }
 }

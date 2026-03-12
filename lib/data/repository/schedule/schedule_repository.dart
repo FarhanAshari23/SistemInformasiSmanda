@@ -2,17 +2,16 @@ import 'package:dartz/dartz.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/schedule/activity.dart';
 
 import '../../../domain/entities/kelas/kelas.dart';
-import '../../../domain/entities/schedule/schedule.dart';
 import '../../../domain/repository/schedule/schedule.dart';
 import '../../../service_locator.dart';
+import '../../models/kelas/class.dart';
 import '../../models/schedule/activity.dart';
-import '../../models/schedule/schedule.dart';
 import '../../sources/schedule/schedule_firebase_service.dart';
 
 class ScheduleRepositoryImpl extends ScheduleRepository {
   @override
-  Future<Either> getJadwal() async {
-    var returnedData = await sl<ScheduleFirebaseService>().getJadwal();
+  Future<Either> getJadwal(int kelasId) async {
+    var returnedData = await sl<ScheduleFirebaseService>().getJadwal(kelasId);
     return returnedData.fold(
       (error) {
         return Left(error);
@@ -21,25 +20,8 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => ScheduleModel.fromMap(e).toEntity(),
+                (e) => KelasModel.fromMap(e).toEntity(),
               )
-              .toList(),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<Either> getAllJadwal() async {
-    var returnedData = await sl<ScheduleFirebaseService>().getAllJadwal();
-    return returnedData.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(
-          List.from(data)
-              .map((e) => ScheduleModel.fromMap(e).toEntity())
               .toList(),
         );
       },
@@ -69,28 +51,13 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
   }
 
   @override
-  Future<Either> createJadwal(ScheduleEntity scheduleReq) async {
-    return await sl<ScheduleFirebaseService>().createSchedule(scheduleReq);
-  }
-
-  @override
-  Future<Either> updateJadwal(ScheduleEntity scheduleReq) async {
-    return await sl<ScheduleFirebaseService>().updateJadwal(scheduleReq);
-  }
-
-  @override
-  Future<Either> deleteJadwal(String kelas) async {
-    return await sl<ScheduleFirebaseService>().deleteJadwal(kelas);
-  }
-
-  @override
   Future<Either> createActivities(String kegiatan) async {
     return await sl<ScheduleFirebaseService>().createActivities(kegiatan);
   }
 
   @override
-  Future<Either> deleteKelas(String kelas) async {
-    return await sl<ScheduleFirebaseService>().deleteKelas(kelas);
+  Future<Either> deleteClass(int kelasId) async {
+    return await sl<ScheduleFirebaseService>().deleteClass(kelasId);
   }
 
   @override
@@ -101,5 +68,10 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
   @override
   Future<Either> updateActivity(ActivityEntity activity) async {
     return await sl<ScheduleFirebaseService>().updateActivity(activity);
+  }
+
+  @override
+  Future<Either> updateClass(KelasEntity kelasReq) async {
+    return await sl<ScheduleFirebaseService>().updateClass(kelasReq);
   }
 }

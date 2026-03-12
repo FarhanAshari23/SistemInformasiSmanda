@@ -1,31 +1,48 @@
 import 'dart:convert';
-
-import 'package:new_sistem_informasi_smanda/domain/entities/schedule/day.dart';
+import '../../../domain/entities/schedule/day.dart';
 
 class DayModel {
-  final String jam;
-  final String kegiatan;
-  final String pelaksana;
+  final String day;
+  final String startTime;
+  final String endTime;
+  final String teacherName;
+  final String subjectName;
+  final int teacherId, subjectId, classId;
 
   DayModel({
-    required this.jam,
-    required this.kegiatan,
-    required this.pelaksana,
+    required this.day,
+    required this.startTime,
+    required this.endTime,
+    required this.teacherId,
+    required this.classId,
+    required this.subjectId,
+    required this.subjectName,
+    required this.teacherName,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'jam': jam,
-      'kegiatan': kegiatan,
-      'pelaksana': pelaksana,
+      'day': day,
+      'start_time': startTime,
+      'end_time': endTime,
+      'teacher_id': teacherId,
+      'subject_id': subjectId,
+      'class_id': classId,
+      'teacher_name': teacherName,
+      'subject_name': subjectName,
     };
   }
 
   factory DayModel.fromMap(Map<String, dynamic> map) {
     return DayModel(
-      jam: map['jam'] ?? '',
-      kegiatan: map['kegiatan'] ?? '',
-      pelaksana: map['pelaksana'] ?? '',
+      day: map['day'] ?? '',
+      startTime: map['start_time'] ?? '',
+      endTime: map['end_time'] ?? '',
+      teacherName: map['teacher_name'] ?? '',
+      subjectName: map['subject_name'] ?? '',
+      teacherId: map['teacher_id']?.toInt() ?? 0,
+      subjectId: map['subject_id']?.toInt() ?? 0,
+      classId: map['class_id']?.toInt() ?? 0,
     );
   }
 
@@ -38,9 +55,14 @@ class DayModel {
 extension DayXModel on DayModel {
   DayEntity toEntity() {
     return DayEntity(
-      jam: jam,
-      kegiatan: kegiatan,
-      pelaksana: pelaksana,
+      day: day,
+      startTime: startTime,
+      endTime: endTime,
+      teacherId: teacherId,
+      subjectId: subjectId,
+      classId: classId,
+      subjectName: subjectName,
+      teacherName: teacherName,
     );
   }
 }
@@ -48,9 +70,14 @@ extension DayXModel on DayModel {
 extension DayXEntity on DayEntity {
   DayModel fromEntity() {
     return DayModel(
-      jam: jam,
-      kegiatan: kegiatan,
-      pelaksana: pelaksana,
+      day: day ?? '',
+      startTime: startTime ?? '',
+      endTime: endTime ?? '',
+      teacherId: teacherId ?? 0,
+      subjectId: subjectId ?? 0,
+      classId: classId ?? 0,
+      subjectName: subjectName ?? '',
+      teacherName: teacherName ?? '',
     );
   }
 }

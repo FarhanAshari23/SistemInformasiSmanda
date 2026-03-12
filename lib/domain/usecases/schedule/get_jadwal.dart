@@ -4,9 +4,9 @@ import 'package:new_sistem_informasi_smanda/domain/repository/schedule/schedule.
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
 
-class GetJadwalUsecase implements Usecase<Either, dynamic> {
+class GetJadwalUsecase implements Usecase<Either, int> {
   @override
-  Future<Either> call({dynamic params}) async {
-    return await sl<ScheduleRepository>().getJadwal();
+  Future<Either> call({int? params}) async {
+    return await sl<ScheduleRepository>().getJadwal(params!);
   }
 }

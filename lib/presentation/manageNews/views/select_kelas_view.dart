@@ -130,7 +130,7 @@ class SelectKelasView extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.all(16),
                               child: Text(
-                                kelas.className,
+                                kelas.className ?? '',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,

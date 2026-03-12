@@ -1,19 +1,41 @@
 class DayEntity {
-  final String jam;
-  final String kegiatan;
-  final String pelaksana;
+  String? day;
+  String? startTime;
+  String? endTime;
+  String? teacherName;
+  String? subjectName;
+  int? teacherId, subjectId, classId;
 
   DayEntity({
-    required this.jam,
-    required this.kegiatan,
-    required this.pelaksana,
+    this.classId,
+    this.day,
+    this.endTime,
+    this.startTime,
+    this.subjectId,
+    this.teacherId,
+    this.subjectName,
+    this.teacherName,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      "jam": jam,
-      "kegiatan": kegiatan,
-      "pelaksana": pelaksana,
-    };
+  DayEntity copyWith({
+    String? day,
+    String? startTime,
+    String? endTime,
+    int? teacherId,
+    int? subjectId,
+    int? classId,
+    String? teacherName,
+    String? subjectName,
+  }) {
+    return DayEntity(
+      classId: classId ?? this.classId,
+      day: day ?? this.day,
+      endTime: endTime ?? this.endTime,
+      startTime: startTime ?? this.startTime,
+      subjectId: subjectId ?? this.subjectId,
+      teacherId: teacherId ?? this.teacherId,
+      subjectName: subjectName ?? this.subjectName,
+      teacherName: teacherName ?? this.teacherName,
+    );
   }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../common/bloc/activities/get_activities_cubit.dart';
+import '../../../common/bloc/activities/get_activities_state.dart';
 import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/bloc/teacher/teacher_state.dart';
-import '../../../common/helper/divided_range_time.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/schedule/day.dart';
@@ -34,13 +35,15 @@ class _CardScheduleState extends State<CardSchedule> {
   final _kegiatanC = TextEditingController();
   final _durasiMulaiC = TextEditingController();
   final _durasiSelesaiC = TextEditingController();
+  int? teacherId, subjectId;
 
   @override
   void initState() {
     super.initState();
-    DividedRangeTime range = DividedRangeTime.fromString(widget.schedule.jam);
-    _durasiMulaiC.text = range.start;
-    _durasiSelesaiC.text = range.end;
+    _durasiMulaiC.text = widget.schedule.startTime!;
+    _durasiSelesaiC.text = widget.schedule.endTime!;
+    teacherId = widget.schedule.teacherId;
+    subjectId = widget.schedule.subjectId;
   }
 
   @override
@@ -87,7 +90,7 @@ class _CardScheduleState extends State<CardSchedule> {
                           );
                         }
                         if (state is TeacherLoaded) {
-                          return DropdownMenu<String>(
+                          return DropdownMenu<int>(
                             width: width * 0.92,
                             enableFilter: true,
                             requestFocusOnTap: false,
@@ -119,15 +122,17 @@ class _CardScheduleState extends State<CardSchedule> {
                             ),
                             hintText: "Pelaksana:",
                             dropdownMenuEntries: state.teachers.map((doc) {
-                              final nama = doc.name!;
-                              return DropdownMenuEntry(
-                                value: nama,
-                                label: nama,
+                              return DropdownMenuEntry<int>(
+                                value: doc.id ?? 0,
+                                label: doc.name ?? '',
                               );
                             }).toList(),
                             onSelected: (value) {
-                              context.read<TeacherCubit>().selectItem(value);
-                              _pelaksanaC.text = value!;
+                              if (value != null) {
+                                setState(() {
+                                  teacherId = value;
+                                });
+                              }
                               FocusScope.of(context).unfocus();
                             },
                           );
@@ -136,9 +141,9 @@ class _CardScheduleState extends State<CardSchedule> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    BlocBuilder<TeacherCubit, TeacherState>(
+                    BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
                       builder: (context, state) {
-                        if (state is TeacherLoading) {
+                        if (state is GetActivitiesLoading) {
                           return TextField(
                             controller: _kegiatanC,
                             autocorrect: false,
@@ -147,23 +152,8 @@ class _CardScheduleState extends State<CardSchedule> {
                             ),
                           );
                         }
-                        if (state is TeacherLoaded) {
-                          final activities = state.selectedActivities;
-
-                          final entries = activities.isEmpty
-                              ? [
-                                  const DropdownMenuEntry(
-                                    value: '',
-                                    label: 'Pilih guru terlebih dahulu',
-                                    enabled: false,
-                                  )
-                                ]
-                              : activities
-                                  .map((a) =>
-                                      DropdownMenuEntry(value: a, label: a))
-                                  .toList();
-
-                          return DropdownMenu<String>(
+                        if (state is GetActivitiesLoaded) {
+                          return DropdownMenu<int>(
                             width: width * 0.92,
                             inputDecorationTheme: const InputDecorationTheme(
                               fillColor: AppColors.tertiary,
@@ -191,9 +181,18 @@ class _CardScheduleState extends State<CardSchedule> {
                               ),
                             ),
                             hintText: 'Kegiatan:',
-                            dropdownMenuEntries: entries,
+                            dropdownMenuEntries: state.activities.map((doc) {
+                              return DropdownMenuEntry<int>(
+                                value: doc.id,
+                                label: doc.name,
+                              );
+                            }).toList(),
                             onSelected: (value) {
-                              _kegiatanC.text = value!;
+                              if (value != null) {
+                                setState(() {
+                                  subjectId = value;
+                                });
+                              }
                               FocusScope.of(context).unfocus();
                             },
                           );
@@ -282,10 +281,10 @@ class _CardScheduleState extends State<CardSchedule> {
                               borderRadius: 12,
                               defaultColor: AppColors.primary,
                               onTap: () {
-                                if (_kegiatanC.text.isEmpty ||
+                                if (teacherId != null ||
                                     _durasiMulaiC.text.isEmpty ||
                                     _durasiMulaiC.text.isEmpty ||
-                                    _pelaksanaC.text.isEmpty) {
+                                    subjectId != null) {
                                   var snackbar = const SnackBar(
                                     content:
                                         Text("Tolong isi semua field yang ada"),
@@ -297,9 +296,11 @@ class _CardScheduleState extends State<CardSchedule> {
                                   cubitCreateSchedule.editActivity(
                                     widget.day,
                                     widget.index,
-                                    _pelaksanaC.text,
-                                    _kegiatanC.text,
-                                    '${_durasiMulaiC.text} - ${_durasiSelesaiC.text}',
+                                    _durasiMulaiC.text,
+                                    _durasiSelesaiC.text,
+                                    teacherId,
+                                    subjectId,
+                                    widget.schedule.classId,
                                   );
                                 }
                                 cubitEditSchedule.toggleEdit(
@@ -418,14 +419,14 @@ class _CardScheduleState extends State<CardSchedule> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    widget.schedule.kegiatan,
+                    widget.schedule.subjectName ?? '',
                     style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
                     ),
                   ),
                   Text(
-                    widget.schedule.jam,
+                    "${widget.schedule.startTime} - ${widget.schedule.endTime}",
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.white,

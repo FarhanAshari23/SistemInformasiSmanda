@@ -1,97 +1,49 @@
-// ignore_for_file: unrelated_type_equality_checks
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../core/networks/network.dart';
 import '../../../domain/entities/kelas/kelas.dart';
 import '../../../domain/entities/schedule/activity.dart';
-import '../../../domain/entities/schedule/schedule.dart';
+import '../../models/kelas/class.dart';
 
 abstract class ScheduleFirebaseService {
-  Future<Either> getJadwal();
-  Future<Either> getAllJadwal();
-  Future<Either> getActivities();
+  Future<Either> getJadwal(int kelasId);
   Future<Either> createClass(KelasEntity kelasReq);
-  Future<Either> createSchedule(ScheduleEntity scheduleReq);
-  Future<Either> createActivities(String kegiatan);
-  Future<Either> updateJadwal(ScheduleEntity scheduleReq);
-  Future<Either> deleteJadwal(String kelas);
-  Future<Either> deleteKelas(String kelas);
+  Future<Either> updateClass(KelasEntity kelasReq);
+  Future<Either> deleteClass(int kelasId);
+  Future<Either> getActivities();
   Future<Either> deleteActivity(int idActivity);
   Future<Either> updateActivity(ActivityEntity activity);
+  Future<Either> createActivities(String kegiatan);
 }
 
 class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   @override
-  Future<Either> getJadwal() async {
+  Future<Either> getJadwal(int kelasId) async {
     try {
-      var currentUser = FirebaseAuth.instance.currentUser;
-      var querySnapshot = await FirebaseFirestore.instance
-          .collection('Students')
-          .where('uid', isEqualTo: currentUser?.uid)
-          .limit(1)
-          .get();
-      if (querySnapshot.docs.isEmpty) {
-        return const Left('User not found');
+      final response =
+          await Network.apiClient.get("/schedule-by-class/$kelasId");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      Map<String, dynamic> data = querySnapshot.docs.first.data();
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Jadwals")
-          .where("kelas", isEqualTo: data['kelas'])
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
     } catch (e) {
-      return Left(e.toString());
-    }
-  }
-
-  @override
-  Future<Either> getAllJadwal() async {
-    try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Jadwals")
-          .orderBy('degree')
-          .orderBy('order')
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
-    } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
   @override
   Future<Either> createClass(KelasEntity kelasReq) async {
     try {
-      final kelasRef = FirebaseFirestore.instance.collection('Kelas');
-      final firstPart = kelasReq.className.trim().split(' ').first;
-      final tingkat = int.tryParse(firstPart) ?? 0;
-      if (tingkat == 0) {
-        throw Exception(
-            "Format nama kelas tidak valid. Awalan harus angka (contoh: '10 IPA 1').");
+      final model = kelasReq.fromEntity();
+      final response = await Network.apiClient
+          .post("/class-with-schedules", body: model.toMap());
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      final snapshot = await kelasRef
-          .where('degree', isEqualTo: tingkat)
-          .orderBy('order', descending: true)
-          .limit(1)
-          .get();
-
-      int lastUrutan = 0;
-
-      if (snapshot.docs.isNotEmpty) {
-        lastUrutan = snapshot.docs.first['order'] as int;
-      }
-
-      await kelasRef.add({
-        'class': kelasReq.className,
-        'degree': tingkat,
-        'order': lastUrutan + 1,
-      });
-
-      return const Right('Data kelas berhasil ditambahkan');
+      return const Right("Mata Pelajaran berhasil dibuat");
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
@@ -110,103 +62,6 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
   }
 
   @override
-  Future<Either> createSchedule(ScheduleEntity scheduleReq) async {
-    try {
-      final scheduleRef = FirebaseFirestore.instance.collection('Jadwals');
-      final firstPart = scheduleReq.kelas.trim().split(' ').first;
-      final tingkat = int.tryParse(firstPart) ?? 0;
-      if (tingkat == 0) {
-        throw Exception(
-            "Format nama kelas tidak valid. Awalan harus angka (contoh: '10 IPA 1').");
-      }
-      final snapshot = await scheduleRef
-          .where('degree', isEqualTo: tingkat)
-          .orderBy('order', descending: true)
-          .limit(1)
-          .get();
-
-      int lastUrutan = 0;
-
-      if (snapshot.docs.isNotEmpty) {
-        lastUrutan = snapshot.docs.first['order'] as int;
-      }
-      await FirebaseFirestore.instance.collection('Jadwals').add({
-        "kelas": scheduleReq.kelas,
-        "degree": tingkat,
-        "order": lastUrutan + 1,
-        ...scheduleReq.hari.map(
-          (key, value) => MapEntry(key, value.map((e) => e.toMap()).toList()),
-        )
-      });
-      return const Right("Success add schedule data");
-    } catch (e) {
-      return Left('Something error: $e');
-    }
-  }
-
-  @override
-  Future<Either> updateJadwal(ScheduleEntity scheduleReq) async {
-    try {
-      final firestore = FirebaseFirestore.instance;
-      final batch = firestore.batch();
-
-      final kelasSnapshot = await firestore
-          .collection('Kelas')
-          .where('class', isEqualTo: scheduleReq.oldNamaKelas)
-          .get();
-      if (kelasSnapshot.docs.isNotEmpty) {
-        final docId = kelasSnapshot.docs.first.id;
-        await firestore.collection('Kelas').doc(docId).update({
-          'class': scheduleReq.kelas,
-        });
-      }
-      final jadwalSnapshot = await firestore
-          .collection('Jadwals')
-          .where('kelas', isEqualTo: scheduleReq.oldNamaKelas)
-          .get();
-      if (jadwalSnapshot.docs.isNotEmpty) {
-        final docId = jadwalSnapshot.docs.first.id;
-        await firestore.collection('Jadwals').doc(docId).update({
-          'kelas': scheduleReq.kelas,
-          ...scheduleReq.hari.map(
-            (key, value) => MapEntry(key, value.map((e) => e.toMap()).toList()),
-          ),
-        });
-      }
-      final muridSnapshot = await firestore
-          .collection('Students')
-          .where('kelas', isEqualTo: scheduleReq.oldNamaKelas)
-          .get();
-      for (final doc in muridSnapshot.docs) {
-        batch.update(doc.reference, {'kelas': scheduleReq.kelas});
-      }
-      await batch.commit();
-      if (kelasSnapshot.docs.isEmpty && jadwalSnapshot.docs.isEmpty) {
-        return const Right('No matching data found');
-      }
-      return const Right('Update success');
-    } catch (e) {
-      return Left(e.toString());
-    }
-  }
-
-  @override
-  Future<Either> deleteJadwal(String kelas) async {
-    try {
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Jadwals');
-      QuerySnapshot querySnapshot =
-          await users.where('kelas', isEqualTo: kelas).get();
-      for (var doc in querySnapshot.docs) {
-        await doc.reference.delete();
-      }
-      return const Right('Delete Data Schedule Success');
-    } catch (e) {
-      return Left(e.toString());
-    }
-  }
-
-  @override
   Future<Either> createActivities(String kegiatan) async {
     try {
       final response =
@@ -217,22 +72,6 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
       return const Right("Mata Pelajaran berhasil dibuat");
     } catch (e) {
       return Left("Something error: ${e.toString()}");
-    }
-  }
-
-  @override
-  Future<Either> deleteKelas(String kelas) async {
-    try {
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Kelas');
-      QuerySnapshot querySnapshot =
-          await users.where('kelas', isEqualTo: kelas).get();
-      for (var doc in querySnapshot.docs) {
-        await doc.reference.delete();
-      }
-      return const Right('Delete Data kelas Success');
-    } catch (e) {
-      return Left(e.toString());
     }
   }
 
@@ -258,6 +97,34 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
         return left("Connection error: ${response.message}");
       }
       return const Right("Mata Pelajaran berhasil diubah");
+    } catch (e) {
+      return Left("Something error: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<Either> deleteClass(int kelasId) async {
+    try {
+      final response = await Network.apiClient.delete("/class/$kelasId");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      return const Right("Kelas berhasil dihapus");
+    } catch (e) {
+      return Left("Something error: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<Either> updateClass(KelasEntity kelasReq) async {
+    try {
+      final model = kelasReq.fromEntity();
+      final response = await Network.apiClient
+          .put("/class/${kelasReq.id}", body: model.toMap());
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      return const Right("Kelas berhasil diubah ");
     } catch (e) {
       return Left("Something error: ${e.toString()}");
     }

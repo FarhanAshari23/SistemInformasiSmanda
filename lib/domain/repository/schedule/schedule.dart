@@ -2,17 +2,13 @@ import 'package:dartz/dartz.dart';
 
 import '../../entities/kelas/kelas.dart';
 import '../../entities/schedule/activity.dart';
-import '../../entities/schedule/schedule.dart';
 
 abstract class ScheduleRepository {
-  Future<Either> getJadwal();
-  Future<Either> getAllJadwal();
-  Future<Either> getActivities();
+  Future<Either> getJadwal(int kelasId);
   Future<Either> createClass(KelasEntity kelasReq);
-  Future<Either> createJadwal(ScheduleEntity scheduleReq);
-  Future<Either> updateJadwal(ScheduleEntity scheduleReq);
-  Future<Either> deleteJadwal(String kelas);
-  Future<Either> deleteKelas(String kelas);
+  Future<Either> updateClass(KelasEntity kelasReq);
+  Future<Either> deleteClass(int kelasId);
+  Future<Either> getActivities();
   Future<Either> deleteActivity(int idActivity);
   Future<Either> updateActivity(ActivityEntity activity);
   Future<Either> createActivities(String kegiatan);

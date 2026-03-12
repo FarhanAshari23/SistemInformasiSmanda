@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/delete_kelas_usecase.dart';
 import 'package:stacked_listview/stacked_listview.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
+import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
+import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/usecases/schedule/delete_jadwal_usecase.dart';
-import '../bloc/get_all_jadwal_cubit.dart';
-import '../bloc/get_all_jadwal_state.dart';
 import 'edit_schedule_detail.dart';
 
 class EditScheduleView extends StatelessWidget {
@@ -26,7 +26,7 @@ class EditScheduleView extends StatelessWidget {
         child: MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => GetAllJadwalCubit()..displayAllJadwal(),
+              create: (context) => GetAllKelasCubit()..displayAll(),
             ),
             BlocProvider(
               create: (context) => ButtonStateCubit(),
@@ -42,7 +42,7 @@ class EditScheduleView extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
               }
               if (state is ButtonSuccessState) {
-                context.read<GetAllJadwalCubit>().displayAllJadwal();
+                context.read<GetAllKelasCubit>().displayAll();
                 Navigator.of(context, rootNavigator: true).pop();
                 var snackbar = const SnackBar(
                   content: Text("Data Berhasil Dihapus"),
@@ -68,12 +68,12 @@ class EditScheduleView extends StatelessWidget {
                     ),
                   ),
                 ),
-                BlocBuilder<GetAllJadwalCubit, GetAllJadwalState>(
+                BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
                   builder: (context, state) {
-                    if (state is GetAllJadwalLoading) {
+                    if (state is KelasDisplayLoading) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    if (state is GetAllJadwalLoaded) {
+                    if (state is KelasDisplayLoaded) {
                       return Expanded(
                         child: StackedListView(
                           itemExtent: width * 0.55,
@@ -85,7 +85,6 @@ class EditScheduleView extends StatelessWidget {
                           ),
                           scrollDirection: Axis.horizontal,
                           builder: (context, index) {
-                            final schedule = state.jadwals[index];
                             return Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -109,7 +108,7 @@ class EditScheduleView extends StatelessWidget {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: schedule.kelas,
+                                            text: state.kelas[index].className,
                                             style: const TextStyle(
                                               fontSize: 32,
                                               fontWeight: FontWeight.w600,
@@ -128,13 +127,8 @@ class EditScheduleView extends StatelessWidget {
                                         if (value == 'Edit') {
                                           AppNavigator.push(
                                               context,
-                                              BlocProvider.value(
-                                                value: context
-                                                    .read<GetAllJadwalCubit>(),
-                                                child: EditScheduleDetailView(
-                                                  kelas: schedule.kelas,
-                                                  schedule: schedule,
-                                                ),
+                                              EditScheduleDetailView(
+                                                schedule: state.kelas[index],
                                               ));
                                         } else if (value == 'Hapus') {
                                           final outerContext = context;
@@ -145,15 +139,16 @@ class EditScheduleView extends StatelessWidget {
                                                 splashImage:
                                                     AppImages.splashDelete,
                                                 mainTitle:
-                                                    'Apakah anda yakin ingin menghapus jadwal ${schedule.kelas}?',
+                                                    'Apakah anda yakin ingin menghapus jadwal ${state.kelas[index].className}?',
                                                 buttonTitle: 'Hapus',
                                                 onPressed: () {
                                                   outerContext
                                                       .read<ButtonStateCubit>()
                                                       .execute(
                                                         usecase:
-                                                            DeleteJadwalUsecase(),
-                                                        params: schedule.kelas,
+                                                            DeleteKelasUsecase(),
+                                                        params: state
+                                                            .kelas[index].id,
                                                       );
                                                 },
                                               );
@@ -202,7 +197,7 @@ class EditScheduleView extends StatelessWidget {
                               ),
                             );
                           },
-                          itemCount: state.jadwals.length,
+                          itemCount: state.kelas.length,
                         ),
                       );
                     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/helper/convert_list_day_entity.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
 import 'package:new_sistem_informasi_smanda/core/constants/notes.dart';
 
@@ -34,9 +35,8 @@ class ProfileStudentScheduleView extends StatelessWidget {
               child: const Center(child: Text('Tidak ada jadwal')),
             );
           }
-
-          final jadwal = state.jadwals[0];
-          final listKegiatan = jadwal.hari[hari] ?? [];
+          final groupedMap = groupSchedules(state.jadwals);
+          final listKegiatan = groupedMap[hari] ?? [];
           if (listKegiatan.isEmpty) {
             return const Center(
                 child: Text('Pada hari ini, tidak ada kegiatan'));
@@ -107,9 +107,9 @@ class ProfileStudentScheduleView extends StatelessWidget {
               }
               final item = listKegiatan[hari == "Jumat" ? index - 1 : index];
               return CardJadwal(
-                jam: item.jam,
-                kegiatan: item.kegiatan,
-                pelaksana: item.pelaksana,
+                jam: "${item.startTime} - ${item.endTime}",
+                kegiatan: item.subjectName ?? '',
+                pelaksana: item.teacherName ?? '',
                 urutan: index + (hari == "Jumat" ? 0 : 1),
               );
             },

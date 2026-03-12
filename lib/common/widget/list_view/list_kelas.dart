@@ -61,7 +61,7 @@ class ListKelas extends StatelessWidget {
                     height: height * 0.035,
                     child: Center(
                       child: Text(
-                        selectedClass[index].className,
+                        selectedClass[index].className ?? '',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,

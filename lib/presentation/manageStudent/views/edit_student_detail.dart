@@ -177,7 +177,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                               dropdownMenuEntries: state.kelas.map((doc) {
                                 final kelas = doc.className;
                                 return DropdownMenuEntry(
-                                  value: kelas,
+                                  value: kelas!,
                                   label: kelas,
                                 );
                               }).toList(),

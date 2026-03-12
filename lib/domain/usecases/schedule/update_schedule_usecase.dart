@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/schedule/schedule.dart';
-import 'package:new_sistem_informasi_smanda/domain/repository/schedule/schedule.dart';
 
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
+import '../../entities/kelas/kelas.dart';
+import '../../repository/schedule/schedule.dart';
 
-class UpdateScheduleUsecase implements Usecase<Either, ScheduleEntity> {
+class UpdateScheduleUsecase implements Usecase<Either, KelasEntity> {
   @override
-  Future<Either> call({ScheduleEntity? params}) async {
-    return await sl<ScheduleRepository>().updateJadwal(params!);
+  Future<Either> call({KelasEntity? params}) async {
+    return await sl<ScheduleRepository>().updateClass(params!);
   }
 }

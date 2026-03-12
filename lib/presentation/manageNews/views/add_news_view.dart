@@ -154,7 +154,9 @@ class _AddNewsViewState extends State<AddNewsView> {
                                                 for (var i = 0;
                                                     i < result.length;
                                                     i++) {
-                                                  name.add(result[i].className);
+                                                  name.add(
+                                                      result[i].className ??
+                                                          '');
                                                   classid.add(result[i].id!);
                                                 }
                                                 _toC.text = name.join(", ");

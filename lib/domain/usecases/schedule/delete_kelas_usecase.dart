@@ -4,9 +4,9 @@ import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
 import '../../repository/schedule/schedule.dart';
 
-class DeleteKelasUsecase implements Usecase<Either, String> {
+class DeleteKelasUsecase implements Usecase<Either, int> {
   @override
-  Future<Either> call({String? params}) async {
-    return await sl<ScheduleRepository>().deleteKelas(params!);
+  Future<Either> call({int? params}) async {
+    return await sl<ScheduleRepository>().deleteClass(params!);
   }
 }

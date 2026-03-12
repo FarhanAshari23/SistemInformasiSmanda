@@ -50,7 +50,6 @@ import 'domain/usecases/news/delete_news.dart';
 import 'domain/usecases/news/get_news.dart';
 import 'domain/usecases/news/update_news.dart';
 import 'domain/usecases/schedule/create_activity_usecase.dart';
-import 'domain/usecases/schedule/get_all_jadwal.dart';
 import 'domain/usecases/schedule/update_activity_usecase.dart';
 import 'domain/usecases/students/accept_student_register_usecase.dart';
 import 'domain/usecases/students/create_excell_students_usecase.dart';
@@ -77,9 +76,7 @@ import 'domain/usecases/ekskul/delete_anggota_usecase.dart';
 import 'domain/usecases/ekskul/update_anggota_usecase.dart';
 import 'domain/usecases/news/create_news.dart';
 import 'domain/usecases/schedule/create_class_usecase.dart';
-import 'domain/usecases/schedule/create_schedule_usecase.dart';
 import 'domain/usecases/schedule/delete_activity_usecase.dart';
-import 'domain/usecases/schedule/delete_jadwal_usecase.dart';
 import 'domain/usecases/schedule/delete_kelas_usecase.dart';
 import 'domain/usecases/schedule/get_activities_usecase.dart';
 import 'domain/usecases/schedule/get_jadwal.dart';
@@ -327,17 +324,11 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<GetJadwalUsecase>(
     GetJadwalUsecase(),
   );
-  sl.registerSingleton<GetAllJadwalUsecase>(
-    GetAllJadwalUsecase(),
-  );
   sl.registerSingleton<CreateClassUsecase>(
     CreateClassUsecase(),
   );
   sl.registerSingleton<CreateActivityUsecase>(
     CreateActivityUsecase(),
-  );
-  sl.registerSingleton<CreateScheduleUsecase>(
-    CreateScheduleUsecase(),
   );
   sl.registerSingleton<GetActivitiesUsecase>(
     GetActivitiesUsecase(),
@@ -347,9 +338,6 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<UpdateScheduleUsecase>(
     UpdateScheduleUsecase(),
-  );
-  sl.registerSingleton<DeleteJadwalUsecase>(
-    DeleteJadwalUsecase(),
   );
   sl.registerSingleton<DeleteKelasUsecase>(
     DeleteKelasUsecase(),

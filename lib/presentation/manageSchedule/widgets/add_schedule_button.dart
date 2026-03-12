@@ -4,6 +4,8 @@ import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/add_schedule_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_cubit.dart';
 
+import '../../../common/bloc/activities/get_activities_cubit.dart';
+import '../../../common/bloc/activities/get_activities_state.dart';
 import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/bloc/teacher/teacher_state.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -28,6 +30,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
   final _kegiatanC = TextEditingController();
   final _durasiMulaiC = TextEditingController();
   final _durasiSelesaiC = TextEditingController();
+  int? teacherId, subjectId;
 
   @override
   void dispose() {
@@ -44,19 +47,6 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
     final cubitAddSchedule = context.read<AddScheduleCubit>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    List<String> hintButton = [
-      "Tambah Aktivitas",
-      "Tambah Upacara",
-      "Tambah Istirahat (Senin)",
-      "Tambah Istirahat",
-      "Tambah Ishoma (Senin)",
-      "Tambah Ishoma",
-      "Tambah Ishoma (Jumat)",
-      "Tambah Ishoma (Jumat Religi)",
-      "Tambah Jumat Religi",
-      "Tambah Jumat Literasi/Bersih",
-    ];
-
     return BlocBuilder<AddScheduleCubit, AddScheduleState>(
       builder: (context, state) {
         final cardState = state.getCardState(widget.day);
@@ -85,7 +75,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                         );
                       }
                       if (state is TeacherLoaded) {
-                        return DropdownMenu<String>(
+                        return DropdownMenu<int>(
                           width: width * 0.92,
                           enableFilter: true,
                           requestFocusOnTap: false,
@@ -117,15 +107,17 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                           ),
                           hintText: 'Pelaksana:',
                           dropdownMenuEntries: state.teachers.map((doc) {
-                            final nama = doc.name!;
-                            return DropdownMenuEntry(
-                              value: nama,
-                              label: nama,
+                            return DropdownMenuEntry<int>(
+                              value: doc.id ?? 0,
+                              label: doc.name ?? '',
                             );
                           }).toList(),
                           onSelected: (value) {
-                            context.read<TeacherCubit>().selectItem(value);
-                            _pelaksanaC.text = value!;
+                            if (value != null) {
+                              setState(() {
+                                teacherId = value;
+                              });
+                            }
                             FocusScope.of(context).unfocus();
                           },
                         );
@@ -134,9 +126,9 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                     },
                   ),
                   const SizedBox(height: 4),
-                  BlocBuilder<TeacherCubit, TeacherState>(
+                  BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
                     builder: (context, state) {
-                      if (state is TeacherLoading) {
+                      if (state is GetActivitiesLoading) {
                         return TextField(
                           controller: _kegiatanC,
                           autocorrect: false,
@@ -145,30 +137,12 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                           ),
                         );
                       }
-                      if (state is TeacherLoaded) {
-                        final activities = state.selectedActivities;
-
-                        final entries = activities.isEmpty
-                            ? [
-                                const DropdownMenuEntry(
-                                  value: '',
-                                  label: 'Pilih guru terlebih dahulu',
-                                  enabled: false,
-                                )
-                              ]
-                            : activities
-                                .map(
-                                  (a) => DropdownMenuEntry(
-                                    value: a,
-                                    label: a,
-                                  ),
-                                )
-                                .toList();
-
-                        return DropdownMenu<String>(
+                      if (state is GetActivitiesLoaded) {
+                        return DropdownMenu<int>(
                           width: width * 0.92,
                           enableFilter: true,
                           requestFocusOnTap: false,
+                          focusNode: pelaksanaFocus,
                           inputDecorationTheme: const InputDecorationTheme(
                             fillColor: AppColors.tertiary,
                             filled: true,
@@ -194,10 +168,19 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                               ),
                             ),
                           ),
-                          hintText: 'Kegiatan:',
-                          dropdownMenuEntries: entries,
+                          hintText: 'Pelaksana:',
+                          dropdownMenuEntries: state.activities.map((doc) {
+                            return DropdownMenuEntry<int>(
+                              value: doc.id,
+                              label: doc.name,
+                            );
+                          }).toList(),
                           onSelected: (value) {
-                            _kegiatanC.text = value!;
+                            if (value != null) {
+                              setState(() {
+                                subjectId = value;
+                              });
+                            }
                             FocusScope.of(context).unfocus();
                           },
                         );
@@ -281,10 +264,10 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                         borderRadius: 12,
                         defaultColor: AppColors.primary,
                         onTap: () {
-                          if (_kegiatanC.text.isEmpty ||
+                          if (teacherId != null ||
                               _durasiMulaiC.text.isEmpty ||
                               _durasiMulaiC.text.isEmpty ||
-                              _pelaksanaC.text.isEmpty) {
+                              subjectId != null) {
                             var snackbar = const SnackBar(
                               content: Text("Tolong isi semua field yang ada"),
                               behavior: SnackBarBehavior.floating,
@@ -293,10 +276,12 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                                 .showSnackBar(snackbar);
                           } else {
                             cubitCreateSchedule.addActivity(
-                                widget.day,
-                                _pelaksanaC.text,
-                                _kegiatanC.text,
-                                '${_durasiMulaiC.text} - ${_durasiSelesaiC.text}');
+                              widget.day,
+                              _durasiMulaiC.text,
+                              _durasiSelesaiC.text,
+                              teacherId,
+                              subjectId,
+                            );
                             _kegiatanC.clear();
                             _durasiMulaiC.clear();
                             _durasiSelesaiC.clear();
@@ -385,91 +370,11 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
             ],
           );
         }
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-              children: List.generate(
-            10,
-            (index) {
-              return TextButton.icon(
-                onPressed: () {
-                  switch (index) {
-                    case 0:
-                      cubitAddSchedule.toggleAdding(widget.day);
-                    case 1:
-                      cubitCreateSchedule.addActivity(
-                        widget.day,
-                        "Seluruh Siswa",
-                        "Upacara Bendera",
-                        '07:15 - 08:15',
-                      );
-                    case 2:
-                      cubitCreateSchedule.addActivity(
-                        widget.day,
-                        "Seluruh Siswa",
-                        "Istirahat",
-                        '09:45 - 10:15',
-                      );
-                    case 3:
-                      cubitCreateSchedule.addActivity(
-                        widget.day,
-                        "Seluruh Siswa",
-                        "Istirahat",
-                        '10:15 - 10:30',
-                      );
-                    case 4:
-                      cubitCreateSchedule.addActivity(
-                        widget.day,
-                        "Seluruh Siswa",
-                        "Ishoma",
-                        '11:45 - 12:40',
-                      );
-                    case 5:
-                      cubitCreateSchedule.addActivity(
-                        widget.day,
-                        "Seluruh Siswa",
-                        "Ishoma",
-                        '12:00 - 12:40',
-                      );
-                    case 6:
-                      cubitCreateSchedule.addActivity(
-                        widget.day,
-                        "Seluruh Siswa",
-                        "Ishoma",
-                        '11:45 - 13:00',
-                      );
-                    case 7:
-                      cubitCreateSchedule.addActivity(
-                        widget.day,
-                        "Seluruh Siswa",
-                        "Ishoma",
-                        '11:45 - 12:45',
-                      );
-                    case 8:
-                      cubitCreateSchedule.addActivity(
-                        widget.day,
-                        "Seluruh Siswa",
-                        "Jumat Religi",
-                        '07:15 - 08:00',
-                      );
-                    case 9:
-                      cubitCreateSchedule.addActivity(
-                        widget.day,
-                        "Seluruh Siswa",
-                        "Jumat Literasi/Bersih",
-                        '14:30 - 15:00',
-                      );
-                      break;
-                    default:
-                  }
-                },
-                icon: const Icon(Icons.add),
-                label: Text(
-                  hintButton[index],
-                ),
-              );
-            },
-          )),
+
+        return TextButton.icon(
+          onPressed: () => cubitAddSchedule.toggleAdding(widget.day),
+          label: const Text("Tambah Jadwal"),
+          icon: const Icon(Icons.add),
         );
       },
     );

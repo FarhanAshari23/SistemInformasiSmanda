@@ -1,9 +1,5 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/update_schedule_usecase.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/get_all_jadwal_cubit.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
@@ -13,7 +9,8 @@ import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/dialog/confirmation_dialog.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/schedule/schedule.dart';
+import '../../../domain/entities/kelas/kelas.dart';
+import '../../../domain/usecases/schedule/update_schedule_usecase.dart';
 import '../bloc/add_schedule_cubit.dart';
 import '../bloc/class_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
@@ -25,11 +22,9 @@ import '../widgets/add_schedule_button.dart';
 import '../widgets/card_schedule.dart';
 
 class EditScheduleDetailView extends StatefulWidget {
-  final String kelas;
-  final ScheduleEntity schedule;
+  final KelasEntity schedule;
   const EditScheduleDetailView({
     super.key,
-    required this.kelas,
     required this.schedule,
   });
 
@@ -43,7 +38,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
   @override
   void initState() {
     super.initState();
-    _kelasC = TextEditingController(text: widget.kelas);
+    _kelasC = TextEditingController(text: widget.schedule.className);
   }
 
   @override
@@ -57,14 +52,14 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ClassFieldCubit()..updateText(widget.kelas),
+          create: (context) =>
+              ClassFieldCubit()..updateText(widget.schedule.className!),
         ),
         BlocProvider(
           create: (context) => ButtonStateCubit(),
         ),
         BlocProvider(
-          create: (context) =>
-              CreateScheduleCubit(initialSchedules: widget.schedule.hari),
+          create: (context) => CreateScheduleCubit(),
         ),
         BlocProvider(
           create: (context) => TeacherCubit()..displayTeacher(),
@@ -92,17 +87,12 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
             ScaffoldMessenger.of(context).showSnackBar(snackbar);
           }
           if (state is ButtonSuccessState) {
-            Future.microtask(() {
-              final ctx = context;
-
-              ctx.read<GetAllJadwalCubit>().displayAllJadwal();
-
-              ScaffoldMessenger.of(ctx).showSnackBar(
-                const SnackBar(content: Text("Berhasil mengubah jadwal")),
-              );
-
-              Navigator.pop(ctx);
-            });
+            var snackbar = const SnackBar(
+              content: Text("Berhasil mengubah jadwal"),
+              behavior: SnackBarBehavior.floating,
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackbar);
+            Navigator.pop(context);
           }
         },
         child: PopScope(
@@ -265,13 +255,10 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                           );
                         } else {
                           context.read<ButtonStateCubit>().execute(
-                                usecase: UpdateScheduleUsecase(),
-                                params: ScheduleEntity(
-                                  oldNamaKelas: widget.kelas,
-                                  kelas: _kelasC.text,
-                                  hari: cubit.state.schedules,
-                                ),
-                              );
+                              usecase: UpdateScheduleUsecase(),
+                              params: KelasEntity(
+                                id: widget.schedule.id,
+                              ));
                         }
                       },
                       title: 'Ubah Jadwal',

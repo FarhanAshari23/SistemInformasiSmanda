@@ -1,16 +1,43 @@
+import '../schedule/day.dart';
+
 class KelasEntity {
-  final int? id, totalStudent;
-  final int teacherId, sequence, degree;
-  final String className, teacherName, teacherNip;
+  int? id, totalStudent, teacherId, sequence, degree;
+  String? className, teacherName, teacherNip;
+  List<DayEntity>? schedules;
 
   KelasEntity({
-    required this.className,
+    this.className,
     this.id,
-    required this.teacherId,
-    required this.sequence,
-    required this.totalStudent,
-    required this.teacherName,
-    required this.teacherNip,
-    required this.degree,
+    this.teacherId,
+    this.sequence,
+    this.totalStudent,
+    this.teacherName,
+    this.teacherNip,
+    this.degree,
+    this.schedules,
   });
+
+  KelasEntity copyWith({
+    int? id,
+    int? totalStudent,
+    int? teacherId,
+    int? sequence,
+    int? degree,
+    String? className,
+    String? teacherName,
+    String? teacherNip,
+    List<DayEntity>? schedules,
+  }) {
+    return KelasEntity(
+      className: className ?? this.className,
+      degree: degree ?? this.degree,
+      id: id ?? this.id,
+      sequence: sequence ?? this.sequence,
+      teacherId: teacherId ?? this.teacherId,
+      teacherName: teacherName ?? this.teacherName,
+      teacherNip: teacherNip ?? this.teacherNip,
+      totalStudent: totalStudent ?? this.totalStudent,
+      schedules: schedules ?? this.schedules,
+    );
+  }
 }

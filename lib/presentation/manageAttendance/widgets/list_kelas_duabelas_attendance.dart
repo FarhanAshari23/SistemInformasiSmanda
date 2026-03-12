@@ -60,7 +60,7 @@ class ListKelasDuabelasAttendance extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          kelas[index].className,
+                          kelas[index].className ?? '',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,

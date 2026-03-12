@@ -203,7 +203,7 @@ class _AddAccountViewState extends State<AddAccountView> {
                               dropdownMenuEntries: state.kelas.map((doc) {
                                 return DropdownMenuEntry<int>(
                                   value: doc.id ?? 0,
-                                  label: doc.className,
+                                  label: doc.className ?? '',
                                 );
                               }).toList(),
                               onSelected: (value) {
