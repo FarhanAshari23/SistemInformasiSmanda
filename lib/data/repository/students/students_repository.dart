@@ -5,7 +5,6 @@ import '../../../service_locator.dart';
 import '../../models/auth/update_user.dart';
 import '../../models/auth/user.dart';
 import '../../models/auth/user_golang.dart';
-import '../../models/kelas/class.dart';
 import '../../sources/students/students_firebase_service.dart';
 
 class StudentsRepositoryImpl extends StudentRepository {
@@ -101,25 +100,6 @@ class StudentsRepositoryImpl extends StudentRepository {
   @override
   Future<Either> acceptStudentAccount(int studentId) async {
     return await sl<StudentsFirebaseService>().acceptStudentAccount(studentId);
-  }
-
-  @override
-  Future<Either> getAllKelas() async {
-    var returnedData = await sl<StudentsFirebaseService>().getAllKelas();
-    return returnedData.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(
-          List.from(data)
-              .map(
-                (e) => KelasModel.fromMap(e).toEntity(),
-              )
-              .toList(),
-        );
-      },
-    );
   }
 
   @override

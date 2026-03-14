@@ -13,7 +13,7 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../bloc/get_attendance_student_cubit.dart';
-import '../bloc/jadwal_display_cubit.dart';
+import '../../../common/bloc/schedule/jadwal_display_cubit.dart';
 import '../bloc/profile_info_cubit.dart';
 import '../bloc/profile_info_state.dart';
 

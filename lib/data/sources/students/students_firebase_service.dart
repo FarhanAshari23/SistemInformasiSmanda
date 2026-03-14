@@ -14,7 +14,7 @@ import 'package:path/path.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 import '../../../common/helper/execute_crud.dart';
-import '../../../common/helper/obscure_email.dart';
+import '../../../common/helper/string_helper.dart';
 import '../../../core/networks/network.dart';
 import '../../models/auth/update_user.dart';
 import '../../models/auth/user_golang.dart';
@@ -24,7 +24,6 @@ abstract class StudentsFirebaseService {
   Future<Either> acceptStudentAccount(int studentId);
   Future<Either> acceptAllStudentAccount();
   Future<Either> deleteAllStudentAccount();
-  Future<Either> getAllKelas();
   Future<Either> getStudentByRegister();
   Future<Either> updateStudent(UpdateUserReq updateUserReq);
   Future<Either> deleteStudent(int studentId);
@@ -344,20 +343,6 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   }
 
   @override
-  Future<Either> getAllKelas() async {
-    try {
-      final response = await Network.apiClient.get("/classes");
-      if (response.statusCode == 500) {
-        return left("Connection error: ${response.message}");
-      }
-      final dataList = response.data['data'] as List<dynamic>;
-      return Right(dataList);
-    } catch (e) {
-      return Left("Something error: ${e.toString()}");
-    }
-  }
-
-  @override
   Future<Either> acceptAllStudentAccount() async {
     try {
       final response = await Network.apiClient.get("/students/unregister");
@@ -527,7 +512,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         sheet.getRangeByName('A${i + 3}').setText(students[i]['nama']);
         sheet
             .getRangeByName('B${i + 3}')
-            .setText(maskEmail(students[i]['email']));
+            .setText(StringHelper.maskEmail(students[i]['email']));
         sheet.getRangeByName('C${i + 3}').setText(students[i]['kelas']);
       }
       sheet.autoFitColumn(1);

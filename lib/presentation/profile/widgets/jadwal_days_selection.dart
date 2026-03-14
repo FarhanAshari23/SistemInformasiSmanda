@@ -4,7 +4,7 @@ import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell
 
 import '../../../core/configs/theme/app_colors.dart';
 import '../bloc/bar_days_cubit.dart';
-import '../bloc/jadwal_display_cubit.dart';
+import '../../../common/bloc/schedule/jadwal_display_cubit.dart';
 import '../views/profile_student_schedule_view.dart';
 import '../views/profile_teacher_schedule_view.dart';
 
@@ -40,9 +40,7 @@ class JadwalDaysSelection extends StatelessWidget {
               onTap: () {
                 context.read<BarDaysCubit>().changeColor(index);
                 if (!isTeacherSchedule) {
-                  context
-                      .read<JadwalDisplayCubit>()
-                      .displayJadwal(params: dayName[index]);
+                  context.read<JadwalDisplayCubit>().displayJadwal(params: 0);
                 }
               },
               defaultColor: context.watch<BarDaysCubit>().state == index

@@ -1,4 +1,4 @@
-import 'check_url.dart';
+import 'string_helper.dart';
 
 class CacheStateImage {
   static final Map<String, bool> _reachableCache = {};
@@ -6,7 +6,7 @@ class CacheStateImage {
   static Future<bool> checkUrl(String url) async {
     if (_reachableCache.containsKey(url)) return _reachableCache[url]!;
 
-    final result = await isUrlReachable(url);
+    final result = await StringHelper.isUrlReachable(url);
     _reachableCache[url] = result;
     return result;
   }

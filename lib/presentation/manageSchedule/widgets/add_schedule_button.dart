@@ -168,7 +168,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                               ),
                             ),
                           ),
-                          hintText: 'Pelaksana:',
+                          hintText: 'Kegiatan:',
                           dropdownMenuEntries: state.activities.map((doc) {
                             return DropdownMenuEntry<int>(
                               value: doc.id,
@@ -177,9 +177,12 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                           }).toList(),
                           onSelected: (value) {
                             if (value != null) {
+                              final selectedDoc = state.activities
+                                  .firstWhere((doc) => doc.id == value);
                               setState(() {
                                 subjectId = value;
                               });
+                              _kegiatanC.text = selectedDoc.name;
                             }
                             FocusScope.of(context).unfocus();
                           },
@@ -264,10 +267,10 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                         borderRadius: 12,
                         defaultColor: AppColors.primary,
                         onTap: () {
-                          if (teacherId != null ||
+                          if (teacherId == null ||
                               _durasiMulaiC.text.isEmpty ||
-                              _durasiMulaiC.text.isEmpty ||
-                              subjectId != null) {
+                              _durasiSelesaiC.text.isEmpty ||
+                              subjectId == null) {
                             var snackbar = const SnackBar(
                               content: Text("Tolong isi semua field yang ada"),
                               behavior: SnackBarBehavior.floating,
@@ -281,6 +284,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                               _durasiSelesaiC.text,
                               teacherId,
                               subjectId,
+                              _kegiatanC.text,
                             );
                             _kegiatanC.clear();
                             _durasiMulaiC.clear();

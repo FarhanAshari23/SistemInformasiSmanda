@@ -106,7 +106,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
-      return const Right("Mata Pelajaran berhasil diubah");
+      return const Right("Data guru berhasil diubah");
     } catch (e) {
       return Left(e.toString());
     }

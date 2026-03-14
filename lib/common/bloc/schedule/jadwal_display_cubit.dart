@@ -7,8 +7,8 @@ import 'jadwal_display_state.dart';
 class JadwalDisplayCubit extends Cubit<JadwalDisplayState> {
   JadwalDisplayCubit() : super(JadwalDisplayLoading());
 
-  void displayJadwal({dynamic params}) async {
-    var returnedData = await sl<GetJadwalUsecase>().call();
+  void displayJadwal({int? params}) async {
+    var returnedData = await sl<GetJadwalUsecase>().call(params: params);
     returnedData.fold(
       (error) {
         return emit(JadwalDisplayFailure());

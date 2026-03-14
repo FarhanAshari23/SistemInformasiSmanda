@@ -24,6 +24,7 @@ class CreateScheduleCubit extends Cubit<CreateScheduleState> {
     String? endTime,
     int? teacherId,
     int? subjectId,
+    String? subjectName,
   ) {
     final updated = Map<String, List<DayEntity>>.from(state.schedules);
     updated[day!] = [
@@ -34,6 +35,7 @@ class CreateScheduleCubit extends Cubit<CreateScheduleState> {
         startTime: startTime,
         subjectId: subjectId,
         teacherId: teacherId,
+        subjectName: subjectName,
       )
     ];
     emit(state.copyWith(schedules: updated));
@@ -61,6 +63,7 @@ class CreateScheduleCubit extends Cubit<CreateScheduleState> {
     int? teacherId,
     int? subjectId,
     int? classId,
+    String? subjectName,
   ) {
     final updated = Map<String, List<DayEntity>>.from(state.schedules);
     final schedules = List<DayEntity>.from(updated[day]!);
@@ -71,6 +74,7 @@ class CreateScheduleCubit extends Cubit<CreateScheduleState> {
       startTime: startTime,
       subjectId: subjectId,
       teacherId: teacherId,
+      subjectName: subjectName,
     );
     updated[day!] = schedules;
     emit(state.copyWith(schedules: updated));

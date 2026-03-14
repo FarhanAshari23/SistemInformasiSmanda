@@ -46,18 +46,30 @@ class KelasModel {
     return data;
   }
 
+  Map<String, dynamic> toCreateRequestMap() {
+    return {
+      "classes": {
+        "name": className,
+        "sequence": sequence,
+        "degree": degree,
+        "teacher_id": teacherId,
+      },
+      "schedules": schedules.map((s) => s.toCreateRequestMap()).toList(),
+    };
+  }
+
   factory KelasModel.fromMap(Map<String, dynamic> map) {
-    final classData = map['classes'] ?? {};
+    final data = map.containsKey('classes') ? map['classes'] : map;
 
     return KelasModel(
-      className: classData['name'] ?? '',
-      degree: classData['degree'] ?? 0,
-      id: classData['id'] ?? 0,
-      sequence: classData['sequence'] ?? 0,
-      teacherId: classData['teacher_id'] ?? 0,
-      teacherName: classData['nama_wali_kelas'] ?? '',
-      teacherNip: classData['nip_wali_kelas'] ?? '',
-      totalStudent: classData['total_student'] ?? 0,
+      id: data['id'] ?? 0,
+      className: data['name'] ?? '',
+      sequence: data['sequence'] ?? 0,
+      degree: data['degree'] ?? 0,
+      totalStudent: data['total_student'] ?? 0,
+      teacherId: data['teacher_id'] ?? 0,
+      teacherName: data['nama_wali_kelas'] ?? '',
+      teacherNip: data['nip_wali_kelas'] ?? '',
       schedules: map['schedules'] != null
           ? List<DayModel>.from(
               (map['schedules'] as List).map((x) => DayModel.fromMap(x)),

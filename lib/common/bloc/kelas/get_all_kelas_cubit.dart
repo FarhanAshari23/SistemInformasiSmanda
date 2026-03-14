@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_all_kelas_usecase.dart';
+import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/get_all_kelas_usecase.dart';
 
 import 'kelas_display_state.dart';
 import '../../../service_locator.dart';

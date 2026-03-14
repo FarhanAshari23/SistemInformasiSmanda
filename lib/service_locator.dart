@@ -55,7 +55,7 @@ import 'domain/usecases/students/accept_student_register_usecase.dart';
 import 'domain/usecases/students/create_excell_students_usecase.dart';
 import 'domain/usecases/students/delete_all_student_account_usecase.dart';
 import 'domain/usecases/students/delete_student_by_class.dart';
-import 'domain/usecases/students/get_all_kelas_usecase.dart';
+import 'domain/usecases/schedule/get_all_kelas_usecase.dart';
 import 'domain/usecases/students/get_student_by_name.dart';
 import 'domain/usecases/students/get_students_register.dart';
 import 'domain/usecases/students/get_students_with_kelas.dart';
@@ -237,11 +237,6 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<GetStudentByNameUsecase>(
     GetStudentByNameUsecase(),
   );
-
-  sl.registerSingleton<GetAllKelasUsecase>(
-    GetAllKelasUsecase(),
-  );
-
   sl.registerSingleton<DeleteStudentByClassUsecase>(
     DeleteStudentByClassUsecase(),
   );
@@ -323,6 +318,9 @@ Future<void> initializeDependecies() async {
   //schedule
   sl.registerSingleton<GetJadwalUsecase>(
     GetJadwalUsecase(),
+  );
+  sl.registerSingleton<GetAllKelasUsecase>(
+    GetAllKelasUsecase(),
   );
   sl.registerSingleton<CreateClassUsecase>(
     CreateClassUsecase(),

@@ -3,20 +3,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
+import '../../../common/bloc/schedule/jadwal_display_cubit.dart';
 import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/dialog/confirmation_dialog.dart';
+import '../../../common/widget/searchbar/search_teachers_views.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/kelas/kelas.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/schedule/update_schedule_usecase.dart';
 import '../bloc/add_schedule_cubit.dart';
-import '../bloc/class_field_cubit.dart';
+import '../bloc/form_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
 import '../bloc/create_schedule_state.dart';
 import '../../../common/bloc/activities/get_activities_cubit.dart';
 import '../bloc/edit_schedule_cubit.dart';
+import '../bloc/form_field_state.dart';
 import '../bloc/schedule_picker_cubit.dart';
 import '../widgets/add_schedule_button.dart';
 import '../widgets/card_schedule.dart';
@@ -34,17 +38,22 @@ class EditScheduleDetailView extends StatefulWidget {
 
 class _EditScheduleDetailState extends State<EditScheduleDetailView> {
   late TextEditingController _kelasC;
+  late TextEditingController _waliKelasC;
+  late int? teacherId;
 
   @override
   void initState() {
     super.initState();
     _kelasC = TextEditingController(text: widget.schedule.className);
+    _waliKelasC = TextEditingController(text: widget.schedule.teacherName);
+    teacherId = widget.schedule.teacherId;
   }
 
   @override
   void dispose() {
     super.dispose();
     _kelasC.dispose();
+    _waliKelasC.dispose();
   }
 
   @override
@@ -53,13 +62,21 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
       providers: [
         BlocProvider(
           create: (context) =>
-              ClassFieldCubit()..updateText(widget.schedule.className!),
+              FormFieldCubit()..updateClass(widget.schedule.className!),
+        ),
+        BlocProvider(
+          create: (context) =>
+              FormFieldCubit()..updateTeacher(widget.schedule.teacherName!),
         ),
         BlocProvider(
           create: (context) => ButtonStateCubit(),
         ),
         BlocProvider(
           create: (context) => CreateScheduleCubit(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              JadwalDisplayCubit()..displayJadwal(params: widget.schedule.id),
         ),
         BlocProvider(
           create: (context) => TeacherCubit()..displayTeacher(),
@@ -129,26 +146,58 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  BlocBuilder<ClassFieldCubit, String>(
+                  BlocBuilder<FormFieldCubit, FormFieldsState>(
                     builder: (context, state) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: TextField(
-                          controller: _kelasC,
-                          autocorrect: false,
-                          onChanged: (value) {
-                            context.read<ClassFieldCubit>().updateText(value);
-                          },
-                          decoration: const InputDecoration(
-                            hintText: "Nama Kelas:",
-                          ),
+                        child: Column(
+                          children: [
+                            TextField(
+                              controller: _waliKelasC,
+                              autocorrect: false,
+                              onChanged: (value) {
+                                context
+                                    .read<FormFieldCubit>()
+                                    .updateTeacher(value);
+                              },
+                              decoration: const InputDecoration(
+                                hintText: "Wali Kelas:",
+                              ),
+                              onTap: () async {
+                                TeacherEntity? result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SearchTeachersViews(),
+                                  ),
+                                );
+                                if (result != null) {
+                                  teacherId = result.id;
+                                  _waliKelasC.text = result.name ?? '';
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            TextField(
+                              controller: _kelasC,
+                              autocorrect: false,
+                              onChanged: (value) {
+                                context
+                                    .read<FormFieldCubit>()
+                                    .updateClass(value);
+                              },
+                              decoration: const InputDecoration(
+                                hintText: "Nama Kelas:",
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
                   ),
-                  BlocBuilder<ClassFieldCubit, String>(
+                  BlocBuilder<FormFieldCubit, FormFieldsState>(
                     builder: (context, state) {
-                      if (state.isEmpty) {
+                      if (state.isClassEmpty && state.isTeacherEmpty) {
                         return Expanded(
                           child: ListView(
                             padding: const EdgeInsets.all(16),
@@ -255,10 +304,11 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                           );
                         } else {
                           context.read<ButtonStateCubit>().execute(
-                              usecase: UpdateScheduleUsecase(),
-                              params: KelasEntity(
-                                id: widget.schedule.id,
-                              ));
+                                usecase: UpdateScheduleUsecase(),
+                                params: KelasEntity(
+                                  id: widget.schedule.id,
+                                ),
+                              );
                         }
                       },
                       title: 'Ubah Jadwal',

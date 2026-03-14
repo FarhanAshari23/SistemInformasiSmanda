@@ -301,6 +301,7 @@ class _CardScheduleState extends State<CardSchedule> {
                                     teacherId,
                                     subjectId,
                                     widget.schedule.classId,
+                                    _kegiatanC.text,
                                   );
                                 }
                                 cubitEditSchedule.toggleEdit(

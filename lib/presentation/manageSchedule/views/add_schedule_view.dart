@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/dialog/confirmation_dialog.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/kelas/kelas.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_state.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/activities/get_activities_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/schedule_picker_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/add_schedule_button.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/widgets/card_schedule.dart';
 
+import '../../../common/bloc/activities/get_activities_cubit.dart';
+import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
+import '../../../common/bloc/teacher/teacher_cubit.dart';
+import '../../../common/helper/string_helper.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/button/basic_button.dart';
+import '../../../common/widget/dialog/confirmation_dialog.dart';
+import '../../../common/widget/searchbar/search_teachers_views.dart';
+import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/kelas/kelas.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/schedule/create_class_usecase.dart';
-import '../../../service_locator.dart';
 import '../bloc/add_schedule_cubit.dart';
-import '../bloc/class_field_cubit.dart';
+import '../bloc/create_schedule_state.dart';
+import '../bloc/form_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
 import '../bloc/edit_schedule_cubit.dart';
+import '../bloc/form_field_state.dart';
+import '../bloc/schedule_picker_cubit.dart';
+import '../widgets/add_schedule_button.dart';
+import '../widgets/card_schedule.dart';
 
 class AddScheduleView extends StatefulWidget {
   const AddScheduleView({super.key});
@@ -31,10 +34,13 @@ class AddScheduleView extends StatefulWidget {
 
 class _AddScheduleViewState extends State<AddScheduleView> {
   final TextEditingController _kelasC = TextEditingController();
+  final TextEditingController _waliKelasC = TextEditingController();
+  int? teacherId;
 
   @override
   void dispose() {
     _kelasC.dispose();
+    _waliKelasC.dispose();
     super.dispose();
   }
 
@@ -43,7 +49,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ClassFieldCubit(),
+          create: (context) => FormFieldCubit(),
         ),
         BlocProvider(
           create: (context) => ButtonStateCubit(),
@@ -77,32 +83,14 @@ class _AddScheduleViewState extends State<AddScheduleView> {
             ScaffoldMessenger.of(context).showSnackBar(snackbar);
           }
           if (state is ButtonSuccessState) {
-            final cubit = context.read<CreateScheduleCubit>();
-            final schedulesMap = cubit.state.schedules;
-            final flatSchedules =
-                schedulesMap.values.expand((list) => list).toList();
-            var createSchedule = await sl<CreateClassUsecase>().call(
-              params: KelasEntity(
-                className: _kelasC.text,
-                schedules: flatSchedules,
+            var snackbar = SnackBar(
+              content: Text(
+                'Berhasil menambahkan jadwal untuk kelas ${_kelasC.text}',
               ),
+              behavior: SnackBarBehavior.floating,
             );
-            return createSchedule.fold(
-              (l) {
-                var snackbar = SnackBar(content: Text(l));
-                ScaffoldMessenger.of(context).showSnackBar(snackbar);
-              },
-              (r) {
-                var snackbar = SnackBar(
-                  content: Text(
-                    'Berhasil menambahkan jadwal untuk kelas ${_kelasC.text}',
-                  ),
-                  behavior: SnackBarBehavior.floating,
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                Navigator.pop(context);
-              },
-            );
+            ScaffoldMessenger.of(context).showSnackBar(snackbar);
+            Navigator.pop(context);
           }
         },
         child: PopScope(
@@ -139,26 +127,58 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  BlocBuilder<ClassFieldCubit, String>(
+                  BlocBuilder<FormFieldCubit, FormFieldsState>(
                     builder: (context, state) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: TextField(
-                          controller: _kelasC,
-                          autocorrect: false,
-                          onChanged: (value) {
-                            context.read<ClassFieldCubit>().updateText(value);
-                          },
-                          decoration: const InputDecoration(
-                            hintText: "Nama Kelas:",
-                          ),
+                        child: Column(
+                          children: [
+                            TextField(
+                              controller: _waliKelasC,
+                              autocorrect: false,
+                              onChanged: (value) {
+                                context
+                                    .read<FormFieldCubit>()
+                                    .updateTeacher(value);
+                              },
+                              decoration: const InputDecoration(
+                                hintText: "Wali Kelas:",
+                              ),
+                              onTap: () async {
+                                TeacherEntity? result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SearchTeachersViews(),
+                                  ),
+                                );
+                                if (result != null) {
+                                  teacherId = result.id;
+                                  _waliKelasC.text = result.name ?? '';
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            TextField(
+                              controller: _kelasC,
+                              autocorrect: false,
+                              onChanged: (value) {
+                                context
+                                    .read<FormFieldCubit>()
+                                    .updateClass(value);
+                              },
+                              decoration: const InputDecoration(
+                                hintText: "Nama Kelas:",
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
                   ),
-                  BlocBuilder<ClassFieldCubit, String>(
+                  BlocBuilder<FormFieldCubit, FormFieldsState>(
                     builder: (context, state) {
-                      if (state.isEmpty) {
+                      if (state.isClassEmpty && state.isTeacherEmpty) {
                         return Expanded(
                           child: ListView(
                             padding: const EdgeInsets.all(16),
@@ -171,7 +191,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                               ),
                               const SizedBox(height: 16),
                               const Text(
-                                'Data nama kelas masih kosong harap isi terlebih dahulu',
+                                'Nama kelas dan wali masih kosong. Harap isi terlebih dahulu',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 18,
@@ -264,16 +284,22 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                             ),
                           );
                         } else {
+                          final schedulesMap = cubit.state.schedules;
+                          final flatSchedules = schedulesMap.values
+                              .expand((list) => list)
+                              .toList();
+                          List<int> listId =
+                              StringHelper.extractFirstAndLastNumbers(
+                                  _kelasC.text);
                           context.read<ButtonStateCubit>().execute(
                                 usecase: CreateClassUsecase(),
                                 params: KelasEntity(
-                                    className: _kelasC.text,
-                                    sequence: 0,
-                                    degree: 0,
-                                    teacherId: 1,
-                                    teacherName: '',
-                                    teacherNip: '',
-                                    totalStudent: 0),
+                                  className: _kelasC.text,
+                                  schedules: flatSchedules,
+                                  degree: listId[0],
+                                  sequence: listId[1],
+                                  teacherId: teacherId,
+                                ),
                               );
                         }
                       },

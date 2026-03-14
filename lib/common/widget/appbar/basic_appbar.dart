@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/extract_name.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/get_first_name.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/profile_info_state.dart';
@@ -15,6 +13,7 @@ import '../../../domain/usecases/auth/logout.dart';
 import '../../../presentation/auth/views/login_view.dart';
 import '../../bloc/button/button.cubit.dart';
 import '../../bloc/button/button_state.dart';
+import '../../helper/string_helper.dart';
 import '../dialog/basic_dialog.dart';
 import '../photo/network_photo.dart';
 
@@ -117,8 +116,9 @@ class BasicAppbar extends StatelessWidget {
                                       );
                                     }
                                     if (state is ProfileInfoLoaded) {
-                                      String nickname = getFirstRealName(
-                                          state.teacherEntity?.name ?? '');
+                                      String nickname =
+                                          StringHelper.getFirstRealName(
+                                              state.teacherEntity?.name ?? '');
                                       return Text(
                                         'Selamat $greeting $nickname!',
                                         style: const TextStyle(
@@ -157,8 +157,8 @@ class BasicAppbar extends StatelessWidget {
                                   );
                                 }
                                 if (state is ProfileInfoLoaded) {
-                                  String nickname =
-                                      extractName(state.userEntity?.nama ?? '');
+                                  String nickname = StringHelper.extractName(
+                                      state.userEntity?.nama ?? '');
                                   return Row(
                                     children: [
                                       Text(

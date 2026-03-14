@@ -6,8 +6,8 @@ import 'package:new_sistem_informasi_smanda/core/constants/notes.dart';
 
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../bloc/jadwal_display_cubit.dart';
-import '../bloc/jadwal_display_state.dart';
+import '../../../common/bloc/schedule/jadwal_display_cubit.dart';
+import '../../../common/bloc/schedule/jadwal_display_state.dart';
 import '../widgets/card_jadwal.dart';
 
 class ProfileStudentScheduleView extends StatelessWidget {

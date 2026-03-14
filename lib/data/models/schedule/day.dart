@@ -33,6 +33,16 @@ class DayModel {
     };
   }
 
+  Map<String, dynamic> toCreateRequestMap() {
+    return <String, dynamic>{
+      'day': day,
+      'start_time': startTime,
+      'end_time': endTime,
+      'teacher_id': teacherId,
+      'subject_id': subjectId,
+    };
+  }
+
   factory DayModel.fromMap(Map<String, dynamic> map) {
     return DayModel(
       day: map['day'] ?? '',
