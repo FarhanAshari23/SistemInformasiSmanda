@@ -122,7 +122,7 @@ class ScheduleFirebaseServiceImpl extends ScheduleFirebaseService {
     try {
       final model = kelasReq.fromEntity();
       final response = await Network.apiClient
-          .put("/class/${kelasReq.id}", body: model.toMap());
+          .put("/class/${kelasReq.id}", body: model.toUpdateRequestMap());
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }

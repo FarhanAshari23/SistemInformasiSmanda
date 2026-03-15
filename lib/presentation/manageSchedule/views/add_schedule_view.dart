@@ -135,6 +135,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                           children: [
                             TextField(
                               controller: _waliKelasC,
+                              readOnly: true,
                               autocorrect: false,
                               onChanged: (value) {
                                 context

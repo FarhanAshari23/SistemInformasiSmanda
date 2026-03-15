@@ -58,6 +58,16 @@ class KelasModel {
     };
   }
 
+  Map<String, dynamic> toUpdateRequestMap() {
+    return {
+      "name": className,
+      "sequence": sequence,
+      "degree": degree,
+      "teacher_id": teacherId,
+      "schedules": schedules.map((s) => s.toCreateRequestMap()).toList(),
+    };
+  }
+
   factory KelasModel.fromMap(Map<String, dynamic> map) {
     final data = map.containsKey('classes') ? map['classes'] : map;
 

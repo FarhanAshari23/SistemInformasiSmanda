@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/schedule/jadwal_display_cubit.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
-import '../../../common/bloc/schedule/jadwal_display_cubit.dart';
+import '../../../common/bloc/schedule/jadwal_display_state.dart';
 import '../../../common/bloc/teacher/teacher_cubit.dart';
+import '../../../common/helper/convert_list_day_entity.dart';
+import '../../../common/helper/string_helper.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/dialog/confirmation_dialog.dart';
@@ -70,9 +73,6 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
         ),
         BlocProvider(
           create: (context) => ButtonStateCubit(),
-        ),
-        BlocProvider(
-          create: (context) => CreateScheduleCubit(),
         ),
         BlocProvider(
           create: (context) =>
@@ -154,6 +154,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                           children: [
                             TextField(
                               controller: _waliKelasC,
+                              readOnly: true,
                               autocorrect: false,
                               onChanged: (value) {
                                 context
@@ -222,98 +223,183 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                           ),
                         );
                       }
-                      return BlocBuilder<CreateScheduleCubit,
-                          CreateScheduleState>(
-                        builder: (context, createState) {
-                          return BlocBuilder<PickerCubit, String>(
-                            builder: (context, pickerState) {
-                              return Expanded(
-                                child: ListView(
-                                  physics: pickerState == "show"
-                                      ? const NeverScrollableScrollPhysics()
-                                      : const BouncingScrollPhysics(),
-                                  children:
-                                      createState.schedules.keys.map((day) {
-                                    return Card(
-                                      margin: const EdgeInsets.all(8),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(12),
+                      return BlocBuilder<JadwalDisplayCubit,
+                          JadwalDisplayState>(
+                        builder: (context, stateJadwal) {
+                          if (stateJadwal is JadwalDisplayLoading) {
+                            return const Expanded(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(),
+                                    SizedBox(height: 18),
+                                    Text(
+                                      "Memuat jadwal...",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                          if (stateJadwal is JadwalDisplayLoaded) {
+                            return BlocProvider(
+                              create: (context) => CreateScheduleCubit(
+                                initialSchedules:
+                                    groupSchedules(stateJadwal.jadwals),
+                              ),
+                              child: BlocBuilder<CreateScheduleCubit,
+                                  CreateScheduleState>(
+                                builder: (context, createState) {
+                                  return BlocBuilder<PickerCubit, String>(
+                                    builder: (context, pickerState) {
+                                      return Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              day,
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors.primary,
+                                            Expanded(
+                                              child: ListView(
+                                                physics: pickerState == "show"
+                                                    ? const NeverScrollableScrollPhysics()
+                                                    : const BouncingScrollPhysics(),
+                                                children: createState
+                                                    .schedules.keys
+                                                    .map((day) {
+                                                  return Card(
+                                                    margin:
+                                                        const EdgeInsets.all(8),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              12),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            day,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: AppColors
+                                                                  .primary,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 8),
+                                                          Column(
+                                                            children: [
+                                                              for (int i = 0;
+                                                                  i <
+                                                                      createState
+                                                                          .schedules[
+                                                                              day]!
+                                                                          .length;
+                                                                  i++)
+                                                                CardSchedule(
+                                                                  day: day,
+                                                                  index: i,
+                                                                  schedule: createState
+                                                                          .schedules[
+                                                                      day]![i],
+                                                                ),
+                                                              AddScheduleButton(
+                                                                day: day,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                }).toList(),
                                               ),
                                             ),
-                                            const SizedBox(height: 8),
-                                            Column(
-                                              children: [
-                                                for (int i = 0;
-                                                    i <
-                                                        createState
-                                                            .schedules[day]!
-                                                            .length;
-                                                    i++)
-                                                  CardSchedule(
-                                                    day: day,
-                                                    index: i,
-                                                    schedule: createState
-                                                        .schedules[day]![i],
-                                                  ),
-                                                AddScheduleButton(
-                                                  day: day,
-                                                ),
-                                              ],
-                                            ),
+                                            Builder(builder: (context) {
+                                              final cubit = context
+                                                  .read<CreateScheduleCubit>();
+                                              return BasicButton(
+                                                onPressed: () async {
+                                                  final allEmpty = cubit
+                                                      .state.schedules.values
+                                                      .every(
+                                                    (list) => list.isEmpty,
+                                                  );
+                                                  if (allEmpty) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      const SnackBar(
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                        content: Text(
+                                                          'Tolong isi semua card jadwal yang sudah tersedia',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    final schedulesMap =
+                                                        cubit.state.schedules;
+                                                    final flatSchedules =
+                                                        schedulesMap.values
+                                                            .expand(
+                                                                (list) => list)
+                                                            .toList();
+                                                    List<int> requestId =
+                                                        StringHelper
+                                                            .extractFirstAndLastNumbers(
+                                                                _kelasC.text);
+                                                    context
+                                                        .read<
+                                                            ButtonStateCubit>()
+                                                        .execute(
+                                                          usecase:
+                                                              UpdateScheduleUsecase(),
+                                                          params: KelasEntity(
+                                                            id: widget
+                                                                .schedule.id,
+                                                            className:
+                                                                _kelasC.text,
+                                                            degree:
+                                                                requestId[0],
+                                                            sequence:
+                                                                requestId[1],
+                                                            teacherId:
+                                                                teacherId,
+                                                            schedules:
+                                                                flatSchedules,
+                                                          ),
+                                                        );
+                                                  }
+                                                },
+                                                title: 'Ubah Jadwal',
+                                              );
+                                            }),
                                           ],
                                         ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              );
-                            },
-                          );
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            );
+                          }
+                          return const Text("Default State");
                         },
                       );
                     },
                   ),
-                  Builder(builder: (context) {
-                    final cubit = context.read<CreateScheduleCubit>();
-                    return BasicButton(
-                      onPressed: () async {
-                        final allEmpty = cubit.state.schedules.values.every(
-                          (list) => list.isEmpty,
-                        );
-                        if (allEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              backgroundColor: Colors.red,
-                              content: Text(
-                                'Tolong isi semua card jadwal yang sudah tersedia',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          );
-                        } else {
-                          context.read<ButtonStateCubit>().execute(
-                                usecase: UpdateScheduleUsecase(),
-                                params: KelasEntity(
-                                  id: widget.schedule.id,
-                                ),
-                              );
-                        }
-                      },
-                      title: 'Ubah Jadwal',
-                    );
-                  }),
                 ],
               ),
             ),

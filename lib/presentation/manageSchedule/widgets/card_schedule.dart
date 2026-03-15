@@ -68,7 +68,6 @@ class _CardScheduleState extends State<CardSchedule> {
         final isPickerVisible = cardState.isPickerVisible;
         final selectedStartTimeTemp = cardState.selectedStartTimeTemp;
         final selectedEndTimeTemp = cardState.selectedEndTimeTemp;
-        final FocusNode pelaksanaFocus = FocusNode();
 
         if (isEdit) {
           return Stack(
@@ -94,7 +93,7 @@ class _CardScheduleState extends State<CardSchedule> {
                             width: width * 0.92,
                             enableFilter: true,
                             requestFocusOnTap: false,
-                            focusNode: pelaksanaFocus,
+                            focusNode: FocusNode(),
                             inputDecorationTheme: const InputDecorationTheme(
                               fillColor: AppColors.tertiary,
                               filled: true,
@@ -154,6 +153,7 @@ class _CardScheduleState extends State<CardSchedule> {
                         }
                         if (state is GetActivitiesLoaded) {
                           return DropdownMenu<int>(
+                            focusNode: FocusNode(),
                             width: width * 0.92,
                             inputDecorationTheme: const InputDecorationTheme(
                               fillColor: AppColors.tertiary,
