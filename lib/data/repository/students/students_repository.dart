@@ -1,10 +1,9 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/repository/students/students.dart';
 import '../../../service_locator.dart';
-import '../../models/auth/update_user.dart';
-import '../../models/auth/user.dart';
-import '../../models/auth/user_golang.dart';
+import '../../models/student/student.dart';
 import '../../sources/students/students_firebase_service.dart';
 
 class StudentsRepositoryImpl extends StudentRepository {
@@ -20,7 +19,7 @@ class StudentsRepositoryImpl extends StudentRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => UserModel.fromMap(e).toEntity(),
+                (e) => StudentModel.fromMap(e).toEntity(),
               )
               .toList(),
         );
@@ -29,7 +28,7 @@ class StudentsRepositoryImpl extends StudentRepository {
   }
 
   @override
-  Future<Either> updateStudent(UpdateUserReq updateUserReq) async {
+  Future<Either> updateStudent(StudentEntity updateUserReq) async {
     return await sl<StudentsFirebaseService>().updateStudent(updateUserReq);
   }
 
@@ -47,7 +46,7 @@ class StudentsRepositoryImpl extends StudentRepository {
         return Left(error);
       },
       (data) {
-        return Right(UserModel.fromMap(data).toEntity());
+        return Right(StudentModel.fromMap(data).toEntity());
       },
     );
   }
@@ -64,7 +63,7 @@ class StudentsRepositoryImpl extends StudentRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => UserModel.fromMap(e).toEntity(),
+                (e) => StudentModel.fromMap(e).toEntity(),
               )
               .toList(),
         );
@@ -89,7 +88,7 @@ class StudentsRepositoryImpl extends StudentRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => UserGolangModel.fromMap(e).toEntity(),
+                (e) => StudentModel.fromMap(e).toEntity(),
               )
               .toList(),
         );
@@ -129,7 +128,7 @@ class StudentsRepositoryImpl extends StudentRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => UserGolangModel.fromMap(e).toEntity(),
+                (e) => StudentModel.fromMap(e).toEntity(),
               )
               .toList(),
         );

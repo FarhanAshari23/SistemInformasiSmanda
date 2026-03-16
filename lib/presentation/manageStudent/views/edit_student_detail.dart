@@ -14,8 +14,7 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/box_gender.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../data/models/auth/update_user.dart';
-import '../../../domain/entities/auth/user.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/usecases/students/update_user.dart';
 import '../../../common/bloc/religion/religion_cubit.dart';
 import '../../auth/widgets/button_role.dart';
@@ -23,7 +22,7 @@ import '../../auth/widgets/scan_qr_nisn.dart';
 import '../../../common/widget/photo/change_photo_view.dart';
 
 class EditStudentDetail extends StatefulWidget {
-  final UserEntity user;
+  final StudentEntity user;
   const EditStudentDetail({
     super.key,
     required this.user,
@@ -45,12 +44,12 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
   @override
   void initState() {
     super.initState();
-    _namaC = TextEditingController(text: widget.user.nama);
-    _kelasC = TextEditingController(text: widget.user.kelas);
+    _namaC = TextEditingController(text: widget.user.name);
+    _kelasC = TextEditingController(text: widget.user.nameClass);
     _nisnC = TextEditingController(text: widget.user.nisn);
-    _tanggalC = TextEditingController(text: widget.user.tanggalLahir);
-    _noHPC = TextEditingController(text: widget.user.noHP);
-    _alamatC = TextEditingController(text: widget.user.alamat);
+    _tanggalC = TextEditingController(text: widget.user.birthDate.toString());
+    _noHPC = TextEditingController(text: widget.user.mobileNum);
+    _alamatC = TextEditingController(text: widget.user.address);
   }
 
   @override
@@ -83,14 +82,14 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
           BlocProvider(
             create: (context) {
               final cubit = ReligionCubit();
-              cubit.selectItem(widget.user.agama);
+              cubit.selectItem(widget.user.religion);
               return cubit;
             },
           ),
           BlocProvider(
             create: (context) {
               final cubit = GetAllKelasCubit()..displayAll();
-              cubit.selectItem(widget.user.kelas);
+              cubit.selectItem(widget.user.nameClass);
               return cubit;
             },
           ),
@@ -173,7 +172,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                                 ),
                               ),
                               menuHeight: 200,
-                              hintText: widget.user.kelas,
+                              hintText: widget.user.nameClass,
                               dropdownMenuEntries: state.kelas.map((doc) {
                                 final kelas = doc.className;
                                 return DropdownMenuEntry(
@@ -307,7 +306,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                               ),
                             ),
                             menuHeight: 200,
-                            hintText: widget.user.agama,
+                            hintText: widget.user.religion,
                             dropdownMenuEntries: cubit.items.map((doc) {
                               return DropdownMenuEntry(
                                 value: doc,
@@ -448,26 +447,25 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                             ),
                           );
                         } else {
-                          final cubit = context.read<GetAllKelasCubit>().state;
+                          // final cubit = context.read<GetAllKelasCubit>().state;
+                          DateFormat formatter =
+                              DateFormat("d MMMM y", "id_ID");
                           context.read<ButtonStateCubit>().execute(
                                 usecase: UpdateStudentUsecase(),
-                                params: UpdateUserReq(
-                                  nama: _namaC.text,
-                                  kelas: cubit is KelasDisplayLoaded &&
-                                          cubit.selected != null
-                                      ? cubit.selected!
-                                      : widget.user.kelas!,
+                                params: StudentEntity(
+                                  address: _alamatC.text,
                                   nisn: _nisnC.text,
-                                  tanggalLahir: _tanggalC.text,
-                                  noHp: _noHPC.text,
-                                  alamat: _alamatC.text,
-                                  ekskul: widget.user.ekskul ?? '',
-                                  agama: context.read<ReligionCubit>().state!,
+                                  name: _namaC.text,
+                                  kelasId: 0,
+                                  mobileNum: _noHPC.text,
+                                  religion: context.read<ReligionCubit>().state,
+                                  isAdmin: false,
+                                  isRegister: false,
                                   gender: context
                                       .read<GenderSelectionCubit>()
                                       .selectedIndex,
+                                  birthDate: formatter.parse(_tanggalC.text),
                                   imageFile: imageProfile,
-                                  oldNisn: widget.user.nisn ?? '',
                                 ),
                               );
                         }

@@ -14,7 +14,7 @@ import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/button_rol
 import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view.dart';
 import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_admin.dart';
 
-import '../../../data/models/auth/signin_user_req.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/usecases/auth/signin.dart';
 import '../../../service_locator.dart';
 import '../../profile/views/profile_teacher_view.dart';
@@ -237,9 +237,9 @@ class LoginView extends StatelessWidget {
             } else {
               context.read<ButtonStateCubit>().execute(
                     usecase: SignInUsecase(),
-                    params: SignInUserReq(
+                    params: StudentEntity(
                       email: _usernameC.text.toString(),
-                      passwword: _passC.text.toString(),
+                      password: _passC.text.toString(),
                     ),
                   );
             }

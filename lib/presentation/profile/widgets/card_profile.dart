@@ -4,11 +4,10 @@ import 'package:intl/intl.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
-// import '../../../common/widget/photo/change_photo_view.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/user.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../students/views/murid_detail.dart';
 import '../../teachers/views/teacher_detail.dart';
@@ -16,7 +15,7 @@ import '../bloc/profile_info_cubit.dart';
 import '../views/edit_profile_student_view.dart';
 
 class CardProfile extends StatelessWidget {
-  final UserEntity? student;
+  final StudentEntity? student;
   final TeacherEntity? teacher;
   const CardProfile({
     super.key,
@@ -57,7 +56,7 @@ class CardProfile extends StatelessWidget {
                 fallbackAsset: student != null
                     ? student?.gender == 1
                         ? AppImages.boyStudent
-                        : student?.agama == "Islam"
+                        : student?.religion == "Islam"
                             ? AppImages.girlStudent
                             : AppImages.girlNonStudent
                     : teacher?.gender == 1
@@ -65,7 +64,7 @@ class CardProfile extends StatelessWidget {
                         : AppImages.guruPerempuan,
                 imageUrl: student != null
                     ? DisplayImage.displayImageStudent(
-                        student?.nama ?? '',
+                        student?.name ?? '',
                         student?.nisn ?? '',
                       )
                     : DisplayImage.displayImageTeacher(
@@ -86,7 +85,7 @@ class CardProfile extends StatelessWidget {
                           width: width * 0.45,
                           height: height * 0.055,
                           child: Text(
-                            (student != null ? student?.nama : teacher?.name) ??
+                            (student != null ? student?.name : teacher?.name) ??
                                 '',
                             style: const TextStyle(
                               color: AppColors.inversePrimary,
@@ -97,7 +96,9 @@ class CardProfile extends StatelessWidget {
                         ),
                         SizedBox(height: height * 0.01),
                         Text(
-                          (student != null ? student?.kelas : teacher?.nip) ??
+                          (student != null
+                                  ? student?.nameClass
+                                  : teacher?.nip) ??
                               '',
                           style: const TextStyle(
                             color: AppColors.inversePrimary,

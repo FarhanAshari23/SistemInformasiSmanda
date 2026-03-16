@@ -4,15 +4,15 @@ import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
-import '../../../domain/entities/auth/user.dart';
 import '../../helper/display_image.dart';
 import '../photo/network_photo.dart';
 
 class CardAnggota extends StatelessWidget {
   final String title;
   final String desc;
-  final UserEntity? murid;
+  final StudentEntity? murid;
   final TeacherEntity? pembina;
   final Function() onTap;
   const CardAnggota({
@@ -44,7 +44,7 @@ class CardAnggota extends StatelessWidget {
               fallbackAsset: murid != null
                   ? murid!.gender == 1
                       ? AppImages.boyStudent
-                      : murid!.agama == "Islam"
+                      : murid!.religion == "Islam"
                           ? AppImages.girlStudent
                           : AppImages.girlNonStudent
                   : pembina!.gender == 1
@@ -52,7 +52,7 @@ class CardAnggota extends StatelessWidget {
                       : AppImages.guruPerempuan,
               imageUrl: murid != null
                   ? DisplayImage.displayImageStudent(
-                      murid?.nama ?? '', murid?.nisn ?? '')
+                      murid?.name ?? '', murid?.nisn ?? '')
                   : DisplayImage.displayImageTeacher(
                       pembina?.name ?? '',
                       pembina?.nip != '-'

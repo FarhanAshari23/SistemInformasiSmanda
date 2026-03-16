@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../data/models/auth/update_user.dart';
+import '../../entities/student/student.dart';
 
 abstract class StudentRepository {
-  Future<Either> updateStudent(UpdateUserReq updateUserReq);
+  Future<Either> updateStudent(StudentEntity updateUserReq);
   Future<Either> acceptStudentAccount(int studentId);
   Future<Either> acceptAllStudentAccount();
   Future<Either> deleteAllStudentAccount();

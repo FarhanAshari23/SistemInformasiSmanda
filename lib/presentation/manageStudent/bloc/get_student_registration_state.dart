@@ -1,4 +1,4 @@
-import '../../../domain/entities/auth/user_golang.dart';
+import '../../../domain/entities/student/student.dart';
 
 abstract class StudentsRegistrationState {}
 
@@ -7,7 +7,7 @@ class StudentsRegistrationInitial extends StudentsRegistrationState {}
 class StudentsRegistrationLoading extends StudentsRegistrationState {}
 
 class StudentsRegistrationLoaded extends StudentsRegistrationState {
-  final List<UserGolang> students;
+  final List<StudentEntity> students;
   StudentsRegistrationLoaded({required this.students});
 }
 

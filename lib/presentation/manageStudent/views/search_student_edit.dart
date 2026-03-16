@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageStudent/widgets/card_edit_user.dart';
 
 import '../../../common/bloc/kelas/students_state.dart';
 import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/widget/landing/not_found.dart';
-import '../../../domain/entities/auth/user.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/usecases/students/get_student_by_name.dart';
 import '../../../common/widget/searchbar/search_student_appbar.dart';
+import '../widgets/card_edit_user.dart';
 
 class SearchStudentEdit extends StatelessWidget {
   const SearchStudentEdit({super.key});
@@ -15,7 +15,6 @@ class SearchStudentEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    // double width = MediaQuery.of(context).size.width;
     return BlocProvider(
       create: (context) =>
           StudentsDisplayCubit(usecase: GetStudentByNameUsecase()),
@@ -53,7 +52,7 @@ class SearchStudentEdit extends StatelessWidget {
     );
   }
 
-  Widget _students(List<UserEntity> students, double height) {
+  Widget _students(List<StudentEntity> students, double height) {
     return ListView.separated(
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {

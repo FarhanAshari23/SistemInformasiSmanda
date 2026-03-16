@@ -1,4 +1,4 @@
-import '../../../domain/entities/auth/user.dart';
+import '../../../domain/entities/student/student.dart';
 
 abstract class StudentsNISNState {}
 
@@ -7,7 +7,7 @@ class StudentsNISNInitial extends StudentsNISNState {}
 class StudentsNISNLoading extends StudentsNISNState {}
 
 class StudentsNISNLoaded extends StudentsNISNState {
-  final UserEntity student;
+  final StudentEntity student;
   StudentsNISNLoaded({required this.student});
 }
 

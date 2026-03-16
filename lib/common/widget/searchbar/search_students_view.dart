@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/student/student.dart';
 
 import '../../bloc/kelas/students_state.dart';
 import '../../bloc/kelas/stundets_cubit.dart';
 import '../card/card_user.dart';
 import '../landing/not_found.dart';
-import '../../../domain/entities/auth/user.dart';
 import '../../../domain/usecases/students/get_student_by_name.dart';
 import 'search_student_appbar.dart';
 
@@ -53,7 +53,7 @@ class SearchStudentsView extends StatelessWidget {
     );
   }
 
-  Widget _students(List<UserEntity> students, double height) {
+  Widget _students(List<StudentEntity> students, double height) {
     return ListView.separated(
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {

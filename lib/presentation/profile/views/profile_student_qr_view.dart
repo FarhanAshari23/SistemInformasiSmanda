@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
+import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/student/student.dart';
 import '../bloc/get_attendance_student_cubit.dart';
 import '../bloc/get_attendance_student_state.dart';
 
 class ProfileStudentQrView extends StatelessWidget {
-  final UserEntity? student;
+  final StudentEntity? student;
   const ProfileStudentQrView({
     super.key,
     required this.student,
@@ -18,7 +18,7 @@ class ProfileStudentQrView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = student!.timeIn!.toDate();
+    DateTime dateTime = DateTime.now();
     String time = DateFormat('HH:mm').format(dateTime);
     final parts = time.split(':');
     final hour = int.parse(parts[0]);

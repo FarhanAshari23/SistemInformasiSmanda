@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/photo/network_photo.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../common/helper/cache_state_image.dart';
+import '../../../common/helper/display_image.dart';
+import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/user.dart';
+import '../../../domain/entities/student/student.dart';
 
 class CardStudentAttendance extends StatefulWidget {
-  final UserEntity student;
+  final StudentEntity student;
   const CardStudentAttendance({
     super.key,
     required this.student,
@@ -28,7 +28,7 @@ class _CardStudentAttendanceState extends State<CardStudentAttendance> {
   void initState() {
     super.initState();
     imageUrl = DisplayImage.displayImageStudent(
-        widget.student.nama ?? '', widget.student.nisn ?? '');
+        widget.student.name ?? '', widget.student.nisn ?? '');
     _checkUrl();
   }
 
@@ -49,7 +49,7 @@ class _CardStudentAttendanceState extends State<CardStudentAttendance> {
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
 
-    DateTime dateTime = widget.student.timeIn!.toDate();
+    DateTime dateTime = DateTime.now();
     String time = DateFormat('HH:mm').format(dateTime);
     final parts = time.split(':');
     final hour = int.parse(parts[0]);
@@ -71,7 +71,7 @@ class _CardStudentAttendanceState extends State<CardStudentAttendance> {
 
     String fallbackAsset = widget.student.gender == 1
         ? AppImages.boyStudent
-        : widget.student.agama == "Islam"
+        : widget.student.religion == "Islam"
             ? AppImages.girlStudent
             : AppImages.girlNonStudent;
     Widget imageWidget;
@@ -129,7 +129,7 @@ class _CardStudentAttendanceState extends State<CardStudentAttendance> {
                         child: RichText(
                           textAlign: TextAlign.left,
                           text: TextSpan(
-                            text: '${widget.student.nama}\n',
+                            text: '${widget.student.name}\n',
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
                               color: AppColors.primary,

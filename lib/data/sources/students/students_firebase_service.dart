@@ -10,14 +10,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 import '../../../common/helper/execute_crud.dart';
 import '../../../common/helper/string_helper.dart';
 import '../../../core/networks/network.dart';
-import '../../models/auth/update_user.dart';
-import '../../models/auth/user_golang.dart';
+import '../../../domain/entities/student/student.dart';
+import '../../models/student/student.dart';
 
 abstract class StudentsFirebaseService {
   Future<Either> getStudentsByClass(String kelas);
@@ -25,7 +24,7 @@ abstract class StudentsFirebaseService {
   Future<Either> acceptAllStudentAccount();
   Future<Either> deleteAllStudentAccount();
   Future<Either> getStudentByRegister();
-  Future<Either> updateStudent(UpdateUserReq updateUserReq);
+  Future<Either> updateStudent(StudentEntity updateUserReq);
   Future<Either> deleteStudent(int studentId);
   Future<Either> searchStudentByNISN(String nisnStudent);
   Future<Either> deleteStudentByClass(String kelas);
@@ -51,88 +50,26 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   }
 
   @override
-  Future<Either> updateStudent(UpdateUserReq updateUserReq) async {
-    String endpoint = ExecuteCRUD.updateImageStudent();
+  Future<Either> updateStudent(StudentEntity updateUserReq) async {
     try {
-      if (updateUserReq.imageFile != null) {
-        Uri? url;
-        try {
-          url = Uri.parse(endpoint);
-        } catch (_) {
-          throw Exception("URL tidak valid: $endpoint");
-        }
+      final model = StudentModelX.fromEntity(updateUserReq);
 
-        final request = http.MultipartRequest("POST", url);
+      final response = await Network.apiClient
+          .put("/student/${updateUserReq.id}", body: model.toMap());
 
-        request.fields['name'] = updateUserReq.nama;
-        request.fields['nisn'] = updateUserReq.nisn;
-
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            "photo",
-            updateUserReq.imageFile?.path ?? '',
-            filename: basename(updateUserReq.imageFile?.path ?? ''),
-            contentType: http.MediaType("image", "jpg"),
-          ),
-        );
-
-        request.headers.addAll({
-          "Accept": "application/json",
-          "Content-Type": "multipart/form-data",
-        });
-
-        final streamedResponse = await request.send().timeout(
-          const Duration(seconds: 10),
-          onTimeout: () {
-            throw Exception("Timeout: Server tidak merespon.");
-          },
-        );
-
-        final responseBody = await streamedResponse.stream.bytesToString();
-
-        if (streamedResponse.statusCode != 200) {
-          throw Exception(
-            "Upload gagal (status: ${streamedResponse.statusCode}). "
-            "Response: $responseBody",
-          );
-        }
-
-        try {
-          jsonDecode(responseBody);
-        } catch (_) {
-          throw Exception("Response server bukan JSON valid: $responseBody");
-        }
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
 
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Students');
-      QuerySnapshot querySnapshot =
-          await users.where('nisn', isEqualTo: updateUserReq.oldNisn).get();
-      if (querySnapshot.docs.isNotEmpty) {
-        String docId = querySnapshot.docs[0].id;
-        await users.doc(docId).update({
-          "nama": updateUserReq.nama,
-          "nisn": updateUserReq.nisn,
-          "kelas": updateUserReq.kelas,
-          "tanggal_lahir": updateUserReq.tanggalLahir,
-          "No_HP": updateUserReq.noHp,
-          "alamat": updateUserReq.alamat,
-          "ekskul": updateUserReq.ekskul,
-          "gender": updateUserReq.gender,
-          "agama": updateUserReq.agama,
-        });
-        return right('Update Data Student Success');
+      final data = StudentModel.fromMap(response.data['data']);
+
+      if (updateUserReq.imageFile != null) {
+        Network.apiClient.postMultipart(
+          "/student/${data.id}/photo",
+          file: updateUserReq.imageFile!,
+        );
       }
       return const Right('Update Data Student Success');
-    } on TimeoutException {
-      return const Left(
-          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
-    } on SocketException {
-      throw Exception("Tidak ada koneksi internet.");
-    } on HttpException {
-      throw Exception("Kesalahan HTTP terjadi.");
-    } on FormatException {
-      throw Exception("Format data tidak valid.");
     } catch (e) {
       return Left(e.toString());
     }
@@ -140,44 +77,13 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
 
   @override
   Future<Either> deleteStudent(int studentId) async {
-    String endpoint = ExecuteCRUD.deleteImageStudent();
-    Uri? url;
     try {
-      url = Uri.parse(endpoint);
-    } catch (_) {
-      return Left("URL tidak valid: $endpoint");
-    }
+      final response = await Network.apiClient.delete("/student/$studentId");
 
-    try {
-      final responseGet = await Network.apiClient.get("/student/$studentId");
-      if (responseGet.statusCode == 500) {
-        return left("Connection error: ${responseGet.data}");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      final data = UserGolangModel.fromMap(responseGet.data['data']);
-      final response = await http.post(url, body: {
-        "name": data.name,
-        "nisn": data.nisn,
-      }).timeout(const Duration(seconds: 5));
-
-      if (response.statusCode != 200 && response.statusCode != 404) {
-        return Left("Upload gagal (status: ${response.statusCode})");
-      }
-    } on TimeoutException {
-      return const Left(
-          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
-    } on SocketException {
-      return const Left("Tidak ada koneksi internet.");
-    } on HttpException {
-      return const Left("Kesalahan HTTP terjadi.");
-    } catch (e) {
-      return Left(e.toString());
-    }
-
-    try {
-      final responseGet = await Network.apiClient.delete("/student/$studentId");
-      if (responseGet.statusCode == 500) {
-        return left("Connection error: ${responseGet.data}");
-      }
+      //not implement delete photo
       return const Right('Delete Data Student Success');
     } catch (e) {
       return Left(e.toString());
@@ -300,7 +206,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
-      final data = UserGolangModel.fromMap(response.data['data']);
+      final data = StudentModel.fromMap(response.data['data']);
 
       final key = encrypt.Key.fromUtf8('1234567890123456');
       final iv = encrypt.IV.fromBase64(data.iv);
@@ -369,7 +275,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
 
       for (final doc in dataList) {
-        final data = UserGolangModel.fromMap(doc);
+        final data = StudentModel.fromMap(doc);
 
         try {
           final iv = encrypt.IV.fromBase64(data.iv);
@@ -434,7 +340,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       final dataList = response.data['data'] as List<Map<String, dynamic>>;
 
       for (var doc in dataList) {
-        final data = UserGolangModel.fromMap(doc);
+        final data = StudentModel.fromMap(doc);
 
         studentsPayload.add({
           "name": data.name,

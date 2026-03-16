@@ -3,11 +3,11 @@ import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.da
 
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/user_golang.dart';
+import '../../../domain/entities/student/student.dart';
 import '../widgets/card_ack.dart';
 
 class RegisterAccountDetailView extends StatelessWidget {
-  final UserGolang user;
+  final StudentEntity user;
   const RegisterAccountDetailView({
     super.key,
     required this.user,

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_students_with_kelas.dart';
 
 import '../../../core/usecase/usecase.dart';
+import '../../../domain/usecases/students/get_students_with_kelas.dart';
 import 'students_state.dart';
 
 class StudentsDisplayCubit extends Cubit<StudentsDisplayState> {
@@ -20,21 +20,6 @@ class StudentsDisplayCubit extends Cubit<StudentsDisplayState> {
       },
       (data) {
         emit(StudentsDisplayLoaded(students: data));
-      },
-    );
-  }
-
-  void displayStudentsGolang({dynamic params}) async {
-    emit(StudentsDisplayLoading());
-    var returnedData = await usecase.call(
-      params: params,
-    );
-    returnedData.fold(
-      (error) {
-        emit(StudentsDisplayFailure(errorMessage: error.toString()));
-      },
-      (data) {
-        emit(StudentsDisplayLoadedGolang(students: data));
       },
     );
   }

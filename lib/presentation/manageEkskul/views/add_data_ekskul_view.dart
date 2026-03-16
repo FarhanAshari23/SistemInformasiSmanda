@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_teachers_views.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/views/ack_ekskul_view.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_students_view.dart';
 
+import '../../../common/helper/app_navigation.dart';
+import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/button/basic_button.dart';
+import '../../../common/widget/searchbar/search_students_view.dart';
+import '../../../common/widget/searchbar/search_teachers_views.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
-import '../../../domain/entities/auth/user.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
+import 'ack_ekskul_view.dart';
 
 class AddDataEkskulView extends StatefulWidget {
   const AddDataEkskulView({super.key});
@@ -28,10 +28,10 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
   final TextEditingController _deskripsiC = TextEditingController();
 
   TeacherEntity? _selectedPembina;
-  UserEntity? _selectedKetua;
-  UserEntity? _selectedWakil;
-  UserEntity? _selectedSekretaris;
-  UserEntity? _selectedBendahara;
+  StudentEntity? _selectedKetua;
+  StudentEntity? _selectedWakil;
+  StudentEntity? _selectedSekretaris;
+  StudentEntity? _selectedBendahara;
 
   @override
   void dispose() {
@@ -138,23 +138,23 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                           if (index == 1 && result is TeacherEntity) {
                             _selectedPembina = result;
                             _namePembinaC.text = result.name ?? '';
-                          } else if (result is UserEntity) {
+                          } else if (result is StudentEntity) {
                             switch (index) {
                               case 2:
                                 _selectedKetua = result;
-                                _nameKetuaC.text = result.nama ?? '';
+                                _nameKetuaC.text = result.name ?? '';
                                 break;
                               case 3:
                                 _selectedWakil = result;
-                                _nameWakilC.text = result.nama ?? '';
+                                _nameWakilC.text = result.name ?? '';
                                 break;
                               case 4:
                                 _selectedSekretaris = result;
-                                _nameSekretarisC.text = result.nama ?? '';
+                                _nameSekretarisC.text = result.name ?? '';
                                 break;
                               case 5:
                                 _selectedBendahara = result;
-                                _nameBendaharaC.text = result.nama ?? '';
+                                _nameBendaharaC.text = result.name ?? '';
                                 break;
                             }
                           }

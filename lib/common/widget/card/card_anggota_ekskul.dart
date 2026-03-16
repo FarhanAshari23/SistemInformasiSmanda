@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/photo/network_photo.dart';
-import 'package:new_sistem_informasi_smanda/presentation/students/views/murid_detail.dart';
-import 'package:new_sistem_informasi_smanda/presentation/teachers/views/teacher_detail.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
-import '../../../domain/entities/auth/user.dart';
+import '../../../presentation/students/views/murid_detail.dart';
+import '../../../presentation/teachers/views/teacher_detail.dart';
+import '../../helper/app_navigation.dart';
 import '../../helper/cache_state_image.dart';
+import '../../helper/display_image.dart';
+import '../inkwell/custom_inkwell.dart';
+import '../photo/network_photo.dart';
 
 class CardAnggotaEkskul extends StatefulWidget {
-  final UserEntity? murid;
+  final StudentEntity? murid;
   final TeacherEntity? pembina;
   final String jabatan;
   const CardAnggotaEkskul({
@@ -38,7 +38,7 @@ class _CardAnggotaEkskulState extends State<CardAnggotaEkskul> {
     super.initState();
     imageUrl = widget.murid != null
         ? DisplayImage.displayImageStudent(
-            widget.murid?.nama ?? '', widget.murid?.nisn ?? '')
+            widget.murid?.name ?? '', widget.murid?.nisn ?? '')
         : DisplayImage.displayImageTeacher(
             widget.pembina?.name ?? '',
             widget.pembina?.nip != '-'
@@ -62,7 +62,7 @@ class _CardAnggotaEkskulState extends State<CardAnggotaEkskul> {
     String fallbackAsset = widget.murid != null
         ? widget.murid!.gender == 1
             ? AppImages.boyStudent
-            : widget.murid!.agama == "Islam"
+            : widget.murid!.religion == "Islam"
                 ? AppImages.girlStudent
                 : AppImages.girlNonStudent
         : widget.pembina!.gender == 1
@@ -121,7 +121,7 @@ class _CardAnggotaEkskulState extends State<CardAnggotaEkskul> {
         Text(
           widget.pembina != null
               ? widget.pembina?.name ?? ''
-              : widget.murid?.nama ?? '',
+              : widget.murid?.name ?? '',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,

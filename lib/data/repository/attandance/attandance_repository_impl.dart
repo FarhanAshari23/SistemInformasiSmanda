@@ -1,20 +1,20 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/data/models/attendance/attendance.dart';
-import 'package:new_sistem_informasi_smanda/data/models/teacher/teacher.dart';
-import 'package:new_sistem_informasi_smanda/data/sources/attandance/attandance_firebase_service.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_attendance_teacher.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_delete_attendance.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
-import 'package:new_sistem_informasi_smanda/domain/repository/attandance/attandance.dart';
 
 import '../../../domain/entities/attandance/param_attendance.dart';
+import '../../../domain/entities/attandance/param_attendance_teacher.dart';
+import '../../../domain/entities/attandance/param_delete_attendance.dart';
+import '../../../domain/entities/student/student.dart';
+import '../../../domain/entities/teacher/teacher.dart';
+import '../../../domain/repository/attandance/attandance.dart';
 import '../../../service_locator.dart';
-import '../../models/auth/user.dart';
+import '../../models/attendance/attendance.dart';
+import '../../models/student/student.dart';
+import '../../models/teacher/teacher.dart';
+import '../../sources/attandance/attandance_firebase_service.dart';
 
 class AttandanceRepositoryImpl extends AttandanceRepository {
   @override
-  Future<Either> addStudentAttendances(UserEntity userAddReq) async {
+  Future<Either> addStudentAttendances(StudentEntity userAddReq) async {
     return await sl<AttandanceFirebaseService>()
         .addStudentAttendances(userAddReq);
   }
@@ -32,7 +32,7 @@ class AttandanceRepositoryImpl extends AttandanceRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => UserModel.fromMap(e).toEntity(),
+                (e) => StudentModel.fromMap(e).toEntity(),
               )
               .toList(),
         );
@@ -53,7 +53,7 @@ class AttandanceRepositoryImpl extends AttandanceRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => UserModel.fromMap(e).toEntity(),
+                (e) => StudentModel.fromMap(e).toEntity(),
               )
               .toList(),
         );
@@ -118,7 +118,7 @@ class AttandanceRepositoryImpl extends AttandanceRepository {
   }
 
   @override
-  Future<Either> getAttendanceStudent(UserEntity attendanceReq) async {
+  Future<Either> getAttendanceStudent(StudentEntity attendanceReq) async {
     var returnedData = await sl<AttandanceFirebaseService>()
         .getAttendanceStudent(attendanceReq);
     return returnedData.fold(

@@ -97,7 +97,7 @@ class ScanBarcodeView extends StatelessWidget {
                                       ),
                                       SizedBox(height: height * 0.02),
                                       Text(
-                                        'Nama: ${state.student.nama}',
+                                        'Nama: ${state.student.name}',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -113,7 +113,7 @@ class ScanBarcodeView extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        'Kelas: ${state.student.kelas}',
+                                        'Kelas: ${state.student.nameClass}',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,

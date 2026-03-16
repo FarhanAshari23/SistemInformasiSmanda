@@ -3,13 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
-import '../../../common/bloc/kelas/students_state.dart';
-import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/usecases/students/get_all_student_golang_usecase.dart';
 import '../../auth/views/login_view.dart';
 import '../../manageActivity/views/manage_activity_view.dart';
 import '../../manageAttendance/views/see_all_data_attandance_students.dart';
@@ -90,11 +87,6 @@ class HomeViewAdmin extends StatelessWidget {
           BlocProvider(
             create: (context) => ButtonStateCubit(),
           ),
-          BlocProvider(
-            create: (context) =>
-                StudentsDisplayCubit(usecase: GetAllStudentGolangUsecase())
-                  ..displayStudentsGolang(),
-          ),
         ],
         child: SafeArea(
           child: BlocListener<ButtonStateCubit, ButtonState>(
@@ -139,20 +131,6 @@ class HomeViewAdmin extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                ),
-                BlocBuilder<StudentsDisplayCubit, StudentsDisplayState>(
-                  builder: (context, state) {
-                    if (state is StudentsDisplayLoading) {
-                      return const Text("Sedang loading....");
-                    }
-                    if (state is StudentsDisplayLoadedGolang) {
-                      return Text(state.students[0].name ?? '');
-                    }
-                    if (state is StudentsDisplayFailure) {
-                      return Text("Terjadi kesalahan: ${state.errorMessage}");
-                    }
-                    return const SizedBox();
-                  },
                 ),
                 const SizedBox(height: 16),
                 Expanded(

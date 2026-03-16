@@ -2,18 +2,18 @@ import 'dart:convert';
 
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 
-import '../auth/user.dart';
+import '../student/student.dart';
 import '../teacher/teacher.dart';
 
 class EkskulModel {
   final String namaEkskul;
   final TeacherModel pembina;
-  final UserModel ketua;
-  final UserModel wakilKetua;
-  final UserModel sekretaris;
-  final UserModel bendahara;
+  final StudentModel ketua;
+  final StudentModel wakilKetua;
+  final StudentModel sekretaris;
+  final StudentModel bendahara;
   final String deskripsi;
-  final List<UserModel> anggota;
+  final List<StudentModel> anggota;
 
   EkskulModel({
     required this.namaEkskul,
@@ -43,14 +43,14 @@ class EkskulModel {
     return EkskulModel(
       namaEkskul: map['nama_ekskul'] ?? '',
       pembina: TeacherModel.fromMap(map['pembina']),
-      ketua: UserModel.fromMap(map['ketua']),
-      wakilKetua: UserModel.fromMap(map['wakil_ketua']),
-      sekretaris: UserModel.fromMap(map['sekretaris']),
-      bendahara: UserModel.fromMap(map['bendahara']),
+      ketua: StudentModel.fromMap(map['ketua']),
+      wakilKetua: StudentModel.fromMap(map['wakil_ketua']),
+      sekretaris: StudentModel.fromMap(map['sekretaris']),
+      bendahara: StudentModel.fromMap(map['bendahara']),
       deskripsi: map['deskripsi'] ?? '',
       anggota: map['anggota'] != null
-          ? List<UserModel>.from(
-              (map['anggota'] as List).map((x) => UserModel.fromMap(x)),
+          ? List<StudentModel>.from(
+              (map['anggota'] as List).map((x) => StudentModel.fromMap(x)),
             )
           : [],
     );

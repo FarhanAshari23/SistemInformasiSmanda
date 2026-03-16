@@ -1,16 +1,15 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/data/models/auth/signin_user_req.dart';
-import 'package:new_sistem_informasi_smanda/data/sources/auth/auth_firebase_service.dart';
-import 'package:new_sistem_informasi_smanda/domain/repository/auth/auth.dart';
 
-import '../../../domain/entities/auth/user_golang.dart';
+import '../../../domain/entities/student/student.dart';
+import '../../../domain/repository/auth/auth.dart';
 import '../../../service_locator.dart';
-import '../../models/auth/user.dart';
+import '../../models/student/student.dart';
 import '../../models/teacher/teacher.dart';
+import '../../sources/auth/auth_firebase_service.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   @override
-  Future<Either> signin(SignInUserReq signinUserReq) async {
+  Future<Either> signin(StudentEntity signinUserReq) async {
     return await sl<AuthFirebaseService>().signin(signinUserReq);
   }
 
@@ -28,14 +27,14 @@ class AuthRepositoryImpl extends AuthRepository {
       },
       (data) {
         return user == "Students"
-            ? Right(UserModel.fromMap(data).toEntity())
+            ? Right(StudentModel.fromMap(data).toEntity())
             : Right(TeacherModel.fromMap(data).toEntity());
       },
     );
   }
 
   @override
-  Future<Either> signUp(UserGolang userCreationReq) async {
+  Future<Either> signUp(StudentEntity userCreationReq) async {
     return await sl<AuthFirebaseService>().signUp(userCreationReq);
   }
 

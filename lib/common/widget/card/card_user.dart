@@ -4,13 +4,13 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/user.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../helper/cache_state_image.dart';
 import '../../helper/display_image.dart';
 import '../photo/network_photo.dart';
 
 class CardUser extends StatefulWidget {
-  final UserEntity user;
+  final StudentEntity user;
   final VoidCallback? onTap;
   final bool forceRefresh;
   const CardUser({
@@ -32,7 +32,7 @@ class _CardUserState extends State<CardUser> {
   void initState() {
     super.initState();
     imageUrl = DisplayImage.displayImageStudent(
-        widget.user.nama ?? '', widget.user.nisn ?? '');
+        widget.user.name ?? '', widget.user.nisn ?? '');
     _checkUrl();
   }
 
@@ -54,7 +54,7 @@ class _CardUserState extends State<CardUser> {
     double width = MediaQuery.of(context).size.width;
     String fallbackAsset = widget.user.gender == 1
         ? AppImages.boyStudent
-        : widget.user.agama == "Islam"
+        : widget.user.religion == "Islam"
             ? AppImages.girlStudent
             : AppImages.girlNonStudent;
     Widget imageWidget;
@@ -110,7 +110,7 @@ class _CardUserState extends State<CardUser> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          widget.user.nama ?? '',
+                          widget.user.name ?? '',
                           maxLines: 2,
                           style: const TextStyle(
                             fontSize: 16,

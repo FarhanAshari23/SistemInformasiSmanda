@@ -14,19 +14,18 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/box_gender.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../common/widget/photo/change_photo_view.dart';
-import '../../../domain/entities/auth/user.dart';
 import '../../../domain/entities/ekskul/update_anggota_req.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/usecases/ekskul/update_anggota_usecase.dart';
 import '../../auth/widgets/button_role.dart';
-import 'ekskul_selection_view.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../data/models/auth/update_user.dart';
 import '../../../domain/usecases/students/update_user.dart';
 import '../../../service_locator.dart';
 import '../bloc/profile_info_cubit.dart';
+import 'ekskul_selection_view.dart';
 
 class EditProfileStudentView extends StatefulWidget {
-  final UserEntity? user;
+  final StudentEntity? user;
   const EditProfileStudentView({
     super.key,
     this.user,
@@ -49,13 +48,13 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
   @override
   void initState() {
     super.initState();
-    _namaC = TextEditingController(text: widget.user?.nama);
-    _kelasC = TextEditingController(text: widget.user?.kelas);
+    _namaC = TextEditingController(text: widget.user?.name);
+    _kelasC = TextEditingController(text: widget.user?.nameClass);
     _nisnC = TextEditingController(text: widget.user?.nisn);
-    _tanggalC = TextEditingController(text: widget.user?.tanggalLahir);
-    _noHPC = TextEditingController(text: widget.user?.noHP);
-    _alamatC = TextEditingController(text: widget.user?.alamat);
-    _ekskulC = TextEditingController(text: widget.user?.ekskul);
+    _tanggalC = TextEditingController(text: widget.user?.birthDate.toString());
+    _noHPC = TextEditingController(text: widget.user?.mobileNum);
+    _alamatC = TextEditingController(text: widget.user?.address);
+    _ekskulC = TextEditingController(text: "Belum ubah nama ekskul");
   }
 
   @override
@@ -88,14 +87,14 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
           BlocProvider(
             create: (context) {
               final cubit = ReligionCubit();
-              cubit.selectItem(widget.user?.agama);
+              cubit.selectItem(widget.user?.religion);
               return cubit;
             },
           ),
           BlocProvider(
             create: (context) {
               final cubit = GetAllKelasCubit()..displayAll();
-              cubit.selectItem(widget.user?.kelas);
+              cubit.selectItem(widget.user?.nameClass);
               return cubit;
             },
           ),
@@ -208,7 +207,7 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                                 ),
                               ),
                               menuHeight: 200,
-                              hintText: widget.user?.kelas,
+                              hintText: widget.user?.nameClass,
                               dropdownMenuEntries: state.kelas.map((doc) {
                                 final kelas = doc.className;
                                 return DropdownMenuEntry(
@@ -297,7 +296,7 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                               ),
                             ),
                             menuHeight: 200,
-                            hintText: widget.user?.agama,
+                            hintText: widget.user?.religion,
                             dropdownMenuEntries: cubit.items.map((doc) {
                               return DropdownMenuEntry(
                                 value: doc,
@@ -472,26 +471,23 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                           ),
                         );
                       } else {
-                        final cubit = context.read<GetAllKelasCubit>().state;
+                        // final cubit = context.read<GetAllKelasCubit>().state;
+                        DateFormat formatter = DateFormat("d MMMM y", "id_ID");
                         context.read<ButtonStateCubit>().execute(
                               usecase: UpdateStudentUsecase(),
-                              params: UpdateUserReq(
-                                nama: _namaC.text,
-                                kelas: cubit is KelasDisplayLoaded &&
-                                        cubit.selected != null
-                                    ? cubit.selected!
-                                    : widget.user?.kelas ?? '',
+                              params: StudentEntity(
+                                address: _alamatC.text,
                                 nisn: _nisnC.text,
-                                tanggalLahir: _tanggalC.text,
-                                noHp: _noHPC.text,
-                                alamat: _alamatC.text,
-                                ekskul: _ekskulC.text,
-                                agama: context.read<ReligionCubit>().state!,
+                                name: _namaC.text,
+                                mobileNum: _noHPC.text,
+                                religion: context.read<ReligionCubit>().state,
+                                isAdmin: false,
+                                isRegister: false,
                                 gender: context
                                     .read<GenderSelectionCubit>()
                                     .selectedIndex,
+                                birthDate: formatter.parse(_tanggalC.text),
                                 imageFile: imageProfile,
-                                oldNisn: widget.user?.nisn ?? '',
                               ),
                             );
                       }

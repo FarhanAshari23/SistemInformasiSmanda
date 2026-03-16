@@ -1,21 +1,20 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/stundets_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/students/delete_student.dart';
 
+import '../../../common/bloc/kelas/stundets_cubit.dart';
+import '../../../common/helper/app_navigation.dart';
+import '../../../common/helper/display_image.dart';
+import '../../../common/widget/dialog/basic_dialog.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/student/student.dart';
+import '../../../domain/usecases/students/delete_student.dart';
 import '../../../service_locator.dart';
 import '../views/edit_student_detail.dart';
 
 class CardEditUser extends StatelessWidget {
-  final UserEntity student;
+  final StudentEntity student;
   const CardEditUser({
     super.key,
     required this.student,
@@ -48,11 +47,11 @@ class CardEditUser extends StatelessWidget {
                   height: bodyHeight * 0.14,
                   fallbackAsset: student.gender == 1
                       ? AppImages.boyStudent
-                      : student.agama == "Islam"
+                      : student.religion == "Islam"
                           ? AppImages.girlStudent
                           : AppImages.girlNonStudent,
                   imageUrl: DisplayImage.displayImageStudent(
-                    student.nama ?? '',
+                    student.name ?? '',
                     student.nisn ?? '',
                   ),
                 ),
@@ -66,7 +65,7 @@ class CardEditUser extends StatelessWidget {
                         width: width * 0.465,
                         height: bodyHeight * 0.06,
                         child: Text(
-                          student.nama!,
+                          student.name ?? '',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w900,
@@ -76,7 +75,7 @@ class CardEditUser extends StatelessWidget {
                       ),
                       SizedBox(height: bodyHeight * 0.01),
                       Text(
-                        student.nisn!,
+                        student.nisn ?? '',
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -108,7 +107,7 @@ class CardEditUser extends StatelessWidget {
                       return BasicDialog(
                         splashImage: AppImages.splashDelete,
                         mainTitle:
-                            "Apakah anda yakin ingin menghapus data ${student.nama}",
+                            "Apakah anda yakin ingin menghapus data ${student.name}",
                         buttonTitle: "Hapus",
                         onPressed: () async {
                           var delete = await sl<DeleteStudentUsecase>()
@@ -131,7 +130,7 @@ class CardEditUser extends StatelessWidget {
                                   .showSnackBar(snackbar);
                               outerContext
                                   .read<StudentsDisplayCubit>()
-                                  .displayStudents(params: student.kelas);
+                                  .displayStudents();
                             },
                           );
                         },

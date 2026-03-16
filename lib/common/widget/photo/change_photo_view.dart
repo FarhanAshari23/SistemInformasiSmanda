@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
-// import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/update_teacher.dart';
 
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../presentation/profile/bloc/profile_info_cubit.dart';
 import '../../bloc/button/button.cubit.dart';
 import '../../bloc/button/button_state.dart';
 import '../../bloc/upload_image/upload_image_cubit.dart';
 import '../../bloc/upload_image/upload_image_state.dart';
+import '../../helper/display_image.dart';
 import '../appbar/basic_appbar.dart';
 import '../button/basic_button.dart';
 import '../inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/auth/user.dart';
 import 'network_photo.dart';
 
 class ChangePhotoView extends StatelessWidget {
-  final UserEntity? user;
+  final StudentEntity? user;
   final TeacherEntity? teacher;
   final bool isProfileTeacher;
 
@@ -30,7 +29,7 @@ class ChangePhotoView extends StatelessWidget {
   });
 
   String? _getName() {
-    if (user != null) return user!.nama;
+    if (user != null) return user!.name;
     if (teacher != null) return teacher!.name;
     return null;
   }

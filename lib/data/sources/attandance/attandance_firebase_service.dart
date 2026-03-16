@@ -4,14 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_attendance_teacher.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 import '../../../domain/entities/attandance/param_attendance.dart';
+import '../../../domain/entities/attandance/param_attendance_teacher.dart';
 import '../../../domain/entities/attandance/param_delete_attendance.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
-import '../../models/auth/user.dart';
+import '../../models/student/student.dart';
 import '../../models/teacher/teacher.dart';
 
 abstract class AttandanceFirebaseService {
@@ -21,8 +21,8 @@ abstract class AttandanceFirebaseService {
   Future<Either> deleteAllAttendances();
   Future<Either> deleteMonthAttendances(ParamDeleteAttendance attendanceReq);
   Future<Either> getAttendanceStudents(ParamAttendanceEntity attendanceReq);
-  Future<Either> getAttendanceStudent(UserEntity attendanceReq);
-  Future<Either> addStudentAttendances(UserEntity userAddReq);
+  Future<Either> getAttendanceStudent(StudentEntity attendanceReq);
+  Future<Either> addStudentAttendances(StudentEntity userAddReq);
   Future<Either> getAttendanceTeacher(TeacherEntity attendanceReq);
   Future<Either> getAttendanceAllTeacher(ParamAttendanceTeacher req);
   Future<Either> addTeacherAttendances(TeacherEntity teacherAddReq);
@@ -76,7 +76,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   }
 
   @override
-  Future<Either> addStudentAttendances(UserEntity userAddReq) async {
+  Future<Either> addStudentAttendances(StudentEntity userAddReq) async {
     try {
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
       CollectionReference kehadiran =
@@ -140,7 +140,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
           'Kehadiran $nama sudahh disimpan, silakan scan NISN murid lain',
         );
       }
-      final userModel = UserModelX.fromEntity(userAddReq);
+      final userModel = StudentModelX.fromEntity(userAddReq);
       final userData = userModel.toMap();
 
       userData['jam_masuk'] = Timestamp.now();
@@ -434,7 +434,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   }
 
   @override
-  Future<Either> getAttendanceStudent(UserEntity attendanceReq) async {
+  Future<Either> getAttendanceStudent(StudentEntity attendanceReq) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     CollectionReference kehadiran = firebaseFirestore.collection('Students');
     try {

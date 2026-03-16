@@ -1,4 +1,4 @@
-import '../../../domain/entities/auth/user.dart';
+import '../../../domain/entities/student/student.dart';
 
 abstract class AttendanceStudentState {}
 
@@ -7,7 +7,7 @@ class AttendanceStudentInitial extends AttendanceStudentState {}
 class AttendanceStudentLoading extends AttendanceStudentState {}
 
 class AttendanceStudentLoaded extends AttendanceStudentState {
-  final List<UserEntity> students;
+  final List<StudentEntity> students;
   AttendanceStudentLoaded({required this.students});
 }
 

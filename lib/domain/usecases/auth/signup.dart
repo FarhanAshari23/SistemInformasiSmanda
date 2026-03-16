@@ -2,12 +2,12 @@ import 'package:dartz/dartz.dart';
 
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
-import '../../entities/auth/user_golang.dart';
+import '../../entities/student/student.dart';
 import '../../repository/auth/auth.dart';
 
-class SignUpUseCase implements Usecase<Either, UserGolang> {
+class SignUpUseCase implements Usecase<Either, StudentEntity> {
   @override
-  Future<Either> call({UserGolang? params}) async {
+  Future<Either> call({StudentEntity? params}) async {
     return await sl<AuthRepository>().signUp(params!);
   }
 }

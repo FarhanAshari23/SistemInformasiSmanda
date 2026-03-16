@@ -158,7 +158,7 @@ class BasicAppbar extends StatelessWidget {
                                 }
                                 if (state is ProfileInfoLoaded) {
                                   String nickname = StringHelper.extractName(
-                                      state.userEntity?.nama ?? '');
+                                      state.userEntity?.name ?? '');
                                   return Row(
                                     children: [
                                       Text(
@@ -185,7 +185,7 @@ class BasicAppbar extends StatelessWidget {
                                                   : AppImages.girlStudent,
                                           imageUrl:
                                               DisplayImage.displayImageStudent(
-                                                  state.userEntity?.nama ?? '',
+                                                  state.userEntity?.name ?? '',
                                                   state.userEntity?.nisn ?? ''),
                                         ),
                                       ),

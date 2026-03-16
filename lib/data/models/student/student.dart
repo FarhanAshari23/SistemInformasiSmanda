@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user_golang.dart';
+import '../../../domain/entities/student/student.dart';
 
-class UserGolangModel {
+class StudentModel {
   final int id;
   final String nisn;
   final String name;
@@ -19,7 +19,7 @@ class UserGolangModel {
   final bool isAdmin;
   final dynamic iv;
 
-  UserGolangModel({
+  StudentModel({
     required this.id,
     required this.nisn,
     required this.name,
@@ -66,8 +66,8 @@ class UserGolangModel {
     return data;
   }
 
-  factory UserGolangModel.fromMap(Map<String, dynamic> map) {
-    return UserGolangModel(
+  factory StudentModel.fromMap(Map<String, dynamic> map) {
+    return StudentModel(
       id: map['id'] ?? 0,
       nisn: map['nisn'] ?? '',
       name: map['name'] ?? '',
@@ -90,13 +90,13 @@ class UserGolangModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserGolangModel.fromJson(String source) =>
-      UserGolangModel.fromMap(json.decode(source));
+  factory StudentModel.fromJson(String source) =>
+      StudentModel.fromMap(json.decode(source));
 }
 
-extension UserGolangModelX on UserGolangModel {
-  UserGolang toEntity() {
-    return UserGolang(
+extension StudentModelX on StudentModel {
+  StudentEntity toEntity() {
+    return StudentEntity(
       address: address,
       birthDate: birthDate,
       gender: gender,
@@ -114,8 +114,8 @@ extension UserGolangModelX on UserGolangModel {
     );
   }
 
-  static UserGolangModel fromEntity(UserGolang entity) {
-    return UserGolangModel(
+  static StudentModel fromEntity(StudentEntity entity) {
+    return StudentModel(
       address: entity.address ?? '',
       birthDate: entity.birthDate ?? DateTime.now(),
       email: entity.email ?? '',

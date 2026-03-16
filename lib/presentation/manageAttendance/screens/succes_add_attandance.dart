@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/assets/app_lotties.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/student/student.dart';
 
 class SuccesAddAttandance extends StatelessWidget {
-  final UserEntity userEntity;
+  final StudentEntity userEntity;
   const SuccesAddAttandance({
     super.key,
     required this.userEntity,
@@ -42,7 +42,7 @@ class SuccesAddAttandance extends StatelessWidget {
                     ),
                     SizedBox(height: height * 0.05),
                     Text(
-                      'Sukses merekam kehadiran ${userEntity.nama}',
+                      'Sukses merekam kehadiran ${userEntity.name}',
                       style: const TextStyle(
                         fontSize: 24,
                         color: AppColors.primary,

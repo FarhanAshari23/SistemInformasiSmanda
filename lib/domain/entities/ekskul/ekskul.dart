@@ -1,15 +1,15 @@
-import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
+import '../student/student.dart';
+import '../teacher/teacher.dart';
 
 class EkskulEntity {
   final String namaEkskul;
   final TeacherEntity pembina;
-  final UserEntity ketua;
-  final UserEntity wakilKetua;
-  final UserEntity sekretaris;
-  final UserEntity bendahara;
+  final StudentEntity ketua;
+  final StudentEntity wakilKetua;
+  final StudentEntity sekretaris;
+  final StudentEntity bendahara;
   final String deskripsi;
-  final List<UserEntity> anggota;
+  final List<StudentEntity> anggota;
   final String? oldNamaEkskul;
 
   EkskulEntity({

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/attendance/get_attendance_name_usecase.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/widgets/search_student_attendance_appbar.dart';
 
 import '../../../common/bloc/kelas/students_state.dart';
 import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/widget/landing/not_found.dart';
-import '../../../domain/entities/auth/user.dart';
+import '../../../domain/entities/student/student.dart';
+import '../../../domain/usecases/attendance/get_attendance_name_usecase.dart';
 import '../../manageStudent/widgets/card_edit_user.dart';
+import '../widgets/search_student_attendance_appbar.dart';
 
 class SearchStudentAttendance extends StatelessWidget {
   final String date;
@@ -54,7 +54,7 @@ class SearchStudentAttendance extends StatelessWidget {
     );
   }
 
-  Widget _students(List<UserEntity> students, double height) {
+  Widget _students(List<StudentEntity> students, double height) {
     return ListView.separated(
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {

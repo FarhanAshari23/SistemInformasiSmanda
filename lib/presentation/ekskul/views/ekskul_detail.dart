@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/card/card_anggota_ekskul.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
-import 'package:new_sistem_informasi_smanda/presentation/students/views/murid_detail.dart';
 
 import '../../../common/helper/app_navigation.dart';
+import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/card_anggota.dart';
+import '../../../common/widget/card/card_anggota_ekskul.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
-import '../../../domain/entities/auth/user.dart';
+import '../../../core/configs/assets/app_images.dart';
+import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/ekskul/ekskul.dart';
+import '../../../domain/entities/student/student.dart';
+import '../../students/views/murid_detail.dart';
 
 class EkskulDetail extends StatelessWidget {
   final EkskulEntity ekskul;
@@ -20,7 +20,7 @@ class EkskulDetail extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
-    List<UserEntity> anggota = [
+    List<StudentEntity> anggota = [
       ekskul.ketua,
       ekskul.wakilKetua,
       ekskul.sekretaris,
@@ -175,7 +175,7 @@ class EkskulDetail extends StatelessWidget {
                                 MuridDetail(user: anggota),
                               ),
                               murid: anggota,
-                              title: anggota.nama ?? '',
+                              title: anggota.name ?? '',
                               desc: anggota.nisn ?? '',
                             );
                           },

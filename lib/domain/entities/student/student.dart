@@ -1,6 +1,6 @@
 import 'dart:io';
 
-class UserGolang {
+class StudentEntity {
   int? id;
   String? nisn;
   String? name;
@@ -18,7 +18,7 @@ class UserGolang {
   String? iv;
   File? imageFile;
 
-  UserGolang({
+  StudentEntity({
     this.id,
     this.nisn,
     this.name,
@@ -37,7 +37,7 @@ class UserGolang {
     this.imageFile,
   });
 
-  UserGolang copyWith({
+  StudentEntity copyWith({
     int? id,
     String? nisn,
     String? name,
@@ -55,7 +55,7 @@ class UserGolang {
     String? iv,
     File? imageFile,
   }) {
-    return UserGolang(
+    return StudentEntity(
       id: id ?? this.id,
       nisn: nisn ?? this.nisn,
       name: name ?? this.name,

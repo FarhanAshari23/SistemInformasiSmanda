@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/button/button_state.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/button/basic_button.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_students_view.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_teachers_views.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageEkskul/bloc/edit_state_button_cubit.dart';
+import '../../../common/bloc/button/button.cubit.dart';
+import '../../../common/bloc/button/button_state.dart';
+import '../../../common/bloc/ekskul/ekskul_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/button/basic_button.dart';
 import '../../../common/widget/card/card_anggota.dart';
+import '../../../common/widget/dialog/basic_dialog.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../common/widget/searchbar/search_students_view.dart';
+import '../../../common/widget/searchbar/search_teachers_views.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
-import '../../../domain/entities/auth/user.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
 import '../../../domain/entities/ekskul/update_anggota_req.dart';
 import '../../../domain/usecases/ekskul/delete_anggota_usecase.dart';
 import '../../../domain/usecases/ekskul/update_ekskul.dart';
+import '../bloc/edit_state_button_cubit.dart';
 
 class EditEkskulDetail extends StatefulWidget {
   final EkskulEntity ekskul;
@@ -40,21 +40,21 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
   late TextEditingController _nameBendaharaC;
   late TextEditingController _deskripsiC;
   late TeacherEntity selectedPembina;
-  late UserEntity selectedKetua;
-  late UserEntity selectedWakil;
-  late UserEntity selectedSekretaris;
-  late UserEntity selectedBendahara;
+  late StudentEntity selectedKetua;
+  late StudentEntity selectedWakil;
+  late StudentEntity selectedSekretaris;
+  late StudentEntity selectedBendahara;
 
   @override
   void initState() {
     super.initState();
     _nameEkskulC = TextEditingController(text: widget.ekskul.namaEkskul);
     _namePembinaC = TextEditingController(text: widget.ekskul.pembina.name);
-    _nameKetuaC = TextEditingController(text: widget.ekskul.ketua.nama);
-    _nameWakilC = TextEditingController(text: widget.ekskul.wakilKetua.nama);
+    _nameKetuaC = TextEditingController(text: widget.ekskul.ketua.name);
+    _nameWakilC = TextEditingController(text: widget.ekskul.wakilKetua.name);
     _nameSekretarisC =
-        TextEditingController(text: widget.ekskul.sekretaris.nama);
-    _nameBendaharaC = TextEditingController(text: widget.ekskul.bendahara.nama);
+        TextEditingController(text: widget.ekskul.sekretaris.name);
+    _nameBendaharaC = TextEditingController(text: widget.ekskul.bendahara.name);
     _deskripsiC = TextEditingController(text: widget.ekskul.deskripsi);
     selectedPembina = widget.ekskul.pembina;
     selectedKetua = widget.ekskul.ketua;
@@ -79,7 +79,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
-    List<UserEntity> roleEntity = [
+    List<StudentEntity> roleEntity = [
       selectedKetua,
       selectedWakil,
       selectedSekretaris,
@@ -401,7 +401,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                         return BasicDialog(
                                           splashImage: AppImages.notfound,
                                           mainTitle:
-                                              'Apakah anda yakin ingin mengeluarkan ${anggota.nama} dari ekskul ${widget.ekskul.namaEkskul}?',
+                                              'Apakah anda yakin ingin mengeluarkan ${anggota.name} dari ekskul ${widget.ekskul.namaEkskul}?',
                                           buttonTitle: 'Hapus',
                                           onPressed: () {
                                             setState(() {
@@ -428,7 +428,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                     );
                                   },
                                   murid: anggota,
-                                  title: anggota.nama ?? '',
+                                  title: anggota.name ?? '',
                                   desc: anggota.nisn ?? '',
                                 );
                               },

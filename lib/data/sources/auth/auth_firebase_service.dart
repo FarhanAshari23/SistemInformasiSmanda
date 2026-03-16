@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:new_sistem_informasi_smanda/data/models/auth/signin_user_req.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
 import '../../../core/networks/network.dart';
-import '../../../domain/entities/auth/user_golang.dart';
-import '../../models/auth/user_golang.dart';
+import '../../../domain/entities/student/student.dart';
+import '../../models/student/student.dart';
 
 abstract class AuthFirebaseService {
-  Future<Either> signin(SignInUserReq signinUserReq);
-  Future<Either> signUp(UserGolang murid);
+  Future<Either> signin(StudentEntity signinUserReq);
+  Future<Either> signUp(StudentEntity murid);
   Future<Either> forgotPassword(String email);
   Future<Either> checkEmailUsed(String email);
   Future<Either> logout();
@@ -23,11 +22,11 @@ abstract class AuthFirebaseService {
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
   @override
-  Future<Either> signin(SignInUserReq signinUserReq) async {
+  Future<Either> signin(StudentEntity signinUserReq) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: signinUserReq.email,
-        password: signinUserReq.passwword,
+        email: signinUserReq.email!,
+        password: signinUserReq.password!,
       );
 
       return const Right('Succes Login');
@@ -85,14 +84,14 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   }
 
   @override
-  Future<Either> signUp(UserGolang murid) async {
+  Future<Either> signUp(StudentEntity murid) async {
     try {
       final key = encrypt.Key.fromUtf8('1234567890123456');
       final iv = encrypt.IV.fromSecureRandom(16);
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
       final encryptedPassword = encrypter.encrypt(murid.password!, iv: iv);
 
-      final model = UserGolangModelX.fromEntity(
+      final model = StudentModelX.fromEntity(
           murid.copyWith(password: encryptedPassword.base64, iv: iv.base64));
 
       final response =
@@ -102,7 +101,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         return left("Connection error: ${response.message}");
       }
 
-      final data = UserGolangModel.fromMap(response.data['data']);
+      final data = StudentModel.fromMap(response.data['data']);
 
       if (murid.imageFile != null) {
         Network.apiClient.postMultipart(

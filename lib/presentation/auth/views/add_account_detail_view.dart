@@ -3,13 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_display_state.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/religion/religion_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/scan_qr_nisn.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
+import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
+import '../../../common/bloc/kelas/kelas_display_state.dart';
+import '../../../common/bloc/religion/religion_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/field/basic_text_field.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
@@ -19,10 +18,11 @@ import '../../../core/configs/theme/app_colors.dart';
 import '../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../common/widget/card/box_gender.dart';
 import '../../../core/constants/static_text.dart';
-import '../../../domain/entities/auth/user_golang.dart';
+import '../../../domain/entities/student/student.dart';
 import '../../../domain/usecases/auth/signup.dart';
 import '../bloc/password_cubit.dart';
 import '../widgets/button_role.dart';
+import '../widgets/scan_qr_nisn.dart';
 import 'login_view.dart';
 
 class AddAccountView extends StatefulWidget {
@@ -505,7 +505,7 @@ class _AddAccountViewState extends State<AddAccountView> {
                       } else {
                         context.read<ButtonStateCubit>().execute(
                               usecase: SignUpUseCase(),
-                              params: UserGolang(
+                              params: StudentEntity(
                                 address: _alamatC.text,
                                 email: _emailC.text,
                                 nisn: _nisnC.text,

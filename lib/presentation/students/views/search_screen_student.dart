@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/students_state.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/stundets_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/landing/not_found.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_student_appbar.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/card/card_user.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_student_by_name.dart';
 
+import '../../../common/bloc/kelas/students_state.dart';
+import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
+import '../../../common/widget/card/card_user.dart';
+import '../../../common/widget/landing/not_found.dart';
+import '../../../common/widget/searchbar/search_student_appbar.dart';
+import '../../../domain/entities/student/student.dart';
+import '../../../domain/usecases/students/get_student_by_name.dart';
 import 'murid_detail.dart';
 
 class SearchScreenStudent extends StatelessWidget {
@@ -55,7 +55,7 @@ class SearchScreenStudent extends StatelessWidget {
     );
   }
 
-  Widget _students(List<UserEntity> students, double height) {
+  Widget _students(List<StudentEntity> students, double height) {
     return ListView.separated(
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {

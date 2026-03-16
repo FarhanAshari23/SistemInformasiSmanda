@@ -1,18 +1,18 @@
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
-import 'package:new_sistem_informasi_smanda/presentation/students/widgets/card_detail.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/photo/network_photo.dart';
+import '../../../core/configs/assets/app_images.dart';
+import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/student/student.dart';
+import '../widgets/card_detail.dart';
 
 class MuridDetail extends StatelessWidget {
-  final UserEntity user;
+  final StudentEntity user;
   const MuridDetail({
     super.key,
     required this.user,
@@ -29,12 +29,12 @@ class MuridDetail extends StatelessWidget {
 
     Event buildEvent() {
       DateFormat format = DateFormat("d MMMM yyyy", "id_ID");
-      DateTime parsedDate = format.parse(user.tanggalLahir!);
+      DateTime parsedDate = format.parse(user.birthDate.toString());
       int currentYear = DateTime.now().year;
       DateTime finalDate =
           DateTime(currentYear, parsedDate.month, parsedDate.day);
       return Event(
-        title: 'Ulang tahun ${user.nama}',
+        title: 'Ulang tahun ${user.name}',
         description: 'Mari rayakan ulang tahun teman kamu!',
         location: 'SMA N 2 METRO',
         startDate: finalDate,
@@ -92,11 +92,11 @@ class MuridDetail extends StatelessWidget {
                             height: bodyHeight,
                             fallbackAsset: user.gender == 1
                                 ? AppImages.boyStudent
-                                : user.agama == "Islam"
+                                : user.religion == "Islam"
                                     ? AppImages.girlStudent
                                     : AppImages.girlNonStudent,
                             imageUrl: DisplayImage.displayImageStudent(
-                              user.nama ?? '',
+                              user.name ?? '',
                               user.nisn ?? '',
                             ),
                           ),
@@ -144,7 +144,7 @@ class MuridDetail extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                user.nama!,
+                                user.name ?? '',
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w800,
@@ -152,7 +152,7 @@ class MuridDetail extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                user.kelas!,
+                                user.nameClass ?? '',
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -176,16 +176,16 @@ class MuridDetail extends StatelessWidget {
                                             onTap: () =>
                                                 Add2Calendar.addEvent2Cal(
                                                     buildEvent()),
-                                            content: user.tanggalLahir!,
+                                            content: user.birthDate.toString(),
                                           ),
                                         ),
                                         const SizedBox(width: 8),
                                         Expanded(
                                           child: CardDetailSiswa(
                                             title: 'Alamat',
-                                            content: user.alamat!,
+                                            content: user.address!,
                                             onTap: () => openMapWithAddress(
-                                                user.alamat!),
+                                                user.address!),
                                           ),
                                         ),
                                       ],
@@ -199,7 +199,7 @@ class MuridDetail extends StatelessWidget {
                                           Expanded(
                                             child: CardDetailSiswa(
                                               title: 'Agama',
-                                              content: user.agama!,
+                                              content: user.religion!,
                                             ),
                                           ),
                                           const SizedBox(width: 8),
@@ -223,16 +223,16 @@ class MuridDetail extends StatelessWidget {
                                           Expanded(
                                             child: CardDetailSiswa(
                                               title: 'No HP',
-                                              content: user.noHP!,
-                                              onTap: () =>
-                                                  openAddContact(user.noHP!),
+                                              content: user.mobileNum!,
+                                              onTap: () => openAddContact(
+                                                  user.mobileNum!),
                                             ),
                                           ),
                                           const SizedBox(width: 8),
-                                          Expanded(
+                                          const Expanded(
                                             child: CardDetailSiswa(
                                               title: 'Ekskul',
-                                              content: user.ekskul!,
+                                              content: "Belum diisi ekskul",
                                             ),
                                           ),
                                         ],

@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/auth/user.dart';
 
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
+import '../../entities/student/student.dart';
 import '../../repository/attandance/attandance.dart';
 
-class AddStudentAttendanceUseCase implements Usecase<Either, UserEntity> {
+class AddStudentAttendanceUseCase implements Usecase<Either, StudentEntity> {
   @override
-  Future<Either> call({UserEntity? params}) async {
+  Future<Either> call({StudentEntity? params}) async {
     return await sl<AttandanceRepository>().addStudentAttendances(params!);
   }
 }

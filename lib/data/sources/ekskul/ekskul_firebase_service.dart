@@ -3,8 +3,8 @@ import 'package:dartz/dartz.dart';
 
 import '../../../domain/entities/ekskul/ekskul.dart';
 import '../../../domain/entities/ekskul/update_anggota_req.dart';
-import '../../models/auth/user.dart';
 import '../../models/ekskul/ekskul.dart';
+import '../../models/student/student.dart';
 import '../../models/teacher/teacher.dart';
 
 abstract class EkskulFirebaseService {
@@ -25,13 +25,13 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
       final model = EkskulModel(
         namaEkskul: ekskulCreationReq.namaEkskul,
         pembina: TeacherModelX.fromEntity(ekskulCreationReq.pembina),
-        ketua: UserModelX.fromEntity(ekskulCreationReq.ketua),
-        wakilKetua: UserModelX.fromEntity(ekskulCreationReq.wakilKetua),
-        sekretaris: UserModelX.fromEntity(ekskulCreationReq.sekretaris),
-        bendahara: UserModelX.fromEntity(ekskulCreationReq.bendahara),
+        ketua: StudentModelX.fromEntity(ekskulCreationReq.ketua),
+        wakilKetua: StudentModelX.fromEntity(ekskulCreationReq.wakilKetua),
+        sekretaris: StudentModelX.fromEntity(ekskulCreationReq.sekretaris),
+        bendahara: StudentModelX.fromEntity(ekskulCreationReq.bendahara),
         deskripsi: ekskulCreationReq.deskripsi,
         anggota: ekskulCreationReq.anggota
-            .map((a) => UserModelX.fromEntity(a))
+            .map((a) => StudentModelX.fromEntity(a))
             .toList(),
       );
       await firebaseFirestore.collection("Ekskuls").add(model.toMap());
@@ -125,13 +125,13 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
       final modelBaru = EkskulModel(
         namaEkskul: ekskulUpdateReq.namaEkskul,
         pembina: TeacherModelX.fromEntity(ekskulUpdateReq.pembina),
-        ketua: UserModelX.fromEntity(ekskulUpdateReq.ketua),
-        wakilKetua: UserModelX.fromEntity(ekskulUpdateReq.wakilKetua),
-        sekretaris: UserModelX.fromEntity(ekskulUpdateReq.sekretaris),
-        bendahara: UserModelX.fromEntity(ekskulUpdateReq.bendahara),
+        ketua: StudentModelX.fromEntity(ekskulUpdateReq.ketua),
+        wakilKetua: StudentModelX.fromEntity(ekskulUpdateReq.wakilKetua),
+        sekretaris: StudentModelX.fromEntity(ekskulUpdateReq.sekretaris),
+        bendahara: StudentModelX.fromEntity(ekskulUpdateReq.bendahara),
         deskripsi: ekskulUpdateReq.deskripsi,
         anggota: ekskulUpdateReq.anggota
-            .map((a) => UserModelX.fromEntity(a))
+            .map((a) => StudentModelX.fromEntity(a))
             .toList(),
       );
       await docRef.update(modelBaru.toMap());
@@ -181,8 +181,8 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
       }
 
       Future<void> updateStudentEkskul(
-        UserModel? oldStudent,
-        UserModel? newStudent,
+        StudentModel? oldStudent,
+        StudentModel? newStudent,
         String role,
       ) async {
         final oldText = "$role ${oldData.namaEkskul}";
@@ -283,7 +283,7 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
         }
       }
 
-      Future<void> removeStudentEkskul(UserModel? student) async {
+      Future<void> removeStudentEkskul(StudentModel? student) async {
         if (student == null) return;
         final query = await firestore
             .collection("Students")
@@ -321,19 +321,22 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
   @override
   Future<Either> addAnggota(UpdateAnggotaReq anggotaReq) async {
     try {
-      final anggotaModel = UserModel(
+      final anggotaModel = StudentModel(
         email: anggotaReq.anggota.email ?? '',
-        nama: anggotaReq.anggota.nama ?? '',
-        kelas: anggotaReq.anggota.kelas ?? '',
+        nameClass: anggotaReq.anggota.nameClass ?? '',
+        name: anggotaReq.anggota.name ?? '',
         nisn: anggotaReq.anggota.nisn ?? '',
-        tanggalLahir: anggotaReq.anggota.tanggalLahir ?? '',
-        noHp: anggotaReq.anggota.noHP ?? '',
-        alamat: anggotaReq.anggota.alamat ?? '',
-        ekskul: anggotaReq.anggota.ekskul ?? '',
+        birthDate: anggotaReq.anggota.birthDate ?? DateTime.now(),
+        mobileNum: anggotaReq.anggota.mobileNum ?? '',
+        address: anggotaReq.anggota.address ?? '',
         gender: anggotaReq.anggota.gender ?? 0,
         isAdmin: anggotaReq.anggota.isAdmin ?? false,
-        agama: anggotaReq.anggota.agama ?? '',
+        religion: anggotaReq.anggota.religion ?? '',
         isRegister: anggotaReq.anggota.isRegister ?? false,
+        id: 0,
+        iv: 0,
+        kelasId: 0,
+        password: 0,
       ).toMap();
 
       final batch = FirebaseFirestore.instance.batch();
@@ -360,19 +363,22 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
   @override
   Future<Either> updateAnggota(UpdateAnggotaReq anggotaReq) async {
     try {
-      final anggotaModel = UserModel(
+      final anggotaModel = StudentModel(
         email: anggotaReq.anggota.email ?? '',
-        nama: anggotaReq.anggota.nama ?? '',
-        kelas: anggotaReq.anggota.kelas ?? '',
+        nameClass: anggotaReq.anggota.nameClass ?? '',
+        name: anggotaReq.anggota.name ?? '',
         nisn: anggotaReq.anggota.nisn ?? '',
-        tanggalLahir: anggotaReq.anggota.tanggalLahir ?? '',
-        noHp: anggotaReq.anggota.noHP ?? '',
-        alamat: anggotaReq.anggota.alamat ?? '',
-        ekskul: anggotaReq.anggota.ekskul ?? '',
+        birthDate: anggotaReq.anggota.birthDate ?? DateTime.now(),
+        mobileNum: anggotaReq.anggota.mobileNum ?? '',
+        address: anggotaReq.anggota.address ?? '',
         gender: anggotaReq.anggota.gender ?? 0,
         isAdmin: anggotaReq.anggota.isAdmin ?? false,
-        agama: anggotaReq.anggota.agama ?? '',
+        religion: anggotaReq.anggota.religion ?? '',
         isRegister: anggotaReq.anggota.isRegister ?? false,
+        id: 0,
+        iv: 0,
+        kelasId: 0,
+        password: 0,
       ).toMap();
 
       final batch = FirebaseFirestore.instance.batch();
