@@ -83,16 +83,15 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   @override
   Future<Either> searchStudentByNISN(String nisnStudent) async {
     try {
-      QuerySnapshot returnedData = await FirebaseFirestore.instance
-          .collection("Students")
-          .where("nisn", isEqualTo: nisnStudent)
-          .get();
-      if (returnedData.docs.isNotEmpty) {
-        return Right(returnedData.docs.first.data() as Map<String, dynamic>);
+      final response =
+          await Network.apiClient.get("/students/findnisn/$nisnStudent");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      return const Left("Data cant be found");
+      final data = response.data['data'] as Map<String, dynamic>;
+      return Right(data);
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
