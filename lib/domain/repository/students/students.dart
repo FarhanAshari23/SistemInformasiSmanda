@@ -9,10 +9,9 @@ abstract class StudentRepository {
   Future<Either> deleteAllStudentAccount();
   Future<Either> deleteStudent(int studentId);
   Future<Either> searchStudentByNISN(String nisnStudent);
-  Future<Either> getStudentsByClass(String kelas);
+  Future<Either> getStudentsByClass(int kelasId);
   Future<Either> getStudentByRegister();
   Future<Either> deleteStudentByClass(String kelas);
   Future<Either> getStudentsByname(String name);
   Future<Either> createExcellForStudentData();
-  Future<Either> getAllStudentGolang();
 }

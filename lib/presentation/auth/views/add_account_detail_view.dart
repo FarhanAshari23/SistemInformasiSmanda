@@ -256,8 +256,7 @@ class _AddAccountViewState extends State<AddAccountView> {
                                     actions: [
                                       TextButton(
                                         onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(); // Tutup dialog
+                                          Navigator.of(context).pop();
                                         },
                                         child: const Text("Tutup"),
                                       ),
@@ -291,8 +290,7 @@ class _AddAccountViewState extends State<AddAccountView> {
                                 data: Theme.of(context).copyWith(
                                   inputDecorationTheme: InputDecorationTheme(
                                     filled: true,
-                                    fillColor: AppColors
-                                        .inversePrimary, // warna background field input tanggal
+                                    fillColor: AppColors.inversePrimary,
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),

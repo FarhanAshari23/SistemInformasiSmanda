@@ -66,6 +66,19 @@ class StudentModel {
     return data;
   }
 
+  Map<String, dynamic> updateStudent() {
+    return {
+      'nisn': nisn,
+      'name': name,
+      'kelas_id': kelasId,
+      'religion': religion,
+      'address': address,
+      'mobile_num': mobileNum,
+      'gender': gender,
+      'birth_date': birthDate.toUtc().toIso8601String(),
+    };
+  }
+
   factory StudentModel.fromMap(Map<String, dynamic> map) {
     return StudentModel(
       id: map['id'] ?? 0,

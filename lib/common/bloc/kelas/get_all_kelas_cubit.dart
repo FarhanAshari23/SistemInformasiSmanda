@@ -17,7 +17,7 @@ class GetAllKelasCubit extends Cubit<KelasDisplayState> {
     });
   }
 
-  void selectItem(String? value) {
+  void selectItem(int? value) {
     final currentState = state;
     if (currentState is KelasDisplayLoaded) {
       emit(currentState.copyWith(selected: value));

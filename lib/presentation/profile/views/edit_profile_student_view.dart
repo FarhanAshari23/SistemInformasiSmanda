@@ -94,7 +94,7 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
           BlocProvider(
             create: (context) {
               final cubit = GetAllKelasCubit()..displayAll();
-              cubit.selectItem(widget.user?.nameClass);
+              cubit.selectItem(widget.user?.kelasId);
               return cubit;
             },
           ),
@@ -194,7 +194,7 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                             );
                           }
                           if (state is KelasDisplayLoaded) {
-                            return DropdownMenu<String>(
+                            return DropdownMenu<int>(
                               width: width * 0.92,
                               enabled: false,
                               inputDecorationTheme: const InputDecorationTheme(
@@ -211,8 +211,8 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                               dropdownMenuEntries: state.kelas.map((doc) {
                                 final kelas = doc.className;
                                 return DropdownMenuEntry(
-                                  value: kelas!,
-                                  label: kelas,
+                                  value: doc.id!,
+                                  label: kelas!,
                                 );
                               }).toList(),
                               onSelected: (value) {
@@ -471,11 +471,12 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                           ),
                         );
                       } else {
-                        // final cubit = context.read<GetAllKelasCubit>().state;
+                        final cubit = context.read<GetAllKelasCubit>().state;
                         DateFormat formatter = DateFormat("d MMMM y", "id_ID");
                         context.read<ButtonStateCubit>().execute(
                               usecase: UpdateStudentUsecase(),
                               params: StudentEntity(
+                                id: widget.user!.id,
                                 address: _alamatC.text,
                                 nisn: _nisnC.text,
                                 name: _namaC.text,
@@ -487,6 +488,10 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                                     .read<GenderSelectionCubit>()
                                     .selectedIndex,
                                 birthDate: formatter.parse(_tanggalC.text),
+                                kelasId: cubit is KelasDisplayLoaded &&
+                                        cubit.selected != null
+                                    ? cubit.selected!
+                                    : widget.user?.kelasId ?? 0,
                                 imageFile: imageProfile,
                               ),
                             );

@@ -39,15 +39,18 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
   late TextEditingController _tanggalC;
   late TextEditingController _noHPC;
   late TextEditingController _alamatC;
+  int? kelasId;
   File? imageProfile;
 
   @override
   void initState() {
+    String date =
+        DateFormat("d MMMM y", "id_ID").format(widget.user.birthDate!);
     super.initState();
     _namaC = TextEditingController(text: widget.user.name);
     _kelasC = TextEditingController(text: widget.user.nameClass);
     _nisnC = TextEditingController(text: widget.user.nisn);
-    _tanggalC = TextEditingController(text: widget.user.birthDate.toString());
+    _tanggalC = TextEditingController(text: date);
     _noHPC = TextEditingController(text: widget.user.mobileNum);
     _alamatC = TextEditingController(text: widget.user.address);
   }
@@ -89,7 +92,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
           BlocProvider(
             create: (context) {
               final cubit = GetAllKelasCubit()..displayAll();
-              cubit.selectItem(widget.user.nameClass);
+              cubit.selectItem(widget.user.kelasId);
               return cubit;
             },
           ),
@@ -108,7 +111,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
             }
             if (state is ButtonSuccessState) {
               context.read<StudentsDisplayCubit>().displayStudents(
-                    params: _kelasC.text,
+                    params: widget.user.kelasId,
                   );
               FocusScope.of(context).unfocus();
               var snackbar = const SnackBar(
@@ -160,7 +163,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                             );
                           }
                           if (state is KelasDisplayLoaded) {
-                            return DropdownMenu<String>(
+                            return DropdownMenu<int>(
                               width: width * 0.92,
                               inputDecorationTheme: const InputDecorationTheme(
                                 fillColor: AppColors.tertiary,
@@ -168,7 +171,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                                 hintStyle: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
-                                  color: Colors.black, // <-- warna hint
+                                  color: Colors.black,
                                 ),
                               ),
                               menuHeight: 200,
@@ -176,8 +179,8 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                               dropdownMenuEntries: state.kelas.map((doc) {
                                 final kelas = doc.className;
                                 return DropdownMenuEntry(
-                                  value: kelas!,
-                                  label: kelas,
+                                  value: doc.id!,
+                                  label: kelas!,
                                 );
                               }).toList(),
                               onSelected: (value) {
@@ -262,8 +265,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                                 data: Theme.of(context).copyWith(
                                   inputDecorationTheme: InputDecorationTheme(
                                     filled: true,
-                                    fillColor: AppColors
-                                        .inversePrimary, // warna background field input tanggal
+                                    fillColor: AppColors.inversePrimary,
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -447,20 +449,22 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                             ),
                           );
                         } else {
-                          // final cubit = context.read<GetAllKelasCubit>().state;
+                          final cubit = context.read<GetAllKelasCubit>().state;
                           DateFormat formatter =
                               DateFormat("d MMMM y", "id_ID");
                           context.read<ButtonStateCubit>().execute(
                                 usecase: UpdateStudentUsecase(),
                                 params: StudentEntity(
+                                  id: widget.user.id,
                                   address: _alamatC.text,
                                   nisn: _nisnC.text,
                                   name: _namaC.text,
-                                  kelasId: 0,
+                                  kelasId: cubit is KelasDisplayLoaded &&
+                                          cubit.selected != null
+                                      ? cubit.selected!
+                                      : widget.user.kelasId ?? 0,
                                   mobileNum: _noHPC.text,
                                   religion: context.read<ReligionCubit>().state,
-                                  isAdmin: false,
-                                  isRegister: false,
                                   gender: context
                                       .read<GenderSelectionCubit>()
                                       .selectedIndex,

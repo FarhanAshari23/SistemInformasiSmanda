@@ -4,9 +4,9 @@ import 'package:new_sistem_informasi_smanda/domain/repository/students/students.
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
 
-class GetStudentsWithKelas implements Usecase<Either, String> {
+class GetStudentsWithKelas implements Usecase<Either, int> {
   @override
-  Future<Either> call({String? params}) async {
+  Future<Either> call({int? params}) async {
     return await sl<StudentRepository>().getStudentsByClass(params!);
   }
 }

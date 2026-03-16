@@ -6,7 +6,7 @@ class KelasDisplayLoading extends KelasDisplayState {}
 
 class KelasDisplayLoaded extends KelasDisplayState {
   final List<KelasEntity> kelas;
-  final String? selected;
+  final int? selected;
   KelasDisplayLoaded({
     required this.kelas,
     this.selected,
@@ -14,7 +14,7 @@ class KelasDisplayLoaded extends KelasDisplayState {
 
   KelasDisplayLoaded copyWith({
     List<KelasEntity>? kelas,
-    String? selected,
+    int? selected,
   }) {
     return KelasDisplayLoaded(
       kelas: kelas ?? this.kelas,

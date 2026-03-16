@@ -8,9 +8,9 @@ import '../../sources/students/students_firebase_service.dart';
 
 class StudentsRepositoryImpl extends StudentRepository {
   @override
-  Future<Either> getStudentsByClass(String kelas) async {
+  Future<Either> getStudentsByClass(int kelasId) async {
     var returnedData =
-        await sl<StudentsFirebaseService>().getStudentsByClass(kelas);
+        await sl<StudentsFirebaseService>().getStudentsByClass(kelasId);
     return returnedData.fold(
       (error) {
         return Left(error);
@@ -114,25 +114,5 @@ class StudentsRepositoryImpl extends StudentRepository {
   @override
   Future<Either> createExcellForStudentData() async {
     return await sl<StudentsFirebaseService>().createExcellForStudentData();
-  }
-
-  @override
-  Future<Either> getAllStudentGolang() async {
-    var returnedData =
-        await sl<StudentsFirebaseService>().getAllStudentGolang();
-    return returnedData.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(
-          List.from(data)
-              .map(
-                (e) => StudentModel.fromMap(e).toEntity(),
-              )
-              .toList(),
-        );
-      },
-    );
   }
 }

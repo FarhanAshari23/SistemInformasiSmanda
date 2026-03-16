@@ -19,7 +19,7 @@ import '../../../domain/entities/student/student.dart';
 import '../../models/student/student.dart';
 
 abstract class StudentsFirebaseService {
-  Future<Either> getStudentsByClass(String kelas);
+  Future<Either> getStudentsByClass(int kelasId);
   Future<Either> acceptStudentAccount(int studentId);
   Future<Either> acceptAllStudentAccount();
   Future<Either> deleteAllStudentAccount();
@@ -30,22 +30,21 @@ abstract class StudentsFirebaseService {
   Future<Either> deleteStudentByClass(String kelas);
   Future<Either> getStudentsByname(String name);
   Future<Either> createExcellForStudentData();
-  Future<Either> getAllStudentGolang();
 }
 
 class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   @override
-  Future<Either> getStudentsByClass(String kelas) async {
+  Future<Either> getStudentsByClass(int kelasId) async {
     try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Students")
-          .where("kelas", isEqualTo: kelas)
-          .where("is_register", isEqualTo: true)
-          .orderBy('nama')
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
+      final response =
+          await Network.apiClient.get("/students/findclass/$kelasId");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
@@ -53,19 +52,11 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   Future<Either> updateStudent(StudentEntity updateUserReq) async {
     try {
       final model = StudentModelX.fromEntity(updateUserReq);
-
-      final response = await Network.apiClient
-          .put("/student/${updateUserReq.id}", body: model.toMap());
-
-      if (response.statusCode == 500) {
-        return left("Connection error: ${response.message}");
-      }
-
-      final data = StudentModel.fromMap(response.data['data']);
-
+      final body = model.updateStudent();
+      await Network.apiClient.put("/student/${updateUserReq.id}", body: body);
       if (updateUserReq.imageFile != null) {
         Network.apiClient.postMultipart(
-          "/student/${data.id}/photo",
+          "/student/${updateUserReq.id}/photo",
           file: updateUserReq.imageFile!,
         );
       }
@@ -83,7 +74,6 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
-      //not implement delete photo
       return const Right('Delete Data Student Success');
     } catch (e) {
       return Left(e.toString());
@@ -109,15 +99,14 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   @override
   Future<Either> getStudentsByname(String name) async {
     try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Students")
-          .where("isAdmin", isEqualTo: false)
-          .where("is_register", isEqualTo: true)
-          .where("keywords", arrayContains: name)
-          .get();
-      return Right(returnedData.docs.map((e) => e.data()).toList());
+      final response = await Network.apiClient.get("/students/findname/$name");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
     } catch (e) {
-      return Left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
@@ -318,67 +307,13 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
 
   @override
   Future<Either> deleteAllStudentAccount() async {
-    String endpoint = ExecuteCRUD.deleteMultipleImageStudent();
-    final List<Map<String, String>> studentsPayload = [];
     try {
-      Uri? url;
-      try {
-        url = Uri.parse(endpoint);
-      } catch (_) {
-        return Left("URL tidak valid: $endpoint");
-      }
-
-      final response = await Network.apiClient.get("/students/unregister");
-      if (response.statusCode == 500) {
-        return left("Connection error: ${response.message}");
-      }
-
-      if (response.statusCode == 404) {
-        return const Right('No Students to Update');
-      }
-
-      final dataList = response.data['data'] as List<Map<String, dynamic>>;
-
-      for (var doc in dataList) {
-        final data = StudentModel.fromMap(doc);
-
-        studentsPayload.add({
-          "name": data.name,
-          "nisn": data.nisn,
-        });
-      }
-
-      final responsePhoto = await http
-          .post(
-            url,
-            headers: {
-              "Content-Type": "application/json",
-              "Accept": "application/json",
-            },
-            body: jsonEncode({
-              "students": studentsPayload,
-            }),
-          )
-          .timeout(const Duration(seconds: 5));
-
-      if (responsePhoto.statusCode != 200) {
-        return Left("Upload gagal (status: ${responsePhoto.statusCode})");
-      }
-
       final responseDelete =
           await Network.apiClient.delete("/student/unregister");
       if (responseDelete.statusCode == 500) {
-        return left("Connection error: ${response.message}");
+        return left("Connection error: ${responseDelete.message}");
       }
-
       return const Right('Semua data akun registrasi telah dihapus');
-    } on TimeoutException {
-      return const Left(
-          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
-    } on SocketException {
-      return const Left("Tidak ada koneksi internet.");
-    } on HttpException {
-      return const Left("Kesalahan HTTP terjadi.");
     } catch (e) {
       return Left('Something wrong: $e');
     }
@@ -444,20 +379,6 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       return Right("Data excel berhasil di simpan di: $filePath");
     } catch (e) {
       return Left(e.toString());
-    }
-  }
-
-  @override
-  Future<Either> getAllStudentGolang() async {
-    try {
-      final response = await Network.apiClient.get("/students");
-      if (response.statusCode == 500) {
-        return left("Connection error: ${response.message}");
-      }
-      final dataList = response.data['data'] as List<dynamic>;
-      return Right(dataList);
-    } catch (e) {
-      return Left("Something error: ${e.toString()}");
     }
   }
 }

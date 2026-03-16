@@ -49,7 +49,7 @@ class ListKelas extends StatelessWidget {
                   onTap: () {
                     context.read<KelasNavigationCubit>().changeColor(index);
                     context.read<StudentsDisplayCubit>().displayStudents(
-                          params: selectedClass[index].className,
+                          params: selectedClass[index].id,
                         );
                   },
                   defaultColor:

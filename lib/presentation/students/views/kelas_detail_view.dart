@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_display_state.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 
-import 'package:new_sistem_informasi_smanda/domain/usecases/students/get_students_with_kelas.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/students_state.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/stundets_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/card/card_user.dart';
-import 'package:new_sistem_informasi_smanda/presentation/students/views/murid_detail.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/list_view/list_kelas.dart';
-
+import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
+import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/bloc/kelas/kelas_navigation.dart';
+import '../../../common/bloc/kelas/students_state.dart';
+import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
+import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/card/card_user.dart';
+import '../../../common/widget/list_view/list_kelas.dart';
+import '../../../domain/usecases/students/get_students_with_kelas.dart';
+import 'murid_detail.dart';
 
 class KelasDetailView extends StatelessWidget {
   final int kelas;
@@ -45,10 +44,10 @@ class KelasDetailView extends StatelessWidget {
                       StudentsDisplayCubit(usecase: GetStudentsWithKelas())
                         ..displayStudentsInit(
                           params: kelas == 10
-                              ? kelasSepuluh[0].className!
+                              ? kelasSepuluh[0].id!
                               : kelas == 11
-                                  ? kelasSebelas[0].className!
-                                  : kelasDuabelas[0].className!,
+                                  ? kelasSebelas[0].id!
+                                  : kelasDuabelas[0].id!,
                         ),
                 ),
                 BlocProvider(

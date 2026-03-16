@@ -50,10 +50,10 @@ class EditStudentDetailClassView extends StatelessWidget {
                       StudentsDisplayCubit(usecase: GetStudentsWithKelas())
                         ..displayStudentsInit(
                           params: kelas == 10
-                              ? kelasSepuluh[0].className!
+                              ? kelasSepuluh[0].id!
                               : kelas == 11
-                                  ? kelasSebelas[0].className!
-                                  : kelasDuabelas[0].className!,
+                                  ? kelasSebelas[0].id!
+                                  : kelasDuabelas[0].id!,
                         ),
                 ),
                 BlocProvider(
@@ -113,14 +113,13 @@ class EditStudentDetailClassView extends StatelessWidget {
                                         final selectedIndex = context
                                             .read<KelasNavigationCubit>()
                                             .state;
-                                        final String currentClass = kelas == 10
-                                            ? kelasSepuluh[selectedIndex]
-                                                .className!
+                                        final int currentClass = kelas == 10
+                                            ? kelasSepuluh[selectedIndex].id!
                                             : kelas == 11
                                                 ? kelasSebelas[selectedIndex]
-                                                    .className!
+                                                    .id!
                                                 : kelasDuabelas[selectedIndex]
-                                                    .className!;
+                                                    .id!;
                                         if (index == 0) {
                                           return CustomInkWell(
                                             borderRadius: 16,
@@ -192,14 +191,29 @@ class EditStudentDetailClassView extends StatelessWidget {
                                 : Padding(
                                     padding: EdgeInsets.only(top: height * 0.2),
                                     child: const Center(
-                                      child: Text('Belum ada kelas'),
+                                      child: Text('Belum ada siswa'),
                                     ),
                                   );
                           }
                           if (state is StudentsDisplayFailure) {
+                            if (state.errorMessage ==
+                                "Something error: (null):(404):Data murid tidak ditemukan") {
+                              return Padding(
+                                padding: EdgeInsets.only(top: height * 0.2),
+                                child: const Center(
+                                  child: Text(
+                                    'Belum ada siswa',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w900,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
                             return Center(
-                              child: Text(
-                                  'Something wrongs: ${state.errorMessage}'),
+                              child: Text(state.errorMessage),
                             );
                           }
                           return Container();
@@ -210,6 +224,9 @@ class EditStudentDetailClassView extends StatelessWidget {
                 ),
               ),
             );
+          }
+          if (state is KelasDisplayFailure) {
+            return Center(child: Text(state.message));
           }
           return Container();
         },

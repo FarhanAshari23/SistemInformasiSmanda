@@ -211,7 +211,7 @@ class ApiClient {
       throw ApiException(
         statusCode: statusCode,
         message:
-            decodedBody?["message"] ?? response.reasonPhrase ?? "Unknown error",
+            decodedBody?["data"] ?? response.reasonPhrase ?? "Unknown error",
       );
     }
   }
