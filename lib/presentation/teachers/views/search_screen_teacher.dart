@@ -7,7 +7,7 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_teacher_
 import 'package:new_sistem_informasi_smanda/presentation/teachers/blocs/get_teacher_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/teachers/blocs/get_teacher_state.dart';
 import 'package:new_sistem_informasi_smanda/presentation/teachers/views/teacher_detail.dart';
-import 'package:new_sistem_informasi_smanda/presentation/teachers/widgets/search_teacher_appbar.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_teacher_appbar.dart';
 
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/card/card_guru.dart';
@@ -27,7 +27,7 @@ class SearchScreenTeacher extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              SearchTeacherAppbar(),
+              const SearchTeacherAppbar(),
               SizedBox(height: height * 0.02),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),

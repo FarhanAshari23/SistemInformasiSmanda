@@ -6,7 +6,7 @@ import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/teacher/get_teacher_by_name.dart';
 import '../../../presentation/teachers/blocs/get_teacher_cubit.dart';
 import '../../../presentation/teachers/blocs/get_teacher_state.dart';
-import '../../../presentation/teachers/widgets/search_teacher_appbar.dart';
+import 'search_teacher_appbar.dart';
 import '../card/card_guru.dart';
 import '../inkwell/custom_inkwell.dart';
 import '../landing/not_found.dart';
@@ -25,7 +25,7 @@ class SearchTeachersViews extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              SearchTeacherAppbar(),
+              const SearchTeacherAppbar(),
               SizedBox(height: height * 0.02),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),

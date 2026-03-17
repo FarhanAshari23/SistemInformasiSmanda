@@ -7,7 +7,7 @@ import '../../../common/widget/landing/not_found.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/teacher/get_teacher_by_name.dart';
-import '../../teachers/widgets/search_teacher_appbar.dart';
+import '../../../common/widget/searchbar/search_teacher_appbar.dart';
 import '../bloc/select_teacher_name_cubit.dart';
 import '../bloc/select_teacher_name_state.dart';
 
@@ -26,7 +26,7 @@ class SelectTeacherView extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              SearchTeacherAppbar(isTeacherGolang: true),
+              const SearchTeacherAppbar(isTeacherGolang: true),
               SizedBox(height: height * 0.02),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
