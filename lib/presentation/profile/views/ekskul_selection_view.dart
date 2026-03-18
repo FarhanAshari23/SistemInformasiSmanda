@@ -62,7 +62,7 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                     final fetchedEkskul = state.ekskul
                         .map(
                           (e) => DisplayEkskul(
-                            namaEkskul: e.namaEkskul,
+                            namaEkskul: e.nameEkskul!,
                             isCustom: false,
                           ),
                         )

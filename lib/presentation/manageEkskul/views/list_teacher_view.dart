@@ -41,7 +41,7 @@ class ListTeacherView extends StatelessWidget {
                             child: CircularProgressIndicator(),
                           );
                         }
-                        if (state is TeacherLoaded) {
+                        if (state is TeacherListLoaded) {
                           return SizedBox(
                             width: double.infinity,
                             height: height * 0.7,

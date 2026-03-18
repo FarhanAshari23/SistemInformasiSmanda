@@ -18,6 +18,7 @@ abstract class TeacherFirebaseService {
   Future<Either> deleteTeacher(int teacherId);
   Future<Either> getTeacher();
   Future<Either> getTeacherByName(String name);
+  Future<Either> getTeacherById(int teacherId);
   Future<Either> getScheduleTeacher(String name);
   Future<Either> createRoles(String role);
   Future<Either> deleteRole(int idRole);
@@ -208,6 +209,20 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
         return left("Connection error: ${response.message}");
       }
       return const Right("Tugas tambahan berhasil diubah");
+    } catch (e) {
+      return Left("Something error: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<Either> getTeacherById(int teacherId) async {
+    try {
+      final response = await Network.apiClient.get("/teacher/$teacherId");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final data = response.data['data'] as Map<String, dynamic>;
+      return Right(data);
     } catch (e) {
       return Left("Something error: ${e.toString()}");
     }

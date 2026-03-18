@@ -6,7 +6,7 @@ import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart
 import 'package:new_sistem_informasi_smanda/domain/usecases/teacher/get_teacher_by_name.dart';
 import 'package:new_sistem_informasi_smanda/presentation/teachers/blocs/get_teacher_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/teachers/blocs/get_teacher_state.dart';
-import 'package:new_sistem_informasi_smanda/presentation/teachers/views/teacher_detail.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/detail/teacher_detail.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/searchbar/search_teacher_appbar.dart';
 
 import '../../../common/helper/app_navigation.dart';
@@ -73,7 +73,7 @@ class SearchScreenTeacher extends StatelessWidget {
           onTap: () => AppNavigator.push(
             context,
             TeacherDetail(
-              teachers: teachers[index],
+              teacherId: teachers[index].id!,
             ),
           ),
           borderRadius: 8,

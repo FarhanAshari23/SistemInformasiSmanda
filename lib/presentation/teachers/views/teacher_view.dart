@@ -5,7 +5,7 @@ import 'package:new_sistem_informasi_smanda/common/widget/card/card_guru.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/card/card_guru_complete.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/teachers/views/teacher_detail.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/detail/teacher_detail.dart';
 
 import '../../../common/helper/app_navigation.dart';
 import '../../../core/configs/assets/app_images.dart';
@@ -89,7 +89,7 @@ class TeacherView extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  if (state is TeacherLoaded) {
+                  if (state is TeacherListLoaded) {
                     final tabIndex = context.watch<BarNavigationCubit>().state;
 
                     final all = state.teachers;
@@ -142,7 +142,7 @@ class TeacherView extends StatelessWidget {
                                     onTap: () => AppNavigator.push(
                                       context,
                                       TeacherDetail(
-                                        teachers: selected[index],
+                                        teacherId: selected[index].id!,
                                       ),
                                     ),
                                     borderRadius: 8,
@@ -167,7 +167,7 @@ class TeacherView extends StatelessWidget {
                                       onTap: () => AppNavigator.push(
                                             context,
                                             TeacherDetail(
-                                              teachers: selected[index],
+                                              teacherId: selected[index].id!,
                                             ),
                                           ),
                                       teacher: selected[index],

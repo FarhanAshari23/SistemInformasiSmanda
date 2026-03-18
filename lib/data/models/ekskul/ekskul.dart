@@ -1,57 +1,52 @@
 import 'dart:convert';
 
-import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
-
-import '../student/student.dart';
-import '../teacher/teacher.dart';
+import '../../../domain/entities/ekskul/advisor.dart';
+import '../../../domain/entities/ekskul/ekskul.dart';
+import 'advisor.dart';
+import 'member.dart';
 
 class EkskulModel {
-  final String namaEkskul;
-  final TeacherModel pembina;
-  final StudentModel ketua;
-  final StudentModel wakilKetua;
-  final StudentModel sekretaris;
-  final StudentModel bendahara;
-  final String deskripsi;
-  final List<StudentModel> anggota;
+  final int id;
+  final String name, description;
+  final AdvisorModel advisor;
+  final List<MemberModel> members;
 
   EkskulModel({
-    required this.namaEkskul,
-    required this.pembina,
-    required this.ketua,
-    required this.wakilKetua,
-    required this.sekretaris,
-    required this.bendahara,
-    required this.deskripsi,
-    required this.anggota,
+    required this.advisor,
+    required this.description,
+    required this.id,
+    required this.members,
+    required this.name,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'nama_ekskul': namaEkskul,
-      'pembina': pembina.toMap(),
-      'ketua': ketua.toMap(),
-      'wakil_ketua': wakilKetua.toMap(),
-      'sekretaris': sekretaris.toMap(),
-      'bendahara': bendahara.toMap(),
-      'deskripsi': deskripsi,
-      'anggota': anggota.map((x) => x.toMap()).toList(),
+      'id': id,
+      'name': name,
+      'description': description,
+      'advisor': advisor.toMap(),
+      'memberships': members.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  Map<String, dynamic> createReq() {
+    return {
+      'name': name,
+      'description': description,
+      'advisor': advisor.createMap(),
+      'memberships': members.map((x) => x.createMap()).toList(),
     };
   }
 
   factory EkskulModel.fromMap(Map<String, dynamic> map) {
     return EkskulModel(
-      namaEkskul: map['nama_ekskul'] ?? '',
-      pembina: TeacherModel.fromMap(map['pembina']),
-      ketua: StudentModel.fromMap(map['ketua']),
-      wakilKetua: StudentModel.fromMap(map['wakil_ketua']),
-      sekretaris: StudentModel.fromMap(map['sekretaris']),
-      bendahara: StudentModel.fromMap(map['bendahara']),
-      deskripsi: map['deskripsi'] ?? '',
-      anggota: map['anggota'] != null
-          ? List<StudentModel>.from(
-              (map['anggota'] as List).map((x) => StudentModel.fromMap(x)),
-            )
+      id: map['id'] ?? 0,
+      name: map['name'] ?? '',
+      description: map['description'] ?? '',
+      advisor: AdvisorModel.fromMap(map['advisor'] ?? {}),
+      members: map['memberships'] != null
+          ? List<MemberModel>.from(
+              map['memberships'].map((x) => MemberModel.fromMap(x)))
           : [],
     );
   }
@@ -65,14 +60,21 @@ class EkskulModel {
 extension EkskulModelX on EkskulModel {
   EkskulEntity toEntity() {
     return EkskulEntity(
-      namaEkskul: namaEkskul,
-      pembina: pembina.toEntity(),
-      ketua: ketua.toEntity(),
-      wakilKetua: wakilKetua.toEntity(),
-      sekretaris: sekretaris.toEntity(),
-      bendahara: bendahara.toEntity(),
-      deskripsi: deskripsi,
-      anggota: anggota.map((e) => e.toEntity()).toList(),
+      nameEkskul: name,
+      description: description,
+      advisor: advisor.toEntity(),
+      members: members.map((e) => e.toEntity()).toList(),
+    );
+  }
+
+  static EkskulModel fromEntity(EkskulEntity entity) {
+    return EkskulModel(
+      id: 0, // Entity biasanya tidak membawa ID saat dari UI ke Model
+      name: entity.nameEkskul ?? '',
+      description: entity.description ?? '',
+      advisor: AdvisorModelX.fromEntity(entity.advisor ?? AdvisorEntity()),
+      members:
+          entity.members?.map((e) => MemberModelX.fromEntity(e)).toList() ?? [],
     );
   }
 }

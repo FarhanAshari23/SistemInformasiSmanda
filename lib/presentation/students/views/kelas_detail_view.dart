@@ -11,7 +11,7 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/card_user.dart';
 import '../../../common/widget/list_view/list_kelas.dart';
 import '../../../domain/usecases/students/get_students_with_kelas.dart';
-import 'murid_detail.dart';
+import '../../../common/widget/detail/murid_detail.dart';
 
 class KelasDetailView extends StatelessWidget {
   final int kelas;
@@ -88,7 +88,7 @@ class KelasDetailView extends StatelessWidget {
                                         onTap: () => AppNavigator.push(
                                           context,
                                           MuridDetail(
-                                            user: state.students[index],
+                                            userId: state.students[index].id!,
                                           ),
                                         ),
                                         user: state.students[index],

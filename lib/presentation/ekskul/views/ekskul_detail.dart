@@ -8,8 +8,8 @@ import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
-import '../../../domain/entities/student/student.dart';
-import '../../students/views/murid_detail.dart';
+import '../../../domain/entities/ekskul/member.dart';
+import '../../../common/widget/detail/murid_detail.dart';
 
 class EkskulDetail extends StatelessWidget {
   final EkskulEntity ekskul;
@@ -20,11 +20,11 @@ class EkskulDetail extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
-    List<StudentEntity> anggota = [
-      ekskul.ketua,
-      ekskul.wakilKetua,
-      ekskul.sekretaris,
-      ekskul.bendahara,
+    List<MemberEntity> anggota = [
+      ekskul.members!.where((element) => element.role == "Ketua").first,
+      ekskul.members!.where((element) => element.role == "Wakil Ketua").first,
+      ekskul.members!.where((element) => element.role == "Sekretaris").first,
+      ekskul.members!.where((element) => element.role == "Bendahara").first,
     ];
     return Scaffold(
       body: SafeArea(
@@ -72,7 +72,7 @@ class EkskulDetail extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        ekskul.deskripsi,
+                                        ekskul.description ?? '',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           color: Colors.black,
@@ -99,7 +99,7 @@ class EkskulDetail extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      ekskul.namaEkskul,
+                      ekskul.nameEkskul ?? '',
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
@@ -110,7 +110,7 @@ class EkskulDetail extends StatelessWidget {
                   SizedBox(height: height * 0.01),
                   Center(
                     child: CardAnggotaEkskul(
-                      pembina: ekskul.pembina,
+                      pembina: ekskul.advisor,
                       jabatan: 'Pembina',
                     ),
                   ),
@@ -142,7 +142,7 @@ class EkskulDetail extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  ekskul.anggota.isEmpty
+                  ekskul.members!.isEmpty
                       ? Center(
                           child: Column(
                             children: [
@@ -168,20 +168,20 @@ class EkskulDetail extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 8),
                           itemBuilder: (context, index) {
-                            final anggota = ekskul.anggota[index];
+                            final anggota = ekskul.members?[index];
                             return CardAnggota(
                               onTap: () => AppNavigator.push(
                                 context,
-                                MuridDetail(user: anggota),
+                                MuridDetail(userId: anggota?.id ?? 0),
                               ),
                               murid: anggota,
-                              title: anggota.name ?? '',
-                              desc: anggota.nisn ?? '',
+                              title: anggota?.name ?? '',
+                              desc: anggota?.nisn ?? '',
                             );
                           },
                           separatorBuilder: (context, index) =>
                               const SizedBox(height: 8),
-                          itemCount: ekskul.anggota.length,
+                          itemCount: ekskul.members!.length,
                         )
                 ],
               ),

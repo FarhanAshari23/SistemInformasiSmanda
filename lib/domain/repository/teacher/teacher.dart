@@ -8,6 +8,7 @@ abstract class TeacherRepository {
   Future<Either> updateTeacher(TeacherEntity teacherReq);
   Future<Either> deleteTeacher(int teacherId);
   Future<Either> getTeacherByName(String name);
+  Future<Either> getTeacherById(int teacherId);
   Future<Either> getScheduleTeacher(String name);
   Future<Either> getTeacher();
   Future<Either> getRoles();

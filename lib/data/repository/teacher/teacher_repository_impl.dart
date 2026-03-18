@@ -95,4 +95,20 @@ class TeacherRepositoryImpl extends TeacherRepository {
   Future<Either> updateRoles(RoleEntity role) async {
     return await sl<TeacherFirebaseService>().updateRoles(role);
   }
+
+  @override
+  Future<Either> getTeacherById(int teacherId) async {
+    var returnedData =
+        await sl<TeacherFirebaseService>().getTeacherById(teacherId);
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          TeacherModel.fromMap(data).toEntity(),
+        );
+      },
+    );
+  }
 }

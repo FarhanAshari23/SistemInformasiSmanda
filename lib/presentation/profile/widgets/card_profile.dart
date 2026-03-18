@@ -9,8 +9,8 @@ import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
-import '../../students/views/murid_detail.dart';
-import '../../teachers/views/teacher_detail.dart';
+import '../../../common/widget/detail/murid_detail.dart';
+import '../../../common/widget/detail/teacher_detail.dart';
 import '../bloc/profile_info_cubit.dart';
 import '../views/edit_profile_student_view.dart';
 
@@ -41,8 +41,8 @@ class CardProfile extends StatelessWidget {
         onTap: () => AppNavigator.push(
           context,
           student != null
-              ? MuridDetail(user: student!)
-              : TeacherDetail(teachers: teacher!),
+              ? MuridDetail(userId: student!.id!)
+              : TeacherDetail(teacherId: teacher!.id!),
         ),
         child: Container(
           padding:

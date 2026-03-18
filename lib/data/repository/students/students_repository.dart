@@ -115,4 +115,20 @@ class StudentsRepositoryImpl extends StudentRepository {
   Future<Either> createExcellForStudentData() async {
     return await sl<StudentsFirebaseService>().createExcellForStudentData();
   }
+
+  @override
+  Future<Either> getStudentById(int studentId) async {
+    var returnedData =
+        await sl<StudentsFirebaseService>().getStudentById(studentId);
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          StudentModel.fromMap(data).toEntity(),
+        );
+      },
+    );
+  }
 }

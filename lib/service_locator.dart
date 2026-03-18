@@ -55,6 +55,7 @@ import 'domain/usecases/students/create_excell_students_usecase.dart';
 import 'domain/usecases/students/delete_all_student_account_usecase.dart';
 import 'domain/usecases/students/delete_student_by_class.dart';
 import 'domain/usecases/schedule/get_all_kelas_usecase.dart';
+import 'domain/usecases/students/get_student_by_id_usecase.dart';
 import 'domain/usecases/students/get_student_by_name.dart';
 import 'domain/usecases/students/get_students_register.dart';
 import 'domain/usecases/students/get_students_with_kelas.dart';
@@ -65,14 +66,12 @@ import 'domain/usecases/teacher/delete_role_usecase.dart';
 import 'domain/usecases/teacher/delete_teacher.dart';
 import 'domain/usecases/teacher/get_schedule_teacher_usecase.dart';
 import 'domain/usecases/teacher/get_teacher.dart';
+import 'domain/usecases/teacher/get_teacher_by_id_usecase.dart';
 import 'domain/usecases/teacher/get_teacher_by_name.dart';
 import 'domain/usecases/teacher/update_role_usecase.dart';
 import 'domain/usecases/teacher/update_teacher.dart';
 
 import 'domain/usecases/auth/forgot_password_usecase.dart';
-import 'domain/usecases/ekskul/add_anggota_usecase.dart';
-import 'domain/usecases/ekskul/delete_anggota_usecase.dart';
-import 'domain/usecases/ekskul/update_anggota_usecase.dart';
 import 'domain/usecases/news/create_news.dart';
 import 'domain/usecases/schedule/create_class_usecase.dart';
 import 'domain/usecases/schedule/delete_activity_usecase.dart';
@@ -193,6 +192,9 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<GetRolesUsecase>(
     GetRolesUsecase(),
   );
+  sl.registerSingleton<GetTeacherByIdUsecase>(
+    GetTeacherByIdUsecase(),
+  );
   sl.registerSingleton<GetScheduleTeacherUsecase>(
     GetScheduleTeacherUsecase(),
   );
@@ -236,6 +238,9 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<GetStudentByNameUsecase>(
     GetStudentByNameUsecase(),
   );
+  sl.registerSingleton<GetStudentByIdUsecase>(
+    GetStudentByIdUsecase(),
+  );
   sl.registerSingleton<DeleteStudentByClassUsecase>(
     DeleteStudentByClassUsecase(),
   );
@@ -259,15 +264,6 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<DeleteEkskulUsecase>(
     DeleteEkskulUsecase(),
-  );
-  sl.registerSingleton<AddAnggotaUsecase>(
-    AddAnggotaUsecase(),
-  );
-  sl.registerSingleton<UpdateAnggotaUsecase>(
-    UpdateAnggotaUsecase(),
-  );
-  sl.registerSingleton<DeleteAnggotaUsecase>(
-    DeleteAnggotaUsecase(),
   );
 
   //attendances

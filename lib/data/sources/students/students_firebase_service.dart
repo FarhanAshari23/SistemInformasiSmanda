@@ -24,6 +24,7 @@ abstract class StudentsFirebaseService {
   Future<Either> acceptAllStudentAccount();
   Future<Either> deleteAllStudentAccount();
   Future<Either> getStudentByRegister();
+  Future<Either> getStudentById(int studentId);
   Future<Either> updateStudent(StudentEntity updateUserReq);
   Future<Either> deleteStudent(int studentId);
   Future<Either> searchStudentByNISN(String nisnStudent);
@@ -378,6 +379,20 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       return Right("Data excel berhasil di simpan di: $filePath");
     } catch (e) {
       return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> getStudentById(int studentId) async {
+    try {
+      final response = await Network.apiClient.get("/student/$studentId");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final data = response.data['data'] as Map<String, dynamic>;
+      return Right(data);
+    } catch (e) {
+      return Left("Something error: ${e.toString()}");
     }
   }
 }

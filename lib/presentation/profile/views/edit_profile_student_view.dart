@@ -14,13 +14,10 @@ import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/box_gender.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../common/widget/photo/change_photo_view.dart';
-import '../../../domain/entities/ekskul/update_anggota_req.dart';
 import '../../../domain/entities/student/student.dart';
-import '../../../domain/usecases/ekskul/update_anggota_usecase.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/students/update_user.dart';
-import '../../../service_locator.dart';
 import '../bloc/profile_info_cubit.dart';
 import 'ekskul_selection_view.dart';
 
@@ -111,30 +108,14 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
             if (state is ButtonSuccessState) {
-              var resultAnggota = await sl<UpdateAnggotaUsecase>().call(
-                params: UpdateAnggotaReq(
-                  namaEkskul: _ekskulC.text.split(', '),
-                  anggota: widget.user!,
-                ),
+              context.read<ProfileInfoCubit>().getUser("Students");
+              FocusScope.of(context).unfocus();
+              var snackbar = const SnackBar(
+                content: Text("Data Berhasil Diubah"),
               );
-              resultAnggota.fold(
-                (error) {
-                  var snackbar = SnackBar(
-                    content: Text("Gagal Mengubah Data: $error"),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                },
-                (r) {
-                  context.read<ProfileInfoCubit>().getUser("Students");
-                  FocusScope.of(context).unfocus();
-                  var snackbar = const SnackBar(
-                    content: Text("Data Berhasil Diubah"),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
 
-                  Navigator.pop(context);
-                },
-              );
+              Navigator.pop(context);
             }
           },
           child: SafeArea(

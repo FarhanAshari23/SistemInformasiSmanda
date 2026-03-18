@@ -88,7 +88,7 @@ class _CardScheduleState extends State<CardSchedule> {
                             ),
                           );
                         }
-                        if (state is TeacherLoaded) {
+                        if (state is TeacherListLoaded) {
                           return DropdownMenu<int>(
                             width: width * 0.92,
                             enableFilter: true,

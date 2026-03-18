@@ -1,26 +1,33 @@
-import '../student/student.dart';
-import '../teacher/teacher.dart';
+import 'advisor.dart';
+import 'member.dart';
 
 class EkskulEntity {
-  final String namaEkskul;
-  final TeacherEntity pembina;
-  final StudentEntity ketua;
-  final StudentEntity wakilKetua;
-  final StudentEntity sekretaris;
-  final StudentEntity bendahara;
-  final String deskripsi;
-  final List<StudentEntity> anggota;
-  final String? oldNamaEkskul;
+  int? id;
+  String? nameEkskul, description;
+  AdvisorEntity? advisor;
+  List<MemberEntity>? members;
 
   EkskulEntity({
-    required this.namaEkskul,
-    required this.pembina,
-    required this.ketua,
-    required this.wakilKetua,
-    required this.sekretaris,
-    required this.bendahara,
-    required this.deskripsi,
-    required this.anggota,
-    this.oldNamaEkskul,
+    this.id,
+    this.advisor,
+    this.description,
+    this.members,
+    this.nameEkskul,
   });
+
+  EkskulEntity copyWith({
+    int? id,
+    String? nameEkskul,
+    String? description,
+    AdvisorEntity? advisor,
+    List<MemberEntity>? members,
+  }) {
+    return EkskulEntity(
+      id: id ?? this.id,
+      description: description ?? this.description,
+      nameEkskul: nameEkskul ?? this.nameEkskul,
+      advisor: advisor ?? this.advisor,
+      members: members ?? this.members,
+    );
+  }
 }

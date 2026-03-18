@@ -9,7 +9,7 @@ import '../../../common/widget/landing/not_found.dart';
 import '../../../common/widget/searchbar/search_student_appbar.dart';
 import '../../../domain/entities/student/student.dart';
 import '../../../domain/usecases/students/get_student_by_name.dart';
-import 'murid_detail.dart';
+import '../../../common/widget/detail/murid_detail.dart';
 
 class SearchScreenStudent extends StatelessWidget {
   const SearchScreenStudent({super.key});
@@ -64,7 +64,7 @@ class SearchScreenStudent extends StatelessWidget {
           onTap: () => AppNavigator.push(
             context,
             MuridDetail(
-              user: students[index],
+              userId: students[index].id!,
             ),
           ),
           user: students[index],

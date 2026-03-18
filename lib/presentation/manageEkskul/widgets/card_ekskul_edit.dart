@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/ekskul/delete_ekskul.dart';
 
 import '../../../common/bloc/ekskul/ekskul_cubit.dart';
+import '../../../common/widget/dialog/basic_dialog.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/ekskul/ekskul.dart';
+import '../../../domain/usecases/ekskul/delete_ekskul.dart';
 import '../../../service_locator.dart';
 import '../views/edit_ekskul_detail.dart';
 
@@ -34,7 +34,7 @@ class CardEkskulEdit extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  ekskul.namaEkskul,
+                  ekskul.nameEkskul ?? '',
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
@@ -46,7 +46,7 @@ class CardEkskulEdit extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  crossAxisAlignment: ekskul.pembina.name!.length > 25
+                  crossAxisAlignment: ekskul.advisor!.name!.length > 25
                       ? CrossAxisAlignment.start
                       : CrossAxisAlignment.center,
                   children: [
@@ -66,7 +66,7 @@ class CardEkskulEdit extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        ekskul.pembina.name ?? '',
+                        ekskul.advisor!.name ?? '',
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -98,7 +98,7 @@ class CardEkskulEdit extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        '${ekskul.anggota.length} anggota',
+                        '${ekskul.members!.length} anggota',
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -123,7 +123,7 @@ class CardEkskulEdit extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) => BlocProvider.value(
-                        value: ekskulCubit, // pastikan ambil cubit dari parent
+                        value: ekskulCubit,
                         child: EditEkskulDetail(ekskul: ekskul),
                       ),
                     ),
@@ -136,11 +136,11 @@ class CardEkskulEdit extends StatelessWidget {
                       return BasicDialog(
                         splashImage: AppImages.splashDelete,
                         mainTitle:
-                            'Apakah anda yakin ingin menghapus data ${ekskul.namaEkskul}?',
+                            'Apakah anda yakin ingin menghapus data ${ekskul.nameEkskul}?',
                         buttonTitle: 'Hapus',
                         onPressed: () async {
                           var delete = await sl<DeleteEkskulUsecase>()
-                              .call(params: ekskul);
+                              .call(params: ekskul.id);
                           return delete.fold(
                             (error) {
                               var snackbar = const SnackBar(

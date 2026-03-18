@@ -43,7 +43,7 @@ class EditTeacherView extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  if (state is TeacherLoaded) {
+                  if (state is TeacherListLoaded) {
                     return Expanded(
                       child: ListView.separated(
                         scrollDirection: Axis.vertical,

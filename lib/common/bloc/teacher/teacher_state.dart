@@ -4,9 +4,14 @@ abstract class TeacherState {}
 
 class TeacherLoading extends TeacherState {}
 
-class TeacherLoaded extends TeacherState {
+class TeacherListLoaded extends TeacherState {
   final List<TeacherEntity> teachers;
-  TeacherLoaded({required this.teachers});
+  TeacherListLoaded({required this.teachers});
+}
+
+class TeacherLoaded extends TeacherState {
+  final TeacherEntity teacher;
+  TeacherLoaded({required this.teacher});
 }
 
 class TeacherFailure extends TeacherState {

@@ -12,11 +12,10 @@ import '../../../common/widget/searchbar/search_students_view.dart';
 import '../../../common/widget/searchbar/search_teachers_views.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/ekskul/advisor.dart';
+import '../../../domain/entities/ekskul/member.dart';
 import '../../../domain/entities/student/student.dart';
-import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
-import '../../../domain/entities/ekskul/update_anggota_req.dart';
-import '../../../domain/usecases/ekskul/delete_anggota_usecase.dart';
 import '../../../domain/usecases/ekskul/update_ekskul.dart';
 import '../bloc/edit_state_button_cubit.dart';
 
@@ -39,28 +38,30 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
   late TextEditingController _nameSekretarisC;
   late TextEditingController _nameBendaharaC;
   late TextEditingController _deskripsiC;
-  late TeacherEntity selectedPembina;
-  late StudentEntity selectedKetua;
-  late StudentEntity selectedWakil;
-  late StudentEntity selectedSekretaris;
-  late StudentEntity selectedBendahara;
+  AdvisorEntity? selectedPembina;
+  List<MemberEntity>? selectedAnggota;
 
   @override
   void initState() {
+    selectedAnggota = widget.ekskul.members;
+    selectedPembina = widget.ekskul.advisor;
+    MemberEntity ketua =
+        selectedAnggota!.where((element) => element.role == "Ketua").first;
+    MemberEntity wakilKetua = selectedAnggota!
+        .where((element) => element.role == "Wakil Ketua")
+        .first;
+    MemberEntity sekretaris =
+        selectedAnggota!.where((element) => element.role == "Sekretaris").first;
+    MemberEntity bendahara =
+        selectedAnggota!.where((element) => element.role == "Bendahara").first;
     super.initState();
-    _nameEkskulC = TextEditingController(text: widget.ekskul.namaEkskul);
-    _namePembinaC = TextEditingController(text: widget.ekskul.pembina.name);
-    _nameKetuaC = TextEditingController(text: widget.ekskul.ketua.name);
-    _nameWakilC = TextEditingController(text: widget.ekskul.wakilKetua.name);
-    _nameSekretarisC =
-        TextEditingController(text: widget.ekskul.sekretaris.name);
-    _nameBendaharaC = TextEditingController(text: widget.ekskul.bendahara.name);
-    _deskripsiC = TextEditingController(text: widget.ekskul.deskripsi);
-    selectedPembina = widget.ekskul.pembina;
-    selectedKetua = widget.ekskul.ketua;
-    selectedWakil = widget.ekskul.wakilKetua;
-    selectedSekretaris = widget.ekskul.sekretaris;
-    selectedBendahara = widget.ekskul.bendahara;
+    _nameEkskulC = TextEditingController(text: widget.ekskul.nameEkskul);
+    _namePembinaC = TextEditingController(text: selectedPembina!.name);
+    _nameKetuaC = TextEditingController(text: ketua.name);
+    _nameWakilC = TextEditingController(text: wakilKetua.name);
+    _nameSekretarisC = TextEditingController(text: sekretaris.name);
+    _nameBendaharaC = TextEditingController(text: bendahara.name);
+    _deskripsiC = TextEditingController(text: widget.ekskul.description);
   }
 
   @override
@@ -77,13 +78,17 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
 
   @override
   Widget build(BuildContext context) {
+    selectedAnggota = widget.ekskul.members;
+    selectedPembina = widget.ekskul.advisor;
+    List<MemberEntity> members =
+        selectedAnggota!.where((element) => element.role == "Anggota").toList();
     double height = MediaQuery.of(context).size.height;
     List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
-    List<StudentEntity> roleEntity = [
-      selectedKetua,
-      selectedWakil,
-      selectedSekretaris,
-      selectedBendahara,
+    List<MemberEntity> roleEntity = [
+      selectedAnggota!.where((element) => element.role == "Ketua").first,
+      selectedAnggota!.where((element) => element.role == "Wakil Ketua").first,
+      selectedAnggota!.where((element) => element.role == "Sekretaris").first,
+      selectedAnggota!.where((element) => element.role == "Bendahara").first,
     ];
     List<TextEditingController> nama = [
       _nameKetuaC,
@@ -319,35 +324,65 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                           padding: const EdgeInsets.only(bottom: 8),
                           child: CardAnggota(
                             onTap: () async {
-                              final result = await Navigator.push(
+                              StudentEntity result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       const SearchStudentsView(),
                                 ),
                               );
-                              if (result != null) {
-                                setState(() {
-                                  switch (index) {
-                                    case 0:
-                                      selectedKetua = result;
-                                      _nameKetuaC.text = result.nama ?? '';
-                                      break;
-                                    case 1:
-                                      selectedWakil = result;
-                                      _nameWakilC.text = result.nama ?? '';
-                                      break;
-                                    case 2:
-                                      selectedSekretaris = result;
-                                      _nameSekretarisC.text = result.nama ?? '';
-                                      break;
-                                    case 3:
-                                      selectedBendahara = result;
-                                      _nameBendaharaC.text = result.nama ?? '';
-                                      break;
-                                  }
-                                });
-                              }
+                              setState(() {
+                                switch (index) {
+                                  case 0:
+                                    selectedAnggota!.removeWhere(
+                                        (element) => element.role == "Ketua");
+                                    selectedAnggota!.add(MemberEntity(
+                                        gender: result.gender,
+                                        id: result.id,
+                                        name: result.name,
+                                        nisn: result.nisn,
+                                        religion: result.religion,
+                                        role: "Ketua"));
+                                    _nameKetuaC.text = result.name ?? '';
+                                    break;
+                                  case 1:
+                                    selectedAnggota!.removeWhere((element) =>
+                                        element.role == "Wakil Ketua");
+                                    selectedAnggota!.add(MemberEntity(
+                                        gender: result.gender,
+                                        id: result.id,
+                                        name: result.name,
+                                        nisn: result.nisn,
+                                        religion: result.religion,
+                                        role: "Wakil Ketua"));
+                                    _nameWakilC.text = result.name ?? '';
+                                    break;
+                                  case 2:
+                                    selectedAnggota!.removeWhere((element) =>
+                                        element.role == "Sekretaris");
+                                    selectedAnggota!.add(MemberEntity(
+                                        gender: result.gender,
+                                        id: result.id,
+                                        name: result.name,
+                                        nisn: result.nisn,
+                                        religion: result.religion,
+                                        role: "Sekretaris"));
+                                    _nameSekretarisC.text = result.name ?? '';
+                                    break;
+                                  case 3:
+                                    selectedAnggota!.removeWhere((element) =>
+                                        element.role == "Bendahara");
+                                    selectedAnggota!.add(MemberEntity(
+                                        gender: result.gender,
+                                        id: result.id,
+                                        name: result.name,
+                                        nisn: result.nisn,
+                                        religion: result.religion,
+                                        role: "Bendahara"));
+                                    _nameBendaharaC.text = result.name ?? '';
+                                    break;
+                                }
+                              });
                             },
                             murid: roleEntity[index],
                             title: nama[index].text,
@@ -367,7 +402,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      widget.ekskul.anggota.isEmpty
+                      members.isEmpty
                           ? Center(
                               child: Column(
                                 children: [
@@ -391,37 +426,22 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
-                                final anggota = widget.ekskul.anggota[index];
+                                final anggota = members[index];
                                 return CardAnggota(
                                   onTap: () {
-                                    final outerContext = context;
                                     showDialog(
                                       context: context,
                                       builder: (context) {
                                         return BasicDialog(
                                           splashImage: AppImages.notfound,
                                           mainTitle:
-                                              'Apakah anda yakin ingin mengeluarkan ${anggota.name} dari ekskul ${widget.ekskul.namaEkskul}?',
+                                              'Apakah anda yakin ingin mengeluarkan ${anggota.name} dari ekskul ${widget.ekskul.nameEkskul}?',
                                           buttonTitle: 'Hapus',
                                           onPressed: () {
                                             setState(() {
-                                              widget.ekskul.anggota.removeWhere(
-                                                  (element) =>
-                                                      element.nisn ==
-                                                      anggota.nisn);
+                                              members.removeWhere((element) =>
+                                                  element.nisn == anggota.nisn);
                                             });
-                                            outerContext
-                                                .read<ButtonStateCubit>()
-                                                .execute(
-                                                  usecase:
-                                                      DeleteAnggotaUsecase(),
-                                                  params: UpdateAnggotaReq(
-                                                    anggota: anggota,
-                                                    namaEkskul: [
-                                                      widget.ekskul.namaEkskul
-                                                    ],
-                                                  ),
-                                                );
                                           },
                                         );
                                       },
@@ -434,7 +454,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                               },
                               separatorBuilder: (context, index) =>
                                   const SizedBox(height: 8),
-                              itemCount: widget.ekskul.anggota.length,
+                              itemCount: members.length,
                             ),
                     ],
                   ),
@@ -462,17 +482,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                             .updateValue('ubah');
                         context.read<ButtonStateCubit>().execute(
                               usecase: UpdateEkskulUsecase(),
-                              params: EkskulEntity(
-                                oldNamaEkskul: widget.ekskul.namaEkskul,
-                                namaEkskul: _nameEkskulC.text,
-                                pembina: selectedPembina,
-                                ketua: selectedKetua,
-                                wakilKetua: selectedWakil,
-                                sekretaris: selectedSekretaris,
-                                bendahara: selectedBendahara,
-                                deskripsi: _deskripsiC.text,
-                                anggota: widget.ekskul.anggota,
-                              ),
+                              params: EkskulEntity(),
                             );
                       }
                     },
