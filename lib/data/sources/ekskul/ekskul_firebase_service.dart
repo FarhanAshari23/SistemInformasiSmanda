@@ -50,8 +50,9 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
   Future<Either> updateEkskul(EkskulEntity ekskulUpdateReq) async {
     try {
       final model = EkskulModelX.fromEntity(ekskulUpdateReq);
-      final response = await Network.apiClient
-          .put("/extracurricular/${ekskulUpdateReq.id}", body: model.toMap());
+      final response = await Network.apiClient.put(
+          "/extracurricular/${ekskulUpdateReq.id}",
+          body: model.updateReq());
 
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");

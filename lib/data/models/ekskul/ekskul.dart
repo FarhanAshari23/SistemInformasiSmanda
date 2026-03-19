@@ -38,6 +38,16 @@ class EkskulModel {
     };
   }
 
+  Map<String, dynamic> updateReq() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'advisor': advisor.createMap(),
+      'memberships': members.map((x) => x.createMap()).toList(),
+    };
+  }
+
   factory EkskulModel.fromMap(Map<String, dynamic> map) {
     return EkskulModel(
       id: map['id'] ?? 0,
@@ -60,6 +70,7 @@ class EkskulModel {
 extension EkskulModelX on EkskulModel {
   EkskulEntity toEntity() {
     return EkskulEntity(
+      id: id,
       nameEkskul: name,
       description: description,
       advisor: advisor.toEntity(),
