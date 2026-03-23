@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/bloc/attendance_teacher_cubit.dart';
 
 import '../../../common/bloc/attendance/select_attendance_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
@@ -11,7 +10,8 @@ import '../../../common/helper/check_same_date.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/attandance/param_attendance_teacher.dart';
+import '../../../domain/entities/attandance/attandance_teacher.dart';
+import '../bloc/attendance_teacher_cubit.dart';
 import '../bloc/display_date_cubit.dart';
 import '../bloc/display_date_state.dart';
 import 'teachers_attendances_views.dart';
@@ -109,7 +109,7 @@ class _SeeAllDataAttendanceTeacherState
                   if (state is DisplayDateLoaded) {
                     DateFormat format = DateFormat('dd-M-yyyy');
                     List<DateTime> highlightedDates = state.attendances
-                        .map((a) => format.parse(a.createdAt))
+                        .map((a) => format.parse(a.date.toString()))
                         .toList();
                     return Expanded(
                       child: Padding(
@@ -127,21 +127,19 @@ class _SeeAllDataAttendanceTeacherState
                             if (isHighlighted) {
                               final state =
                                   context.read<SelectAttendanceCubit>().state;
-                              String formatted =
-                                  DateFormat('dd-MM-yyyy').format(date);
+
                               AppNavigator.push(
                                 context,
                                 BlocProvider.value(
                                   value: AttendanceTeacherCubit()
                                     ..displayAttendanceTeacher(
-                                      ParamAttendanceTeacher(
-                                        date: formatted,
-                                        isAttendance: state == 0 ? false : true,
+                                      AttandanceTeacherEntity(
+                                        date: date,
                                       ),
                                     ),
                                   child: TeachersAttendancesViews(
                                     isAttendace: state == 0 ? true : false,
-                                    date: formatted,
+                                    date: date,
                                   ),
                                 ),
                               );

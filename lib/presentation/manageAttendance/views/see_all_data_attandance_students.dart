@@ -10,14 +10,7 @@ import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/check_same_date.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../common/widget/button/basic_button.dart';
-import '../../../common/widget/inkwell/custom_inkwell.dart';
-import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/attandance/param_delete_attendance.dart';
-import '../../../domain/usecases/attendance/delete_attendances_usecase.dart';
-import '../../../domain/usecases/attendance/delete_month_attendances_usecase.dart';
-import '../../auth/widgets/button_role.dart';
 import '../bloc/display_date_cubit.dart';
 import '../bloc/display_date_state.dart';
 import 'select_class.dart';
@@ -39,8 +32,6 @@ class _SeeAllDataAttandanceStudentsState
   DateTime displayedMonth = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: MultiBlocProvider(
         providers: [
@@ -97,7 +88,7 @@ class _SeeAllDataAttandanceStudentsState
                     if (state is DisplayDateLoaded) {
                       DateFormat format = DateFormat('dd-M-yyyy');
                       List<DateTime> highlightedDates = state.attendances
-                          .map((a) => format.parse(a.createdAt))
+                          .map((a) => format.parse(a.date.toString()))
                           .toList();
                       return Expanded(
                         child: Padding(
@@ -113,13 +104,11 @@ class _SeeAllDataAttandanceStudentsState
                                 (element) => isSameDate(element, date),
                               );
                               if (isHighlighted) {
-                                String formatted =
-                                    DateFormat('dd-M-yyyy').format(date);
                                 AppNavigator.push(
                                   context,
                                   BlocProvider.value(
                                     value: GetAllKelasCubit(),
-                                    child: SelectClass(date: formatted),
+                                    child: SelectClass(date: date),
                                   ),
                                 );
                               }
@@ -192,258 +181,6 @@ class _SeeAllDataAttandanceStudentsState
                     return Container();
                   },
                 ),
-                Visibility(
-                  visible: !widget.isProfileTeacher,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Builder(builder: (context) {
-                          return BasicButton(
-                            onPressed: () {
-                              final outerContext = context;
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return BlocProvider.value(
-                                    value:
-                                        outerContext.read<ButtonStateCubit>(),
-                                    child: Dialog(
-                                      backgroundColor: AppColors.inversePrimary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      insetPadding: EdgeInsets.symmetric(
-                                        vertical: height * 0.2,
-                                        horizontal: 16,
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: width * 0.6,
-                                            height: height * 0.3,
-                                            decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                    AppImages.splashDelete),
-                                                fit: BoxFit.fill,
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Text(
-                                              'Apakah anda yakin ingin menghapus kehadiran pada bulan ${displayedMonth.month} tahun ${displayedMonth.year}?',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                                color: AppColors.primary,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                          SizedBox(height: height * 0.02),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: ButtonRole(
-                                                    onPressed: () {
-                                                      outerContext
-                                                          .read<
-                                                              ButtonStateCubit>()
-                                                          .execute(
-                                                            usecase:
-                                                                DeleteMonthAttendancesUsecase(),
-                                                            params:
-                                                                ParamDeleteAttendance(
-                                                              month:
-                                                                  displayedMonth
-                                                                      .month,
-                                                              year:
-                                                                  displayedMonth
-                                                                      .year,
-                                                            ),
-                                                          );
-                                                    },
-                                                    title: 'Hapus',
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: CustomInkWell(
-                                                        onTap: () =>
-                                                            Navigator.pop(
-                                                                context),
-                                                        borderRadius: 12,
-                                                        defaultColor:
-                                                            AppColors.primary,
-                                                        child: SizedBox(
-                                                          height:
-                                                              height * 0.085,
-                                                          child: const Center(
-                                                            child: Text(
-                                                              'Batal',
-                                                              style: TextStyle(
-                                                                color: AppColors
-                                                                    .inversePrimary,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            title: 'Hapus Bulan Ini',
-                          );
-                        }),
-                      ),
-                      Expanded(
-                        child: Builder(builder: (context) {
-                          return BasicButton(
-                            onPressed: () {
-                              final outerContext = context;
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return BlocProvider.value(
-                                    value:
-                                        outerContext.read<ButtonStateCubit>(),
-                                    child: Dialog(
-                                      backgroundColor: AppColors.inversePrimary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      insetPadding: EdgeInsets.symmetric(
-                                        vertical: height * 0.2,
-                                        horizontal: 16,
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: width * 0.6,
-                                            height: height * 0.3,
-                                            decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                    AppImages.splashDelete),
-                                                fit: BoxFit.fill,
-                                              ),
-                                            ),
-                                          ),
-                                          const Text(
-                                            'Apakah anda yakin ingin menghapus seluruh kehadiran ?',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w800,
-                                              color: AppColors.primary,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          SizedBox(height: height * 0.02),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: ButtonRole(
-                                                    onPressed: () {
-                                                      outerContext
-                                                          .read<
-                                                              ButtonStateCubit>()
-                                                          .execute(
-                                                            usecase:
-                                                                DeleteAttendancesUsecase(),
-                                                          );
-                                                    },
-                                                    title: 'Hapus',
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: CustomInkWell(
-                                                        onTap: () =>
-                                                            Navigator.pop(
-                                                                context),
-                                                        borderRadius: 12,
-                                                        defaultColor:
-                                                            AppColors.primary,
-                                                        child: SizedBox(
-                                                          height:
-                                                              height * 0.085,
-                                                          child: const Center(
-                                                            child: Text(
-                                                              'Batal',
-                                                              style: TextStyle(
-                                                                color: AppColors
-                                                                    .inversePrimary,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            title: 'Hapus Semua',
-                          );
-                        }),
-                      ),
-                    ],
-                  ),
-                )
               ],
             ),
           ),

@@ -6,11 +6,11 @@ import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/bloc/kelas/kelas_navigation.dart';
 import '../../../common/widget/loading/list_kelas_loading.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/attandance/param_attendance.dart';
+import '../../../domain/entities/attandance/attendance_student.dart';
 import '../bloc/attendance_student_cubit.dart';
 
 class ListKelasDuabelasAttendance extends StatelessWidget {
-  final String date;
+  final DateTime date;
   const ListKelasDuabelasAttendance({
     super.key,
     required this.date,
@@ -42,9 +42,9 @@ class ListKelasDuabelasAttendance extends StatelessWidget {
                       context
                           .read<AttendanceStudentCubit>()
                           .displayAttendanceStudent(
-                            params: ParamAttendanceEntity(
+                            params: AttendanceStudentEntity(
                               date: date,
-                              kelas: kelas[index].className,
+                              className: kelas[index].className,
                             ),
                           );
                     },

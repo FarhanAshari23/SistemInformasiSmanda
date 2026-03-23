@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_attendance_teacher.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../domain/entities/attandance/attendance_workbook.dart';
 import '../../../domain/usecases/attendance/download_attendance_teachers_usecase.dart';
 import '../bloc/attendance_teacher_cubit.dart';
 import '../bloc/attendance_teacher_state.dart';
@@ -14,7 +14,7 @@ import '../widgets/card_teacher_attendance.dart';
 
 class TeachersAttendancesViews extends StatelessWidget {
   final bool isAttendace;
-  final String date;
+  final DateTime date;
   const TeachersAttendancesViews({
     super.key,
     required this.isAttendace,
@@ -94,7 +94,7 @@ class TeachersAttendancesViews extends StatelessWidget {
                                           .execute(
                                             usecase:
                                                 DownloadAttendanceTeachersUsecase(),
-                                            params: ParamAttendanceTeacher(
+                                            params: AttendanceWorkBookEntity(
                                               date: date,
                                               isAttendance: isAttendace,
                                             ),

@@ -6,11 +6,11 @@ import 'package:new_sistem_informasi_smanda/common/widget/loading/list_kelas_loa
 
 import '../../../common/bloc/kelas/kelas_navigation.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/attandance/param_attendance.dart';
+import '../../../domain/entities/attandance/attendance_student.dart';
 import '../bloc/attendance_student_cubit.dart';
 
 class ListKelasSebelasAttendance extends StatelessWidget {
-  final String date;
+  final DateTime date;
   const ListKelasSebelasAttendance({
     super.key,
     required this.date,
@@ -43,9 +43,9 @@ class ListKelasSebelasAttendance extends StatelessWidget {
                       context
                           .read<AttendanceStudentCubit>()
                           .displayAttendanceStudent(
-                            params: ParamAttendanceEntity(
+                            params: AttendanceStudentEntity(
                               date: date,
-                              kelas: kelas[index].className,
+                              className: kelas[index].className,
                             ),
                           );
                     },

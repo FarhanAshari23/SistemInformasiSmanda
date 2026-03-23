@@ -87,11 +87,6 @@ class TeacherRepositoryImpl extends TeacherRepository {
   }
 
   @override
-  Future<Either> getScheduleTeacher(String name) async {
-    return await sl<TeacherFirebaseService>().getScheduleTeacher(name);
-  }
-
-  @override
   Future<Either> updateRoles(RoleEntity role) async {
     return await sl<TeacherFirebaseService>().updateRoles(role);
   }

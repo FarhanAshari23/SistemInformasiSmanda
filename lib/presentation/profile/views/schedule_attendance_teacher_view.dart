@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
@@ -30,9 +29,7 @@ class ScheduleAttendanceTeacherView extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (_) => GetTeacherAttendanceCubit()
-              ..getAttendanceTeacher(
-                teacher.copyWith(),
-              ),
+              ..getAttendanceTeacher(teacher.id ?? 0),
           ),
           BlocProvider(create: (_) => SelectTimestampCubit()),
           BlocProvider(create: (_) => SelectedDateCubit()),
@@ -57,7 +54,7 @@ class _MainContent extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return BlocListener<SelectAttendanceCubit, int>(
       listener: (context, state) {
-        context.read<GetTeacherAttendanceCubit>().getAttendanceTeacher(teacher);
+        // context.read<GetTeacherAttendanceCubit>().getAttendanceTeacher(teacher);
       },
       child: SafeArea(
         child: Column(
@@ -113,14 +110,14 @@ class _MainContent extends StatelessWidget {
                     state.attendances.isNotEmpty) {
                   DateFormat format = DateFormat('dd-M-yyyy');
 
-                  String lastTimestamp =
-                      format.format(state.attendances.last.timestamp.toDate());
-                  String today = format.format(Timestamp.now().toDate());
+                  String lastTimestamp = format
+                      .format(state.attendances.last.date ?? DateTime.now());
+                  String today = format.format(DateTime.now());
 
                   if (lastTimestamp == today) {
                     context
                         .read<SelectTimestampCubit>()
-                        .select(state.attendances.last.timestamp);
+                        .select(state.attendances.last.date!);
                   }
                 }
               },
@@ -142,7 +139,7 @@ class _MainContent extends StatelessWidget {
                     DateFormat format = DateFormat('dd-M-yyyy');
 
                     List<DateTime> highlightedDates = state.attendances
-                        .map((a) => format.parse(a.createdAt))
+                        .map((a) => format.parse(a.date.toString()))
                         .toList();
 
                     final selectedDate =
@@ -163,7 +160,8 @@ class _MainContent extends StatelessWidget {
                             bool found = false;
 
                             for (var att in state.attendances) {
-                              final attDate = format.parse(att.createdAt);
+                              final attDate =
+                                  format.parse(att.checkIn.toString());
                               final attOnly = DateTime(
                                   attDate.year, attDate.month, attDate.day);
 
@@ -171,7 +169,7 @@ class _MainContent extends StatelessWidget {
                                 found = true;
                                 context
                                     .read<SelectTimestampCubit>()
-                                    .select(att.timestamp);
+                                    .select(att.checkIn!);
                                 break;
                               }
                             }
@@ -262,7 +260,7 @@ class _MainContent extends StatelessWidget {
             ),
 
             /// TIMESTAMP DISPLAY
-            BlocBuilder<SelectTimestampCubit, Timestamp?>(
+            BlocBuilder<SelectTimestampCubit, DateTime?>(
               builder: (context, selectedTimestamp) {
                 if (selectedTimestamp == null) {
                   return const SizedBox();
@@ -295,7 +293,7 @@ class _MainContent extends StatelessWidget {
                           ),
                           Text(
                             DateFormat('HH:mm').format(
-                              selectedTimestamp.toDate(),
+                              selectedTimestamp,
                             ),
                             style: const TextStyle(
                               fontSize: 24,

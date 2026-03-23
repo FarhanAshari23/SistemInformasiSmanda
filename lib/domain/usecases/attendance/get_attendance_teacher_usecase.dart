@@ -2,12 +2,11 @@ import 'package:dartz/dartz.dart';
 
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
-import '../../entities/teacher/teacher.dart';
 import '../../repository/attandance/attandance.dart';
 
-class GetAttendanceTeacherUsecase implements Usecase<Either, TeacherEntity> {
+class GetAttendanceTeacherUsecase implements Usecase<Either, int> {
   @override
-  Future<Either> call({TeacherEntity? params}) async {
+  Future<Either> call({int? params}) async {
     return await sl<AttandanceRepository>().getAttendanceTeacher(params!);
   }
 }

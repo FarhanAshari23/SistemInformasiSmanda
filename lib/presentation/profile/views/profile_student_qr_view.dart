@@ -48,7 +48,7 @@ class ProfileStudentQrView extends StatelessWidget {
             DateFormat format = DateFormat('dd-M-yyyy');
 
             List<DateTime> highlightedDates = state.attendances
-                .map((a) => format.parse(a.createdAt))
+                .map((a) => format.parse(a.date.toString()))
                 .toList();
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),

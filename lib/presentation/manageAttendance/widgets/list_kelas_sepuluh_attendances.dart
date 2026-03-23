@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
 import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_display_state.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_attendance.dart';
 
 import '../../../common/bloc/kelas/kelas_navigation.dart';
 import '../../../common/widget/loading/list_kelas_loading.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/attandance/attendance_student.dart';
 import '../bloc/attendance_student_cubit.dart';
 
 class ListKelasSepuluhAttendances extends StatelessWidget {
-  final String date;
+  final DateTime date;
   const ListKelasSepuluhAttendances({super.key, required this.date});
 
   @override
@@ -40,9 +40,9 @@ class ListKelasSepuluhAttendances extends StatelessWidget {
                       context
                           .read<AttendanceStudentCubit>()
                           .displayAttendanceStudent(
-                            params: ParamAttendanceEntity(
+                            params: AttendanceStudentEntity(
                               date: date,
-                              kelas: kelas[index].className,
+                              className: kelas[index].className,
                             ),
                           );
                     },

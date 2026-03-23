@@ -23,8 +23,6 @@ import 'domain/repository/students/students.dart';
 import 'domain/repository/teacher/teacher.dart';
 import 'domain/usecases/attendance/add_student_attendance.dart';
 import 'domain/usecases/attendance/add_teacher_attendance.dart';
-import 'domain/usecases/attendance/delete_attendances_usecase.dart';
-import 'domain/usecases/attendance/delete_month_attendances_usecase.dart';
 import 'domain/usecases/attendance/download_attendance_teachers_usecase.dart';
 import 'domain/usecases/attendance/get_attendance_all_teacher_usecase.dart';
 import 'domain/usecases/attendance/get_attendance_name_usecase.dart';
@@ -64,7 +62,6 @@ import 'domain/usecases/students/update_user.dart';
 import 'domain/usecases/teacher/create_teacher.dart';
 import 'domain/usecases/teacher/delete_role_usecase.dart';
 import 'domain/usecases/teacher/delete_teacher.dart';
-import 'domain/usecases/teacher/get_schedule_teacher_usecase.dart';
 import 'domain/usecases/teacher/get_teacher.dart';
 import 'domain/usecases/teacher/get_teacher_by_id_usecase.dart';
 import 'domain/usecases/teacher/get_teacher_by_name.dart';
@@ -195,9 +192,6 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<GetTeacherByIdUsecase>(
     GetTeacherByIdUsecase(),
   );
-  sl.registerSingleton<GetScheduleTeacherUsecase>(
-    GetScheduleTeacherUsecase(),
-  );
 
   //news
   sl.registerSingleton<CreateNewsUseCase>(
@@ -288,12 +282,7 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<GetAttendanceNameUsecase>(
     GetAttendanceNameUsecase(),
   );
-  sl.registerSingleton<DeleteAttendancesUsecase>(
-    DeleteAttendancesUsecase(),
-  );
-  sl.registerSingleton<DeleteMonthAttendancesUsecase>(
-    DeleteMonthAttendancesUsecase(),
-  );
+
   sl.registerSingleton<AddTeacherAttendanceUseCase>(
     AddTeacherAttendanceUseCase(),
   );

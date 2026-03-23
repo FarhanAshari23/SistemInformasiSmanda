@@ -1,8 +1,8 @@
-class ParamAttendanceTeacher {
-  final String date;
+class AttendanceWorkBookEntity {
+  final DateTime date;
   final bool isAttendance;
 
-  ParamAttendanceTeacher({
+  AttendanceWorkBookEntity({
     required this.date,
     required this.isAttendance,
   });

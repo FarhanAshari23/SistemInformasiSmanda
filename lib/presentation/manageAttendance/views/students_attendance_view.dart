@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/widgets/card_student_attendance.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/widgets/list_kelas_duabelas_attendance.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/widgets/list_kelas_sebelas_attendance.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../domain/entities/attandance/param_attendance.dart';
+import '../../../domain/entities/attandance/attendance_student.dart';
 import '../../../domain/usecases/attendance/get_attendance_students.dart';
 import '../bloc/attendance_student_cubit.dart';
 import '../bloc/attendance_student_state.dart';
+import '../widgets/card_student_attendance.dart';
+import '../widgets/list_kelas_duabelas_attendance.dart';
+import '../widgets/list_kelas_sebelas_attendance.dart';
 import '../widgets/list_kelas_sepuluh_attendances.dart';
 
 class StudentAttendancesView extends StatelessWidget {
   final int kelas;
-  final String date;
+  final DateTime date;
   const StudentAttendancesView({
     super.key,
     required this.date,
@@ -42,9 +42,9 @@ class StudentAttendancesView extends StatelessWidget {
               create: (context) => AttendanceStudentCubit(
                   usecase: GetAttendanceStudentsUsecase())
                 ..displayAttendanceStudent(
-                  params: ParamAttendanceEntity(
+                  params: AttendanceStudentEntity(
                     date: date,
-                    kelas: kelas == 10
+                    className: kelas == 10
                         ? kelasSepuluh[0].className
                         : kelas == 11
                             ? kelasSebelas[0].className

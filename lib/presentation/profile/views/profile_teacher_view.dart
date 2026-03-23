@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/bar_days_cubit.dart';
-import '../bloc/get_schedule_teacher_cubit.dart';
 import '../bloc/profile_info_cubit.dart';
 import '../bloc/profile_info_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
@@ -25,18 +24,15 @@ class ProfileTeacher extends StatelessWidget {
           create: (context) => ProfileInfoCubit()..getUser("Teachers"),
         ),
         BlocProvider(create: (context) => TwoContainersCubit()),
-        BlocProvider(
-          create: (_) => GetScheduleTeacherCubit(),
-        ),
         BlocProvider(create: (context) => BarDaysCubit()),
       ],
       child: BlocListener<ProfileInfoCubit, ProfileInfoState>(
         listener: (context, state) {
-          if (state is ProfileInfoLoaded) {
-            context
-                .read<GetScheduleTeacherCubit>()
-                .getScheduleTeacher(state.teacherEntity?.name ?? '');
-          }
+          // if (state is ProfileInfoLoaded) {
+          //   context
+          //       .read<GetScheduleTeacherCubit>()
+          //       .getScheduleTeacher(state.teacherEntity?.name ?? '');
+          // }
         },
         child: Scaffold(
           resizeToAvoidBottomInset: false,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/attandance/param_attendance.dart';
 
 import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/attandance/attendance_student.dart';
 
 class SearchStudentAttendanceAppbar extends StatelessWidget {
-  final String date;
+  final DateTime date;
   const SearchStudentAttendanceAppbar({
     super.key,
     required this.date,
@@ -59,8 +59,10 @@ class SearchStudentAttendanceAppbar extends StatelessWidget {
                       context.read<StudentsDisplayCubit>().displayInitial();
                     } else {
                       context.read<StudentsDisplayCubit>().displayStudents(
-                          params:
-                              ParamAttendanceEntity(date: date, name: value));
+                              params: AttendanceStudentEntity(
+                            date: date,
+                            name: value,
+                          ));
                     }
                   },
                   decoration: const InputDecoration(

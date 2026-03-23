@@ -10,13 +10,12 @@ import '../../manageStudent/widgets/card_edit_user.dart';
 import '../widgets/search_student_attendance_appbar.dart';
 
 class SearchStudentAttendance extends StatelessWidget {
-  final String date;
+  final DateTime date;
   const SearchStudentAttendance({super.key, required this.date});
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    // double width = MediaQuery.of(context).size.width;
     return BlocProvider(
       create: (context) =>
           StudentsDisplayCubit(usecase: GetAttendanceNameUsecase()),

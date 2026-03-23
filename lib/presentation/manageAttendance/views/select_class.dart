@@ -10,7 +10,7 @@ import '../../../common/widget/card/card_search.dart';
 import '../../../core/configs/theme/app_colors.dart';
 
 class SelectClass extends StatelessWidget {
-  final String date;
+  final DateTime date;
   const SelectClass({
     super.key,
     required this.date,

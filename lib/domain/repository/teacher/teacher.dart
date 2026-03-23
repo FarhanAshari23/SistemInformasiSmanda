@@ -9,7 +9,6 @@ abstract class TeacherRepository {
   Future<Either> deleteTeacher(int teacherId);
   Future<Either> getTeacherByName(String name);
   Future<Either> getTeacherById(int teacherId);
-  Future<Either> getScheduleTeacher(String name);
   Future<Either> getTeacher();
   Future<Either> getRoles();
   Future<Either> createRoles(String role);

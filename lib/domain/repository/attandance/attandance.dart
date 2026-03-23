@@ -1,22 +1,18 @@
 import 'package:dartz/dartz.dart';
-import '../../entities/attandance/param_attendance.dart';
-import '../../entities/attandance/param_attendance_teacher.dart';
-import '../../entities/attandance/param_delete_attendance.dart';
-import '../../entities/student/student.dart';
-import '../../entities/teacher/teacher.dart';
+import '../../entities/attandance/attandance_teacher.dart';
+import '../../entities/attandance/attendance_student.dart';
+import '../../entities/attandance/attendance_workbook.dart';
 
 abstract class AttandanceRepository {
+  Future<Either> addStudentAttendances(AttendanceStudentEntity student);
+  Future<Either> addTeacherAttendances(AttandanceTeacherEntity teacher);
   Future<Either> getListStudentAttendancesDate();
   Future<Either> getListTeacherAttendancesDate();
   Future<Either> getListTeacherCompletionsDate();
-  Future<Either> deleteAllAttendances();
-  Future<Either> deleteMonthAttendances(ParamDeleteAttendance attendanceReq);
-  Future<Either> searchStudentAttendance(ParamAttendanceEntity attendanceReq);
-  Future<Either> getAttendanceStudents(ParamAttendanceEntity attendanceReq);
-  Future<Either> getAttendanceStudent(StudentEntity attendanceReq);
-  Future<Either> getAttendanceTeacher(TeacherEntity attendanceReq);
-  Future<Either> getAttendanceAllTeacher(ParamAttendanceTeacher req);
-  Future<Either> addStudentAttendances(StudentEntity userAddReq);
-  Future<Either> addTeacherAttendances(TeacherEntity teacherAddReq);
-  Future<Either> downloadAttendanceTeachers(ParamAttendanceTeacher req);
+  Future<Either> getAttendanceStudents(AttendanceStudentEntity attendanceReq);
+  Future<Either> getAttendanceAllTeacher(AttandanceTeacherEntity req);
+  Future<Either> getAttendanceTeacher(int teacherId);
+  Future<Either> getAttendanceStudent(int studentId);
+  Future<Either> searchStudentAttendance(AttendanceStudentEntity req);
+  Future<Either> downloadAttendanceTeachers(AttendanceWorkBookEntity req);
 }

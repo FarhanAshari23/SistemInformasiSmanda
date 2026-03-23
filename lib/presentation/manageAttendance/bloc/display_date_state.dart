@@ -1,11 +1,11 @@
-import 'package:new_sistem_informasi_smanda/domain/entities/attandance/attandance.dart';
+import '../../../domain/entities/attandance/attandance_teacher.dart';
 
 abstract class DisplayDateState {}
 
 class DisplayDateLoading extends DisplayDateState {}
 
 class DisplayDateLoaded extends DisplayDateState {
-  final List<AttandanceEntity> attendances;
+  final List<AttandanceTeacherEntity> attendances;
   DisplayDateLoaded({required this.attendances});
 }
 

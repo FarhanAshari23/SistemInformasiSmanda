@@ -1,15 +1,12 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import '../../../core/networks/network.dart';
 import '../../../domain/entities/teacher/role.dart';
-import '../../../domain/entities/teacher/schedule_teacher.dart';
 import '../../../domain/entities/teacher/teacher.dart';
-import '../../models/teacher/schedule_teacher.dart';
 import '../../models/teacher/teacher.dart';
 
 abstract class TeacherFirebaseService {
@@ -19,7 +16,6 @@ abstract class TeacherFirebaseService {
   Future<Either> getTeacher();
   Future<Either> getTeacherByName(String name);
   Future<Either> getTeacherById(int teacherId);
-  Future<Either> getScheduleTeacher(String name);
   Future<Either> createRoles(String role);
   Future<Either> deleteRole(int idRole);
   Future<Either> updateRoles(RoleEntity role);
@@ -165,38 +161,6 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
       return Right(dataList);
     } catch (e) {
       return Left("Something error: ${e.toString()}");
-    }
-  }
-
-  @override
-  Future<Either> getScheduleTeacher(String name) async {
-    final firestore = FirebaseFirestore.instance;
-    try {
-      final schedules = await firestore.collection("Jadwals").get();
-      List<ScheduleTeacherEntity> result = [];
-      for (var doc in schedules.docs) {
-        final data = doc.data();
-        List<String> days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
-        for (var day in days) {
-          if (data[day] != null && data[day] is List) {
-            for (var item in data[day]) {
-              if (item['pelaksana'] == name) {
-                final mapped = {
-                  "hari": day,
-                  "jam": item['jam'],
-                  "kegiatan": item['kegiatan'],
-                  "kelas": data['kelas']
-                };
-                final model = ScheduleTeacherModel.fromMap(mapped);
-                result.add(model.toEntity());
-              }
-            }
-          }
-        }
-      }
-      return Right(result);
-    } catch (e) {
-      return Left("Something wrong: $e");
     }
   }
 

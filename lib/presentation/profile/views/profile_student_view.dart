@@ -100,7 +100,8 @@ class ProfileStudentView extends StatelessWidget {
                           if (state is ProfileInfoLoaded) {
                             context
                                 .read<GetStudentAttendanceCubit>()
-                                .getAttendanceStudent(state.userEntity!);
+                                .getAttendanceStudent(
+                                    state.userEntity!.id ?? 0);
 
                             return Expanded(
                               child: Column(

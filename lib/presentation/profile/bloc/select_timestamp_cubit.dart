@@ -1,10 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SelectTimestampCubit extends Cubit<Timestamp?> {
+class SelectTimestampCubit extends Cubit<DateTime?> {
   SelectTimestampCubit() : super(null);
 
-  void select(Timestamp time) {
+  void select(DateTime time) {
     emit(time);
   }
 
