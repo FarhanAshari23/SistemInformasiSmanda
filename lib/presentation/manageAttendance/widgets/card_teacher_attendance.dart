@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/cache_state_image.dart';
 import '../../../common/helper/display_image.dart';
+import '../../../common/widget/detail/teacher_detail.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -86,7 +89,13 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
         child: Container(
           height: mediaQueryHeight * 0.14,
           width: width * 0.235,
-          color: Colors.grey,
+          decoration: const BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              bottomLeft: Radius.circular(12),
+            ),
+          ),
         ),
       );
     } else if (isReachable == true) {
@@ -98,66 +107,70 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
         forceRefresh: false,
       );
     } else {
-      imageWidget = Image.asset(
-        fallbackAsset,
-        height: mediaQueryHeight * 0.14,
-        width: width * 0.235,
-        fit: BoxFit.cover,
+      imageWidget = ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          bottomLeft: Radius.circular(12),
+        ),
+        child: Image.asset(
+          fallbackAsset,
+          height: mediaQueryHeight * 0.14,
+          width: width * 0.235,
+          fit: BoxFit.cover,
+        ),
       );
     }
 
-    return Container(
-      width: width * 0.7,
-      height: bodyHeight * 0.175,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: AppColors.secondary,
-      ),
+    return CustomInkWell(
+      borderRadius: 12,
+      defaultColor: AppColors.secondary,
+      onTap: () {
+        AppNavigator.push(
+          context,
+          TeacherDetail(
+            teacherId: widget.teacher.teacherId ?? 0,
+          ),
+        );
+      },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
+          Expanded(
             child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 imageWidget,
-                SizedBox(width: width * 0.05),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: width * 0.385,
-                        height: bodyHeight * 0.09,
-                        child: RichText(
-                          textAlign: TextAlign.left,
-                          text: TextSpan(
-                            text: '${widget.teacher.name}\n',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w900,
-                              color: AppColors.primary,
-                              fontSize: 16,
-                            ),
-                            children: [
-                              WidgetSpan(
-                                child: SizedBox(
-                                  height: bodyHeight * 0.03,
-                                ),
-                              ),
-                              TextSpan(
-                                text: widget.teacher.nip,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                            ],
-                          ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12.0, top: 16.0),
+                    child: RichText(
+                      textAlign: TextAlign.left,
+                      text: TextSpan(
+                        text: '${widget.teacher.name}\n',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.primary,
+                          fontSize: 16,
                         ),
+                        children: [
+                          WidgetSpan(
+                            child: SizedBox(
+                              height: bodyHeight * 0.03,
+                            ),
+                          ),
+                          TextSpan(
+                            text: widget.teacher.nip,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ],
@@ -166,25 +179,22 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
           Align(
             alignment: Alignment.bottomRight,
             child: Container(
-              width: width * 0.185,
-              height: bodyHeight * 0.06,
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 borderRadius:
                     const BorderRadius.only(bottomRight: Radius.circular(12)),
                 color:
                     currentTime.isAfter(targetTime) ? Colors.red : Colors.green,
               ),
-              child: Center(
-                child: Text(
-                  time,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.inversePrimary,
-                  ),
+              child: Text(
+                time,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.inversePrimary,
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/dialog/basic_dialog.dart';
 
+import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
+import '../../../common/helper/display_image.dart';
+import '../../../common/widget/detail/teacher_detail.dart';
+import '../../../common/widget/dialog/basic_dialog.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -29,23 +31,29 @@ class CardEditTeacher extends StatelessWidget {
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
     String formattedDate = DateFormat('d MMMM yyyy').format(teacher.birthDate!);
-    return Container(
-      width: width * 0.7,
-      height: bodyHeight * 0.175,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: AppColors.secondary,
-      ),
+    return CustomInkWell(
+      borderRadius: 12,
+      defaultColor: AppColors.secondary,
+      onTap: () {
+        AppNavigator.push(
+          context,
+          TeacherDetail(
+            teacherId: teacher.id ?? 0,
+          ),
+        );
+      },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
+          Expanded(
             child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 NetworkPhoto(
-                  width: width * 0.25,
-                  height: bodyHeight * 0.12,
+                  height: mediaQueryHeight * 0.14,
+                  width: width * 0.235,
                   fallbackAsset: teacher.gender == 1
                       ? AppImages.guruLaki
                       : AppImages.guruPerempuan,
@@ -54,40 +62,35 @@ class CardEditTeacher extends StatelessWidget {
                     teacher.nip != '-' ? teacher.nip! : formattedDate,
                   ),
                 ),
-                SizedBox(width: width * 0.05),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: width * 0.465,
-                        height: bodyHeight * 0.06,
-                        child: Text(
-                          teacher.name ?? '',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                            color: AppColors.primary,
-                          ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12.0, top: 16.0),
+                    child: RichText(
+                      textAlign: TextAlign.left,
+                      text: TextSpan(
+                        text: '${teacher.name}\n',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.primary,
+                          fontSize: 16,
                         ),
-                      ),
-                      Visibility(
-                        visible: teacher.nip != '-',
-                        child: SizedBox(
-                          width: width * 0.4,
-                          height: bodyHeight * 0.04,
-                          child: Text(
-                            teacher.nip ?? '',
+                        children: [
+                          WidgetSpan(
+                            child: SizedBox(
+                              height: bodyHeight * 0.03,
+                            ),
+                          ),
+                          TextSpan(
+                            text: teacher.nip ?? "-",
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
                             ),
                           ),
-                        ),
-                      )
-                    ],
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],

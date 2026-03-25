@@ -42,7 +42,7 @@ class AttendanceStudentModel {
       "check_in": checkIn,
       "status": status,
       "total": total,
-      "agama": religion,
+      "religion": religion,
     };
   }
 
@@ -68,7 +68,7 @@ class AttendanceStudentModel {
       status: map['status'] ?? '',
       studentId: map['student_id'] ?? 0,
       className: map['kelas_siswa'] ?? '',
-      religion: map['agama'] ?? '',
+      religion: map['religion'] ?? '',
       tingkat: map['tingkat'] ?? 0,
       total: map['total'] ?? 0,
     );

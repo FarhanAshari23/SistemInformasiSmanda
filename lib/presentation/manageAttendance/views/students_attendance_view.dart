@@ -99,6 +99,15 @@ class StudentAttendancesView extends StatelessWidget {
                                 );
                         }
                         if (state is AttendanceStudentFailure) {
+                          if (state.errorMessage ==
+                              "Something error: (null):(404):Data kelas tidak ditemukan") {
+                            return Padding(
+                              padding: EdgeInsets.only(top: height * 0.25),
+                              child: const Center(
+                                child: Text('Belum ada data yang terekam'),
+                              ),
+                            );
+                          }
                           return Center(
                             child:
                                 Text('Something wrongs: ${state.errorMessage}'),

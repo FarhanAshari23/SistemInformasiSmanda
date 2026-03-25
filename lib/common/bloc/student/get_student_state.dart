@@ -1,4 +1,4 @@
-import '../../../domain/entities/Student/Student.dart';
+import '../../../domain/entities/student/student.dart';
 
 abstract class StudentState {}
 

@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/display_image.dart';
+import '../../../common/widget/detail/murid_detail.dart';
 import '../../../common/widget/dialog/basic_dialog.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -28,61 +30,74 @@ class CardEditUser extends StatelessWidget {
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
 
-    return Container(
-      width: width * 0.7,
-      height: bodyHeight * 0.175,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: AppColors.secondary,
-      ),
+    return CustomInkWell(
+      borderRadius: 12,
+      defaultColor: AppColors.secondary,
+      onTap: () {
+        AppNavigator.push(
+          context,
+          MuridDetail(
+            userId: student.id ?? 0,
+          ),
+        );
+      },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
+          Expanded(
             child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                NetworkPhoto(
-                  width: width * 0.235,
-                  height: bodyHeight * 0.14,
-                  fallbackAsset: student.gender == 1
-                      ? AppImages.boyStudent
-                      : student.religion == "Islam"
-                          ? AppImages.girlStudent
-                          : AppImages.girlNonStudent,
-                  imageUrl: DisplayImage.displayImageStudent(
-                    student.name ?? '',
-                    student.nisn ?? '',
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    bottomLeft: Radius.circular(12),
+                  ),
+                  child: NetworkPhoto(
+                    height: mediaQueryHeight * 0.15,
+                    width: width * 0.235,
+                    fallbackAsset: student.gender == 1
+                        ? AppImages.boyStudent
+                        : student.religion == "Islam"
+                            ? AppImages.girlStudent
+                            : AppImages.girlNonStudent,
+                    imageUrl: DisplayImage.displayImageStudent(
+                      student.name ?? '',
+                      student.nisn ?? '',
+                    ),
                   ),
                 ),
-                SizedBox(width: width * 0.05),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: width * 0.465,
-                        height: bodyHeight * 0.06,
-                        child: Text(
-                          student.name ?? '',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: bodyHeight * 0.01),
-                      Text(
-                        student.nisn ?? '',
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12.0, top: 16.0),
+                    child: RichText(
+                      textAlign: TextAlign.left,
+                      text: TextSpan(
+                        text: '${student.name}\n',
                         style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w900,
                           color: AppColors.primary,
+                          fontSize: 16,
                         ),
+                        children: [
+                          WidgetSpan(
+                            child: SizedBox(
+                              height: bodyHeight * 0.03,
+                            ),
+                          ),
+                          TextSpan(
+                            text: student.nisn!,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ],
