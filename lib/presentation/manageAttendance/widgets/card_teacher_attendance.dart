@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../common/helper/cache_state_image.dart';
@@ -8,9 +7,10 @@ import '../../../common/helper/display_image.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/attandance/attandance_teacher.dart';
 
 class CardTeacherAttendance extends StatefulWidget {
-  final TeacherEntity teacher;
+  final AttandanceTeacherEntity teacher;
   final bool isAttendance;
   const CardTeacherAttendance({
     super.key,

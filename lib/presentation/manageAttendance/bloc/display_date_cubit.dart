@@ -17,7 +17,7 @@ class DisplayDateCubit extends Cubit<DisplayDateState> {
         return emit(DisplayDateFailure(errorMessage: error));
       },
       (data) {
-        return emit(DisplayDateLoaded(attendances: data));
+        return emit(DisplayDateStudentLoaded(attendances: data));
       },
     );
   }
@@ -30,7 +30,7 @@ class DisplayDateCubit extends Cubit<DisplayDateState> {
         return emit(DisplayDateFailure(errorMessage: error));
       },
       (data) {
-        return emit(DisplayDateLoaded(attendances: data));
+        return emit(DisplayDateTeacherLoaded(attendances: data));
       },
     );
   }
@@ -43,7 +43,7 @@ class DisplayDateCubit extends Cubit<DisplayDateState> {
         return emit(DisplayDateFailure(errorMessage: error));
       },
       (data) {
-        return emit(DisplayDateLoaded(attendances: data));
+        return emit(DisplayDateTeacherLoaded(attendances: data));
       },
     );
   }

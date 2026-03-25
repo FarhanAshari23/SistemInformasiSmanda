@@ -12,6 +12,7 @@ class AttendanceStudentModel {
   final String status;
   final DateTime date;
   final DateTime checkIn;
+  final String religion;
 
   AttendanceStudentModel({
     required this.id,
@@ -25,6 +26,7 @@ class AttendanceStudentModel {
     required this.date,
     required this.total,
     required this.checkIn,
+    required this.religion,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,6 +42,7 @@ class AttendanceStudentModel {
       "check_in": checkIn,
       "status": status,
       "total": total,
+      "agama": religion,
     };
   }
 
@@ -53,11 +56,11 @@ class AttendanceStudentModel {
   factory AttendanceStudentModel.fromMap(Map<String, dynamic> map) {
     return AttendanceStudentModel(
       id: map['id'] ?? 0,
-      nisn: map['nisn'] ?? '',
+      nisn: map['nisn_siswa'] ?? '',
       name: map['nama_siswa'] ?? '',
       gender: map['gender_siswa'] ?? 0,
-      date: map['attendance_date'] != null && map['birth_date'] != ''
-          ? DateTime.parse(map['birth_date'])
+      date: map['attendance_date'] != null && map['attendance_date'] != ''
+          ? DateTime.parse(map['attendance_date'])
           : DateTime(2000, 1, 1),
       checkIn: map['check_in'] != null && map['check_in'] != ''
           ? DateTime.parse(map['check_in'])
@@ -65,6 +68,7 @@ class AttendanceStudentModel {
       status: map['status'] ?? '',
       studentId: map['student_id'] ?? 0,
       className: map['kelas_siswa'] ?? '',
+      religion: map['agama'] ?? '',
       tingkat: map['tingkat'] ?? 0,
       total: map['total'] ?? 0,
     );
@@ -85,6 +89,7 @@ extension AttendanceStudentModelX on AttendanceStudentModel {
       studentId: studentId,
       tingkat: tingkat,
       total: total,
+      religion: religion,
     );
   }
 
@@ -101,6 +106,7 @@ extension AttendanceStudentModelX on AttendanceStudentModel {
       className: entity.className ?? '',
       tingkat: entity.tingkat ?? 0,
       total: entity.total ?? 0,
+      religion: entity.religion ?? '',
     );
   }
 }

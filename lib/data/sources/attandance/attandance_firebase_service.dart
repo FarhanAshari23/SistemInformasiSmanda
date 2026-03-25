@@ -111,7 +111,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   Future<Either> getAttendanceStudents(AttendanceStudentEntity req) async {
     try {
       final response = await Network.apiClient.get(
-          "/attendancestudent/date/${req.date}/listattendances/${req.tingkat}");
+          "/attendancestudent/date/${req.date}/className/${req.className}");
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }

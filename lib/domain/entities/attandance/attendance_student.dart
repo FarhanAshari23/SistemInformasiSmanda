@@ -1,6 +1,6 @@
 class AttendanceStudentEntity {
   int? id, studentId, tingkat, gender, total;
-  String? name, nisn, className, status;
+  String? name, nisn, className, status, religion;
   DateTime? date, checkIn;
   AttendanceStudentEntity({
     this.gender,
@@ -14,6 +14,7 @@ class AttendanceStudentEntity {
     this.studentId,
     this.tingkat,
     this.total,
+    this.religion,
   });
 
   AttendanceStudentEntity copyWith({
@@ -26,6 +27,7 @@ class AttendanceStudentEntity {
     String? nisn,
     String? className,
     String? status,
+    String? religion,
     DateTime? date,
     DateTime? checkIn,
   }) {
@@ -41,6 +43,7 @@ class AttendanceStudentEntity {
       studentId: studentId ?? this.studentId,
       tingkat: tingkat ?? this.tingkat,
       total: total ?? this.total,
+      religion: religion ?? this.religion,
     );
   }
 }

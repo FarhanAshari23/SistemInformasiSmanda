@@ -1,11 +1,11 @@
-import '../../../domain/entities/teacher/teacher.dart';
+import '../../../domain/entities/attandance/attandance_teacher.dart';
 
 abstract class AttendanceTeacherState {}
 
 class AttendanceTeacherLoading extends AttendanceTeacherState {}
 
 class AttendanceTeacherLoaded extends AttendanceTeacherState {
-  final List<TeacherEntity> teachers;
+  final List<AttandanceTeacherEntity> teachers;
 
   AttendanceTeacherLoaded({required this.teachers});
 }

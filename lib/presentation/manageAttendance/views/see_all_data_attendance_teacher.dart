@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
-import 'package:intl/intl.dart';
 
 import '../../../common/bloc/attendance/select_attendance_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
@@ -106,11 +105,9 @@ class _SeeAllDataAttendanceTeacherState
                       ),
                     );
                   }
-                  if (state is DisplayDateLoaded) {
-                    DateFormat format = DateFormat('dd-M-yyyy');
-                    List<DateTime> highlightedDates = state.attendances
-                        .map((a) => format.parse(a.date.toString()))
-                        .toList();
+                  if (state is DisplayDateTeacherLoaded) {
+                    List<DateTime> highlightedDates =
+                        state.attendances.map((a) => a.date!).toList();
                     return Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),

@@ -1,11 +1,11 @@
-import '../../../domain/entities/teacher/schedule_teacher.dart';
+import '../../../domain/entities/schedule/day.dart';
 
 abstract class GetScheduleTeacherState {}
 
 class GetScheduleTeacherLoading extends GetScheduleTeacherState {}
 
 class GetScheduleTeacherLoaded extends GetScheduleTeacherState {
-  List<ScheduleTeacherEntity> teacherSchedule;
+  List<DayEntity> teacherSchedule;
   GetScheduleTeacherLoaded({
     required this.teacherSchedule,
   });

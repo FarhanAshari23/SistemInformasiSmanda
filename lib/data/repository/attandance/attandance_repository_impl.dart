@@ -7,7 +7,6 @@ import '../../../domain/repository/attandance/attandance.dart';
 import '../../../service_locator.dart';
 import '../../models/attendance/attendance_student.dart';
 import '../../models/attendance/attendance_teacher.dart';
-import '../../models/student/student.dart';
 import '../../sources/attandance/attandance_firebase_service.dart';
 
 class AttandanceRepositoryImpl extends AttandanceRepository {
@@ -29,7 +28,7 @@ class AttandanceRepositoryImpl extends AttandanceRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => StudentModel.fromMap(e).toEntity(),
+                (e) => AttendanceStudentModel.fromMap(e).toEntity(),
               )
               .toList(),
         );
@@ -49,7 +48,7 @@ class AttandanceRepositoryImpl extends AttandanceRepository {
         return Right(
           List.from(data)
               .map(
-                (e) => StudentModel.fromMap(e).toEntity(),
+                (e) => AttendanceStudentModel.fromMap(e).toEntity(),
               )
               .toList(),
         );

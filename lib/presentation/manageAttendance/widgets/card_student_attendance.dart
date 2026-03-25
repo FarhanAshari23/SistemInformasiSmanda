@@ -7,10 +7,10 @@ import '../../../common/helper/display_image.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/student/student.dart';
+import '../../../domain/entities/attandance/attendance_student.dart';
 
 class CardStudentAttendance extends StatefulWidget {
-  final StudentEntity student;
+  final AttendanceStudentEntity student;
   const CardStudentAttendance({
     super.key,
     required this.student,

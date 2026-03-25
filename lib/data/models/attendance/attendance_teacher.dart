@@ -11,6 +11,7 @@ class AttendanceTeacherModel {
   final DateTime date;
   final DateTime checkIn;
   final DateTime checkOut;
+  final DateTime birthDate;
 
   AttendanceTeacherModel({
     required this.id,
@@ -23,6 +24,7 @@ class AttendanceTeacherModel {
     required this.checkIn,
     required this.checkOut,
     required this.total,
+    required this.birthDate,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,6 +39,7 @@ class AttendanceTeacherModel {
       "check_out": checkOut,
       "status": status,
       "total": total,
+      "birth_date": birthDate,
     };
     data.removeWhere((key, value) {
       if (value == null) return true;
@@ -65,10 +68,13 @@ class AttendanceTeacherModel {
   factory AttendanceTeacherModel.fromMap(Map<String, dynamic> map) {
     return AttendanceTeacherModel(
       id: map['id'] ?? 0,
-      nip: map['nip'] ?? '',
+      nip: map['nip_guru'] ?? '',
       name: map['nama_guru'] ?? '',
       gender: map['gender_guru'] ?? 0,
-      date: map['attendance_date'] != null && map['birth_date'] != ''
+      date: map['attendance_date'] != null && map['attendance_date'] != ''
+          ? DateTime.parse(map['attendance_date'])
+          : DateTime(2000, 1, 1),
+      birthDate: map['birth_date'] != null && map['birth_date'] != ''
           ? DateTime.parse(map['birth_date'])
           : DateTime(2000, 1, 1),
       checkIn: map['check_in'] != null && map['check_in'] != ''
@@ -97,6 +103,7 @@ extension AttendanceTeacherModelX on AttendanceTeacherModel {
       status: status,
       teacherId: teacherId,
       total: total,
+      birthDate: birthDate,
     );
   }
 
@@ -108,10 +115,11 @@ extension AttendanceTeacherModelX on AttendanceTeacherModel {
       name: entity.name ?? '',
       nip: entity.nip ?? '',
       status: entity.status ?? '',
-      date: entity.date ?? DateTime.now(),
-      checkIn: entity.checkIn ?? DateTime.now(),
-      checkOut: entity.checkOut ?? DateTime.now(),
+      date: entity.date ?? DateTime(2000, 1, 1),
+      checkIn: entity.checkIn ?? DateTime(2000, 1, 1),
+      checkOut: entity.checkOut ?? DateTime(2000, 1, 1),
       total: entity.total ?? 0,
+      birthDate: entity.birthDate ?? DateTime(2000, 1, 1),
     );
   }
 }
