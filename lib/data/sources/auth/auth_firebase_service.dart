@@ -14,6 +14,7 @@ abstract class AuthFirebaseService {
   Future<Either> checkEmailUsed(String email);
   Future<Either> profileTeacher(String email);
   Future<Either> profileStudent(String email);
+  Future<Either> isAdmin(String email);
   Future<Either> logout();
   Future<bool> isLoggedIn();
 }
@@ -155,6 +156,21 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       return Right(dataList);
     } catch (e) {
       return Left("Something error: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<Either> isAdmin(String email) async {
+    try {
+      final response = await Network.apiClient.get("/student/admin/$email");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as Map<String, dynamic>;
+      return Right(dataList);
+    } catch (e) {
+      return const Left(
+          "Anda gagal login karena akun anda telah dihapus, silakan hubungi admin");
     }
   }
 }

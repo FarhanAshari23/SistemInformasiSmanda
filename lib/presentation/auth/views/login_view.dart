@@ -8,6 +8,7 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../core/configs/assets/app_lotties.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/student/student.dart';
+import '../../../domain/usecases/auth/is_admin_usecase.dart';
 import '../../../domain/usecases/auth/profile_student_usecase.dart';
 import '../../../domain/usecases/auth/profile_teacher_usecase.dart';
 import '../../../domain/usecases/auth/signin.dart';
@@ -62,10 +63,24 @@ class LoginView extends StatelessWidget {
                       var teacherProfile =
                           await sl<ProfileTeacherUsecase>().call(params: email);
                       return teacherProfile.fold(
-                        (l) {
-                          AppNavigator.pushAndRemoveUntil(
-                            context,
-                            const HomeViewAdmin(),
+                        (l) async {
+                          var isAdmin =
+                              await sl<IsAdminUsecase>().call(params: email);
+                          isAdmin.fold(
+                            (l) {
+                              var snackbar = SnackBar(
+                                content: Text(l.toString()),
+                                behavior: SnackBarBehavior.floating,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackbar);
+                            },
+                            (r) {
+                              AppNavigator.pushAndRemoveUntil(
+                                context,
+                                const HomeViewAdmin(),
+                              );
+                            },
                           );
                         },
                         (data) {

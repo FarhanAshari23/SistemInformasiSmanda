@@ -67,4 +67,19 @@ class AuthRepositoryImpl extends AuthRepository {
       },
     );
   }
+
+  @override
+  Future<Either> isAdmin(String email) async {
+    var returnedData = await sl<AuthFirebaseService>().isAdmin(email);
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          StudentModel.fromMap(data).toEntity(),
+        );
+      },
+    );
+  }
 }

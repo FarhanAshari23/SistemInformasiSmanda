@@ -500,6 +500,7 @@ class _AddAccountViewState extends State<AddAccountView> {
                           ),
                         );
                       } else {
+                        DateTime pickedDate = formatter.parse(_tanggalC.text);
                         context.read<ButtonStateCubit>().execute(
                               usecase: SignUpUseCase(),
                               params: StudentEntity(
@@ -516,7 +517,8 @@ class _AddAccountViewState extends State<AddAccountView> {
                                 gender: context
                                     .read<GenderSelectionCubit>()
                                     .selectedIndex,
-                                birthDate: formatter.parse(_tanggalC.text),
+                                birthDate: DateTime.utc(pickedDate.year,
+                                    pickedDate.month, pickedDate.day),
                                 imageFile: imageProfile,
                               ),
                             );

@@ -33,6 +33,7 @@ import 'domain/usecases/attendance/get_list_attendaces_teacher_usecase.dart';
 import 'domain/usecases/attendance/get_list_attendances_student.dart';
 import 'domain/usecases/attendance/get_list_completions_teacher_usecase.dart';
 import 'domain/usecases/auth/check_email_usecase.dart';
+import 'domain/usecases/auth/is_admin_usecase.dart';
 import 'domain/usecases/auth/profile_student_usecase.dart';
 import 'domain/usecases/auth/profile_teacher_usecase.dart';
 import 'domain/usecases/auth/signin.dart';
@@ -151,6 +152,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<ProfileStudentUsecase>(
     ProfileStudentUsecase(),
+  );
+  sl.registerSingleton<IsAdminUsecase>(
+    IsAdminUsecase(),
   );
 
   //teacher
