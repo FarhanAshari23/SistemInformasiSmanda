@@ -1,11 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/helper/app_navigation.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/usecases/auth/check_admin.dart';
-import '../../../domain/usecases/auth/check_teacher_usecase.dart';
+import '../../../domain/usecases/auth/profile_student_usecase.dart';
+import '../../../domain/usecases/auth/profile_teacher_usecase.dart';
 import '../../../service_locator.dart';
 import '../../auth/views/login_view.dart';
 import '../../home/views/home_view.dart';
@@ -25,35 +26,32 @@ class SplashView extends StatelessWidget {
           AppNavigator.pushReplacement(context, LoginView());
         }
         if (state is Authenticated) {
-          var resultTeacher = await sl<CheckTeacherUsecase>().call();
-          return resultTeacher.fold(
+          String? email = FirebaseAuth.instance.currentUser?.email;
+          var teacherPage =
+              await sl<ProfileTeacherUsecase>().call(params: email);
+          return teacherPage.fold(
             (l) async {
-              var resultAdmin = await sl<IsAdminUsecase>().call();
-              return resultAdmin.fold(
-                (error) {
-                  var snackbar = SnackBar(content: Text(error));
-                  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              var studentPage =
+                  await sl<ProfileStudentUsecase>().call(params: email);
+              return studentPage.fold(
+                (l) {
+                  AppNavigator.pushReplacement(
+                    context,
+                    const HomeViewAdmin(),
+                  );
                 },
-                (r) {
-                  bool checkAdmin = true;
-                  if (checkAdmin == r) {
-                    AppNavigator.pushReplacement(
-                      context,
-                      const HomeViewAdmin(),
-                    );
-                  } else {
-                    AppNavigator.pushReplacement(
-                      context,
-                      const HomeView(),
-                    );
-                  }
+                (data) {
+                  AppNavigator.pushReplacement(
+                    context,
+                    HomeView(student: data),
+                  );
                 },
               );
             },
-            (r) {
+            (data) {
               AppNavigator.pushReplacement(
                 context,
-                const ProfileTeacher(),
+                ProfileTeacher(teacher: data),
               );
             },
           );

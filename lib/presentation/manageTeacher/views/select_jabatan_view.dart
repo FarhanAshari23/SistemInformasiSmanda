@@ -30,10 +30,7 @@ class SelectJabatanView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const BasicAppbar(
-                    isBackViewed: true,
-                    isProfileViewed: false,
-                  ),
+                  const BasicAppbar(isBackViewed: true),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

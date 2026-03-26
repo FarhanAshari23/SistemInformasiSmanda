@@ -23,7 +23,6 @@ class SuccesAddDate extends StatelessWidget {
           children: [
             const BasicAppbar(
               isBackViewed: false,
-              isProfileViewed: false,
             ),
             SizedBox(height: height * 0.1),
             Padding(

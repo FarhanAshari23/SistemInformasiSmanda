@@ -20,10 +20,7 @@ class EditTeacherView extends StatelessWidget {
           create: (context) => TeacherCubit()..displayTeacher(),
           child: Column(
             children: [
-              const BasicAppbar(
-                isBackViewed: true,
-                isProfileViewed: false,
-              ),
+              const BasicAppbar(isBackViewed: true),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(

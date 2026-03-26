@@ -32,7 +32,7 @@ class TeacherView extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              const BasicAppbar(isBackViewed: true, isProfileViewed: true),
+              const BasicAppbar(isBackViewed: true),
               const Text(
                 "Daftar Guru SMAN 2 METRO",
                 style: TextStyle(

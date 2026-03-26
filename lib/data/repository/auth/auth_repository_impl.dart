@@ -14,26 +14,6 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either> isAdmin() async {
-    return await sl<AuthFirebaseService>().isAdmin();
-  }
-
-  @override
-  Future<Either> getUser(String user) async {
-    var userLogin = await sl<AuthFirebaseService>().getUser(user);
-    return userLogin.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return user == "Students"
-            ? Right(StudentModel.fromMap(data).toEntity())
-            : Right(TeacherModel.fromMap(data).toEntity());
-      },
-    );
-  }
-
-  @override
   Future<Either> signUp(StudentEntity userCreationReq) async {
     return await sl<AuthFirebaseService>().signUp(userCreationReq);
   }
@@ -41,11 +21,6 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either> logout() async {
     return await sl<AuthFirebaseService>().logout();
-  }
-
-  @override
-  Future<Either> isRegister() async {
-    return await sl<AuthFirebaseService>().isRegister();
   }
 
   @override
@@ -59,12 +34,37 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either> isTeacher() async {
-    return await sl<AuthFirebaseService>().isTeacher();
+  Future<bool> isLoggedIn() async {
+    return await sl<AuthFirebaseService>().isLoggedIn();
   }
 
   @override
-  Future<bool> isLoggedIn() async {
-    return await sl<AuthFirebaseService>().isLoggedIn();
+  Future<Either> profileStudent(String email) async {
+    var returnedData = await sl<AuthFirebaseService>().profileStudent(email);
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          StudentModel.fromMap(data).toEntity(),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<Either> profileTeacher(String email) async {
+    var returnedData = await sl<AuthFirebaseService>().profileTeacher(email);
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          TeacherModel.fromMap(data).toEntity(),
+        );
+      },
+    );
   }
 }

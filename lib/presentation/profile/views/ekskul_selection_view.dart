@@ -40,7 +40,6 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
             children: [
               const BasicAppbar(
                 isBackViewed: true,
-                isProfileViewed: false,
               ),
               const Padding(
                 padding: EdgeInsets.all(8.0),

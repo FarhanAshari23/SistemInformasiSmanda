@@ -4,9 +4,9 @@ import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
 import '../../repository/auth/auth.dart';
 
-class IsAdminUsecase implements Usecase<Either, dynamic> {
+class ProfileStudentUsecase implements Usecase<Either, String> {
   @override
-  Future<Either> call({params}) async {
-    return await sl<AuthRepository>().isAdmin();
+  Future<Either> call({String? params}) async {
+    return sl<AuthRepository>().profileStudent(params!);
   }
 }

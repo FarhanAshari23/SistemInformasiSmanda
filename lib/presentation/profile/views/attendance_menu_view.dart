@@ -22,7 +22,7 @@ class AttendanceMenuView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const BasicAppbar(isBackViewed: true, isProfileViewed: false),
+            const BasicAppbar(isBackViewed: true),
             const Text(
               "Data absen mana yang ingin kamu lihat?",
               style: TextStyle(

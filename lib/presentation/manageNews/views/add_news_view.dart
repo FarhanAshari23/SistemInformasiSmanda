@@ -79,10 +79,7 @@ class _AddNewsViewState extends State<AddNewsView> {
           body: SafeArea(
             child: Column(
               children: [
-                const BasicAppbar(
-                  isBackViewed: true,
-                  isProfileViewed: false,
-                ),
+                const BasicAppbar(isBackViewed: true),
                 const Text(
                   'BUAT PENGUMUMAN',
                   style: TextStyle(

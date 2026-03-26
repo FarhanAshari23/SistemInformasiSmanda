@@ -44,7 +44,7 @@ class _SeeAllDataAttendanceTeacherState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const BasicAppbar(isBackViewed: true, isProfileViewed: false),
+              const BasicAppbar(isBackViewed: true),
               SizedBox(height: height * 0.01),
               Center(
                 child: BlocBuilder<SelectAttendanceCubit, int>(

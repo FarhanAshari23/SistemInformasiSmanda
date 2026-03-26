@@ -32,7 +32,7 @@ class EkskulDetail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const BasicAppbar(isBackViewed: true, isProfileViewed: true),
+            const BasicAppbar(isBackViewed: true),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 12),

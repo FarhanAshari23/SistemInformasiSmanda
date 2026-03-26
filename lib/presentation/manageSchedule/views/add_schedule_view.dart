@@ -109,10 +109,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const BasicAppbar(
-                    isBackViewed: true,
-                    isProfileViewed: false,
-                  ),
+                  const BasicAppbar(isBackViewed: true),
                   const SizedBox(height: 24),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),

@@ -112,7 +112,6 @@ class _AddAccountViewState extends State<AddAccountView> {
               children: [
                 const BasicAppbar(
                   isBackViewed: true,
-                  isProfileViewed: false,
                 ),
                 Expanded(
                   child: ListView(

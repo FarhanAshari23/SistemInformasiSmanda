@@ -108,7 +108,6 @@ class HomeViewAdmin extends StatelessWidget {
                 const BasicAppbar(
                   isBackViewed: false,
                   isLogout: true,
-                  isProfileViewed: false,
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),

@@ -11,9 +11,14 @@ import 'package:new_sistem_informasi_smanda/presentation/home/screens/teacher_sc
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/student/student.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  final StudentEntity student;
+  const HomeView({
+    super.key,
+    required this.student,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +53,6 @@ class HomeView extends StatelessWidget {
             children: [
               const BasicAppbar(
                 isBackViewed: false,
-                isProfileViewed: true,
               ),
               SizedBox(height: height * 0.0095),
               Builder(

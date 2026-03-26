@@ -41,10 +41,7 @@ class RegisterAccountDetailView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const BasicAppbar(
-              isBackViewed: true,
-              isProfileViewed: false,
-            ),
+            const BasicAppbar(isBackViewed: true),
             const Text(
               'DETAIL DATA AKUN',
               style: TextStyle(

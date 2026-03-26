@@ -93,10 +93,7 @@ class _EditNewsViewDetailState extends State<EditNewsViewDetail> {
           child: SafeArea(
             child: Column(
               children: [
-                const BasicAppbar(
-                  isBackViewed: true,
-                  isProfileViewed: false,
-                ),
+                const BasicAppbar(isBackViewed: true),
                 const Text(
                   'EDIT PENGUMUMAN',
                   style: TextStyle(

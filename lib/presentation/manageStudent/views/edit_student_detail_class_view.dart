@@ -83,10 +83,7 @@ class EditStudentDetailClassView extends StatelessWidget {
                   },
                   child: Column(
                     children: [
-                      const BasicAppbar(
-                        isBackViewed: true,
-                        isProfileViewed: false,
-                      ),
+                      const BasicAppbar(isBackViewed: true),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,

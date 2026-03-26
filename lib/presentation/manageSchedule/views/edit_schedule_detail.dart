@@ -128,10 +128,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const BasicAppbar(
-                    isBackViewed: true,
-                    isProfileViewed: false,
-                  ),
+                  const BasicAppbar(isBackViewed: true),
                   const SizedBox(height: 8),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),

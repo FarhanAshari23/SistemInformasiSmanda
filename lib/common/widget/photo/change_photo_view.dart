@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 
 import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
-import '../../../presentation/profile/bloc/profile_info_cubit.dart';
 import '../../bloc/button/button.cubit.dart';
 import '../../bloc/button/button_state.dart';
 import '../../bloc/upload_image/upload_image_cubit.dart';
@@ -81,8 +80,6 @@ class ChangePhotoView extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
             if (state is ButtonSuccessState) {
-              context.read<ProfileInfoCubit>().getUser("Teachers");
-
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Berhasil mengubah foto")),
               );
@@ -97,7 +94,6 @@ class ChangePhotoView extends StatelessWidget {
                 children: [
                   const BasicAppbar(
                     isBackViewed: true,
-                    isProfileViewed: false,
                   ),
                   SizedBox(height: height * 0.1),
                   BlocBuilder<UploadImageCubit, UploadImageState>(

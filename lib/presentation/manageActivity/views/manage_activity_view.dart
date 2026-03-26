@@ -68,7 +68,6 @@ class _ManageActivityViewState extends State<ManageActivityView> {
               children: [
                 const BasicAppbar(
                   isBackViewed: true,
-                  isProfileViewed: false,
                 ),
                 const Padding(
                   padding: EdgeInsets.only(left: 18),

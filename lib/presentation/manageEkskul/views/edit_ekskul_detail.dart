@@ -141,7 +141,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
           child: SafeArea(
             child: ListView(
               children: [
-                const BasicAppbar(isBackViewed: true, isProfileViewed: false),
+                const BasicAppbar(isBackViewed: true),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Column(

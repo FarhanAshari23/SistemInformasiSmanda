@@ -62,7 +62,6 @@ class _MainContent extends StatelessWidget {
           children: [
             const BasicAppbar(
               isBackViewed: true,
-              isProfileViewed: false,
               isLogout: false,
             ),
             SizedBox(height: height * 0.01),

@@ -57,7 +57,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
           child: SafeArea(
             child: Column(
               children: [
-                const BasicAppbar(isBackViewed: true, isProfileViewed: false),
+                const BasicAppbar(isBackViewed: true),
                 SizedBox(height: height * 0.01),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),

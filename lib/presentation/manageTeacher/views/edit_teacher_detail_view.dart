@@ -116,10 +116,7 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const BasicAppbar(
-                  isBackViewed: true,
-                  isProfileViewed: false,
-                ),
+                const BasicAppbar(isBackViewed: true),
                 const Center(
                   child: Text(
                     'EDIT DATA GURU',

@@ -126,10 +126,7 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const BasicAppbar(
-                  isBackViewed: true,
-                  isProfileViewed: false,
-                ),
+                const BasicAppbar(isBackViewed: true),
                 const Text(
                   'Ubah data siswa',
                   style: TextStyle(

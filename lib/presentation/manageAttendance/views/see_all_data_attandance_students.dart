@@ -65,7 +65,7 @@ class _SeeAllDataAttandanceStudentsState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const BasicAppbar(isBackViewed: true, isProfileViewed: false),
+                const BasicAppbar(isBackViewed: true),
                 const Padding(
                   padding: EdgeInsets.only(left: 20, bottom: 12),
                   child: Text(

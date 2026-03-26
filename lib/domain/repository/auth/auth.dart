@@ -7,10 +7,8 @@ abstract class AuthRepository {
   Future<Either> signUp(StudentEntity userCreationReq);
   Future<Either> forgotPassword(String email);
   Future<Either> checkEmailUsed(String email);
+  Future<Either> profileTeacher(String email);
+  Future<Either> profileStudent(String email);
   Future<Either> logout();
   Future<bool> isLoggedIn();
-  Future<Either> getUser(String user);
-  Future<Either> isAdmin();
-  Future<Either> isRegister();
-  Future<Either> isTeacher();
 }

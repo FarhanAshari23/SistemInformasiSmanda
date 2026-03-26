@@ -22,7 +22,7 @@ class PengumumanDetailView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const BasicAppbar(isBackViewed: true, isProfileViewed: true),
+            const BasicAppbar(isBackViewed: true),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(

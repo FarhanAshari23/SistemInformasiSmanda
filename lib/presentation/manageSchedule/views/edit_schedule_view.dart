@@ -53,10 +53,7 @@ class EditScheduleView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const BasicAppbar(
-                  isBackViewed: true,
-                  isProfileViewed: false,
-                ),
+                const BasicAppbar(isBackViewed: true),
                 const Padding(
                   padding: EdgeInsets.only(left: 18),
                   child: Text(

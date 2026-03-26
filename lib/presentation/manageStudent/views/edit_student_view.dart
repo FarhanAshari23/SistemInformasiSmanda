@@ -20,10 +20,7 @@ class EditStudentView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const BasicAppbar(
-              isBackViewed: true,
-              isProfileViewed: false,
-            ),
+            const BasicAppbar(isBackViewed: true),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(

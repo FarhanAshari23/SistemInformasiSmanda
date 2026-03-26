@@ -59,7 +59,6 @@ class KelasDetailView extends StatelessWidget {
                   children: [
                     const BasicAppbar(
                       isBackViewed: true,
-                      isProfileViewed: true,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),

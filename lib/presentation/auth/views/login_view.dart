@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/button/button_state.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/assets/app_lotties.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_admin.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_register.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/auth/check_teacher_usecase.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/bloc/password_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/button_role.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/views/home_view_admin.dart';
 
+import '../../../common/bloc/button/button.cubit.dart';
+import '../../../common/bloc/button/button_state.dart';
+import '../../../common/helper/app_navigation.dart';
+import '../../../core/configs/assets/app_lotties.dart';
+import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/student/student.dart';
+import '../../../domain/usecases/auth/profile_student_usecase.dart';
+import '../../../domain/usecases/auth/profile_teacher_usecase.dart';
 import '../../../domain/usecases/auth/signin.dart';
 import '../../../service_locator.dart';
+import '../../home/views/home_view.dart';
+import '../../home/views/home_view_admin.dart';
 import '../../profile/views/profile_teacher_view.dart';
+import '../bloc/password_cubit.dart';
+import '../widgets/button_role.dart';
 import 'add_account_detail_view.dart';
 import 'forget_password_view.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
 
-  final TextEditingController _usernameC = TextEditingController();
+  final TextEditingController _emailC = TextEditingController();
   final TextEditingController _passC = TextEditingController();
 
   @override
@@ -47,6 +46,7 @@ class LoginView extends StatelessWidget {
             ],
             child: BlocListener<ButtonStateCubit, ButtonState>(
               listener: (context, state) async {
+                String email = _emailC.text;
                 if (state is ButtonFailureState) {
                   var snackbar = SnackBar(
                     content: Text(state.errorMessage),
@@ -55,44 +55,33 @@ class LoginView extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(snackbar);
                 }
                 if (state is ButtonSuccessState) {
-                  var resultRegister = await sl<IsRegisterUsecase>().call();
-                  return resultRegister.fold(
+                  var studentProfile =
+                      await sl<ProfileStudentUsecase>().call(params: email);
+                  return studentProfile.fold(
                     (l) async {
-                      var resultTeacher =
-                          await sl<CheckTeacherUsecase>().call();
-                      return resultTeacher.fold(
-                        (error) {
-                          var snackbar = SnackBar(content: Text(error));
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                        },
-                        (r) {
+                      var teacherProfile =
+                          await sl<ProfileTeacherUsecase>().call(params: email);
+                      return teacherProfile.fold(
+                        (l) {
                           AppNavigator.pushAndRemoveUntil(
                             context,
-                            const ProfileTeacher(),
+                            const HomeViewAdmin(),
+                          );
+                        },
+                        (data) {
+                          AppNavigator.pushAndRemoveUntil(
+                            context,
+                            ProfileTeacher(
+                              teacher: data,
+                            ),
                           );
                         },
                       );
                     },
-                    (r) async {
-                      var resultAdmin = await sl<IsAdminUsecase>().call();
-                      return resultAdmin.fold(
-                        (error) {
-                          var snackbar = SnackBar(content: Text(error));
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                        },
-                        (r) async {
-                          if (r) {
-                            AppNavigator.pushAndRemoveUntil(
-                              context,
-                              const HomeViewAdmin(),
-                            );
-                          } else {
-                            AppNavigator.pushAndRemoveUntil(
-                              context,
-                              const HomeView(),
-                            );
-                          }
-                        },
+                    (data) {
+                      AppNavigator.pushAndRemoveUntil(
+                        context,
+                        HomeView(student: data),
                       );
                     },
                   );
@@ -130,10 +119,10 @@ class LoginView extends StatelessWidget {
                   ),
                   SizedBox(height: height * 0.05),
                   TextField(
-                    controller: _usernameC,
+                    controller: _emailC,
                     autocorrect: false,
                     decoration: const InputDecoration(
-                      hintText: 'Username:',
+                      hintText: 'Email:',
                     ),
                   ),
                   SizedBox(height: height * 0.025),
@@ -222,12 +211,12 @@ class LoginView extends StatelessWidget {
         return ButtonRole(
           title: 'Login',
           onPressed: () {
-            if (_usernameC.text.isEmpty || _passC.text.isEmpty) {
+            if (_emailC.text.isEmpty || _passC.text.isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   backgroundColor: Colors.red,
                   content: Text(
-                    'Tolong Isi Kolom Username dan Password yang Disediakan',
+                    'Tolong Isi Kolom Email dan Password yang Disediakan',
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                     ),
@@ -238,7 +227,7 @@ class LoginView extends StatelessWidget {
               context.read<ButtonStateCubit>().execute(
                     usecase: SignInUsecase(),
                     params: StudentEntity(
-                      email: _usernameC.text.toString(),
+                      email: _emailC.text.toString(),
                       password: _passC.text.toString(),
                     ),
                   );

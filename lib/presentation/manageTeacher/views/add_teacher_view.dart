@@ -101,10 +101,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
           child: SafeArea(
             child: Column(
               children: [
-                const BasicAppbar(
-                  isBackViewed: true,
-                  isProfileViewed: false,
-                ),
+                const BasicAppbar(isBackViewed: true),
                 const Text(
                   'TAMBAH DATA GURU',
                   style: TextStyle(

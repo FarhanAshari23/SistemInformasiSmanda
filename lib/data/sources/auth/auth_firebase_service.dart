@@ -12,12 +12,10 @@ abstract class AuthFirebaseService {
   Future<Either> signUp(StudentEntity murid);
   Future<Either> forgotPassword(String email);
   Future<Either> checkEmailUsed(String email);
+  Future<Either> profileTeacher(String email);
+  Future<Either> profileStudent(String email);
   Future<Either> logout();
-  Future<Either> getUser(String user);
   Future<bool> isLoggedIn();
-  Future<Either> isAdmin();
-  Future<Either> isRegister();
-  Future<Either> isTeacher();
 }
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
@@ -41,45 +39,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       }
 
       return Left(message);
-    }
-  }
-
-  @override
-  Future<Either> isAdmin() async {
-    try {
-      FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
-      final query = await firebaseFirestore
-          .collection('Students')
-          .where('uid', isEqualTo: firebaseAuth.currentUser?.uid)
-          .limit(1)
-          .get();
-
-      if (query.docs.isEmpty) {
-        return const Left("Admin not found");
-      }
-      final userData = query.docs.first.data();
-      final isAdmin = userData['isAdmin'] ?? false;
-      return right(isAdmin);
-    } catch (e) {
-      return left(e.toString());
-    }
-  }
-
-  @override
-  Future<Either> getUser(String user) async {
-    try {
-      var currentUser = FirebaseAuth.instance.currentUser;
-      var userData = await FirebaseFirestore.instance
-          .collection(user)
-          .where('uid', isEqualTo: currentUser?.uid)
-          .limit(1)
-          .get()
-          .then((value) => value.docs.first.data());
-      return Right(userData);
-    } catch (e) {
-      return left(e.toString());
     }
   }
 
@@ -127,31 +86,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   }
 
   @override
-  Future<Either> isRegister() async {
-    try {
-      FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
-      final query = await firebaseFirestore
-          .collection('Students')
-          .where('uid', isEqualTo: firebaseAuth.currentUser?.uid)
-          .limit(1)
-          .get();
-
-      if (query.docs.isEmpty) {
-        return const Left("User Register not found");
-      }
-      final userData = query.docs.first.data();
-      final isRegister = userData['is_register'] ?? false;
-      return right(isRegister);
-    } catch (e) {
-      return left(
-        'Akun anda belum terdaftar. Jika merasa sudah mendaftar, harap tunggu admin mengkonfirmasi pendaftaran anda.',
-      );
-    }
-  }
-
-  @override
   Future<Either> forgotPassword(String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
@@ -192,30 +126,35 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   }
 
   @override
-  Future<Either> isTeacher() async {
+  Future<bool> isLoggedIn() async {
+    return FirebaseAuth.instance.currentUser != null;
+  }
+
+  @override
+  Future<Either> profileStudent(String email) async {
     try {
-      FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
-      final query = await firebaseFirestore
-          .collection('Teachers')
-          .where('uid', isEqualTo: firebaseAuth.currentUser?.uid)
-          .limit(1)
-          .get();
-
-      if (query.docs.isEmpty) {
-        return const Left("Teacher not found");
+      final response = await Network.apiClient.get("/student/email/$email");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
       }
-      final userData = query.docs.first.data();
-      final isTeacher = userData['mengajar'] != null;
-      return right(isTeacher);
+      final dataList = response.data['data'] as Map<String, dynamic>;
+      return Right(dataList);
     } catch (e) {
-      return left(e.toString());
+      return Left("Something error: ${e.toString()}");
     }
   }
 
   @override
-  Future<bool> isLoggedIn() async {
-    return FirebaseAuth.instance.currentUser != null;
+  Future<Either> profileTeacher(String email) async {
+    try {
+      final response = await Network.apiClient.get("/teacher/email/$email");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as Map<String, dynamic>;
+      return Right(dataList);
+    } catch (e) {
+      return Left("Something error: ${e.toString()}");
+    }
   }
 }

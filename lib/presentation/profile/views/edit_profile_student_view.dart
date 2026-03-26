@@ -18,7 +18,6 @@ import '../../../domain/entities/student/student.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/students/update_user.dart';
-import '../bloc/profile_info_cubit.dart';
 import 'ekskul_selection_view.dart';
 
 class EditProfileStudentView extends StatefulWidget {
@@ -108,7 +107,6 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
             if (state is ButtonSuccessState) {
-              context.read<ProfileInfoCubit>().getUser("Students");
               FocusScope.of(context).unfocus();
               var snackbar = const SnackBar(
                 content: Text("Data Berhasil Diubah"),
@@ -123,10 +121,7 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const BasicAppbar(
-                  isBackViewed: true,
-                  isProfileViewed: false,
-                ),
+                const BasicAppbar(isBackViewed: true),
                 const Center(
                   child: Text(
                     'Ubah data profil',

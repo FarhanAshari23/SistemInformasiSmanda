@@ -28,7 +28,6 @@ class AddPhotoView extends StatelessWidget {
             children: [
               const BasicAppbar(
                 isBackViewed: true,
-                isProfileViewed: false,
               ),
               SizedBox(height: height * 0.1),
               BlocBuilder<UploadImageCubit, UploadImageState>(

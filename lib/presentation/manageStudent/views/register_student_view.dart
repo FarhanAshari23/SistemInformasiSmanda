@@ -61,10 +61,7 @@ class RegisterStudentView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const BasicAppbar(
-                  isBackViewed: true,
-                  isProfileViewed: false,
-                ),
+                const BasicAppbar(isBackViewed: true),
                 const Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(

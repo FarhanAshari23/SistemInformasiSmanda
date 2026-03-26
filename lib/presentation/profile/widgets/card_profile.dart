@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/display_image.dart';
@@ -11,7 +10,6 @@ import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../common/widget/detail/murid_detail.dart';
 import '../../../common/widget/detail/teacher_detail.dart';
-import '../bloc/profile_info_cubit.dart';
 import '../views/edit_profile_student_view.dart';
 
 class CardProfile extends StatelessWidget {
@@ -114,10 +112,7 @@ class CardProfile extends StatelessWidget {
                       defaultColor: AppColors.primary,
                       onTap: () => AppNavigator.push(
                         context,
-                        BlocProvider.value(
-                          value: context.read<ProfileInfoCubit>(),
-                          child: EditProfileStudentView(user: student!),
-                        ),
+                        EditProfileStudentView(user: student),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8),

@@ -105,7 +105,7 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
           body: SafeArea(
             child: Column(
               children: [
-                const BasicAppbar(isBackViewed: true, isProfileViewed: false),
+                const BasicAppbar(isBackViewed: true),
                 SizedBox(height: height * 0.01),
                 const Text(
                   'TAMBAH EKSKUL',

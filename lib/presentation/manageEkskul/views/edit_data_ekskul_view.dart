@@ -23,7 +23,7 @@ class EditDataEkskulView extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              const BasicAppbar(isBackViewed: true, isProfileViewed: false),
+              const BasicAppbar(isBackViewed: true),
               const Text(
                 'Pilih Ekskul yang ingin diubah:',
                 style: TextStyle(

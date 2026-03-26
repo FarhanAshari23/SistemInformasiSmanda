@@ -32,11 +32,9 @@ import 'domain/usecases/attendance/get_attendance_teacher_usecase.dart';
 import 'domain/usecases/attendance/get_list_attendaces_teacher_usecase.dart';
 import 'domain/usecases/attendance/get_list_attendances_student.dart';
 import 'domain/usecases/attendance/get_list_completions_teacher_usecase.dart';
-import 'domain/usecases/auth/check_admin.dart';
 import 'domain/usecases/auth/check_email_usecase.dart';
-import 'domain/usecases/auth/check_register.dart';
-import 'domain/usecases/auth/check_teacher_usecase.dart';
-import 'domain/usecases/auth/get_user.dart';
+import 'domain/usecases/auth/profile_student_usecase.dart';
+import 'domain/usecases/auth/profile_teacher_usecase.dart';
 import 'domain/usecases/auth/signin.dart';
 import 'domain/usecases/auth/signup.dart';
 import 'domain/usecases/ekskul/create_ekskul.dart';
@@ -136,17 +134,8 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<SignInUsecase>(
     SignInUsecase(),
   );
-  sl.registerSingleton<GetUserUsecase>(
-    GetUserUsecase(),
-  );
-  sl.registerSingleton<IsAdminUsecase>(
-    IsAdminUsecase(),
-  );
   sl.registerSingleton<CheckEmailUsecase>(
     CheckEmailUsecase(),
-  );
-  sl.registerSingleton<IsRegisterUsecase>(
-    IsRegisterUsecase(),
   );
   sl.registerSingleton<IsLoggedInUsecase>(
     IsLoggedInUsecase(),
@@ -157,8 +146,11 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<ForgotPasswordUsecase>(
     ForgotPasswordUsecase(),
   );
-  sl.registerSingleton<CheckTeacherUsecase>(
-    CheckTeacherUsecase(),
+  sl.registerSingleton<ProfileTeacherUsecase>(
+    ProfileTeacherUsecase(),
+  );
+  sl.registerSingleton<ProfileStudentUsecase>(
+    ProfileStudentUsecase(),
   );
 
   //teacher
