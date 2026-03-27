@@ -6,6 +6,7 @@ import '../../entities/attandance/attendance_workbook.dart';
 abstract class AttandanceRepository {
   Future<Either> addStudentAttendances(AttendanceStudentEntity student);
   Future<Either> addTeacherAttendances(AttandanceTeacherEntity teacher);
+  Future<Either> addTeacherCompletion(int teacherId);
   Future<Either> getListStudentAttendancesDate();
   Future<Either> getListTeacherAttendancesDate();
   Future<Either> getListTeacherCompletionsDate();

@@ -22,6 +22,7 @@ abstract class AttandanceFirebaseService {
   Future<Either> getAttendanceTeacher(int teacherId);
   Future<Either> getAttendanceAllTeacher(AttandanceTeacherEntity req);
   Future<Either> addTeacherAttendances(AttandanceTeacherEntity teacher);
+  Future<Either> addTeacherCompletion(int teacherId);
   Future<Either> searchStudentAttendance(AttendanceStudentEntity req);
   Future<Either> downloadAttendanceTeachers(AttendanceWorkBookEntity req);
 }
@@ -245,6 +246,22 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       final File file = File(filePath);
       await file.writeAsBytes(bytes, flush: true);
       return Right("Data excel berhasil di simpan di: $filePath");
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> addTeacherCompletion(int teacherId) async {
+    try {
+      final response =
+          await Network.apiClient.put("/attendanceteacher/$teacherId");
+
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+
+      return const Right("Rekam Pulang Berhasil");
     } catch (e) {
       return left(e.toString());
     }

@@ -8,8 +8,10 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/card/card_basic.dart';
 import '../../../common/widget/landing/succes.dart';
 import '../../../core/configs/assets/app_images.dart';
+import '../../../domain/entities/attandance/attandance_teacher.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/attendance/add_teacher_attendance.dart';
+import '../../../domain/usecases/attendance/add_teacher_completion_usecase.dart';
 import 'scan_barcode_view.dart';
 import '../bloc/get_distace_state.dart';
 import '../bloc/get_distance_cubit.dart';
@@ -90,11 +92,12 @@ class ProfileTeacherMenuView extends StatelessWidget {
                         final state = distanceCubit.state;
 
                         if (state is GetDistanceLoaded && state.isNear) {
-                          // final updatedTeacher =
-                          //     teacher.copyWith(isAttendance: true);
                           buttonCubit.execute(
                             usecase: AddTeacherAttendanceUseCase(),
-                            params: true,
+                            params: AttandanceTeacherEntity(
+                              teacherId: teacher.id,
+                              status: "Hadir",
+                            ),
                           );
                         } else {
                           messenger.showSnackBar(
@@ -120,11 +123,9 @@ class ProfileTeacherMenuView extends StatelessWidget {
                         final state = distanceCubit.state;
 
                         if (state is GetDistanceLoaded && state.isNear) {
-                          // final updatedTeacher =
-                          //     teacher.copyWith(isAttendance: false);
                           buttonCubit.execute(
-                            usecase: AddTeacherAttendanceUseCase(),
-                            params: false,
+                            usecase: AddTeacherCompletionUsecase(),
+                            params: teacher.id,
                           );
                         } else {
                           messenger.showSnackBar(
