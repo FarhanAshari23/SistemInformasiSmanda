@@ -94,4 +94,24 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
       },
     );
   }
+
+  @override
+  Future<Either> getJadwalGuru(int teacherId) async {
+    var returnedData =
+        await sl<ScheduleFirebaseService>().getJadwalGuru(teacherId);
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          List.from(data)
+              .map(
+                (e) => DayModel.fromMap(e).toEntity(),
+              )
+              .toList(),
+        );
+      },
+    );
+  }
 }

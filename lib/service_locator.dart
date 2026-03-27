@@ -46,6 +46,7 @@ import 'domain/usecases/news/delete_news.dart';
 import 'domain/usecases/news/get_news.dart';
 import 'domain/usecases/news/update_news.dart';
 import 'domain/usecases/schedule/create_activity_usecase.dart';
+import 'domain/usecases/schedule/get_jadwal_guru_usecase.dart';
 import 'domain/usecases/schedule/update_activity_usecase.dart';
 import 'domain/usecases/students/accept_student_register_usecase.dart';
 import 'domain/usecases/students/create_excell_students_usecase.dart';
@@ -319,5 +320,8 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<DeleteActivityUsecase>(
     DeleteActivityUsecase(),
+  );
+  sl.registerSingleton<GetJadwalGuruUsecase>(
+    GetJadwalGuruUsecase(),
   );
 }

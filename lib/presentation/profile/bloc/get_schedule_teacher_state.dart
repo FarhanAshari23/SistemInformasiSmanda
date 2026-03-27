@@ -11,4 +11,8 @@ class GetScheduleTeacherLoaded extends GetScheduleTeacherState {
   });
 }
 
-class GetScheduleTeacherFailure extends GetScheduleTeacherState {}
+class GetScheduleTeacherFailure extends GetScheduleTeacherState {
+  final String errorMessage;
+
+  GetScheduleTeacherFailure({required this.errorMessage});
+}

@@ -7,6 +7,7 @@ class DayModel {
   final String endTime;
   final String teacherName;
   final String subjectName;
+  final String className;
   final int teacherId, subjectId, classId;
 
   DayModel({
@@ -18,6 +19,7 @@ class DayModel {
     required this.subjectId,
     required this.subjectName,
     required this.teacherName,
+    required this.className,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,6 +32,7 @@ class DayModel {
       'class_id': classId,
       'teacher_name': teacherName,
       'subject_name': subjectName,
+      'class_name': className,
     };
   }
 
@@ -53,6 +56,7 @@ class DayModel {
       teacherId: map['teacher_id']?.toInt() ?? 0,
       subjectId: map['subject_id']?.toInt() ?? 0,
       classId: map['class_id']?.toInt() ?? 0,
+      className: map['class_name'] ?? '',
     );
   }
 
@@ -73,6 +77,7 @@ extension DayXModel on DayModel {
       classId: classId,
       subjectName: subjectName,
       teacherName: teacherName,
+      className: className,
     );
   }
 }
@@ -88,6 +93,7 @@ extension DayXEntity on DayEntity {
       classId: classId ?? 0,
       subjectName: subjectName ?? '',
       teacherName: teacherName ?? '',
+      className: className ?? '',
     );
   }
 }

@@ -70,7 +70,9 @@ class JadwalDaysSelection extends StatelessWidget {
           final selectedDay = dayName[context.watch<BarDaysCubit>().state];
           return Expanded(
             child: isTeacherSchedule
-                ? const ProfileTeacherScheduleView()
+                ? ProfileTeacherScheduleView(
+                    hari: selectedDay,
+                  )
                 : ProfileStudentScheduleView(hari: selectedDay),
           );
         }),

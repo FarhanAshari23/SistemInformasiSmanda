@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/get_schedule_teacher_cubit.dart';
 
 import '../../../domain/entities/teacher/teacher.dart';
 import '../bloc/bar_days_cubit.dart';
@@ -25,6 +26,10 @@ class ProfileTeacher extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => TwoContainersCubit()),
         BlocProvider(create: (context) => BarDaysCubit()),
+        BlocProvider(
+          create: (context) =>
+              GetScheduleTeacherCubit()..getJadwalGuru(teacher.id ?? 0),
+        ),
       ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,

@@ -5,6 +5,7 @@ import '../../entities/schedule/activity.dart';
 
 abstract class ScheduleRepository {
   Future<Either> getJadwal(int kelasId);
+  Future<Either> getJadwalGuru(int teacherId);
   Future<Either> createClass(KelasEntity kelasReq);
   Future<Either> updateClass(KelasEntity kelasReq);
   Future<Either> deleteClass(int kelasId);

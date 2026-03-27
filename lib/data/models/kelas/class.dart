@@ -131,6 +131,7 @@ extension KelasEntityX on KelasEntity {
                     classId: x.classId ?? 0,
                     subjectName: x.subjectName ?? '',
                     teacherName: x.teacherName ?? '',
+                    className: x.className ?? '',
                   ))
               .toList() ??
           [],

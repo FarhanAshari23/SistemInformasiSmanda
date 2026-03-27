@@ -4,6 +4,7 @@ class DayEntity {
   String? endTime;
   String? teacherName;
   String? subjectName;
+  String? className;
   int? teacherId, subjectId, classId;
 
   DayEntity({
@@ -15,6 +16,7 @@ class DayEntity {
     this.teacherId,
     this.subjectName,
     this.teacherName,
+    this.className,
   });
 
   DayEntity copyWith({
@@ -26,6 +28,7 @@ class DayEntity {
     int? classId,
     String? teacherName,
     String? subjectName,
+    String? className,
   }) {
     return DayEntity(
       classId: classId ?? this.classId,
@@ -36,6 +39,7 @@ class DayEntity {
       teacherId: teacherId ?? this.teacherId,
       subjectName: subjectName ?? this.subjectName,
       teacherName: teacherName ?? this.teacherName,
+      className: className ?? this.className,
     );
   }
 }
