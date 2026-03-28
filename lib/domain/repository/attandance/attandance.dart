@@ -13,6 +13,7 @@ abstract class AttandanceRepository {
   Future<Either> getAttendanceStudents(AttendanceStudentEntity attendanceReq);
   Future<Either> getAttendanceAllTeacher(AttandanceTeacherEntity req);
   Future<Either> getAttendanceTeacher(int teacherId);
+  Future<Either> getAttendanceTeacherCurrent(int teacherId);
   Future<Either> getAttendanceStudent(int studentId);
   Future<Either> searchStudentAttendance(AttendanceStudentEntity req);
   Future<Either> downloadAttendanceTeachers(AttendanceWorkBookEntity req);

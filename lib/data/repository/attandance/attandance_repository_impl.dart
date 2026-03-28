@@ -181,4 +181,20 @@ class AttandanceRepositoryImpl extends AttandanceRepository {
     return await sl<AttandanceFirebaseService>()
         .addTeacherCompletion(teacherId);
   }
+
+  @override
+  Future<Either> getAttendanceTeacherCurrent(int teacherId) async {
+    var returnedData = await sl<AttandanceFirebaseService>()
+        .getAttendanceTeacherCurrent(teacherId);
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          AttendanceTeacherModel.fromMap(data).toEntity(),
+        );
+      },
+    );
+  }
 }

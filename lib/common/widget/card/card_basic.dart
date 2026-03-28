@@ -6,6 +6,7 @@ import '../../../core/configs/theme/app_colors.dart';
 class CardBasic extends StatelessWidget {
   final String title;
   final String image;
+  final Color color, textColor;
   final VoidCallback onpressed;
 
   const CardBasic({
@@ -13,6 +14,8 @@ class CardBasic extends StatelessWidget {
     required this.title,
     required this.image,
     required this.onpressed,
+    this.color = AppColors.secondary,
+    this.textColor = AppColors.inversePrimary,
   });
 
   @override
@@ -22,7 +25,7 @@ class CardBasic extends StatelessWidget {
     return CustomInkWell(
       onTap: onpressed,
       borderRadius: 12,
-      defaultColor: AppColors.secondary,
+      defaultColor: color,
       child: SizedBox(
         width: width * 0.435,
         height: height * 0.25,
@@ -52,9 +55,9 @@ class CardBasic extends StatelessWidget {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w800,
-                  color: AppColors.inversePrimary,
+                  color: textColor,
                   fontSize: 14,
                 ),
               )

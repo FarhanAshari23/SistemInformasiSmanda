@@ -20,6 +20,7 @@ abstract class AttandanceFirebaseService {
   Future<Either> getAttendanceStudents(AttendanceStudentEntity req);
   Future<Either> getAttendanceStudent(int studentId);
   Future<Either> getAttendanceTeacher(int teacherId);
+  Future<Either> getAttendanceTeacherCurrent(int teacherId);
   Future<Either> getAttendanceAllTeacher(AttandanceTeacherEntity req);
   Future<Either> addTeacherAttendances(AttandanceTeacherEntity teacher);
   Future<Either> addTeacherCompletion(int teacherId);
@@ -146,7 +147,7 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
-      final dataList = response.data['data'] as Map<String, dynamic>;
+      final dataList = response.data['data'] as List<dynamic>;
       return Right(dataList);
     } catch (e) {
       return Left("Something error: ${e.toString()}");
@@ -264,6 +265,21 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       return const Right("Rekam Pulang Berhasil");
     } catch (e) {
       return left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> getAttendanceTeacherCurrent(int teacherId) async {
+    try {
+      final response = await Network.apiClient
+          .get("/attendanceteacher/teacherid/$teacherId/current");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final data = response.data['data'] as Map<String, dynamic>;
+      return Right(data);
+    } catch (e) {
+      return Left("Something error: ${e.toString()}");
     }
   }
 }

@@ -10,6 +10,12 @@ class GetTeacherAttendanceLoaded extends GetTeacherAttendanceState {
   GetTeacherAttendanceLoaded({required this.attendances});
 }
 
+class GetTeacherAttendanceCurrentLoaded extends GetTeacherAttendanceState {
+  final AttandanceTeacherEntity attendance;
+
+  GetTeacherAttendanceCurrentLoaded({required this.attendance});
+}
+
 class GetTeacherAttendanceFailure extends GetTeacherAttendanceState {
   final String errorMessage;
 
