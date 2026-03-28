@@ -54,7 +54,9 @@ class _MainContent extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return BlocListener<SelectAttendanceCubit, int>(
       listener: (context, state) {
-        // context.read<GetTeacherAttendanceCubit>().getAttendanceTeacher(teacher);
+        context
+            .read<GetTeacherAttendanceCubit>()
+            .getAttendanceTeacher(teacher.id ?? 0);
       },
       child: SafeArea(
         child: Column(
@@ -116,7 +118,7 @@ class _MainContent extends StatelessWidget {
                   if (lastTimestamp == today) {
                     context
                         .read<SelectTimestampCubit>()
-                        .select(state.attendances.last.date!);
+                        .select(state.attendances.last.checkIn!);
                   }
                 }
               },
@@ -135,11 +137,8 @@ class _MainContent extends StatelessWidget {
                   }
 
                   if (state is GetTeacherAttendanceLoaded) {
-                    DateFormat format = DateFormat('dd-M-yyyy');
-
-                    List<DateTime> highlightedDates = state.attendances
-                        .map((a) => format.parse(a.date.toString()))
-                        .toList();
+                    List<DateTime> highlightedDates =
+                        state.attendances.map((a) => a.date!).toList();
 
                     final selectedDate =
                         context.watch<SelectedDateCubit>().state;
@@ -157,18 +156,28 @@ class _MainContent extends StatelessWidget {
                                 .selectDate(dateOnly);
 
                             bool found = false;
+                            final attendanceType =
+                                context.read<SelectAttendanceCubit>().state;
 
                             for (var att in state.attendances) {
                               final attDate =
-                                  format.parse(att.checkIn.toString());
+                                  DateTime.parse(att.checkIn.toString())
+                                      .toLocal();
                               final attOnly = DateTime(
                                   attDate.year, attDate.month, attDate.day);
 
                               if (attOnly == dateOnly) {
                                 found = true;
-                                context
-                                    .read<SelectTimestampCubit>()
-                                    .select(att.checkIn!);
+                                if (attendanceType == 0) {
+                                  context
+                                      .read<SelectTimestampCubit>()
+                                      .select(att.checkIn!);
+                                }
+                                if (attendanceType == 1) {
+                                  context
+                                      .read<SelectTimestampCubit>()
+                                      .select(att.checkOut!);
+                                }
                                 break;
                               }
                             }
@@ -257,8 +266,6 @@ class _MainContent extends StatelessWidget {
                 },
               ),
             ),
-
-            /// TIMESTAMP DISPLAY
             BlocBuilder<SelectTimestampCubit, DateTime?>(
               builder: (context, selectedTimestamp) {
                 if (selectedTimestamp == null) {
