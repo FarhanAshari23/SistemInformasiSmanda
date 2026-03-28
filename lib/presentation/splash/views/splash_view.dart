@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/usecases/auth/is_admin_usecase.dart';
 import '../../../domain/usecases/auth/profile_student_usecase.dart';
 import '../../../domain/usecases/auth/profile_teacher_usecase.dart';
 import '../../../service_locator.dart';
@@ -34,10 +35,23 @@ class SplashView extends StatelessWidget {
               var studentPage =
                   await sl<ProfileStudentUsecase>().call(params: email);
               return studentPage.fold(
-                (l) {
-                  AppNavigator.pushReplacement(
-                    context,
-                    const HomeViewAdmin(),
+                (l) async {
+                  var isAdmin = await sl<IsAdminUsecase>().call(params: email);
+                  isAdmin.fold(
+                    (l) {
+                      AppNavigator.pushReplacement(context, LoginView());
+                      var snackbar = SnackBar(
+                        content: Text(l.toString()),
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                    },
+                    (r) {
+                      AppNavigator.pushAndRemoveUntil(
+                        context,
+                        const HomeViewAdmin(),
+                      );
+                    },
                   );
                 },
                 (data) {
