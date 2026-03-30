@@ -1,10 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SelectEkskulCubit extends Cubit<List<String>> {
+import '../../../domain/entities/ekskul/ekskul.dart';
+
+class SelectEkskulCubit extends Cubit<List<EkskulEntity>> {
   SelectEkskulCubit() : super([]);
 
-  void toggleEkskul(String ekskul) {
-    final current = List<String>.from(state);
+  void toggleEkskul(EkskulEntity ekskul) {
+    final current = List<EkskulEntity>.from(state);
 
     if (current.contains(ekskul)) {
       current.remove(ekskul); // kalau sudah ada → hapus
@@ -15,7 +17,7 @@ class SelectEkskulCubit extends Cubit<List<String>> {
     emit(current);
   }
 
-  void setInitialSelected(List<String> selectedEkskul) {
-    emit(List<String>.from(selectedEkskul));
+  void setInitialSelected(List<EkskulEntity> selectedEkskul) {
+    emit(List<EkskulEntity>.from(selectedEkskul));
   }
 }

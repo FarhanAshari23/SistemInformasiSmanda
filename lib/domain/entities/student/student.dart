@@ -12,6 +12,8 @@ class StudentEntity {
   String? mobileNum;
   int? gender;
   DateTime? birthDate;
+  List<String>? ekskul;
+  List<int>? ekskulId;
   String? password;
   bool? isRegister;
   bool? isAdmin;
@@ -35,6 +37,8 @@ class StudentEntity {
     this.iv,
     this.email,
     this.imageFile,
+    this.ekskul,
+    this.ekskulId,
   });
 
   StudentEntity copyWith({
@@ -49,6 +53,8 @@ class StudentEntity {
     String? mobileNum,
     int? gender,
     DateTime? birthDate,
+    List<String>? ekskul,
+    List<int>? ekskulId,
     String? password,
     bool? isRegister,
     bool? isAdmin,
@@ -65,6 +71,7 @@ class StudentEntity {
       address: address ?? this.address,
       email: email ?? this.email,
       mobileNum: mobileNum ?? this.mobileNum,
+      ekskul: ekskul ?? this.ekskul,
       gender: gender ?? this.gender,
       birthDate: birthDate ?? this.birthDate,
       password: password ?? this.password,
@@ -72,6 +79,7 @@ class StudentEntity {
       isAdmin: isAdmin ?? this.isAdmin,
       iv: iv ?? this.iv,
       imageFile: imageFile ?? this.imageFile,
+      ekskulId: ekskulId ?? this.ekskulId,
     );
   }
 }

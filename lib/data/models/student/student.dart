@@ -11,12 +11,14 @@ class StudentModel {
   final String religion;
   final String address;
   final String mobileNum;
+  final List<String> ekskul;
+  final List<int> ekskulId;
   final int gender;
   final DateTime birthDate;
   final String email;
-  final dynamic password;
   final bool isRegister;
   final bool isAdmin;
+  final dynamic password;
   final dynamic iv;
 
   StudentModel({
@@ -35,6 +37,8 @@ class StudentModel {
     required this.isRegister,
     required this.isAdmin,
     required this.iv,
+    required this.ekskul,
+    required this.ekskulId,
   });
 
   Map<String, dynamic> toMap() {
@@ -47,6 +51,7 @@ class StudentModel {
       'religion': religion,
       'address': address,
       'mobile_num': mobileNum,
+      "list_ekskul": ekskul,
       'gender': gender,
       'birth_date': birthDate.toUtc().toIso8601String(),
       'email': email,
@@ -59,6 +64,7 @@ class StudentModel {
     data.removeWhere((key, value) {
       if (value == null) return true;
       if (value == 0) return true;
+      if (value is Iterable && value.isEmpty) return true;
       if (value is String && value.isEmpty) return true;
       return false;
     });
@@ -67,7 +73,7 @@ class StudentModel {
   }
 
   Map<String, dynamic> updateStudent() {
-    return {
+    final Map<String, dynamic> data = {
       'nisn': nisn,
       'name': name,
       'kelas_id': kelasId,
@@ -76,7 +82,18 @@ class StudentModel {
       'mobile_num': mobileNum,
       'gender': gender,
       'birth_date': birthDate.toUtc().toIso8601String(),
+      'ekskul_id': ekskulId,
     };
+
+    data.removeWhere((key, value) {
+      if (value == null) return true;
+      if (value == 0) return true;
+      if (value is Iterable && value.isEmpty) return true;
+      if (value is String && value.isEmpty) return true;
+      return false;
+    });
+
+    return data;
   }
 
   factory StudentModel.fromMap(Map<String, dynamic> map) {
@@ -98,6 +115,15 @@ class StudentModel {
       isRegister: map['is_register'] ?? false,
       isAdmin: map['is_admin'] ?? false,
       iv: map['iv'],
+      ekskul: map['list_ekskul'] != null
+          ? List<String>.from(map['list_ekskul'] is String
+              ? [map['list_ekskul']]
+              : map['list_ekskul'])
+          : [],
+      ekskulId: map['ekskul_id'] != null
+          ? List<int>.from(
+              map['ekskul_id'] is int ? [map['ekskul_id']] : map['ekskul_id'])
+          : [],
     );
   }
 
@@ -124,6 +150,8 @@ extension StudentModelX on StudentModel {
       nisn: nisn,
       password: password,
       religion: religion,
+      ekskul: ekskul,
+      ekskulId: ekskulId,
     );
   }
 
@@ -144,6 +172,8 @@ extension StudentModelX on StudentModel {
       nisn: entity.nisn ?? '',
       password: entity.password ?? '',
       religion: entity.religion ?? '',
+      ekskul: entity.ekskul ?? [],
+      ekskulId: entity.ekskulId ?? [],
     );
   }
 }

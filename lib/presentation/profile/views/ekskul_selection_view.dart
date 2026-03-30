@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_state.dart';
+import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 
+import '../../../common/bloc/ekskul/ekskul_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../common/bloc/ekskul/ekskul_cubit.dart';
 import '../../../common/bloc/ekskul/select_ekskul_cubit.dart';
+import '../../../domain/entities/ekskul/member.dart';
 
 class EkskulSelectionView extends StatefulWidget {
-  final List<String> initialEkskul;
+  final List<MemberEntity>? initialEkskul;
   const EkskulSelectionView({
     super.key,
-    required this.initialEkskul,
+    this.initialEkskul,
   });
 
   @override
@@ -23,6 +25,12 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    List<MemberEntity> mainRole = [];
+    if (widget.initialEkskul != null) {
+      mainRole = widget.initialEkskul!
+          .where((element) => element.role != "Anggota")
+          .toList as List<MemberEntity>;
+    }
     return Scaffold(
       body: MultiBlocProvider(
         providers: [
@@ -30,8 +38,7 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
             create: (context) => EkskulCubit()..displayEkskul(),
           ),
           BlocProvider(
-            create: (context) =>
-                SelectEkskulCubit()..setInitialSelected(widget.initialEkskul),
+            create: (context) => SelectEkskulCubit(),
           ),
         ],
         child: SafeArea(
@@ -41,6 +48,54 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
               const BasicAppbar(
                 isBackViewed: true,
               ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Jabatan Ekskul Anda',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              widget.initialEkskul != null
+                  ? ListView.separated(
+                      scrollDirection: Axis.vertical,
+                      padding: const EdgeInsets.all(8.0),
+                      itemBuilder: (context, index) {
+                        final role = mainRole[index];
+                        return Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            "${role.role} ${role.ekskulName}",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 8),
+                      itemCount: mainRole.length,
+                    )
+                  : const Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Text(
+                        'Anda tidak sedang menjabat ekskul apapun',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+              const SizedBox(height: 8),
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
@@ -58,35 +113,13 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (state is EkskulLoaded) {
-                    final fetchedEkskul = state.ekskul
-                        .map(
-                          (e) => DisplayEkskul(
-                            namaEkskul: e.nameEkskul!,
-                            isCustom: false,
-                          ),
-                        )
-                        .toList();
-
-                    final extraEkskul = (widget.initialEkskul)
-                        .where((nama) => !fetchedEkskul.any(
-                              (e) =>
-                                  e.namaEkskul.toLowerCase() ==
-                                  nama.toLowerCase(),
-                            ))
-                        .map((nama) =>
-                            DisplayEkskul(namaEkskul: nama, isCustom: true))
-                        .toList();
-
-                    final combinedEkskul = extraEkskul.isEmpty
-                        ? [...fetchedEkskul] // kalau extraEkskul kosong
-                        : [...extraEkskul, ...fetchedEkskul]; // kalau ada extra
                     return Expanded(
                       child: Stack(
                         children: [
-                          BlocBuilder<SelectEkskulCubit, List<String>>(
+                          BlocBuilder<SelectEkskulCubit, List<EkskulEntity>>(
                             builder: (context, selectedEkskul) {
                               return GridView.builder(
-                                itemCount: combinedEkskul.length,
+                                itemCount: state.ekskul.length,
                                 scrollDirection: Axis.vertical,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8),
@@ -98,27 +131,24 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                                   mainAxisExtent: height * 0.25,
                                 ),
                                 itemBuilder: (context, index) {
-                                  final ekskul = combinedEkskul[index];
-                                  final isSelected = selectedEkskul
-                                      .contains(ekskul.namaEkskul);
+                                  final ekskul = state.ekskul[index];
+                                  final isSelected =
+                                      selectedEkskul.contains(ekskul);
                                   return CustomInkWell(
                                     onTap: () {
-                                      if (ekskul.isCustom) return;
                                       context
                                           .read<SelectEkskulCubit>()
-                                          .toggleEkskul(ekskul.namaEkskul);
+                                          .toggleEkskul(ekskul);
                                     },
                                     borderRadius: 8,
-                                    defaultColor: ekskul.isCustom
-                                        ? Colors.red
-                                        : isSelected
-                                            ? AppColors.primary
-                                            : AppColors.secondary,
+                                    defaultColor: isSelected
+                                        ? AppColors.primary
+                                        : AppColors.secondary,
                                     child: Center(
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          ekskul.namaEkskul,
+                                          ekskul.nameEkskul ?? '',
                                           style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w700,
@@ -144,13 +174,9 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                                   final selected =
                                       context.read<SelectEkskulCubit>().state;
 
-                                  final String endResult = selected
-                                      .where((e) => e.trim().isNotEmpty)
-                                      .join(', ');
-
                                   Navigator.pop(
                                     context,
-                                    endResult,
+                                    selected,
                                   );
                                 },
                                 child: Container(

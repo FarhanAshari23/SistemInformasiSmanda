@@ -42,6 +42,7 @@ class CardDetailSiswa extends StatelessWidget {
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),

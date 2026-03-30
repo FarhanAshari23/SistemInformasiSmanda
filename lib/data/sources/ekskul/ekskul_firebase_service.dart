@@ -7,6 +7,7 @@ import '../../models/ekskul/ekskul.dart';
 abstract class EkskulFirebaseService {
   Future<Either> createEkskul(EkskulEntity ekskulCreationReq);
   Future<Either> getEkskul();
+  Future<Either> getStudentEkskul(int studentId);
   Future<Either> updateEkskul(EkskulEntity ekskulUpdateReq);
   Future<Either> deleteEkskul(int ekskulId);
 }
@@ -77,6 +78,21 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
       return const Right("Delete ekskul berhasil");
     } catch (e) {
       return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> getStudentEkskul(int studentId) async {
+    try {
+      final response =
+          await Network.apiClient.get("/membership-student/$studentId");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
+    } catch (e) {
+      return Left("Something error: ${e.toString()}");
     }
   }
 }

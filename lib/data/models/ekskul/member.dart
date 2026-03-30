@@ -4,7 +4,7 @@ import '../../../domain/entities/ekskul/member.dart';
 
 class MemberModel {
   final int id, gender;
-  final String name, nisn, role, religion;
+  final String name, nisn, role, religion, ekskulName;
 
   MemberModel({
     required this.id,
@@ -13,6 +13,7 @@ class MemberModel {
     required this.role,
     required this.religion,
     required this.gender,
+    required this.ekskulName,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +24,7 @@ class MemberModel {
       'student_religion': religion,
       'student_gender': gender,
       'role': role,
+      'extracurricular_name': ekskulName,
     };
   }
 
@@ -41,6 +43,7 @@ class MemberModel {
       role: map['role'] ?? '',
       gender: map['student_gender'] ?? 0,
       religion: map['student_religion'] ?? '',
+      ekskulName: map['extracurricular_name'] ?? '',
     );
   }
 
@@ -59,6 +62,7 @@ extension MemberModelX on MemberModel {
       role: role,
       gender: gender,
       religion: religion,
+      ekskulName: ekskulName,
     );
   }
 
@@ -70,6 +74,7 @@ extension MemberModelX on MemberModel {
       role: entity.role ?? '',
       gender: entity.gender ?? 0,
       religion: entity.religion ?? '',
+      ekskulName: entity.ekskulName ?? '',
     );
   }
 }

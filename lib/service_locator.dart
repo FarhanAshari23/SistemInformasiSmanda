@@ -43,6 +43,7 @@ import 'domain/usecases/auth/signup.dart';
 import 'domain/usecases/ekskul/create_ekskul.dart';
 import 'domain/usecases/ekskul/delete_ekskul.dart';
 import 'domain/usecases/ekskul/get_ekskul.dart';
+import 'domain/usecases/ekskul/get_student_ekskul_usecase.dart';
 import 'domain/usecases/ekskul/update_ekskul.dart';
 import 'domain/usecases/news/delete_news.dart';
 import 'domain/usecases/news/get_news.dart';
@@ -251,6 +252,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<GetEkskulUsecase>(
     GetEkskulUsecase(),
+  );
+  sl.registerSingleton<GetStudentEkskulUsecase>(
+    GetStudentEkskulUsecase(),
   );
   sl.registerSingleton<UpdateEkskulUsecase>(
     UpdateEkskulUsecase(),
