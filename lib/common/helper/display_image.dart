@@ -12,13 +12,4 @@ class DisplayImage {
   static String displayImageStaff(String name) {
     return '${AppUrl.storageStudent}/$name.jpg';
   }
-
-  // static String displayImageEkskul(String name) {
-  //   return '${AppUrl.storageEkskul}/$name.jpg';
-  // }
-
-  // static String displayImageMemberEkskul(
-  //     String name, String ekskul, String jabatan) {
-  //   return '${AppUrl.storageEkskul}/$ekskul$name$jabatan.jpg';
-  // }
 }

@@ -181,7 +181,7 @@ class TeacherFirebaseServiceImpl extends TeacherFirebaseService {
   @override
   Future<Either> getTeacherById(int teacherId) async {
     try {
-      final response = await Network.apiClient.get("/teacher/$teacherId");
+      final response = await Network.apiClient.get("/teacher/id/$teacherId");
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }

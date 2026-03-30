@@ -28,104 +28,116 @@ class CardProfile extends StatelessWidget {
     final nip = teacher?.nip;
     final birthDate = teacher?.birthDate;
 
-    final nipOrBirthDate = (nip != null && nip.isNotEmpty)
-        ? nip
-        : (DateFormat('d MMMM yyyy', "id_ID").format(birthDate!));
+    String nipOrBirthDate = '';
+    if (nip != null && nip.isNotEmpty) {
+      nipOrBirthDate = nip;
+    } else if (birthDate != null) {
+      nipOrBirthDate = DateFormat('d MMMM yyyy', "id_ID").format(birthDate);
+    }
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: width * 0.015),
       child: CustomInkWell(
         borderRadius: 16,
         defaultColor: AppColors.secondary,
-        onTap: () => AppNavigator.push(
-          context,
-          student != null
-              ? MuridDetail(userId: student!.id!)
-              : TeacherDetail(teacherId: teacher!.id!),
-        ),
+        onTap: () {
+          if (student != null) {
+            AppNavigator.push(context, MuridDetail(userId: student?.id ?? 0));
+          } else if (teacher != null) {
+            AppNavigator.push(
+                context, TeacherDetail(teacherId: teacher?.id ?? 0));
+          }
+        },
         child: Container(
-          padding:
-              const EdgeInsets.only(bottom: 18, top: 18, right: 12, left: 8),
+          padding: const EdgeInsets.only(
+            bottom: 18,
+            top: 18,
+            right: 12,
+            left: 8,
+          ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              NetworkPhoto(
-                width: width * 0.3,
-                height: height * 0.15,
-                fallbackAsset: student != null
-                    ? student?.gender == 1
-                        ? AppImages.boyStudent
-                        : student?.religion == "Islam"
-                            ? AppImages.girlStudent
-                            : AppImages.girlNonStudent
-                    : teacher?.gender == 1
-                        ? AppImages.guruLaki
-                        : AppImages.guruPerempuan,
-                imageUrl: student != null
-                    ? DisplayImage.displayImageStudent(
-                        student?.name ?? '',
-                        student?.nisn ?? '',
-                      )
-                    : DisplayImage.displayImageTeacher(
-                        teacher?.name ?? '',
-                        nipOrBirthDate.toString(),
-                      ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 19, left: 12),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: width * 0.45,
-                          height: height * 0.055,
-                          child: Text(
-                            (student != null ? student?.name : teacher?.name) ??
-                                '',
-                            style: const TextStyle(
-                              color: AppColors.inversePrimary,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w900,
+                    NetworkPhoto(
+                      width: width * 0.3,
+                      height: height * 0.15,
+                      fallbackAsset: student != null
+                          ? student?.gender == 1
+                              ? AppImages.boyStudent
+                              : student?.religion == "Islam"
+                                  ? AppImages.girlStudent
+                                  : AppImages.girlNonStudent
+                          : teacher?.gender == 1
+                              ? AppImages.guruLaki
+                              : AppImages.guruPerempuan,
+                      imageUrl: student != null
+                          ? DisplayImage.displayImageStudent(
+                              student?.name ?? '',
+                              student?.nisn ?? '',
+                            )
+                          : DisplayImage.displayImageTeacher(
+                              teacher?.name ?? '',
+                              nipOrBirthDate.toString(),
                             ),
-                          ),
-                        ),
-                        SizedBox(height: height * 0.01),
-                        Text(
-                          (student != null
-                                  ? student?.nameClass
-                                  : teacher?.nip) ??
-                              '',
-                          style: const TextStyle(
-                            color: AppColors.inversePrimary,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
                     ),
-                    const SizedBox(height: 8),
-                    CustomInkWell(
-                      borderRadius: 999,
-                      defaultColor: AppColors.primary,
-                      onTap: () => AppNavigator.push(
-                        context,
-                        EditProfileStudentView(user: student),
-                      ),
+                    Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Icon(
-                          student != null
-                              ? Icons.edit
-                              : Icons.camera_alt_rounded,
-                          color: Colors.white,
-                          size: 16,
+                        padding: const EdgeInsets.all(12.0),
+                        child: RichText(
+                          textAlign: TextAlign.left,
+                          text: TextSpan(
+                            text:
+                                "${student != null ? student?.name : teacher?.name ?? ''}\n",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                            children: [
+                              WidgetSpan(
+                                child: SizedBox(
+                                  height: height * 0.03,
+                                ),
+                              ),
+                              TextSpan(
+                                text: student != null
+                                    ? student?.nameClass
+                                    : teacher?.nip,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: CustomInkWell(
+                  borderRadius: 999,
+                  defaultColor: AppColors.primary,
+                  onTap: () => AppNavigator.push(
+                    context,
+                    EditProfileStudentView(user: student),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Icon(
+                      student != null ? Icons.edit : Icons.camera_alt_rounded,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                  ),
                 ),
               ),
             ],

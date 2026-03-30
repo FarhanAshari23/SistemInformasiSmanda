@@ -262,6 +262,11 @@ class TeacherDetail extends StatelessWidget {
                   ),
                 );
               }
+              if (state is TeacherFailure) {
+                return Center(
+                  child: Text(state.errorMessage),
+                );
+              }
               return const SizedBox();
             },
           ),

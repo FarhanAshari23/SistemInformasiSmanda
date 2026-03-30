@@ -31,6 +31,9 @@ class NetworkPhoto extends StatelessWidget {
     return CachedNetworkImage(
       imageUrl: finalUrl,
       cacheManager: FastCacheManager.instance,
+      httpHeaders: const {
+        'x-api-key': 'RAHASIA',
+      },
       imageBuilder: (context, provider) => Container(
         width: width,
         height: height,

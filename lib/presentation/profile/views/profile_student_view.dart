@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:new_sistem_informasi_smanda/presentation/profile/widgets/card_profile.dart';
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/helper/app_navigation.dart';
@@ -13,6 +12,7 @@ import '../bloc/bar_days_cubit.dart';
 import '../bloc/get_attendance_student_cubit.dart';
 import '../../../common/bloc/schedule/jadwal_display_cubit.dart';
 import '../bloc/section_cubit.dart';
+import '../widgets/card_profile.dart';
 import '../widgets/jadwal_days_selection.dart';
 import 'profile_student_qr_view.dart';
 
@@ -32,7 +32,8 @@ class ProfileStudentView extends StatelessWidget {
         BlocProvider(create: (context) => BarDaysCubit()),
         BlocProvider(create: (context) => TwoContainersCubit()),
         BlocProvider(
-          create: (context) => JadwalDisplayCubit()..displayJadwal(),
+          create: (context) => JadwalDisplayCubit()
+            ..displayJadwal(params: student?.kelasId ?? 0),
         ),
         BlocProvider(
           create: (context) => ButtonStateCubit(),
@@ -58,10 +59,9 @@ class ProfileStudentView extends StatelessWidget {
             },
             child: Column(
               children: [
-                BasicAppbar(
+                const BasicAppbar(
                   isBackViewed: true,
                   isLogout: true,
-                  student: student,
                 ),
                 Expanded(
                   child: Column(
@@ -72,8 +72,10 @@ class ProfileStudentView extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                CardProfile(
-                                  student: student,
+                                Expanded(
+                                  child: CardProfile(
+                                    student: student,
+                                  ),
                                 ),
                                 Column(
                                   mainAxisSize: MainAxisSize.min,

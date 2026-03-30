@@ -51,8 +51,9 @@ class HomeView extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              const BasicAppbar(
+              BasicAppbar(
                 isBackViewed: false,
+                student: student,
               ),
               SizedBox(height: height * 0.0095),
               Builder(

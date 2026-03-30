@@ -39,9 +39,6 @@ class JadwalDaysSelection extends StatelessWidget {
             itemBuilder: (context, index) => CustomInkWell(
               onTap: () {
                 context.read<BarDaysCubit>().changeColor(index);
-                if (!isTeacherSchedule) {
-                  context.read<JadwalDisplayCubit>().displayJadwal(params: 0);
-                }
               },
               defaultColor: context.watch<BarDaysCubit>().state == index
                   ? AppColors.primary

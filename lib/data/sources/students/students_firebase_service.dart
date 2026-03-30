@@ -191,7 +191,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   @override
   Future<Either> acceptStudentAccount(int studentId) async {
     try {
-      final response = await Network.apiClient.get("/student/$studentId");
+      final response = await Network.apiClient.get("/student/id/$studentId");
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
@@ -385,7 +385,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   @override
   Future<Either> getStudentById(int studentId) async {
     try {
-      final response = await Network.apiClient.get("/student/$studentId");
+      final response = await Network.apiClient.get("/student/id/$studentId");
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
