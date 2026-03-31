@@ -8,7 +8,7 @@ import '../../../common/widget/dialog/basic_dialog.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../service_locator.dart';
-import '../../home/bloc/news_cubit.dart';
+import '../../news/bloc/news_cubit.dart';
 import '../views/edit_news_view_detail.dart';
 
 class CardNewsEdit extends StatelessWidget {

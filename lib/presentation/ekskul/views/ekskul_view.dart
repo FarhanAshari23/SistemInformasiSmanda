@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/presentation/ekskul/views/ekskul_detail.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/ekskul/ekskul_state.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/widgets/card_ekskul.dart';
-import 'package:stacked_listview/stacked_listview.dart';
 
+import '../../../common/bloc/ekskul/ekskul_cubit.dart';
+import '../../../common/bloc/ekskul/ekskul_state.dart';
+import '../../../common/helper/app_navigation.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../widgets/card_ekskul.dart';
+import 'ekskul_detail_view.dart';
 
 class EkskulScreen extends StatelessWidget {
   const EkskulScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: BlocProvider(
@@ -50,13 +48,22 @@ class EkskulScreen extends StatelessWidget {
                   ),
                 );
               } else {
-                return StackedListView(
-                  padding: EdgeInsets.only(
-                      bottom: height * 0.15, top: height * 0.07),
-                  itemExtent: width * 0.475,
-                  itemCount: state.ekskul.length,
-                  scrollDirection: Axis.horizontal,
-                  builder: (context, index) {
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  padding: const EdgeInsets.only(
+                    left: 8,
+                    right: 8,
+                    bottom: 48,
+                  ),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12.0,
+                    mainAxisSpacing: 12.0,
+                    mainAxisExtent: height * 0.3,
+                  ),
+                  itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () => AppNavigator.push(
                         context,
@@ -64,17 +71,12 @@ class EkskulScreen extends StatelessWidget {
                           ekskul: state.ekskul[index],
                         ),
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: index == 0 ? 0 : 4,
-                          right: index == state.ekskul.length - 1 ? 0 : 4,
-                        ),
-                        child: CardEkskul(
-                          ekskul: state.ekskul[index],
-                        ),
+                      child: CardEkskul(
+                        ekskul: state.ekskul[index],
                       ),
                     );
                   },
+                  itemCount: state.ekskul.length,
                 );
               }
             }

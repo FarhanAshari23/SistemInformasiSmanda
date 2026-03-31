@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/card/card_news.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/bloc/news_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/home/views/pengumuman_detail_view.dart';
+import 'package:new_sistem_informasi_smanda/presentation/news/bloc/news_cubit.dart';
+import 'package:new_sistem_informasi_smanda/presentation/news/views/pengumuman_detail_screen.dart';
 
 import '../bloc/news_state.dart';
 

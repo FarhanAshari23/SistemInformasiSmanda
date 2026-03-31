@@ -5,8 +5,10 @@ import 'package:shimmer/shimmer.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
+import '../../helper/app_navigation.dart';
 import '../../helper/cache_state_image.dart';
 import '../../helper/display_image.dart';
+import '../detail/teacher_detail.dart';
 import '../inkwell/custom_inkwell.dart';
 import '../photo/network_photo.dart';
 
@@ -89,7 +91,12 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
     return CustomInkWell(
       borderRadius: 12,
       defaultColor: AppColors.secondary,
-      onTap: widget.onTap,
+      onTap: () => AppNavigator.push(
+        context,
+        TeacherDetail(
+          teacherId: widget.teacher.id ?? 0,
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,

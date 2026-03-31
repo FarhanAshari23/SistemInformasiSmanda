@@ -12,7 +12,7 @@ import '../../../domain/entities/news/news.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/news/update_news.dart';
 import '../../auth/widgets/button_role.dart';
-import '../../home/bloc/news_cubit.dart';
+import '../../news/bloc/news_cubit.dart';
 import '../widgets/field_news.dart';
 import 'select_kelas_view.dart';
 import 'select_teacher_view.dart';
