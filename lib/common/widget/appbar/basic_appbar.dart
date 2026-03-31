@@ -125,7 +125,7 @@ class BasicAppbar extends StatelessWidget {
                                   onTap: () => AppNavigator.push(
                                     context,
                                     ProfileStudentView(
-                                      student: student,
+                                      studentId: student?.id ?? 0,
                                     ),
                                   ),
                                   child: NetworkPhoto(

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/student/get_student_cubit.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
@@ -114,12 +115,14 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
             if (state is ButtonSuccessState) {
+              context
+                  .read<StudentCubit>()
+                  .displayStudentById(params: widget.user?.id ?? 0);
               FocusScope.of(context).unfocus();
               var snackbar = const SnackBar(
                 content: Text("Data Berhasil Diubah"),
               );
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
-
               Navigator.pop(context);
             }
           },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import '../../../common/bloc/student/get_student_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
@@ -128,7 +130,10 @@ class CardProfile extends StatelessWidget {
                   defaultColor: AppColors.primary,
                   onTap: () => AppNavigator.push(
                     context,
-                    EditProfileStudentView(user: student),
+                    BlocProvider.value(
+                      value: context.read<StudentCubit>(),
+                      child: EditProfileStudentView(user: student!),
+                    ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8),
