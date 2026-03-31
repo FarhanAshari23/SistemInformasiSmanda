@@ -19,8 +19,6 @@ import '../../../domain/entities/student/student.dart';
 import '../../auth/widgets/button_role.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/usecases/students/update_user.dart';
-import '../bloc/get_student_ekskul_cubit.dart';
-import '../bloc/get_student_ekskul_state.dart';
 import 'ekskul_selection_view.dart';
 
 class EditProfileStudentView extends StatefulWidget {
@@ -49,9 +47,9 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
   void initState() {
     String date = DateFormat("d MMMM y", "id_ID")
         .format(widget.user?.birthDate ?? DateTime(2000, 1, 1));
-    String ekskul = widget.user?.ekskul?.isNotEmpty == true
-        ? widget.user!.ekskul.toString()
-        : "Belum memilih ekskul";
+    List<String> name = [
+      ...?widget.user?.ekskul,
+    ];
     super.initState();
     _namaC = TextEditingController(text: widget.user?.name);
     _kelasC = TextEditingController(text: widget.user?.nameClass);
@@ -59,7 +57,7 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
     _tanggalC = TextEditingController(text: date);
     _noHPC = TextEditingController(text: widget.user?.mobileNum);
     _alamatC = TextEditingController(text: widget.user?.address);
-    _ekskulC = TextEditingController(text: ekskul);
+    _ekskulC = TextEditingController(text: name.join(", "));
   }
 
   @override
@@ -95,10 +93,6 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
               cubit.selectItem(widget.user?.religion);
               return cubit;
             },
-          ),
-          BlocProvider(
-            create: (context) =>
-                GetStudentEkskulCubit()..getStudentEkskul(widget.user?.id ?? 0),
           ),
           BlocProvider(
             create: (context) {
@@ -292,86 +286,31 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                         ),
                       ),
                       SizedBox(height: height * 0.01),
-                      BlocBuilder<GetStudentEkskulCubit, GetStudentEkskulState>(
-                        builder: (context, state) {
-                          if (state is GetStudentEkskulLoading) {
-                            return TextField(
-                              controller: _ekskulC,
-                              readOnly: true,
-                              maxLines: 4,
-                              onTap: () async {},
-                              decoration: const InputDecoration(
-                                hintText: 'Tuliskan ekskul disini...',
+                      TextField(
+                        controller: _ekskulC,
+                        readOnly: true,
+                        maxLines: 4,
+                        onTap: () async {
+                          List<EkskulEntity>? result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EkskulSelectionView(
+                                studentId: widget.user?.id ?? 0,
                               ),
-                            );
-                          }
-                          if (state is GetStudentEkskulLoaded) {
-                            return TextField(
-                              controller: _ekskulC,
-                              readOnly: true,
-                              maxLines: 4,
-                              onTap: () async {
-                                List<EkskulEntity>? result =
-                                    await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => EkskulSelectionView(
-                                      initialEkskul: state.ekskuls,
-                                    ),
-                                  ),
-                                );
-                                if (result != null) {
-                                  List<String> name = [];
-                                  for (var i = 0; i < result.length; i++) {
-                                    name.add(result[i].nameEkskul ?? '');
-                                    ekskulId.add(result[i].id ?? 0);
-                                  }
-                                  _ekskulC.text = name.join(", ");
-                                }
-                              },
-                              decoration: const InputDecoration(
-                                hintText: 'Tuliskan ekskul disini...',
-                              ),
-                            );
-                          }
-                          if (state is GetStudentEkskulFailure) {
-                            if (state.errorMessage ==
-                                "Something error: (null):(404):Data murid tidak ditemukan") {
-                              return TextField(
-                                controller: _ekskulC,
-                                readOnly: true,
-                                maxLines: 4,
-                                onTap: () async {
-                                  List<EkskulEntity>? result =
-                                      await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const EkskulSelectionView(),
-                                    ),
-                                  );
-                                  if (result != null) {
-                                    ekskulId.clear();
-                                    List<String> name = [];
-                                    for (var i = 0; i < result.length; i++) {
-                                      name.add(result[i].nameEkskul ?? '');
-                                      ekskulId.add(result[i].id ?? 0);
-                                    }
-                                    _ekskulC.text = name.join(", ");
-                                  }
-                                },
-                                decoration: const InputDecoration(
-                                  hintText: 'Tuliskan ekskul disini...',
-                                ),
-                              );
-                            } else {
-                              return Center(
-                                child: Text(state.errorMessage),
-                              );
+                            ),
+                          );
+                          if (result != null) {
+                            List<String> name = [];
+                            for (var i = 0; i < result.length; i++) {
+                              name.add(result[i].nameEkskul ?? '');
+                              ekskulId.add(result[i].id ?? 0);
                             }
+                            _ekskulC.text = name.join(", ");
                           }
-                          return const SizedBox();
                         },
+                        decoration: const InputDecoration(
+                          hintText: 'Tuliskan ekskul disini...',
+                        ),
                       ),
                       SizedBox(height: height * 0.02),
                       Row(

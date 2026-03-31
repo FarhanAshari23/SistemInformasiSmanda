@@ -9,9 +9,9 @@ class SelectEkskulCubit extends Cubit<List<EkskulEntity>> {
     final current = List<EkskulEntity>.from(state);
 
     if (current.contains(ekskul)) {
-      current.remove(ekskul); // kalau sudah ada → hapus
+      current.remove(ekskul);
     } else {
-      current.add(ekskul); // kalau belum ada → tambah
+      current.add(ekskul);
     }
 
     emit(current);
@@ -19,5 +19,9 @@ class SelectEkskulCubit extends Cubit<List<EkskulEntity>> {
 
   void setInitialSelected(List<EkskulEntity> selectedEkskul) {
     emit(List<EkskulEntity>.from(selectedEkskul));
+  }
+
+  bool isSelected(EkskulEntity ekskul) {
+    return state.any((e) => e.id == ekskul.id);
   }
 }
