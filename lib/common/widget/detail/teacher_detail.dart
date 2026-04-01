@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/teacher/teacher_cubit.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/schedule/teacher_schedule_detail.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../bloc/teacher/teacher_cubit.dart';
 import '../../bloc/teacher/teacher_state.dart';
+import '../../helper/app_navigation.dart';
 import '../../helper/display_image.dart';
+import '../inkwell/custom_inkwell.dart';
 import '../photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -228,16 +231,100 @@ class TeacherDetail extends StatelessWidget {
                                               ),
                                             ],
                                           ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 4),
-                                            child: CardDetailSiswa(
-                                              title: 'Tanggal Lahir',
-                                              content: DateFormat(
-                                                      'd MMMM yyyy', "id_ID")
-                                                  .format(
-                                                      state.teacher.birthDate!),
-                                            ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Expanded(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 4),
+                                                  child: CardDetailSiswa(
+                                                    title: 'Tanggal Lahir',
+                                                    content: DateFormat(
+                                                            'd MMMM yyyy',
+                                                            "id_ID")
+                                                        .format(state.teacher
+                                                            .birthDate!),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 16,
+                                                    top: 16,
+                                                  ),
+                                                  child: CustomInkWell(
+                                                    borderRadius: 8,
+                                                    defaultColor:
+                                                        AppColors.secondary,
+                                                    onTap: () =>
+                                                        AppNavigator.push(
+                                                      context,
+                                                      TeacherScheduleDetail(
+                                                        teacherId: teacherId,
+                                                      ),
+                                                    ),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                            top: bodyHeight *
+                                                                0.1,
+                                                          ),
+                                                          child: Text(
+                                                            "Lihat Jadwal\nGuru",
+                                                            style: TextStyle(
+                                                              color: AppColors
+                                                                  .inversePrimary,
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w900,
+                                                            ),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          ),
+                                                        ),
+                                                        Align(
+                                                          alignment: Alignment
+                                                              .bottomRight,
+                                                          child: Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8),
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              8),
+                                                                    ),
+                                                                    color: AppColors
+                                                                        .primary),
+                                                            child: const Icon(
+                                                              Icons
+                                                                  .arrow_right_alt_rounded,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
