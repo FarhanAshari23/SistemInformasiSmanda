@@ -9,8 +9,8 @@ import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../common/bloc/ekskul/ekskul_cubit.dart';
 import '../../../common/bloc/ekskul/select_ekskul_cubit.dart';
-import '../bloc/get_student_ekskul_cubit.dart';
-import '../bloc/get_student_ekskul_state.dart';
+import '../../../common/bloc/ekskul/get_student_ekskul_cubit.dart';
+import '../../../common/bloc/ekskul/get_student_ekskul_state.dart';
 
 class EkskulSelectionView extends StatefulWidget {
   final int studentId;

@@ -12,6 +12,7 @@ import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../blocs/teacher_navigation_cubit.dart';
+import 'search_screen_teacher.dart';
 
 class TeacherScreen extends StatelessWidget {
   const TeacherScreen({super.key});
@@ -104,41 +105,64 @@ class TeacherScreen extends StatelessWidget {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(
-                    3,
-                    (index) {
-                      List<String> title = [
-                        "Semua",
-                        "Wali Kelas",
-                        "Tugas Tambahan",
-                      ];
-                      return CustomInkWell(
-                        onTap: () {
-                          context
-                              .read<TeacherNavigationCubit>()
-                              .changeColor(index);
-                        },
-                        defaultColor: tabIndex == index
-                            ? AppColors.primary
-                            : AppColors.tertiary,
-                        left: index == 0 ? 8 : 0,
-                        right: index == 2 ? 8 : 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Text(
-                            title[index],
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: List.generate(
+                        3,
+                        (index) {
+                          List<String> title = [
+                            "Semua",
+                            "Wali Kelas",
+                            "Tugas Tambahan",
+                          ];
+                          return CustomInkWell(
+                            onTap: () {
+                              context
+                                  .read<TeacherNavigationCubit>()
+                                  .changeColor(index);
+                            },
+                            defaultColor: tabIndex == index
+                                ? AppColors.primary
+                                : AppColors.tertiary,
+                            left: index == 0 ? 8 : 0,
+                            right: index == 2 ? 8 : 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                title[index],
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
+                          );
+                        },
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => AppNavigator.push(
+                        context,
+                        const SearchScreenTeacher(),
+                      ),
+                      highlightColor: AppColors.inversePrimary,
+                      icon: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: AppColors.primary,
                         ),
-                      );
-                    },
-                  ),
+                        child: const Icon(
+                          Icons.search,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
                 const SizedBox(height: 16),
                 tabIndex == 0

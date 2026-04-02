@@ -212,21 +212,40 @@ class TeacherDetail extends StatelessWidget {
                                               Expanded(
                                                 child: CardDetailSiswa(
                                                   title: 'Wali Kelas',
-                                                  content:
-                                                      state.teacher.waliKelas ??
-                                                          '',
+                                                  content: Text(
+                                                    state.teacher.waliKelas ??
+                                                        "Belum Mengisi",
+                                                    style: const TextStyle(
+                                                      color: AppColors
+                                                          .inversePrimary,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
                                                 ),
                                               ),
                                               const SizedBox(width: 8),
                                               Expanded(
                                                 child: CardDetailSiswa(
                                                   title: 'Tugas tambahan',
-                                                  content: state.teacher
-                                                              .tasksName !=
-                                                          null
-                                                      ? state.teacher.tasksName!
-                                                          .join(",")
-                                                      : "-",
+                                                  content: Text(
+                                                    state.teacher.tasksName !=
+                                                            null
+                                                        ? state
+                                                            .teacher.tasksName!
+                                                            .join(",")
+                                                        : "-",
+                                                    style: const TextStyle(
+                                                      color: AppColors
+                                                          .inversePrimary,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -242,11 +261,25 @@ class TeacherDetail extends StatelessWidget {
                                                           left: 4),
                                                   child: CardDetailSiswa(
                                                     title: 'Tanggal Lahir',
-                                                    content: DateFormat(
-                                                            'd MMMM yyyy',
-                                                            "id_ID")
-                                                        .format(state.teacher
-                                                            .birthDate!),
+                                                    content: Text(
+                                                      DateFormat('d MMMM yyyy',
+                                                              "id_ID")
+                                                          .format(
+                                                        state.teacher
+                                                                .birthDate ??
+                                                            DateTime(
+                                                                2000, 1, 1),
+                                                      ),
+                                                      style: const TextStyle(
+                                                        color: AppColors
+                                                            .inversePrimary,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -279,7 +312,7 @@ class TeacherDetail extends StatelessWidget {
                                                             top: bodyHeight *
                                                                 0.1,
                                                           ),
-                                                          child: Text(
+                                                          child: const Text(
                                                             "Lihat Jadwal\nGuru",
                                                             style: TextStyle(
                                                               color: AppColors

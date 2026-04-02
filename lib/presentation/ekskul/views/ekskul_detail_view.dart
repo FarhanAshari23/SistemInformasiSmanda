@@ -20,12 +20,14 @@ class EkskulDetail extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
-    List<MemberEntity> anggota = [
+    List<MemberEntity> jabatans = [
       ekskul.members!.where((element) => element.role == "Ketua").first,
       ekskul.members!.where((element) => element.role == "Wakil Ketua").first,
       ekskul.members!.where((element) => element.role == "Sekretaris").first,
       ekskul.members!.where((element) => element.role == "Bendahara").first,
     ];
+    List<MemberEntity> anggotas =
+        ekskul.members!.where((element) => element.role == "Anggota").toList();
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -121,7 +123,7 @@ class EkskulDetail extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         return CardAnggotaEkskul(
-                          murid: anggota[index],
+                          murid: jabatans[index],
                           jabatan: jabatan[index],
                         );
                       },
@@ -142,7 +144,7 @@ class EkskulDetail extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  ekskul.members!.isEmpty
+                  anggotas.isEmpty
                       ? Center(
                           child: Column(
                             children: [
@@ -168,20 +170,20 @@ class EkskulDetail extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 8),
                           itemBuilder: (context, index) {
-                            final anggota = ekskul.members?[index];
+                            final anggota = anggotas[index];
                             return CardAnggota(
                               onTap: () => AppNavigator.push(
                                 context,
-                                MuridDetail(userId: anggota?.id ?? 0),
+                                MuridDetail(userId: anggota.id ?? 0),
                               ),
                               murid: anggota,
-                              title: anggota?.name ?? '',
-                              desc: anggota?.nisn ?? '',
+                              title: anggota.name ?? '',
+                              desc: anggota.nisn ?? '',
                             );
                           },
                           separatorBuilder: (context, index) =>
                               const SizedBox(height: 8),
-                          itemCount: ekskul.members!.length,
+                          itemCount: anggotas.length,
                         )
                 ],
               ),

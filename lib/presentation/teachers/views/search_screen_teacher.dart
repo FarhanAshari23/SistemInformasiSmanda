@@ -47,6 +47,9 @@ class SearchScreenTeacher extends StatelessWidget {
                               child: _teachers(state.teachers, height),
                             );
                     }
+                    if (state is GetTeacherFailure) {
+                      return const NotFound(objek: 'Guru');
+                    }
                     return Container();
                   },
                 ),

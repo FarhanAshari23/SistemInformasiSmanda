@@ -5,7 +5,7 @@ import '../../../core/configs/theme/app_colors.dart';
 
 class CardDetailSiswa extends StatelessWidget {
   final String title;
-  final String content;
+  final Widget content;
   final Function()? onTap;
   const CardDetailSiswa({
     super.key,
@@ -35,15 +35,7 @@ class CardDetailSiswa extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Center(
-                child: Text(
-                  content,
-                  style: const TextStyle(
-                    color: AppColors.inversePrimary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                child: content,
               ),
             ),
           ),

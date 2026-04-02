@@ -6,6 +6,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../bloc/ekskul/get_student_ekskul_cubit.dart';
+import '../../bloc/ekskul/get_student_ekskul_state.dart';
 import '../../bloc/student/get_student_cubit.dart';
 import '../../bloc/student/get_student_state.dart';
 import '../../helper/display_image.dart';
@@ -73,8 +75,17 @@ class MuridDetail extends StatelessWidget {
       }
     }
 
-    return BlocProvider(
-      create: (context) => StudentCubit()..displayStudentById(params: userId),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              StudentCubit()..displayStudentById(params: userId),
+        ),
+        BlocProvider(
+          create: (context) =>
+              GetStudentEkskulCubit()..getStudentEkskul(userId),
+        ),
+      ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: SafeArea(
@@ -276,17 +287,44 @@ class MuridDetail extends StatelessWidget {
                                                             state.student
                                                                 .birthDate
                                                                 .toString())),
-                                                    content: state
-                                                        .student.birthDate
-                                                        .toString(),
+                                                    content: Text(
+                                                      DateFormat('d MMMM yyyy',
+                                                              "id_ID")
+                                                          .format(
+                                                        state.student
+                                                                .birthDate ??
+                                                            DateTime(
+                                                                2000, 1, 1),
+                                                      ),
+                                                      style: const TextStyle(
+                                                        color: AppColors
+                                                            .inversePrimary,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
                                                   ),
                                                 ),
                                                 const SizedBox(width: 8),
                                                 Expanded(
                                                   child: CardDetailSiswa(
                                                     title: 'Alamat',
-                                                    content:
-                                                        state.student.address!,
+                                                    content: Text(
+                                                      state.student.address ??
+                                                          'Belum mengisi',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                        color: AppColors
+                                                            .inversePrimary,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
                                                     onTap: () =>
                                                         openMapWithAddress(state
                                                             .student.address!),
@@ -305,19 +343,37 @@ class MuridDetail extends StatelessWidget {
                                                   Expanded(
                                                     child: CardDetailSiswa(
                                                       title: 'Agama',
-                                                      content: state
-                                                          .student.religion!,
+                                                      content: Text(
+                                                        state.student
+                                                                .religion ??
+                                                            'Belum mengisi',
+                                                        style: const TextStyle(
+                                                          color: AppColors
+                                                              .inversePrimary,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Expanded(
                                                     child: CardDetailSiswa(
                                                       title: 'Jenis Kelamin',
-                                                      content: state.student
-                                                                  .gender! ==
-                                                              1
-                                                          ? 'Laki-laki'
-                                                          : 'Perempuan',
+                                                      content: Text(
+                                                        state.student.gender! ==
+                                                                1
+                                                            ? 'Laki-laki'
+                                                            : 'Perempuan',
+                                                        style: const TextStyle(
+                                                          color: AppColors
+                                                              .inversePrimary,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -334,8 +390,18 @@ class MuridDetail extends StatelessWidget {
                                                   Expanded(
                                                     child: CardDetailSiswa(
                                                       title: 'No HP',
-                                                      content: state
-                                                          .student.mobileNum!,
+                                                      content: Text(
+                                                        state.student
+                                                                .mobileNum ??
+                                                            '',
+                                                        style: const TextStyle(
+                                                          color: AppColors
+                                                              .inversePrimary,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
                                                       onTap: () =>
                                                           openAddContact(state
                                                               .student
@@ -343,12 +409,81 @@ class MuridDetail extends StatelessWidget {
                                                     ),
                                                   ),
                                                   const SizedBox(width: 8),
-                                                  const Expanded(
-                                                    child: CardDetailSiswa(
-                                                      title: 'Ekskul',
-                                                      content:
-                                                          "Belum diisi ekskul",
-                                                    ),
+                                                  BlocBuilder<
+                                                      GetStudentEkskulCubit,
+                                                      GetStudentEkskulState>(
+                                                    builder: (context, state) {
+                                                      if (state
+                                                          is GetStudentEkskulLoading) {
+                                                        return Expanded(
+                                                          child:
+                                                              CardDetailSiswa(
+                                                            title: 'Ekskul',
+                                                            content:
+                                                                const CircularProgressIndicator(),
+                                                            onTap: () {},
+                                                          ),
+                                                        );
+                                                      }
+                                                      if (state
+                                                          is GetStudentEkskulLoaded) {
+                                                        return Expanded(
+                                                          child:
+                                                              CardDetailSiswa(
+                                                            title: 'Ekskul',
+                                                            content: Text(
+                                                              state.ekskuls
+                                                                  .map((m) {
+                                                                String r =
+                                                                    m.role ??
+                                                                        "Belum";
+                                                                String e = m
+                                                                        .ekskulName ??
+                                                                    "Ada Ekskul";
+                                                                return "$r $e";
+                                                              }).join(", "),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: AppColors
+                                                                    .inversePrimary,
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                            onTap: () {},
+                                                          ),
+                                                        );
+                                                      }
+                                                      if (state
+                                                          is GetStudentEkskulFailure) {
+                                                        return Expanded(
+                                                          child:
+                                                              CardDetailSiswa(
+                                                            title: 'Ekskul',
+                                                            content: Text(
+                                                              state
+                                                                  .errorMessage,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: AppColors
+                                                                    .inversePrimary,
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                            onTap: () {},
+                                                          ),
+                                                        );
+                                                      }
+                                                      return Container();
+                                                    },
                                                   ),
                                                 ],
                                               ),
