@@ -54,7 +54,8 @@ class ScanBarcodeView extends StatelessWidget {
                       child: BlocBuilder<StudentsNISNCubit, StudentsNISNState>(
                         builder: (context, state) {
                           if (state is StudentsNISNLoading) {
-                            return const Row(
+                            return const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   'Tunggu Sebentar...',
@@ -72,14 +73,27 @@ class ScanBarcodeView extends StatelessWidget {
                             return BlocBuilder<ButtonStateCubit, ButtonState>(
                               builder: (context, btnState) {
                                 if (btnState is ButtonFailureState) {
-                                  return Text(
-                                    'Terjadi error: ${btnState.errorMessage}',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.primary,
-                                    ),
-                                    textAlign: TextAlign.center,
+                                  return Column(
+                                    children: [
+                                      Text(
+                                        btnState.errorMessage,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w800,
+                                          color: AppColors.primary,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '${state.student.name} - ${state.student.nisn}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                    ],
                                   );
                                 }
                                 if (btnState is ButtonSuccessState) {

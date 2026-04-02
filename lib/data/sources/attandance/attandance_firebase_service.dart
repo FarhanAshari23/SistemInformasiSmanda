@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
+import '../../../core/networks/api_exception.dart';
 import '../../../core/networks/network.dart';
 import '../../../domain/entities/attandance/attandance_teacher.dart';
 import '../../../domain/entities/attandance/attendance_student.dart';
@@ -52,17 +53,19 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   Future<Either> addStudentAttendances(AttendanceStudentEntity student) async {
     try {
       final model = AttendanceStudentModelX.fromEntity(student);
-      final response = await Network.apiClient.post(
+      await Network.apiClient.post(
         "/attendancestudent",
         body: model.createReq(),
       );
 
-      if (response.statusCode == 500) {
-        return left("Connection error: ${response.message}");
-      }
-
       return const Right("Rekam Kehadiran Berhasil");
     } catch (e) {
+      if (e is ApiException) {
+        if (e.message.contains("Duplicate entry")) {
+          return left("Siswa ini sudah mengisi absensi hari ini:");
+        }
+        return left(e.message);
+      }
       return left(e.toString());
     }
   }

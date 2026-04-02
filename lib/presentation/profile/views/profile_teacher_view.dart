@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/get_schedule_teacher_cubit.dart';
 
 import '../../../domain/entities/teacher/teacher.dart';
 import '../bloc/bar_days_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../bloc/get_schedule_teacher_cubit.dart';
 import '../bloc/section_cubit.dart';
 import '../widgets/card_profile.dart';
 import '../widgets/jadwal_days_selection.dart';
@@ -47,8 +47,7 @@ class ProfileTeacher extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: width * 0.005),
+                        Expanded(
                           child: CardProfile(
                             teacher: teacher,
                           ),

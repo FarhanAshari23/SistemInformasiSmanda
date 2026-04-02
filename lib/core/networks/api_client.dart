@@ -208,10 +208,20 @@ class ApiClient {
         data: decodedBody,
       );
     } else {
+      String errorMessage = "Unknown error";
+
+      if (decodedBody != null && decodedBody["data"] != null) {
+        if (decodedBody["data"] is Map) {
+          errorMessage =
+              decodedBody["data"]["Message"] ?? response.reasonPhrase;
+        } else {
+          errorMessage = decodedBody["data"].toString();
+        }
+      }
+
       throw ApiException(
         statusCode: statusCode,
-        message:
-            decodedBody?["data"] ?? response.reasonPhrase ?? "Unknown error",
+        message: errorMessage,
       );
     }
   }

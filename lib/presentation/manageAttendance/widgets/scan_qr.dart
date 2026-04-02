@@ -4,6 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:new_sistem_informasi_smanda/presentation/profile/bloc/student_nisn_state.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
+import '../../../domain/entities/attandance/attendance_student.dart';
 import '../../../domain/usecases/attendance/add_student_attendance.dart';
 import '../../profile/bloc/student_nisn_cubit.dart';
 
@@ -17,7 +18,12 @@ class ScanQRAttandance extends StatelessWidget {
         listener: (context, state) {
           if (state is StudentsNISNLoaded) {
             context.read<ButtonStateCubit>().execute(
-                usecase: AddStudentAttendanceUseCase(), params: state.student);
+                  usecase: AddStudentAttendanceUseCase(),
+                  params: AttendanceStudentEntity(
+                    studentId: state.student.id,
+                    status: "Hadir",
+                  ),
+                );
           }
         },
         child: MobileScanner(
