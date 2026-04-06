@@ -5,6 +5,7 @@ import '../../../common/bloc/student/get_student_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../common/widget/photo/change_photo_view.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -130,10 +131,15 @@ class CardProfile extends StatelessWidget {
                   defaultColor: AppColors.primary,
                   onTap: () => AppNavigator.push(
                     context,
-                    BlocProvider.value(
-                      value: context.read<StudentCubit>(),
-                      child: EditProfileStudentView(user: student!),
-                    ),
+                    student != null
+                        ? BlocProvider.value(
+                            value: context.read<StudentCubit>(),
+                            child: EditProfileStudentView(user: student!),
+                          )
+                        : ChangePhotoView(
+                            teacher: teacher,
+                            isProfileTeacher: true,
+                          ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8),

@@ -35,4 +35,19 @@ class NewsRepositoryImpl extends NewsRepository {
   Future<Either> updateNews(NewsEntity updateNewsReq) async {
     return await sl<NewsFirebaseService>().updateNews(updateNewsReq);
   }
+
+  @override
+  Future<Either> getNewsByClass(int classId) async {
+    var returnedData = await sl<NewsFirebaseService>().getNewsByClass(classId);
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          List.from(data).map((e) => NewsModel.fromMap(e).toEntity()).toList(),
+        );
+      },
+    );
+  }
 }

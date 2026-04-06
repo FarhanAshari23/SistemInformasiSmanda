@@ -15,7 +15,7 @@ import '../../../common/bloc/schedule/jadwal_display_cubit.dart';
 import '../bloc/section_cubit.dart';
 import '../widgets/card_profile.dart';
 import '../widgets/jadwal_days_selection.dart';
-import 'profile_student_qr_view.dart';
+import 'profile_student_attendance_view.dart';
 
 class ProfileStudentView extends StatelessWidget {
   final int studentId;
@@ -40,7 +40,8 @@ class ProfileStudentView extends StatelessWidget {
           create: (context) => ButtonStateCubit(),
         ),
         BlocProvider(
-          create: (context) => GetStudentAttendanceCubit(),
+          create: (context) =>
+              GetStudentAttendanceCubit()..getAttendanceStudent(studentId),
         ),
       ],
       child: Scaffold(
@@ -228,7 +229,7 @@ class ProfileStudentView extends StatelessWidget {
                                             TwoContainersState
                                                 .containerOneSelected
                                         ? const JadwalDaysSelection()
-                                        : ProfileStudentQrView(
+                                        : ProfileStudentAttendanceView(
                                             student: state.student);
                                   }),
                                 ),

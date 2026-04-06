@@ -12,7 +12,7 @@ class JadwalDisplayCubit extends Cubit<JadwalDisplayState> {
     var returnedData = await sl<GetJadwalUsecase>().call(params: params);
     returnedData.fold(
       (error) {
-        return emit(JadwalDisplayFailure());
+        return emit(JadwalDisplayFailure(errorMessage: error.toString()));
       },
       (data) {
         return emit(JadwalDisplayLoaded(jadwals: data));
@@ -24,7 +24,7 @@ class JadwalDisplayCubit extends Cubit<JadwalDisplayState> {
     var returnedData = await sl<GetJadwalGuruUsecase>().call(params: params);
     returnedData.fold(
       (error) {
-        return emit(JadwalDisplayFailure());
+        return emit(JadwalDisplayFailure(errorMessage: error.toString()));
       },
       (data) {
         return emit(JadwalDisplayLoaded(jadwals: data));

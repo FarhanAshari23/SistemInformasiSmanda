@@ -9,7 +9,6 @@ import '../../../domain/entities/student/student.dart';
 import '../../ekskul/views/ekskul_view.dart';
 import '../../news/views/pengumuman_screen.dart';
 import '../../students/views/siswa_screen.dart';
-import '../../teachers/blocs/teacher_navigation_cubit.dart';
 import '../../teachers/views/teacher_screen.dart';
 import '../bloc/bar_navigation_cubit.dart';
 
@@ -36,7 +35,7 @@ class HomeView extends StatelessWidget {
       'HALAMAN EKSKUL',
     ];
     List<Widget> page = [
-      const PengumumanScreen(),
+      PengumumanScreen(classId: student.kelasId ?? 0),
       const SiswaScreen(),
       const TeacherScreen(),
       const EkskulScreen(),
@@ -47,9 +46,6 @@ class HomeView extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => BarNavigationCubit(),
-          ),
-          BlocProvider(
-            create: (context) => TeacherNavigationCubit(),
           ),
         ],
         child: SafeArea(

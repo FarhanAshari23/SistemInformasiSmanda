@@ -5,58 +5,152 @@ import 'package:new_sistem_informasi_smanda/common/widget/card/card_news.dart';
 import 'package:new_sistem_informasi_smanda/presentation/news/bloc/news_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/news/views/pengumuman_detail_screen.dart';
 
+import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../core/configs/assets/app_images.dart';
+import '../../../core/configs/theme/app_colors.dart';
+import '../bloc/news_navigation_cubit.dart';
 import '../bloc/news_state.dart';
 
 class PengumumanScreen extends StatelessWidget {
-  const PengumumanScreen({super.key});
+  final int classId;
+  const PengumumanScreen({
+    super.key,
+    required this.classId,
+  });
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => NewsCubit()..displayNews(),
-        child: BlocBuilder<NewsCubit, NewsState>(
-          builder: (context, state) {
-            if (state is NewsLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (state is NewsLoaded) {
-              return SizedBox(
-                width: double.infinity,
-                height: double.infinity,
-                child: ListView.separated(
-                  separatorBuilder: (context, index) =>
-                      SizedBox(height: height * 0.01),
-                  itemCount: state.news.length,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    return CardNews(
-                      onPressed: () => AppNavigator.push(
-                        context,
-                        PengumumanDetailView(
-                          newsEntity: state.news[index],
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => NewsCubit()..displayNews(),
+          ),
+          BlocProvider(
+            create: (context) => NewsNavigationCubit(),
+          ),
+        ],
+        child: Column(
+          children: [
+            BlocBuilder<NewsNavigationCubit, int>(
+              builder: (context, state) {
+                return Align(
+                  alignment: Alignment.topRight,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(
+                      2,
+                      (index) {
+                        const titles = ["Semua", "Berdasarkan Kelas"];
+                        return CustomInkWell(
+                          onTap: () {
+                            context
+                                .read<NewsNavigationCubit>()
+                                .changeColor(index);
+                            if (state == 0) {
+                              context.read<NewsCubit>().displayNews();
+                            }
+                            if (state == 1) {
+                              context
+                                  .read<NewsCubit>()
+                                  .displayNewsByClass(classId);
+                            }
+                          },
+                          defaultColor: state == index
+                              ? AppColors.primary
+                              : AppColors.tertiary,
+                          left: index == 0 ? 8 : 0,
+                          right: index == 1 ? 8 : 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            child: Text(
+                              titles[index],
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+            BlocBuilder<NewsCubit, NewsState>(
+              builder: (context, state) {
+                if (state is NewsLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (state is NewsLoaded) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 8),
+                      Expanded(
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: height * 0.01),
+                          itemCount: state.news.length,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            return CardNews(
+                              onPressed: () => AppNavigator.push(
+                                context,
+                                PengumumanDetailView(
+                                  newsEntity: state.news[index],
+                                ),
+                              ),
+                              title: state.news[index].title ?? '',
+                              from: state.news[index].teacherName ?? '',
+                              to: state.news[index].isGlobal!
+                                  ? 'Semua Kelas'
+                                  : state.news[index].className ?? '',
+                            );
+                          },
                         ),
                       ),
-                      title: state.news[index].title ?? '',
-                      from: state.news[index].teacherName ?? '',
-                      to: state.news[index].isGlobal!
-                          ? 'Semua Kelas'
-                          : state.news[index].className ?? '',
+                    ],
+                  );
+                }
+                if (state is NewsFailure) {
+                  if (state.errorMessage ==
+                      "Something error: (null):(404):Data pengumuman tidak ditemukan") {
+                    return Center(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 80),
+                          Image.asset(
+                            AppImages.emptyRegistrationChara,
+                            width: 120,
+                            height: 120,
+                          ),
+                          const Text(
+                            'Data pengumuman tidak ditemukan',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
                     );
-                  },
-                ),
-              );
-            }
-            if (state is NewsFailure) {
-              return Center(
-                child: Text(state.errorMessage),
-              );
-            }
-            return Container();
-          },
+                  }
+                  return Center(
+                    child: Text(state.errorMessage),
+                  );
+                }
+                return Container();
+              },
+            ),
+          ],
         ),
       ),
     );

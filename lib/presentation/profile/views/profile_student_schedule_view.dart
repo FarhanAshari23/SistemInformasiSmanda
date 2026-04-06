@@ -130,7 +130,7 @@ class ProfileStudentScheduleView extends StatelessWidget {
           }
         }
         if (state is JadwalDisplayFailure) {
-          return Container();
+          return Text(state.errorMessage);
         }
         return Container();
       },

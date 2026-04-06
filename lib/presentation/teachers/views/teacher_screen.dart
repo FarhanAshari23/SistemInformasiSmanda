@@ -20,8 +20,15 @@ class TeacherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return BlocProvider(
-      create: (context) => TeacherCubit()..displayTeacher(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => TeacherCubit()..displayTeacher(),
+        ),
+        BlocProvider(
+          create: (context) => TeacherNavigationCubit(),
+        ),
+      ],
       child: BlocBuilder<TeacherCubit, TeacherState>(
         builder: (context, state) {
           if (state is TeacherLoading) {
@@ -207,7 +214,7 @@ class TeacherScreen extends StatelessWidget {
                           return CardGuruComplete(
                             teacher: teachersEntity[tabIndex][index],
                             desc: tabIndex == 1
-                                ? "Kelas: ${teachersEntity[tabIndex][index].waliKelas}"
+                                ? "Kelas: //${teachersEntity[tabIndex][index].waliKelas}"
                                 : "Tugas: ${teachersEntity[tabIndex][index].tasksName!.join(", ")}",
                           );
                         },

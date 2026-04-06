@@ -6,4 +6,5 @@ abstract class NewsRepository {
   Future<Either> updateNews(NewsEntity updateNewsReq);
   Future<Either> deleteNews(int idNews);
   Future<Either> getNews();
+  Future<Either> getNewsByClass(int classId);
 }

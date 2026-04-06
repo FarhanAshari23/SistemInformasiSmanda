@@ -9,6 +9,7 @@ abstract class NewsFirebaseService {
   Future<Either> updateNews(NewsEntity updateNewsReq);
   Future<Either> deleteNews(int idNews);
   Future<Either> getNews();
+  Future<Either> getNewsByClass(int classId);
 }
 
 class NewsFirebaseServiceImpl extends NewsFirebaseService {
@@ -71,6 +72,21 @@ class NewsFirebaseServiceImpl extends NewsFirebaseService {
       return const Right("Pengumuman berhasil diubah");
     } catch (e) {
       return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either> getNewsByClass(int classId) async {
+    try {
+      final response =
+          await Network.apiClient.get("/announcement-class-id/$classId");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
+    } catch (e) {
+      return Left("Something error: ${e.toString()}");
     }
   }
 }

@@ -10,4 +10,8 @@ class JadwalDisplayLoaded extends JadwalDisplayState {
   JadwalDisplayLoaded({required this.jadwals});
 }
 
-class JadwalDisplayFailure extends JadwalDisplayState {}
+class JadwalDisplayFailure extends JadwalDisplayState {
+  final String errorMessage;
+
+  JadwalDisplayFailure({required this.errorMessage});
+}
