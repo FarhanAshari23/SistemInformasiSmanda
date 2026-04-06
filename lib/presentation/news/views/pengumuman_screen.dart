@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/card/card_news.dart';
-import 'package:new_sistem_informasi_smanda/presentation/news/bloc/news_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/news/views/pengumuman_detail_screen.dart';
 
+import '../../../common/helper/app_navigation.dart';
+import '../../../common/widget/card/card_news.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../bloc/news_cubit.dart';
 import '../bloc/news_navigation_cubit.dart';
 import '../bloc/news_state.dart';
+import 'pengumuman_detail_screen.dart';
 
 class PengumumanScreen extends StatelessWidget {
   final int classId;
@@ -49,10 +49,10 @@ class PengumumanScreen extends StatelessWidget {
                             context
                                 .read<NewsNavigationCubit>()
                                 .changeColor(index);
-                            if (state == 0) {
+                            if (index == 0) {
                               context.read<NewsCubit>().displayNews();
                             }
-                            if (state == 1) {
+                            if (index == 1) {
                               context
                                   .read<NewsCubit>()
                                   .displayNewsByClass(classId);
@@ -81,6 +81,7 @@ class PengumumanScreen extends StatelessWidget {
                 );
               },
             ),
+            const SizedBox(height: 8),
             BlocBuilder<NewsCubit, NewsState>(
               builder: (context, state) {
                 if (state is NewsLoading) {
@@ -89,34 +90,28 @@ class PengumumanScreen extends StatelessWidget {
                   );
                 }
                 if (state is NewsLoaded) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(height: 8),
-                      Expanded(
-                        child: ListView.separated(
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: height * 0.01),
-                          itemCount: state.news.length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            return CardNews(
-                              onPressed: () => AppNavigator.push(
-                                context,
-                                PengumumanDetailView(
-                                  newsEntity: state.news[index],
-                                ),
-                              ),
-                              title: state.news[index].title ?? '',
-                              from: state.news[index].teacherName ?? '',
-                              to: state.news[index].isGlobal!
-                                  ? 'Semua Kelas'
-                                  : state.news[index].className ?? '',
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+                  return Expanded(
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: height * 0.01),
+                      itemCount: state.news.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return CardNews(
+                          onPressed: () => AppNavigator.push(
+                            context,
+                            PengumumanDetailView(
+                              newsEntity: state.news[index],
+                            ),
+                          ),
+                          title: state.news[index].title ?? '',
+                          from: state.news[index].teacherName ?? '',
+                          to: state.news[index].isGlobal!
+                              ? 'Semua Kelas'
+                              : state.news[index].className ?? '',
+                        );
+                      },
+                    ),
                   );
                 }
                 if (state is NewsFailure) {

@@ -9,6 +9,7 @@ class NewsCubit extends Cubit<NewsState> {
   NewsCubit() : super(NewsLoading());
 
   void displayNews() async {
+    emit(NewsLoading());
     var returnedData = await sl<GetNewsUseCase>().call();
     returnedData.fold(
       (error) {
@@ -21,6 +22,7 @@ class NewsCubit extends Cubit<NewsState> {
   }
 
   void displayNewsByClass(int classId) async {
+    emit(NewsLoading());
     var returnedData = await sl<GetNewsByClassUsecase>().call(params: classId);
     returnedData.fold(
       (error) {
