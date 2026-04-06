@@ -16,6 +16,7 @@ import '../../../domain/usecases/attendance/add_teacher_completion_usecase.dart'
 import '../bloc/get_teacher_attendance_cubit.dart';
 import '../bloc/get_teacher_attendance_state.dart';
 import 'attendance_menu_view.dart';
+import 'create_announcement_view.dart';
 import 'scan_barcode_view.dart';
 import '../bloc/get_distace_state.dart';
 import '../bloc/get_distance_cubit.dart';
@@ -79,12 +80,13 @@ class ProfileTeacherMenuView extends StatelessWidget {
             },
           ),
         ],
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 8,
-          ),
-          child: Column(
+        child: Expanded(
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -371,6 +373,19 @@ class ProfileTeacherMenuView extends StatelessWidget {
                     },
                   ),
                 ],
+              ),
+              SizedBox(height: height * 0.01),
+              CardBasic(
+                image: AppImages.megaphone,
+                onpressed: () {
+                  AppNavigator.push(
+                    context,
+                    CreateAnnouncementView(
+                      teacherId: teacher.id ?? 0,
+                    ),
+                  );
+                },
+                title: 'Buat Pengumuman',
               ),
             ],
           ),

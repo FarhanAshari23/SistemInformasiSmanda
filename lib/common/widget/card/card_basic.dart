@@ -30,16 +30,12 @@ class CardBasic extends StatelessWidget {
         width: width * 0.435,
         height: height * 0.25,
         child: Padding(
-          padding: const EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 16,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: width * 0.25,
-                height: height * 0.12,
+                padding: const EdgeInsets.all(24),
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.primary,
