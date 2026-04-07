@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/cache_state_image.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/detail/teacher_detail.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
