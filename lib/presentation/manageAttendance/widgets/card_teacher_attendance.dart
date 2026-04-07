@@ -80,46 +80,6 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
     String fallbackAsset = widget.teacher.gender == 1
         ? AppImages.guruLaki
         : AppImages.guruPerempuan;
-    Widget imageWidget;
-
-    if (isReachable == null) {
-      imageWidget = Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
-        child: Container(
-          height: mediaQueryHeight * 0.14,
-          width: width * 0.235,
-          decoration: const BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12),
-              bottomLeft: Radius.circular(12),
-            ),
-          ),
-        ),
-      );
-    } else if (isReachable == true) {
-      imageWidget = NetworkPhoto(
-        imageUrl: imageUrl,
-        fallbackAsset: fallbackAsset,
-        height: mediaQueryHeight * 0.14,
-        width: width * 0.235,
-        forceRefresh: false,
-      );
-    } else {
-      imageWidget = ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12),
-          bottomLeft: Radius.circular(12),
-        ),
-        child: Image.asset(
-          fallbackAsset,
-          height: mediaQueryHeight * 0.14,
-          width: width * 0.235,
-          fit: BoxFit.cover,
-        ),
-      );
-    }
 
     return CustomInkWell(
       borderRadius: 12,
@@ -141,7 +101,13 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                imageWidget,
+                NetworkPhoto(
+                  imageUrl: imageUrl,
+                  fallbackAsset: fallbackAsset,
+                  height: mediaQueryHeight * 0.14,
+                  width: width * 0.235,
+                  forceRefresh: false,
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 12.0, top: 16.0),

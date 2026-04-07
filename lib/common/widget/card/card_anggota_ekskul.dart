@@ -68,33 +68,7 @@ class _CardAnggotaEkskulState extends State<CardAnggotaEkskul> {
         : widget.pembina!.gender == 1
             ? AppImages.guruLaki
             : AppImages.guruPerempuan;
-    Widget imageWidget;
 
-    if (isReachable == null) {
-      imageWidget = Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
-        child: Container(
-          width: height * 0.1,
-          height: height * 0.1,
-          color: Colors.grey,
-        ),
-      );
-    } else if (isReachable == true) {
-      imageWidget = NetworkPhoto(
-        width: height * 0.1,
-        height: height * 0.1,
-        fallbackAsset: fallbackAsset,
-        imageUrl: imageUrl,
-      );
-    } else {
-      imageWidget = Image.asset(
-        fallbackAsset,
-        width: height * 0.1,
-        height: height * 0.1,
-        fit: BoxFit.cover,
-      );
-    }
     return Column(
       children: [
         CustomInkWell(
@@ -114,7 +88,12 @@ class _CardAnggotaEkskulState extends State<CardAnggotaEkskul> {
             width: height * 0.125,
             height: height * 0.125,
             child: Center(
-              child: imageWidget,
+              child: NetworkPhoto(
+                width: height * 0.1,
+                height: height * 0.1,
+                fallbackAsset: fallbackAsset,
+                imageUrl: imageUrl,
+              ),
             ),
           ),
         ),

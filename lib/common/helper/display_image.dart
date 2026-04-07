@@ -1,4 +1,4 @@
-import 'package:new_sistem_informasi_smanda/core/constants/app_url.dart';
+import '../../core/constants/app_url.dart';
 
 class DisplayImage {
   static String displayImageStudent(String name, String nisn) {

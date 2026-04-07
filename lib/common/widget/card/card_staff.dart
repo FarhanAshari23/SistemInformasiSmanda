@@ -59,33 +59,7 @@ class _CardStaffState extends State<CardStaff> {
     String fallbackAsset = widget.teacher.gender == 1
         ? AppImages.tendikLaki
         : AppImages.tendikPerempuan;
-    Widget imageWidget;
 
-    if (isReachable == null) {
-      imageWidget = Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
-        child: Container(
-          width: width * 0.24,
-          height: height * 0.115,
-          color: Colors.grey,
-        ),
-      );
-    } else if (isReachable == true) {
-      imageWidget = NetworkPhoto(
-        width: width * 0.24,
-        height: height * 0.115,
-        fallbackAsset: fallbackAsset,
-        imageUrl: imageUrl,
-      );
-    } else {
-      imageWidget = Image.asset(
-        fallbackAsset,
-        width: width * 0.24,
-        height: height * 0.115,
-        fit: BoxFit.cover,
-      );
-    }
     return CustomInkWell(
       onTap: () => AppNavigator.push(context, widget.page),
       borderRadius: 8,
@@ -98,7 +72,12 @@ class _CardStaffState extends State<CardStaff> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: imageWidget,
+              child: NetworkPhoto(
+                width: width * 0.24,
+                height: height * 0.115,
+                fallbackAsset: fallbackAsset,
+                imageUrl: imageUrl,
+              ),
             ),
             SizedBox(height: height * 0.01),
             Column(

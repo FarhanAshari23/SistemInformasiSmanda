@@ -53,34 +53,6 @@ class _CardGuruState extends State<CardGuru> {
     String fallbackAsset = widget.teacher.gender == 1
         ? AppImages.guruLaki
         : AppImages.guruPerempuan;
-    Widget imageWidget;
-
-    if (isReachable == null) {
-      imageWidget = Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
-        child: Container(
-          width: width * 0.285,
-          height: height * 0.135,
-          color: Colors.grey,
-        ),
-      );
-    } else if (isReachable == true) {
-      imageWidget = NetworkPhoto(
-        imageUrl: imageUrl,
-        fallbackAsset: fallbackAsset,
-        width: width * 0.285,
-        height: height * 0.135,
-        forceRefresh: false,
-      );
-    } else {
-      imageWidget = Image.asset(
-        fallbackAsset,
-        width: width * 0.285,
-        height: height * 0.135,
-        fit: BoxFit.cover,
-      );
-    }
 
     return SizedBox(
       width: width * 0.45,
@@ -90,7 +62,13 @@ class _CardGuruState extends State<CardGuru> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            imageWidget,
+            NetworkPhoto(
+              imageUrl: imageUrl,
+              fallbackAsset: fallbackAsset,
+              width: width * 0.285,
+              height: height * 0.135,
+              forceRefresh: false,
+            ),
             SizedBox(height: height * 0.01),
             SizedBox(
               width: width * 0.385,

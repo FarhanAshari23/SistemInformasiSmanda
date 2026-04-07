@@ -60,34 +60,7 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
     String fallbackAsset = widget.teacher.gender == 1
         ? AppImages.guruLaki
         : AppImages.guruPerempuan;
-    Widget imageWidget;
 
-    if (isReachable == null) {
-      imageWidget = Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
-        child: Container(
-          width: width * 0.285,
-          height: height * 0.15,
-          color: Colors.grey,
-        ),
-      );
-    } else if (isReachable == true) {
-      imageWidget = NetworkPhoto(
-        imageUrl: imageUrl,
-        fallbackAsset: fallbackAsset,
-        width: width * 0.285,
-        height: height * 0.15,
-        forceRefresh: false,
-      );
-    } else {
-      imageWidget = Image.asset(
-        fallbackAsset,
-        width: width * 0.285,
-        height: height * 0.15,
-        fit: BoxFit.cover,
-      );
-    }
     return CustomInkWell(
       borderRadius: 12,
       defaultColor: AppColors.secondary,
@@ -109,7 +82,13 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
                   borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(12),
                   ),
-                  child: imageWidget,
+                  child: NetworkPhoto(
+                    imageUrl: imageUrl,
+                    fallbackAsset: fallbackAsset,
+                    width: width * 0.285,
+                    height: height * 0.15,
+                    forceRefresh: false,
+                  ),
                 ),
                 SizedBox(width: width * 0.05),
                 Expanded(

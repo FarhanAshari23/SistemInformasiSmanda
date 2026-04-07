@@ -77,39 +77,6 @@ class _CardStudentAttendanceState extends State<CardStudentAttendance> {
         : widget.student.religion == "Islam"
             ? AppImages.girlStudent
             : AppImages.girlNonStudent;
-    Widget imageWidget;
-
-    if (isReachable == null) {
-      imageWidget = Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
-        child: Container(
-          height: mediaQueryHeight * 0.14,
-          width: width * 0.235,
-          color: Colors.grey,
-        ),
-      );
-    } else if (isReachable == true) {
-      imageWidget = NetworkPhoto(
-        height: mediaQueryHeight * 0.14,
-        width: width * 0.235,
-        fallbackAsset: fallbackAsset,
-        imageUrl: imageUrl,
-      );
-    } else {
-      imageWidget = ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12),
-          bottomLeft: Radius.circular(12),
-        ),
-        child: Image.asset(
-          fallbackAsset,
-          height: mediaQueryHeight * 0.14,
-          width: width * 0.235,
-          fit: BoxFit.cover,
-        ),
-      );
-    }
 
     return CustomInkWell(
       borderRadius: 12,
@@ -131,7 +98,12 @@ class _CardStudentAttendanceState extends State<CardStudentAttendance> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                imageWidget,
+                NetworkPhoto(
+                  height: mediaQueryHeight * 0.14,
+                  width: width * 0.235,
+                  fallbackAsset: fallbackAsset,
+                  imageUrl: imageUrl,
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 12.0, top: 16.0),
