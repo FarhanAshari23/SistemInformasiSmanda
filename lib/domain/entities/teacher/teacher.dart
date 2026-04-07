@@ -4,7 +4,7 @@ class TeacherEntity {
   int? id, gender;
   List<int>? tasksId;
   List<String>? tasksName;
-  String? waliKelas, name, nip, email, password;
+  String? waliKelas, name, nip, email, password, picture;
   DateTime? birthDate;
   File? imageFile;
 
@@ -20,6 +20,7 @@ class TeacherEntity {
     this.tasksName,
     this.imageFile,
     this.password,
+    this.picture,
   });
 
   TeacherEntity copyWith({
@@ -31,6 +32,7 @@ class TeacherEntity {
     String? nip,
     String? email,
     String? password,
+    String? picture,
     DateTime? birthDate,
     List<String>? tasksName,
     File? imageFile,
@@ -47,6 +49,7 @@ class TeacherEntity {
       tasksName: tasksName ?? this.tasksName,
       imageFile: imageFile ?? this.imageFile,
       password: password ?? this.password,
+      picture: picture ?? this.picture,
     );
   }
 }

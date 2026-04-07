@@ -4,7 +4,7 @@ import '../../../domain/entities/ekskul/member.dart';
 
 class MemberModel {
   final int id, gender;
-  final String name, nisn, role, religion, ekskulName;
+  final String name, nisn, role, religion, ekskulName, picture;
 
   MemberModel({
     required this.id,
@@ -14,6 +14,7 @@ class MemberModel {
     required this.religion,
     required this.gender,
     required this.ekskulName,
+    required this.picture,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,6 +26,7 @@ class MemberModel {
       'student_gender': gender,
       'role': role,
       'extracurricular_name': ekskulName,
+      'picture': picture,
     };
   }
 
@@ -37,14 +39,14 @@ class MemberModel {
 
   factory MemberModel.fromMap(Map<String, dynamic> map) {
     return MemberModel(
-      id: map['student_id'] ?? 0,
-      nisn: map['student_nisn'] ?? '',
-      name: map['student_name'] ?? '',
-      role: map['role'] ?? '',
-      gender: map['student_gender'] ?? 0,
-      religion: map['student_religion'] ?? '',
-      ekskulName: map['extracurricular_name'] ?? '',
-    );
+        id: map['student_id'] ?? 0,
+        nisn: map['student_nisn'] ?? '',
+        name: map['student_name'] ?? '',
+        role: map['role'] ?? '',
+        gender: map['student_gender'] ?? 0,
+        religion: map['student_religion'] ?? '',
+        ekskulName: map['extracurricular_name'] ?? '',
+        picture: map['picture'] ?? '');
   }
 
   String toJson() => json.encode(toMap());
@@ -63,6 +65,7 @@ extension MemberModelX on MemberModel {
       gender: gender,
       religion: religion,
       ekskulName: ekskulName,
+      picture: picture,
     );
   }
 
@@ -75,6 +78,7 @@ extension MemberModelX on MemberModel {
       gender: entity.gender ?? 0,
       religion: entity.religion ?? '',
       ekskulName: entity.ekskulName ?? '',
+      picture: entity.picture ?? '',
     );
   }
 }

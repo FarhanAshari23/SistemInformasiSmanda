@@ -5,13 +5,12 @@ import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../helper/app_navigation.dart';
-import '../../helper/cache_state_image.dart';
 import '../../helper/display_image.dart';
 import '../detail/teacher_detail.dart';
 import '../inkwell/custom_inkwell.dart';
 import '../photo/network_photo.dart';
 
-class CardGuruComplete extends StatefulWidget {
+class CardGuruComplete extends StatelessWidget {
   final TeacherEntity teacher;
   final String desc;
   final VoidCallback? onTap;
@@ -25,40 +24,11 @@ class CardGuruComplete extends StatefulWidget {
   });
 
   @override
-  State<CardGuruComplete> createState() => _CardGuruCompleteState();
-}
-
-class _CardGuruCompleteState extends State<CardGuruComplete> {
-  late String imageUrl;
-  bool? isReachable;
-
-  @override
-  void initState() {
-    super.initState();
-    imageUrl = DisplayImage.displayImageTeacher(
-        widget.teacher.name!,
-        widget.teacher.nip != "-"
-            ? widget.teacher.nip!
-            : DateFormat('d MMMM yyyy').format(widget.teacher.birthDate!));
-    _checkUrl();
-  }
-
-  Future<void> _checkUrl() async {
-    final reachable = await CacheStateImage.checkUrl(imageUrl);
-    if (mounted) {
-      setState(() {
-        isReachable = reachable;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    String fallbackAsset = widget.teacher.gender == 1
-        ? AppImages.guruLaki
-        : AppImages.guruPerempuan;
+    String fallbackAsset =
+        teacher.gender == 1 ? AppImages.guruLaki : AppImages.guruPerempuan;
 
     return CustomInkWell(
       borderRadius: 12,
@@ -66,7 +36,7 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
       onTap: () => AppNavigator.push(
         context,
         TeacherDetail(
-          teacherId: widget.teacher.id ?? 0,
+          teacherId: teacher.id ?? 0,
         ),
       ),
       child: Row(
@@ -82,7 +52,12 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
                     left: Radius.circular(12),
                   ),
                   child: NetworkPhoto(
-                    imageUrl: imageUrl,
+                    imageUrl: DisplayImage.displayImageTeacher(
+                        teacher.name!,
+                        teacher.nip != "-"
+                            ? teacher.nip!
+                            : DateFormat('d MMMM yyyy')
+                                .format(teacher.birthDate!)),
                     fallbackAsset: fallbackAsset,
                     width: width * 0.285,
                     height: height * 0.15,
@@ -98,7 +73,7 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          widget.teacher.name ?? '',
+                          teacher.name ?? '',
                           maxLines: 2,
                           style: const TextStyle(
                             fontSize: 16,
@@ -108,7 +83,7 @@ class _CardGuruCompleteState extends State<CardGuruComplete> {
                         ),
                         SizedBox(height: height * 0.01),
                         Text(
-                          widget.desc,
+                          desc,
                           maxLines: 2,
                           style: const TextStyle(
                             fontSize: 12,

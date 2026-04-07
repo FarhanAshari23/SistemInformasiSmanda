@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
-import '../../helper/cache_state_image.dart';
 import '../../helper/display_image.dart';
 import '../photo/network_photo.dart';
 
@@ -22,29 +21,6 @@ class CardGuru extends StatefulWidget {
 }
 
 class _CardGuruState extends State<CardGuru> {
-  late String imageUrl;
-  bool? isReachable;
-
-  @override
-  void initState() {
-    super.initState();
-    imageUrl = DisplayImage.displayImageTeacher(
-        widget.teacher.name!,
-        widget.teacher.nip != null
-            ? widget.teacher.nip!
-            : DateFormat('d MMMM yyyy').format(widget.teacher.birthDate!));
-    _checkUrl();
-  }
-
-  Future<void> _checkUrl() async {
-    final reachable = await CacheStateImage.checkUrl(imageUrl);
-    if (mounted) {
-      setState(() {
-        isReachable = reachable;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -62,7 +38,12 @@ class _CardGuruState extends State<CardGuru> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             NetworkPhoto(
-              imageUrl: imageUrl,
+              imageUrl: DisplayImage.displayImageTeacher(
+                  widget.teacher.name!,
+                  widget.teacher.nip != null
+                      ? widget.teacher.nip!
+                      : DateFormat('d MMMM yyyy')
+                          .format(widget.teacher.birthDate!)),
               fallbackAsset: fallbackAsset,
               width: width * 0.285,
               height: height * 0.135,

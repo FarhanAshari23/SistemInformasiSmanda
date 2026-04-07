@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../common/helper/app_navigation.dart';
-import '../../../common/helper/cache_state_image.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/detail/murid_detail.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
@@ -11,7 +10,7 @@ import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/attandance/attendance_student.dart';
 
-class CardStudentAttendance extends StatefulWidget {
+class CardStudentAttendance extends StatelessWidget {
   final AttendanceStudentEntity student;
   const CardStudentAttendance({
     super.key,
@@ -19,30 +18,6 @@ class CardStudentAttendance extends StatefulWidget {
   });
 
   @override
-  State<CardStudentAttendance> createState() => _CardStudentAttendanceState();
-}
-
-class _CardStudentAttendanceState extends State<CardStudentAttendance> {
-  late String imageUrl;
-  bool? isReachable;
-
-  @override
-  void initState() {
-    super.initState();
-    imageUrl = DisplayImage.displayImageStudent(
-        widget.student.name ?? '', widget.student.nisn ?? '');
-    _checkUrl();
-  }
-
-  Future<void> _checkUrl() async {
-    final reachable = await CacheStateImage.checkUrl(imageUrl);
-    if (mounted) {
-      setState(() {
-        isReachable = reachable;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
@@ -71,9 +46,9 @@ class _CardStudentAttendanceState extends State<CardStudentAttendance> {
       15,
     );
 
-    String fallbackAsset = widget.student.gender == 1
+    String fallbackAsset = student.gender == 1
         ? AppImages.boyStudent
-        : widget.student.religion == "Islam"
+        : student.religion == "Islam"
             ? AppImages.girlStudent
             : AppImages.girlNonStudent;
 
@@ -84,7 +59,7 @@ class _CardStudentAttendanceState extends State<CardStudentAttendance> {
         AppNavigator.push(
           context,
           MuridDetail(
-            userId: widget.student.studentId ?? 0,
+            userId: student.studentId ?? 0,
           ),
         );
       },
@@ -101,7 +76,8 @@ class _CardStudentAttendanceState extends State<CardStudentAttendance> {
                   height: mediaQueryHeight * 0.14,
                   width: width * 0.235,
                   fallbackAsset: fallbackAsset,
-                  imageUrl: imageUrl,
+                  imageUrl:
+                      DisplayImage.displayImageStudent(student.picture ?? ''),
                 ),
                 Expanded(
                   child: Padding(
@@ -109,7 +85,7 @@ class _CardStudentAttendanceState extends State<CardStudentAttendance> {
                     child: RichText(
                       textAlign: TextAlign.left,
                       text: TextSpan(
-                        text: '${widget.student.name}\n',
+                        text: '${student.name}\n',
                         style: const TextStyle(
                           fontWeight: FontWeight.w900,
                           color: AppColors.primary,
@@ -122,7 +98,7 @@ class _CardStudentAttendanceState extends State<CardStudentAttendance> {
                             ),
                           ),
                           TextSpan(
-                            text: widget.student.nisn!,
+                            text: student.nisn!,
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,

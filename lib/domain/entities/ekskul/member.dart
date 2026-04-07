@@ -1,6 +1,6 @@
 class MemberEntity {
   int? id, gender;
-  String? name, nisn, role, religion, ekskulName;
+  String? name, nisn, role, religion, ekskulName, picture;
   MemberEntity({
     this.id,
     this.role,
@@ -9,6 +9,7 @@ class MemberEntity {
     this.gender,
     this.religion,
     this.ekskulName,
+    this.picture,
   });
 
   MemberEntity copyWith({
@@ -19,6 +20,7 @@ class MemberEntity {
     String? role,
     String? religion,
     String? ekskulName,
+    String? picture,
   }) {
     return MemberEntity(
       id: id ?? this.id,
@@ -28,6 +30,7 @@ class MemberEntity {
       gender: gender ?? this.gender,
       religion: religion ?? this.religion,
       ekskulName: ekskulName ?? this.ekskulName,
+      picture: picture ?? this.picture,
     );
   }
 }

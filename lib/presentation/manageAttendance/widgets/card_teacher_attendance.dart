@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../common/helper/app_navigation.dart';
-import '../../../common/helper/cache_state_image.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/detail/teacher_detail.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
@@ -11,7 +10,7 @@ import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/attandance/attandance_teacher.dart';
 
-class CardTeacherAttendance extends StatefulWidget {
+class CardTeacherAttendance extends StatelessWidget {
   final AttandanceTeacherEntity teacher;
   final bool isAttendance;
   const CardTeacherAttendance({
@@ -19,34 +18,6 @@ class CardTeacherAttendance extends StatefulWidget {
     required this.isAttendance,
     required this.teacher,
   });
-
-  @override
-  State<CardTeacherAttendance> createState() => _CardTeacherAttendanceState();
-}
-
-class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
-  late String imageUrl;
-  bool? isReachable;
-
-  @override
-  void initState() {
-    super.initState();
-    imageUrl = DisplayImage.displayImageTeacher(
-        widget.teacher.name!,
-        widget.teacher.nip != null
-            ? widget.teacher.nip!
-            : DateFormat('d MMMM yyyy').format(widget.teacher.birthDate!));
-    _checkUrl();
-  }
-
-  Future<void> _checkUrl() async {
-    final reachable = await CacheStateImage.checkUrl(imageUrl);
-    if (mounted) {
-      setState(() {
-        isReachable = reachable;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +43,12 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
       DateTime.now().year,
       DateTime.now().month,
       DateTime.now().day,
-      widget.isAttendance ? 7 : 16,
-      widget.isAttendance ? 15 : 00,
+      isAttendance ? 7 : 16,
+      isAttendance ? 15 : 00,
     );
 
-    String fallbackAsset = widget.teacher.gender == 1
-        ? AppImages.guruLaki
-        : AppImages.guruPerempuan;
+    String fallbackAsset =
+        teacher.gender == 1 ? AppImages.guruLaki : AppImages.guruPerempuan;
 
     return CustomInkWell(
       borderRadius: 12,
@@ -87,7 +57,7 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
         AppNavigator.push(
           context,
           TeacherDetail(
-            teacherId: widget.teacher.teacherId ?? 0,
+            teacherId: teacher.teacherId ?? 0,
           ),
         );
       },
@@ -101,7 +71,12 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 NetworkPhoto(
-                  imageUrl: imageUrl,
+                  imageUrl: DisplayImage.displayImageTeacher(
+                      teacher.name!,
+                      teacher.nip != null
+                          ? teacher.nip!
+                          : DateFormat('d MMMM yyyy')
+                              .format(teacher.birthDate!)),
                   fallbackAsset: fallbackAsset,
                   height: mediaQueryHeight * 0.14,
                   width: width * 0.235,
@@ -113,7 +88,7 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
                     child: RichText(
                       textAlign: TextAlign.left,
                       text: TextSpan(
-                        text: '${widget.teacher.name}\n',
+                        text: '${teacher.name}\n',
                         style: const TextStyle(
                           fontWeight: FontWeight.w900,
                           color: AppColors.primary,
@@ -126,7 +101,7 @@ class _CardTeacherAttendanceState extends State<CardTeacherAttendance> {
                             ),
                           ),
                           TextSpan(
-                            text: widget.teacher.nip,
+                            text: teacher.nip,
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,

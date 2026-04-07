@@ -18,6 +18,7 @@ class StudentEntity {
   bool? isRegister;
   bool? isAdmin;
   String? iv;
+  String? picture;
   File? imageFile;
 
   StudentEntity({
@@ -39,6 +40,7 @@ class StudentEntity {
     this.imageFile,
     this.ekskul,
     this.ekskulId,
+    this.picture,
   });
 
   StudentEntity copyWith({
@@ -59,6 +61,7 @@ class StudentEntity {
     bool? isRegister,
     bool? isAdmin,
     String? iv,
+    String? picture,
     File? imageFile,
   }) {
     return StudentEntity(
@@ -80,6 +83,7 @@ class StudentEntity {
       iv: iv ?? this.iv,
       imageFile: imageFile ?? this.imageFile,
       ekskulId: ekskulId ?? this.ekskulId,
+      picture: picture ?? this.picture,
     );
   }
 }

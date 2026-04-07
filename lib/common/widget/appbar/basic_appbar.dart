@@ -136,8 +136,7 @@ class BasicAppbar extends StatelessWidget {
                                         ? AppImages.boyStudent
                                         : AppImages.girlStudent,
                                     imageUrl: DisplayImage.displayImageStudent(
-                                        student?.name ?? '',
-                                        student?.nisn ?? ''),
+                                        student?.picture ?? ''),
                                   ),
                                 ),
                               ],

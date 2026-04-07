@@ -80,8 +80,7 @@ class CardProfile extends StatelessWidget {
                               : AppImages.guruPerempuan,
                       imageUrl: student != null
                           ? DisplayImage.displayImageStudent(
-                              student?.name ?? '',
-                              student?.nisn ?? '',
+                              student?.picture ?? '',
                             )
                           : DisplayImage.displayImageTeacher(
                               teacher?.name ?? '',

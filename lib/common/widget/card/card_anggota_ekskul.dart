@@ -8,12 +8,11 @@ import '../../../domain/entities/ekskul/member.dart';
 import '../detail/murid_detail.dart';
 import '../detail/teacher_detail.dart';
 import '../../helper/app_navigation.dart';
-import '../../helper/cache_state_image.dart';
 import '../../helper/display_image.dart';
 import '../inkwell/custom_inkwell.dart';
 import '../photo/network_photo.dart';
 
-class CardAnggotaEkskul extends StatefulWidget {
+class CardAnggotaEkskul extends StatelessWidget {
   final MemberEntity? murid;
   final AdvisorEntity? pembina;
   final String jabatan;
@@ -25,46 +24,22 @@ class CardAnggotaEkskul extends StatefulWidget {
   });
 
   @override
-  State<CardAnggotaEkskul> createState() => _CardAnggotaEkskulState();
-}
-
-class _CardAnggotaEkskulState extends State<CardAnggotaEkskul> {
-  late String imageUrl;
-  bool? isReachable;
-
-  @override
-  void initState() {
-    super.initState();
-    imageUrl = widget.murid != null
-        ? DisplayImage.displayImageStudent(
-            widget.murid?.name ?? '', widget.murid?.nisn ?? '')
-        : DisplayImage.displayImageTeacher(
-            widget.pembina?.name ?? '',
-            widget.pembina?.nip != '-'
-                ? widget.pembina?.nip ?? ''
-                : DateFormat('d MMMM yyyy').format(widget.pembina!.birthDate!));
-    _checkUrl();
-  }
-
-  Future<void> _checkUrl() async {
-    final reachable = await CacheStateImage.checkUrl(imageUrl);
-    if (mounted) {
-      setState(() {
-        isReachable = reachable;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    String fallbackAsset = widget.murid != null
-        ? widget.murid!.gender == 1
+    String imageUrl = murid != null
+        ? DisplayImage.displayImageStudent(murid?.picture ?? '')
+        : DisplayImage.displayImageTeacher(
+            pembina?.name ?? '',
+            pembina?.nip != '-'
+                ? pembina?.nip ?? ''
+                : DateFormat('d MMMM yyyy').format(pembina!.birthDate!));
+    String fallbackAsset = murid != null
+        ? murid!.gender == 1
             ? AppImages.boyStudent
-            : widget.murid!.religion == "Islam"
+            : murid!.religion == "Islam"
                 ? AppImages.girlStudent
                 : AppImages.girlNonStudent
-        : widget.pembina!.gender == 1
+        : pembina!.gender == 1
             ? AppImages.guruLaki
             : AppImages.guruPerempuan;
 
@@ -74,12 +49,11 @@ class _CardAnggotaEkskulState extends State<CardAnggotaEkskul> {
           borderRadius: 16,
           defaultColor: AppColors.secondary,
           onTap: () {
-            if (widget.pembina != null) {
+            if (pembina != null) {
               AppNavigator.push(
-                  context, TeacherDetail(teacherId: widget.pembina!.id!));
+                  context, TeacherDetail(teacherId: pembina!.id!));
             } else {
-              AppNavigator.push(
-                  context, MuridDetail(userId: widget.murid!.id!));
+              AppNavigator.push(context, MuridDetail(userId: murid!.id!));
             }
           },
           child: Container(
@@ -98,9 +72,7 @@ class _CardAnggotaEkskulState extends State<CardAnggotaEkskul> {
         ),
         SizedBox(height: height * 0.01),
         Text(
-          widget.pembina != null
-              ? widget.pembina?.name ?? ''
-              : widget.murid?.name ?? '',
+          pembina != null ? pembina?.name ?? '' : murid?.name ?? '',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
@@ -110,7 +82,7 @@ class _CardAnggotaEkskulState extends State<CardAnggotaEkskul> {
         ),
         SizedBox(height: height * 0.005),
         Text(
-          widget.jabatan,
+          jabatan,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,

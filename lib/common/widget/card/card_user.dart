@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/student/student.dart';
-import '../../helper/cache_state_image.dart';
 import '../../helper/display_image.dart';
 import '../inkwell/custom_inkwell.dart';
 import '../photo/network_photo.dart';
 
-class CardUser extends StatefulWidget {
+class CardUser extends StatelessWidget {
   final StudentEntity user;
   final VoidCallback? onTap;
   final bool forceRefresh;
@@ -20,47 +19,22 @@ class CardUser extends StatefulWidget {
   });
 
   @override
-  State<CardUser> createState() => _CardUserState();
-}
-
-class _CardUserState extends State<CardUser> {
-  late String imageUrl;
-  bool? isReachable;
-
-  @override
-  void initState() {
-    super.initState();
-    imageUrl = DisplayImage.displayImageStudent(
-        widget.user.name ?? '', widget.user.nisn ?? '');
-    _checkUrl();
-  }
-
-  Future<void> _checkUrl() async {
-    final reachable = await CacheStateImage.checkUrl(imageUrl);
-    if (mounted) {
-      setState(() {
-        isReachable = reachable;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final bodyHeight = mediaQueryHeight -
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
-    String fallbackAsset = widget.user.gender == 1
+    String fallbackAsset = user.gender == 1
         ? AppImages.boyStudent
-        : widget.user.religion == "Islam"
+        : user.religion == "Islam"
             ? AppImages.girlStudent
             : AppImages.girlNonStudent;
 
     return CustomInkWell(
       borderRadius: 12,
       defaultColor: AppColors.secondary,
-      onTap: widget.onTap,
+      onTap: onTap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -77,7 +51,8 @@ class _CardUserState extends State<CardUser> {
                     width: width * 0.235,
                     height: bodyHeight * 0.14,
                     fallbackAsset: fallbackAsset,
-                    imageUrl: imageUrl,
+                    imageUrl:
+                        DisplayImage.displayImageStudent(user.picture ?? ''),
                   ),
                 ),
                 SizedBox(width: width * 0.05),
@@ -89,7 +64,7 @@ class _CardUserState extends State<CardUser> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          widget.user.name ?? '',
+                          user.name ?? '',
                           maxLines: 2,
                           style: const TextStyle(
                             fontSize: 16,
@@ -99,7 +74,7 @@ class _CardUserState extends State<CardUser> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          widget.user.nisn ?? '',
+                          user.nisn ?? '',
                           maxLines: 1,
                           style: const TextStyle(
                             fontSize: 12,

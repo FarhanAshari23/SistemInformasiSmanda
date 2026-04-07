@@ -51,8 +51,7 @@ class CardAnggota extends StatelessWidget {
                       ? AppImages.guruLaki
                       : AppImages.guruPerempuan,
               imageUrl: murid != null
-                  ? DisplayImage.displayImageStudent(
-                      murid?.name ?? '', murid?.nisn ?? '')
+                  ? DisplayImage.displayImageStudent(murid?.picture ?? '')
                   : DisplayImage.displayImageTeacher(
                       pembina?.name ?? '',
                       pembina?.nip != '-'

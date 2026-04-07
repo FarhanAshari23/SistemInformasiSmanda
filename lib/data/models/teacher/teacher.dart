@@ -5,7 +5,7 @@ import '../../../domain/entities/teacher/teacher.dart';
 class TeacherModel {
   final int id, gender;
   final List<int>? tasksId;
-  final String name, nip, email;
+  final String name, nip, email, picture;
   final String? waliKelas;
   final DateTime birthDate;
   final List<String>? tasksName;
@@ -20,6 +20,7 @@ class TeacherModel {
     required this.waliKelas,
     required this.birthDate,
     required this.tasksName,
+    required this.picture,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,6 +34,7 @@ class TeacherModel {
       'birth_date': birthDate.toUtc().toIso8601String(),
       'email': email,
       'tugas_tambahan': tasksName,
+      'picture': picture,
     };
 
     data.removeWhere((key, value) {
@@ -52,6 +54,7 @@ class TeacherModel {
       nip: map['nip'] ?? '',
       name: map['name'] ?? '',
       gender: map['gender'] ?? 0,
+      picture: map['picture'] ?? '',
       birthDate: map['birth_date'] != null && map['birth_date'] != ''
           ? DateTime.parse(map['birth_date'])
           : DateTime(2000, 1, 1),
@@ -86,6 +89,7 @@ extension TeacherModelX on TeacherModel {
       tasksId: tasksId,
       tasksName: tasksName,
       waliKelas: waliKelas,
+      picture: picture,
     );
   }
 
@@ -100,6 +104,7 @@ extension TeacherModelX on TeacherModel {
       tasksId: entity.tasksId ?? [],
       tasksName: entity.tasksName ?? [],
       waliKelas: entity.waliKelas ?? '',
+      picture: entity.picture ?? '',
     );
   }
 }

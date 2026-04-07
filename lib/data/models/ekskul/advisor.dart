@@ -4,7 +4,7 @@ import '../../../domain/entities/ekskul/advisor.dart';
 
 class AdvisorModel {
   final int id, gender;
-  final String name, nip, status;
+  final String name, nip, status, picture;
   final DateTime birthDate;
 
   AdvisorModel({
@@ -14,6 +14,7 @@ class AdvisorModel {
     required this.birthDate,
     required this.gender,
     required this.status,
+    required this.picture,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +24,7 @@ class AdvisorModel {
       'teacher_nip': nip,
       'teacher_birth_date': birthDate.toUtc().toIso8601String(),
       'teacher_gender': gender,
+      'picture': picture,
     };
   }
 
@@ -43,6 +45,7 @@ class AdvisorModel {
           : DateTime(2000, 1, 1),
       gender: map['teacher_gender'] ?? 0,
       status: map['status'] ?? '',
+      picture: map['picture'] ?? '',
     );
   }
 
@@ -61,6 +64,7 @@ extension AdvisorModelX on AdvisorModel {
       birthDate: birthDate,
       gender: gender,
       status: status,
+      picture: picture,
     );
   }
 
@@ -72,6 +76,7 @@ extension AdvisorModelX on AdvisorModel {
       birthDate: entity.birthDate ?? DateTime.now(),
       gender: entity.gender ?? 0,
       status: entity.status ?? '',
+      picture: entity.picture ?? '',
     );
   }
 }

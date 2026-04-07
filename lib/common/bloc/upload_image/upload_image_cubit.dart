@@ -20,23 +20,23 @@ class UploadImageCubit extends Cubit<UploadImageState> {
       );
 
       if (result == null || result.files.single.path == null) {
-        emit(UploadImageInitial());
+        if (state is! UploadImageSuccess) emit(UploadImageInitial());
         return;
       }
 
       final file = File(result.files.single.path!);
-      final ext = p.extension(file.path).toLowerCase();
-
-      if (ext != '.jpg' && ext != '.jpeg') {
-        emit(UploadImageFailure("Hanya file JPG yang diperbolehkan"));
-        return;
-      }
 
       final File compressedFile = await compressImage(file);
-      final customName = "$filename$ext";
+
+      final ext = p.extension(file.path).toLowerCase();
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final customName = "${filename}_$timestamp$ext";
+
       final appDir = await getApplicationDocumentsDirectory();
       final savePath = p.join(appDir.path, customName);
+
       final savedFile = await compressedFile.copy(savePath);
+
       emit(UploadImageSuccess(savedFile));
     } catch (e) {
       emit(UploadImageFailure("Gagal memproses gambar: $e"));

@@ -16,6 +16,7 @@ class StudentModel {
   final int gender;
   final DateTime birthDate;
   final String email;
+  final String picture;
   final bool isRegister;
   final bool isAdmin;
   final dynamic password;
@@ -39,6 +40,7 @@ class StudentModel {
     required this.iv,
     required this.ekskul,
     required this.ekskulId,
+    required this.picture,
   });
 
   Map<String, dynamic> toMap() {
@@ -59,6 +61,7 @@ class StudentModel {
       'is_register': isRegister,
       'is_admin': isAdmin,
       'iv': iv,
+      'picture': picture,
     };
 
     data.removeWhere((key, value) {
@@ -83,6 +86,7 @@ class StudentModel {
       'gender': gender,
       'birth_date': birthDate.toUtc().toIso8601String(),
       'ekskul_id': ekskulId,
+      'picture': picture,
     };
 
     data.removeWhere((key, value) {
@@ -111,6 +115,7 @@ class StudentModel {
           ? DateTime.parse(map['birth_date'])
           : DateTime(2000, 1, 1),
       email: map['email'] ?? '',
+      picture: map['picture'] ?? '',
       password: map['password'],
       isRegister: map['is_register'] ?? false,
       isAdmin: map['is_admin'] ?? false,
@@ -152,6 +157,7 @@ extension StudentModelX on StudentModel {
       religion: religion,
       ekskul: ekskul,
       ekskulId: ekskulId,
+      picture: picture,
     );
   }
 
@@ -174,6 +180,7 @@ extension StudentModelX on StudentModel {
       religion: entity.religion ?? '',
       ekskul: entity.ekskul ?? [],
       ekskulId: entity.ekskulId ?? [],
+      picture: entity.picture ?? '',
     );
   }
 }

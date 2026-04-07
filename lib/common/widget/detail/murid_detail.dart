@@ -203,8 +203,7 @@ class MuridDetail extends StatelessWidget {
                                             ? AppImages.girlStudent
                                             : AppImages.girlNonStudent,
                                     imageUrl: DisplayImage.displayImageStudent(
-                                      state.student.name ?? '',
-                                      state.student.nisn ?? '',
+                                      state.student.picture ?? '',
                                     ),
                                   ),
                                   Align(

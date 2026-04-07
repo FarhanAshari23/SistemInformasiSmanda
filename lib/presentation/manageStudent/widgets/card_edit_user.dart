@@ -64,8 +64,7 @@ class CardEditUser extends StatelessWidget {
                             ? AppImages.girlStudent
                             : AppImages.girlNonStudent,
                     imageUrl: DisplayImage.displayImageStudent(
-                      student.name ?? '',
-                      student.nisn ?? '',
+                      student.picture ?? '',
                     ),
                   ),
                 ),

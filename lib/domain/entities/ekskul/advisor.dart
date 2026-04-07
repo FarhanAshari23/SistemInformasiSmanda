@@ -1,6 +1,6 @@
 class AdvisorEntity {
   int? id, gender;
-  String? name, nip, status;
+  String? name, nip, status, picture;
   DateTime? birthDate;
   AdvisorEntity({
     this.id,
@@ -9,6 +9,7 @@ class AdvisorEntity {
     this.birthDate,
     this.gender,
     this.status,
+    this.picture,
   });
 
   AdvisorEntity copyWith({
@@ -17,15 +18,16 @@ class AdvisorEntity {
     String? name,
     String? nip,
     String? status,
+    String? picture,
     DateTime? birthDate,
   }) {
     return AdvisorEntity(
-      id: id ?? this.id,
-      nip: nip ?? this.nip,
-      name: name ?? this.name,
-      birthDate: birthDate ?? this.birthDate,
-      gender: gender ?? this.gender,
-      status: status ?? this.status,
-    );
+        id: id ?? this.id,
+        nip: nip ?? this.nip,
+        name: name ?? this.name,
+        birthDate: birthDate ?? this.birthDate,
+        gender: gender ?? this.gender,
+        status: status ?? this.status,
+        picture: picture ?? this.picture);
   }
 }

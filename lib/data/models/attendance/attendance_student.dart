@@ -13,6 +13,7 @@ class AttendanceStudentModel {
   final DateTime date;
   final DateTime checkIn;
   final String religion;
+  final String picture;
 
   AttendanceStudentModel({
     required this.id,
@@ -27,6 +28,7 @@ class AttendanceStudentModel {
     required this.total,
     required this.checkIn,
     required this.religion,
+    required this.picture,
   });
 
   Map<String, dynamic> toMap() {
@@ -43,6 +45,7 @@ class AttendanceStudentModel {
       "status": status,
       "total": total,
       "religion": religion,
+      "picture": picture,
     };
   }
 
@@ -58,6 +61,7 @@ class AttendanceStudentModel {
       id: map['id'] ?? 0,
       nisn: map['nisn_siswa'] ?? '',
       name: map['nama_siswa'] ?? '',
+      picture: map['picture'] ?? '',
       gender: map['gender_siswa'] ?? 0,
       date: map['attendance_date'] != null && map['attendance_date'] != ''
           ? DateTime.parse(map['attendance_date'])
@@ -90,6 +94,7 @@ extension AttendanceStudentModelX on AttendanceStudentModel {
       tingkat: tingkat,
       total: total,
       religion: religion,
+      picture: picture,
     );
   }
 
@@ -107,6 +112,7 @@ extension AttendanceStudentModelX on AttendanceStudentModel {
       tingkat: entity.tingkat ?? 0,
       total: entity.total ?? 0,
       religion: entity.religion ?? '',
+      picture: entity.picture ?? '',
     );
   }
 }
