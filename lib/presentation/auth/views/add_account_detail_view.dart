@@ -328,7 +328,7 @@ class _AddAccountViewState extends State<AddAccountView> {
                               hintStyle: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,
-                                color: Colors.black, // <-- warna hint
+                                color: Colors.black,
                               ),
                             ),
                             menuHeight: 200,
@@ -453,7 +453,8 @@ class _AddAccountViewState extends State<AddAccountView> {
                       ),
                       SizedBox(height: height * 0.02),
                       imageProfile != null
-                          ? Row(
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
                                   'Tampilan Foto: ',
@@ -463,12 +464,12 @@ class _AddAccountViewState extends State<AddAccountView> {
                                     color: AppColors.primary,
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                const SizedBox(height: 8),
                                 Container(
-                                  width: width * 0.2,
-                                  height: width * 0.2,
+                                  width: width * 0.4,
+                                  height: width * 0.5,
                                   decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
+                                    borderRadius: BorderRadius.circular(16),
                                     image: DecorationImage(
                                         image: FileImage(imageProfile!),
                                         fit: BoxFit.fill),

@@ -8,11 +8,6 @@ class UploadImageEmpty extends UploadImageState {}
 
 class UploadImageLoading extends UploadImageState {}
 
-class UploadImageNetwork extends UploadImageState {
-  final String imageUrl;
-  UploadImageNetwork(this.imageUrl);
-}
-
 class UploadImageSuccess extends UploadImageState {
   final File imageFile;
   UploadImageSuccess(this.imageFile);

@@ -10,22 +10,6 @@ import 'upload_image_state.dart';
 class UploadImageCubit extends Cubit<UploadImageState> {
   UploadImageCubit() : super(UploadImageInitial());
 
-  void loadNetworkImage(String url) {
-    emit(UploadImageNetwork(url));
-  }
-
-  void loadInitialImage(String? url) async {
-    if (url == null || url.isEmpty) {
-      emit(UploadImageFailure("Tidak berhasil mendapatkan gambar"));
-    }
-    bool checkImage = await isUrlReachable(url!);
-    if (checkImage) {
-      emit(UploadImageNetwork(url));
-    } else {
-      emit(UploadImageEmpty());
-    }
-  }
-
   Future<void> pickImage(String filename) async {
     try {
       emit(UploadImageLoading());
@@ -56,19 +40,6 @@ class UploadImageCubit extends Cubit<UploadImageState> {
       emit(UploadImageSuccess(savedFile));
     } catch (e) {
       emit(UploadImageFailure("Gagal memproses gambar: $e"));
-    }
-  }
-
-  Future<bool> isUrlReachable(String url) async {
-    try {
-      final uri = Uri.parse(url);
-
-      final request = await HttpClient().headUrl(uri);
-      final response = await request.close();
-
-      return response.statusCode >= 200 && response.statusCode < 400;
-    } catch (e) {
-      return false;
     }
   }
 

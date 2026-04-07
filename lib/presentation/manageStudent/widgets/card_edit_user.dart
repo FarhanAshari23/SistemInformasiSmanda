@@ -145,7 +145,7 @@ class CardEditUser extends StatelessWidget {
                                   .showSnackBar(snackbar);
                               outerContext
                                   .read<StudentsDisplayCubit>()
-                                  .displayStudents();
+                                  .displayStudents(params: student.kelasId);
                             },
                           );
                         },

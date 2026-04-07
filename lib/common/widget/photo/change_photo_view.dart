@@ -4,16 +4,15 @@ import 'package:intl/intl.dart';
 
 import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
+import '../../../domain/usecases/teacher/update_teacher.dart';
 import '../../bloc/button/button.cubit.dart';
 import '../../bloc/button/button_state.dart';
 import '../../bloc/upload_image/upload_image_cubit.dart';
 import '../../bloc/upload_image/upload_image_state.dart';
-import '../../helper/display_image.dart';
 import '../appbar/basic_appbar.dart';
 import '../button/basic_button.dart';
 import '../inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import 'network_photo.dart';
 
 class ChangePhotoView extends StatelessWidget {
   final StudentEntity? user;
@@ -43,20 +42,9 @@ class ChangePhotoView extends StatelessWidget {
     return null;
   }
 
-  String? _getImageUrl() {
-    final name = _getName();
-    final id = _getId();
-    if (name == null || id == null) return null;
-
-    return user != null
-        ? DisplayImage.displayImageStudent(name, id)
-        : DisplayImage.displayImageTeacher(name, id);
-  }
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -67,9 +55,6 @@ class ChangePhotoView extends StatelessWidget {
         ),
       ],
       child: Builder(builder: (context) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          context.read<UploadImageCubit>().loadInitialImage(_getImageUrl());
-        });
         return BlocListener<ButtonStateCubit, ButtonState>(
           listener: (context, state) {
             if (state is ButtonFailureState) {
@@ -132,7 +117,8 @@ class ChangePhotoView extends StatelessWidget {
                           ],
                         );
                       }
-                      if (state is UploadImageEmpty) {
+                      if (state is UploadImageEmpty ||
+                          state is UploadImageInitial) {
                         return CustomInkWell(
                           borderRadius: 12,
                           defaultColor: AppColors.secondary,
@@ -166,35 +152,7 @@ class ChangePhotoView extends StatelessWidget {
                           ),
                         );
                       }
-                      if (state is UploadImageNetwork) {
-                        return Column(
-                          children: [
-                            ClipOval(
-                              child: NetworkPhoto(
-                                width: height * 0.3,
-                                height: height * 0.3,
-                                fallbackAsset: "",
-                                imageUrl: state.imageUrl,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Builder(builder: (context) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 48),
-                                child: BasicButton(
-                                  onPressed: () async {
-                                    context.read<UploadImageCubit>().pickImage(
-                                          "${_getName()}_${_getId()}",
-                                        );
-                                  },
-                                  title: "Ganti Foto",
-                                ),
-                              );
-                            }),
-                          ],
-                        );
-                      }
+
                       return const SizedBox();
                     },
                   ),
@@ -203,28 +161,26 @@ class ChangePhotoView extends StatelessWidget {
                     builder: (context, state) {
                       return BasicButton(
                         title: "Simpan",
-                        buttonColor: state is UploadImageSuccess ||
-                                state is UploadImageNetwork
+                        buttonColor: state is UploadImageSuccess
                             ? AppColors.primary
                             : Colors.grey,
                         onPressed: () async {
                           if (state is UploadImageInitial) return;
                           if (state is UploadImageSuccess) {
                             if (isProfileTeacher) {
-                              // await context.read<ButtonStateCubit>().execute(
-                              //       usecase: UpdateTeacherUsecase(),
-                              //       params: TeacherEntity(
-                              //         nama: teacher!.nama,
-                              //         mengajar: teacher!.mengajar,
-                              //         nip: teacher!.nip,
-                              //         tanggalLahir: teacher!.tanggalLahir,
-                              //         waliKelas: teacher!.waliKelas,
-                              //         jabatan: teacher!.jabatan,
-                              //         gender: teacher!.gender,
-                              //         image: state.imageFile,
-                              //         uid: teacher!.uid,
-                              //       ),
-                              //     );
+                              await context.read<ButtonStateCubit>().execute(
+                                    usecase: UpdateTeacherUsecase(),
+                                    params: TeacherEntity(
+                                      id: teacher?.id ?? 0,
+                                      name: teacher?.name ?? '',
+                                      nip: teacher?.nip ?? '',
+                                      tasksId: teacher?.tasksId ?? [],
+                                      birthDate: teacher?.birthDate ??
+                                          DateTime(2000, 1, 1),
+                                      gender: teacher?.gender ?? 0,
+                                      imageFile: state.imageFile,
+                                    ),
+                                  );
                             } else {
                               Navigator.pop(context, state.imageFile);
                             }
