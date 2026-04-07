@@ -109,7 +109,11 @@ class AttandanceRepositoryImpl extends AttandanceRepository {
       },
       (data) {
         return Right(
-          AttendanceStudentModel.fromMap(data).toEntity(),
+          List.from(data)
+              .map(
+                (e) => AttendanceStudentModel.fromMap(e).toEntity(),
+              )
+              .toList(),
         );
       },
     );

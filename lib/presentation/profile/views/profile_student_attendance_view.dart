@@ -44,11 +44,8 @@ class ProfileStudentAttendanceView extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (state is GetAttendanceStudentLoaded) {
-          DateFormat format = DateFormat('dd-M-yyyy');
-
-          List<DateTime> highlightedDates = state.attendances
-              .map((a) => format.parse(a.date.toString()))
-              .toList();
+          List<DateTime> highlightedDates =
+              state.attendances.map((a) => a.date!).toList();
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: CalendarCarousel<Event>(
