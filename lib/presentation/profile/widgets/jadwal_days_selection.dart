@@ -17,7 +17,6 @@ class JadwalDaysSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     List<String> dayName = [
       'Senin',
       'Selasa',
@@ -28,24 +27,24 @@ class JadwalDaysSelection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          width: double.infinity,
-          height: height * 0.1,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: dayName.length,
-            padding: EdgeInsets.symmetric(horizontal: width * 0.035),
-            itemBuilder: (context, index) => CustomInkWell(
-              onTap: () {
-                context.read<BarDaysCubit>().changeColor(index);
-              },
-              defaultColor: context.watch<BarDaysCubit>().state == index
-                  ? AppColors.primary
-                  : AppColors.inversePrimary,
-              child: SizedBox(
-                width: width * 0.1825,
-                height: height * 0.1,
-                child: Center(
+        SizedBox(height: height * 0.02),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(
+            dayName.length,
+            (index) {
+              return CustomInkWell(
+                onTap: () {
+                  context.read<BarDaysCubit>().changeColor(index);
+                },
+                defaultColor: context.watch<BarDaysCubit>().state == index
+                    ? AppColors.primary
+                    : AppColors.inversePrimary,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 24,
+                  ),
                   child: Text(
                     dayName[index],
                     style: TextStyle(
@@ -57,8 +56,8 @@ class JadwalDaysSelection extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
         SizedBox(height: height * 0.02),

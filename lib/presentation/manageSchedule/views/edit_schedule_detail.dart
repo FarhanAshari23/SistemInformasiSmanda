@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/schedule/jadwal_display_cubit.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
+import '../../../common/bloc/schedule/jadwal_display_cubit.dart';
 import '../../../common/bloc/schedule/jadwal_display_state.dart';
 import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/helper/convert_list_day_entity.dart';
@@ -30,9 +30,11 @@ import '../widgets/card_schedule.dart';
 
 class EditScheduleDetailView extends StatefulWidget {
   final KelasEntity schedule;
+  final int? currentTeacherId;
   const EditScheduleDetailView({
     super.key,
     required this.schedule,
+    this.currentTeacherId,
   });
 
   @override
@@ -145,50 +147,53 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                   const SizedBox(height: 16),
                   BlocBuilder<FormFieldCubit, FormFieldsState>(
                     builder: (context, state) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          children: [
-                            TextField(
-                              controller: _waliKelasC,
-                              readOnly: true,
-                              autocorrect: false,
-                              onChanged: (value) {
-                                context
-                                    .read<FormFieldCubit>()
-                                    .updateTeacher(value);
-                              },
-                              decoration: const InputDecoration(
-                                hintText: "Wali Kelas:",
+                      return Visibility(
+                        visible: widget.currentTeacherId == null,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            children: [
+                              TextField(
+                                controller: _waliKelasC,
+                                readOnly: true,
+                                autocorrect: false,
+                                onChanged: (value) {
+                                  context
+                                      .read<FormFieldCubit>()
+                                      .updateTeacher(value);
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: "Wali Kelas:",
+                                ),
+                                onTap: () async {
+                                  TeacherEntity? result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SearchTeachersViews(),
+                                    ),
+                                  );
+                                  if (result != null) {
+                                    teacherId = result.id;
+                                    _waliKelasC.text = result.name ?? '';
+                                  }
+                                },
                               ),
-                              onTap: () async {
-                                TeacherEntity? result = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SearchTeachersViews(),
-                                  ),
-                                );
-                                if (result != null) {
-                                  teacherId = result.id;
-                                  _waliKelasC.text = result.name ?? '';
-                                }
-                              },
-                            ),
-                            const SizedBox(height: 8),
-                            TextField(
-                              controller: _kelasC,
-                              autocorrect: false,
-                              onChanged: (value) {
-                                context
-                                    .read<FormFieldCubit>()
-                                    .updateClass(value);
-                              },
-                              decoration: const InputDecoration(
-                                hintText: "Nama Kelas:",
+                              const SizedBox(height: 8),
+                              TextField(
+                                controller: _kelasC,
+                                autocorrect: false,
+                                onChanged: (value) {
+                                  context
+                                      .read<FormFieldCubit>()
+                                      .updateClass(value);
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: "Nama Kelas:",
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -302,12 +307,18 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                                                                   i++)
                                                                 CardSchedule(
                                                                   day: day,
+                                                                  currentTeacherId:
+                                                                      widget
+                                                                          .currentTeacherId,
                                                                   index: i,
                                                                   schedule: createState
                                                                           .schedules[
                                                                       day]![i],
                                                                 ),
                                                               AddScheduleButton(
+                                                                currentTeacherId:
+                                                                    widget
+                                                                        .currentTeacherId,
                                                                 day: day,
                                                               ),
                                                             ],

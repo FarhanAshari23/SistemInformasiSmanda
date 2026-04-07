@@ -15,9 +15,11 @@ import 'duration_picker.dart';
 
 class AddScheduleButton extends StatefulWidget {
   final String day;
+  final int? currentTeacherId;
   const AddScheduleButton({
     super.key,
     required this.day,
+    this.currentTeacherId,
   });
 
   @override
@@ -62,68 +64,71 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  BlocBuilder<TeacherCubit, TeacherState>(
-                    builder: (context, state) {
-                      if (state is TeacherLoading) {
-                        return TextField(
-                          controller: _pelaksanaC,
-                          autocorrect: false,
-                          decoration: const InputDecoration(
-                            hintText: 'Pelaksana:',
-                          ),
-                        );
-                      }
-                      if (state is TeacherListLoaded) {
-                        return DropdownMenu<int>(
-                          width: width * 0.92,
-                          enableFilter: true,
-                          requestFocusOnTap: false,
-                          focusNode: FocusNode(),
-                          inputDecorationTheme: const InputDecorationTheme(
-                            fillColor: AppColors.tertiary,
-                            filled: true,
-                            hintStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black,
-                            ),
-                          ),
-                          menuHeight: 200,
-                          menuStyle: MenuStyle(
-                            padding: WidgetStateProperty.all(
-                              const EdgeInsets.symmetric(horizontal: 8),
-                            ),
-                            alignment: Alignment.bottomLeft,
-                            visualDensity: VisualDensity.compact,
-                            maximumSize: WidgetStateProperty.all(
-                              Size(width * 0.92, 200),
-                            ),
-                            shape: WidgetStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          ),
-                          hintText: 'Pelaksana:',
-                          dropdownMenuEntries: state.teachers.map((doc) {
-                            return DropdownMenuEntry<int>(
-                              value: doc.id ?? 0,
-                              label: doc.name ?? '',
-                            );
-                          }).toList(),
-                          onSelected: (value) {
-                            if (value != null) {
-                              setState(() {
-                                teacherId = value;
-                              });
+                  widget.currentTeacherId != null
+                      ? Container()
+                      : BlocBuilder<TeacherCubit, TeacherState>(
+                          builder: (context, state) {
+                            if (state is TeacherLoading) {
+                              return TextField(
+                                controller: _pelaksanaC,
+                                autocorrect: false,
+                                decoration: const InputDecoration(
+                                  hintText: 'Pelaksana:',
+                                ),
+                              );
                             }
-                            FocusScope.of(context).unfocus();
+                            if (state is TeacherListLoaded) {
+                              return DropdownMenu<int>(
+                                width: width * 0.92,
+                                enableFilter: true,
+                                requestFocusOnTap: false,
+                                focusNode: FocusNode(),
+                                inputDecorationTheme:
+                                    const InputDecorationTheme(
+                                  fillColor: AppColors.tertiary,
+                                  filled: true,
+                                  hintStyle: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                menuHeight: 200,
+                                menuStyle: MenuStyle(
+                                  padding: WidgetStateProperty.all(
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                  ),
+                                  alignment: Alignment.bottomLeft,
+                                  visualDensity: VisualDensity.compact,
+                                  maximumSize: WidgetStateProperty.all(
+                                    Size(width * 0.92, 200),
+                                  ),
+                                  shape: WidgetStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                                hintText: 'Pelaksana:',
+                                dropdownMenuEntries: state.teachers.map((doc) {
+                                  return DropdownMenuEntry<int>(
+                                    value: doc.id ?? 0,
+                                    label: doc.name ?? '',
+                                  );
+                                }).toList(),
+                                onSelected: (value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      teacherId = value;
+                                    });
+                                  }
+                                  FocusScope.of(context).unfocus();
+                                },
+                              );
+                            }
+                            return const SizedBox();
                           },
-                        );
-                      }
-                      return const SizedBox();
-                    },
-                  ),
+                        ),
                   const SizedBox(height: 4),
                   BlocBuilder<GetActivitiesCubit, GetActivitiesState>(
                     builder: (context, state) {
@@ -266,7 +271,8 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                         borderRadius: 12,
                         defaultColor: AppColors.primary,
                         onTap: () {
-                          if (teacherId == null ||
+                          if (teacherId == null &&
+                                  widget.currentTeacherId == null ||
                               _durasiMulaiC.text.isEmpty ||
                               _durasiSelesaiC.text.isEmpty ||
                               subjectId == null) {
@@ -281,7 +287,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                               widget.day,
                               _durasiMulaiC.text,
                               _durasiSelesaiC.text,
-                              teacherId,
+                              widget.currentTeacherId ?? teacherId,
                               subjectId,
                               _kegiatanC.text,
                             );

@@ -15,7 +15,11 @@ import '../../../core/configs/theme/app_colors.dart';
 import 'edit_schedule_detail.dart';
 
 class EditScheduleView extends StatelessWidget {
-  const EditScheduleView({super.key});
+  final int? teacherId;
+  const EditScheduleView({
+    super.key,
+    this.teacherId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +129,7 @@ class EditScheduleView extends StatelessWidget {
                                           AppNavigator.push(
                                               context,
                                               EditScheduleDetailView(
+                                                currentTeacherId: teacherId,
                                                 schedule: state.kelas[index],
                                               ));
                                         } else if (value == 'Hapus') {
@@ -165,16 +170,18 @@ class EditScheduleView extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          const PopupMenuItem<String>(
-                                            value: 'Hapus',
-                                            child: Text(
-                                              'Hapus',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                                color: AppColors.inversePrimary,
+                                          if (teacherId == null)
+                                            const PopupMenuItem<String>(
+                                              value: 'Hapus',
+                                              child: Text(
+                                                'Hapus',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w800,
+                                                  color:
+                                                      AppColors.inversePrimary,
+                                                ),
                                               ),
                                             ),
-                                          ),
                                         ];
                                       },
                                       child: Container(
