@@ -68,6 +68,7 @@ class CardProfile extends StatelessWidget {
                     NetworkPhoto(
                       width: width * 0.3,
                       height: height * 0.15,
+                      forceRefresh: true,
                       fallbackAsset: student != null
                           ? student?.gender == 1
                               ? AppImages.boyStudent

@@ -191,7 +191,10 @@ class TeacherDetail extends StatelessWidget {
                                       textAlign: TextAlign.center,
                                     ),
                                     Text(
-                                      state.teacher.nip ?? '',
+                                      (state.teacher.nip != null &&
+                                              state.teacher.nip!.isNotEmpty)
+                                          ? state.teacher.nip!
+                                          : "-",
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -213,8 +216,15 @@ class TeacherDetail extends StatelessWidget {
                                                 child: CardDetailSiswa(
                                                   title: 'Wali Kelas',
                                                   content: Text(
-                                                    state.teacher.waliKelas ??
-                                                        "Belum Mengisi",
+                                                    (state.teacher.waliKelas !=
+                                                                null &&
+                                                            state
+                                                                .teacher
+                                                                .waliKelas!
+                                                                .isNotEmpty)
+                                                        ? state
+                                                            .teacher.waliKelas!
+                                                        : "Bukan Wali Kelas",
                                                     style: const TextStyle(
                                                       color: AppColors
                                                           .inversePrimary,
@@ -231,12 +241,16 @@ class TeacherDetail extends StatelessWidget {
                                                 child: CardDetailSiswa(
                                                   title: 'Tugas tambahan',
                                                   content: Text(
-                                                    state.teacher.tasksName !=
-                                                            null
+                                                    (state.teacher.tasksName !=
+                                                                null &&
+                                                            state
+                                                                .teacher
+                                                                .tasksName!
+                                                                .isNotEmpty)
                                                         ? state
                                                             .teacher.tasksName!
                                                             .join(",")
-                                                        : "-",
+                                                        : "Tidak ada tugas tambahan",
                                                     style: const TextStyle(
                                                       color: AppColors
                                                           .inversePrimary,

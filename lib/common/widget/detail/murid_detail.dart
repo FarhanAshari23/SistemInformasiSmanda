@@ -313,8 +313,15 @@ class MuridDetail extends StatelessWidget {
                                                   child: CardDetailSiswa(
                                                     title: 'Alamat',
                                                     content: Text(
-                                                      state.student.address ??
-                                                          'Belum mengisi',
+                                                      (state.student.address !=
+                                                                  null &&
+                                                              state
+                                                                  .student
+                                                                  .address!
+                                                                  .isNotEmpty)
+                                                          ? state
+                                                              .student.address!
+                                                          : 'Tidak ada alamat',
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: const TextStyle(
@@ -391,9 +398,15 @@ class MuridDetail extends StatelessWidget {
                                                     child: CardDetailSiswa(
                                                       title: 'No HP',
                                                       content: Text(
-                                                        state.student
-                                                                .mobileNum ??
-                                                            '',
+                                                        (state.student.mobileNum !=
+                                                                    null &&
+                                                                state
+                                                                    .student
+                                                                    .mobileNum!
+                                                                    .isNotEmpty)
+                                                            ? state.student
+                                                                .mobileNum!
+                                                            : 'Tidak ada no HP',
                                                         style: const TextStyle(
                                                           color: AppColors
                                                               .inversePrimary,
