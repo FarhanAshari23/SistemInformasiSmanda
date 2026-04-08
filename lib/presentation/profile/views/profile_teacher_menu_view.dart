@@ -354,7 +354,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CardBasic(
-                    image: AppImages.verification,
+                    image: AppImages.studentAttendance,
                     onpressed: () {
                       AppNavigator.push(
                         context,

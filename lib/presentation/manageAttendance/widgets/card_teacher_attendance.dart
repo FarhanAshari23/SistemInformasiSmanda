@@ -27,7 +27,7 @@ class CardTeacherAttendance extends StatelessWidget {
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
 
-    DateTime dateTime = DateTime.now();
+    DateTime dateTime = isAttendance ? teacher.checkIn! : teacher.checkOut!;
     String time = DateFormat('HH:mm').format(dateTime);
     final parts = time.split(':');
     final hour = int.parse(parts[0]);
@@ -121,10 +121,12 @@ class CardTeacherAttendance extends StatelessWidget {
                 borderRadius:
                     const BorderRadius.only(bottomRight: Radius.circular(12)),
                 color:
-                    currentTime.isAfter(targetTime) ? Colors.red : Colors.green,
+                    currentTime.isAfter(targetTime) || teacher.status != "Hadir"
+                        ? Colors.red
+                        : Colors.green,
               ),
               child: Text(
-                time,
+                teacher.status != "Hadir" ? teacher.status ?? '' : time,
                 style: const TextStyle(
                   fontWeight: FontWeight.w800,
                   color: AppColors.inversePrimary,

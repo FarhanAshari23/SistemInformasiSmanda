@@ -11,7 +11,8 @@ class AppImages {
   static const String information = "${basePath}information.png";
   static const String splashLogout = "${basePath}splashLogout.png";
   static const String splashDelete = "${basePath}delete_splash.png";
-  static const String verification = "${basePath}verification.png";
+  static const String studentAttendance = "${basePath}student_attendance.png";
+  static const String teacherAttendance = "${basePath}teacher_attendance.png";
   static const String attendance = "${basePath}attendance.png";
   static const String camera = "${basePath}camera.png";
   static const String search = "${basePath}search.png";

@@ -6,6 +6,7 @@ import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../domain/entities/attandance/attandance_teacher.dart';
 import '../../../domain/entities/attandance/attendance_workbook.dart';
 import '../../../domain/usecases/attendance/download_attendance_teachers_usecase.dart';
 import '../bloc/attendance_teacher_cubit.dart';
@@ -68,6 +69,10 @@ class TeachersAttendancesViews extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (state is AttendanceTeacherLoaded) {
+                      List<AttandanceTeacherEntity> teacherCompletions = state
+                          .teachers
+                          .where((e) => e.checkOut != DateTime(2000, 1, 1))
+                          .toList();
                       return state.teachers.isEmpty
                           ? Padding(
                               padding: EdgeInsets.only(top: height * 0.25),
@@ -124,13 +129,17 @@ class TeachersAttendancesViews extends StatelessWidget {
                                     );
                                   }
                                   return CardTeacherAttendance(
-                                    teacher: state.teachers[index - 1],
+                                    teacher: isAttendace
+                                        ? state.teachers[index - 1]
+                                        : teacherCompletions[index - 1],
                                     isAttendance: isAttendace,
                                   );
                                 },
                                 separatorBuilder: (context, index) =>
                                     SizedBox(height: height * 0.02),
-                                itemCount: state.teachers.length + 1,
+                                itemCount: isAttendace
+                                    ? state.teachers.length + 1
+                                    : teacherCompletions.length + 1,
                               ),
                             );
                     }

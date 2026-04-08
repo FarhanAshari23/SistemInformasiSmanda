@@ -31,8 +31,8 @@ class HomeViewAdmin extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     List<String> title = [
-      'Lihat data kehadiran guru',
-      'Lihat data kehadiran siswa',
+      'Lihat absen guru',
+      'Lihat absen siswa',
       'Registrasi data siswa',
       'Edit data siswa',
       'Tambah data guru',
@@ -47,8 +47,8 @@ class HomeViewAdmin extends StatelessWidget {
       'Daftar tugas tambahan',
     ];
     List<String> images = [
-      AppImages.verification,
-      AppImages.verification,
+      AppImages.teacherAttendance,
+      AppImages.studentAttendance,
       AppImages.students,
       AppImages.students,
       AppImages.teacher,
