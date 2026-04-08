@@ -81,30 +81,209 @@ class ProfileTeacherMenuView extends StatelessWidget {
             },
           ),
         ],
-        child: Expanded(
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  BlocBuilder<GetTeacherAttendanceCubit,
-                      GetTeacherAttendanceState>(
-                    builder: (context, state) {
-                      if (state is GetTeacherAttendanceLoading) {
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BlocBuilder<GetTeacherAttendanceCubit,
+                    GetTeacherAttendanceState>(
+                  builder: (context, state) {
+                    if (state is GetTeacherAttendanceLoading) {
+                      return CardBasic(
+                        title: "Tunggu Sebentar...",
+                        image: AppImages.attendance,
+                        onpressed: () {},
+                      );
+                    }
+                    if (state is GetTeacherAttendanceCurrentLoaded) {
+                      String formattedTime =
+                          DateFormat('HH:mm').format(state.attendance.checkIn!);
+                      return CardBasic(
+                        image: AppImages.attendance,
+                        color: const Color(0XFFA9A9A9),
+                        textColor: Colors.white,
+                        onpressed: () async {},
+                        title: "Anda sudah absen\n$formattedTime",
+                      );
+                    }
+                    if (state is GetTeacherAttendanceFailure) {
+                      if (state.errorMessage ==
+                          "Something error: (null):(404):data kehadiran tidak ditemukan") {
+                        return Builder(builder: (context) {
+                          return CardBasic(
+                            image: AppImages.attendance,
+                            onpressed: () async {
+                              final buttonCubit =
+                                  context.read<ButtonStateCubit>();
+                              showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return Dialog(
+                                    backgroundColor: Colors.white,
+                                    alignment: Alignment.center,
+                                    insetPadding: const EdgeInsets.all(16),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            "Jenis absen apa yang ingin anda lakukan?",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w900,
+                                              color: AppColors.primary,
+                                            ),
+                                          ),
+                                          BasicButton(
+                                            onPressed: () async {
+                                              final distanceCubit = context
+                                                  .read<GetDistanceCubit>();
+                                              final messenger =
+                                                  ScaffoldMessenger.of(context);
+                                              final navigator = Navigator.of(
+                                                  context,
+                                                  rootNavigator: true);
+                                              await distanceCubit.getDistance();
+                                              if (!context.mounted) return;
+
+                                              final state = distanceCubit.state;
+                                              if (state is GetDistanceLoaded &&
+                                                  state.isNear) {
+                                                buttonCubit.execute(
+                                                  usecase:
+                                                      AddTeacherAttendanceUseCase(),
+                                                  params:
+                                                      AttandanceTeacherEntity(
+                                                    teacherId: teacher.id,
+                                                    status: "Hadir",
+                                                  ),
+                                                );
+                                              } else {
+                                                navigator.pop();
+                                                messenger.showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                        "Anda tidak berada di lingkungan SMA N 2 Metro, harap melakukan absen di sekolah"),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            title: "Hadir",
+                                          ),
+                                          BasicButton(
+                                            onPressed: () {
+                                              buttonCubit.execute(
+                                                usecase:
+                                                    AddTeacherAttendanceUseCase(),
+                                                params: AttandanceTeacherEntity(
+                                                  teacherId: teacher.id,
+                                                  status: "Izin",
+                                                ),
+                                              );
+                                            },
+                                            title: "Izin",
+                                          ),
+                                          BasicButton(
+                                            onPressed: () {
+                                              buttonCubit.execute(
+                                                usecase:
+                                                    AddTeacherAttendanceUseCase(),
+                                                params: AttandanceTeacherEntity(
+                                                  teacherId: teacher.id,
+                                                  status: "Sakit",
+                                                ),
+                                              );
+                                            },
+                                            title: "Sakit",
+                                          ),
+                                          BasicButton(
+                                            onPressed: () {
+                                              buttonCubit.execute(
+                                                usecase:
+                                                    AddTeacherAttendanceUseCase(),
+                                                params: AttandanceTeacherEntity(
+                                                  teacherId: teacher.id,
+                                                  status: "Dinas",
+                                                ),
+                                              );
+                                            },
+                                            title: "Dinas",
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            title: 'Absen Masuk',
+                          );
+                        });
+                      } else {
                         return CardBasic(
-                          title: "Tunggu Sebentar...",
+                          title: state.errorMessage,
                           image: AppImages.attendance,
                           onpressed: () {},
                         );
                       }
-                      if (state is GetTeacherAttendanceCurrentLoaded) {
-                        String formattedTime = DateFormat('HH:mm')
-                            .format(state.attendance.checkIn!);
+                    }
+                    return Container();
+                  },
+                ),
+                BlocBuilder<GetTeacherAttendanceCubit,
+                    GetTeacherAttendanceState>(
+                  builder: (context, state) {
+                    if (state is GetTeacherAttendanceLoading) {
+                      return CardBasic(
+                        title: "Tunggu Sebentar...",
+                        image: AppImages.attendance,
+                        onpressed: () {},
+                      );
+                    }
+                    if (state is GetTeacherAttendanceCurrentLoaded) {
+                      String formattedTime = DateFormat('HH:mm')
+                          .format(state.attendance.checkOut!);
+                      if (formattedTime == "00:00") {
+                        return Builder(builder: (context) {
+                          return CardBasic(
+                            image: AppImages.attendance,
+                            onpressed: () async {
+                              final distanceCubit =
+                                  context.read<GetDistanceCubit>();
+                              final buttonCubit =
+                                  context.read<ButtonStateCubit>();
+                              final messenger = ScaffoldMessenger.of(context);
+
+                              await distanceCubit.getDistance();
+                              final state = distanceCubit.state;
+
+                              if (state is GetDistanceLoaded && state.isNear) {
+                                buttonCubit.execute(
+                                  usecase: AddTeacherCompletionUsecase(),
+                                  params: teacher.id,
+                                );
+                              } else {
+                                messenger.showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        "Anda tidak berada di lingkungan SMA N 2 Metro, harap melakukan absen di sekolah"),
+                                  ),
+                                );
+                              }
+                            },
+                            title: 'Absen Pulang',
+                          );
+                        });
+                      } else {
                         return CardBasic(
                           image: AppImages.attendance,
                           color: const Color(0XFFA9A9A9),
@@ -113,296 +292,106 @@ class ProfileTeacherMenuView extends StatelessWidget {
                           title: "Anda sudah absen\n$formattedTime",
                         );
                       }
-                      if (state is GetTeacherAttendanceFailure) {
-                        if (state.errorMessage ==
-                            "Something error: (null):(404):data kehadiran tidak ditemukan") {
-                          return Builder(builder: (context) {
-                            return CardBasic(
-                              image: AppImages.attendance,
-                              onpressed: () async {
-                                final buttonCubit =
-                                    context.read<ButtonStateCubit>();
-                                showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return Dialog(
-                                      backgroundColor: Colors.white,
-                                      alignment: Alignment.center,
-                                      insetPadding: const EdgeInsets.all(16),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            const Text(
-                                              "Jenis absen apa yang ingin anda lakukan?",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w900,
-                                                color: AppColors.primary,
-                                              ),
-                                            ),
-                                            BasicButton(
-                                              onPressed: () async {
-                                                final distanceCubit = context
-                                                    .read<GetDistanceCubit>();
-                                                final messenger =
-                                                    ScaffoldMessenger.of(
-                                                        context);
-                                                final navigator = Navigator.of(
-                                                    context,
-                                                    rootNavigator: true);
-                                                await distanceCubit
-                                                    .getDistance();
-                                                if (!context.mounted) return;
-
-                                                final state =
-                                                    distanceCubit.state;
-                                                if (state
-                                                        is GetDistanceLoaded &&
-                                                    state.isNear) {
-                                                  buttonCubit.execute(
-                                                    usecase:
-                                                        AddTeacherAttendanceUseCase(),
-                                                    params:
-                                                        AttandanceTeacherEntity(
-                                                      teacherId: teacher.id,
-                                                      status: "Hadir",
-                                                    ),
-                                                  );
-                                                } else {
-                                                  navigator.pop();
-                                                  messenger.showSnackBar(
-                                                    const SnackBar(
-                                                      content: Text(
-                                                          "Anda tidak berada di lingkungan SMA N 2 Metro, harap melakukan absen di sekolah"),
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                              title: "Hadir",
-                                            ),
-                                            BasicButton(
-                                              onPressed: () {
-                                                buttonCubit.execute(
-                                                  usecase:
-                                                      AddTeacherAttendanceUseCase(),
-                                                  params:
-                                                      AttandanceTeacherEntity(
-                                                    teacherId: teacher.id,
-                                                    status: "Izin",
-                                                  ),
-                                                );
-                                              },
-                                              title: "Izin",
-                                            ),
-                                            BasicButton(
-                                              onPressed: () {
-                                                buttonCubit.execute(
-                                                  usecase:
-                                                      AddTeacherAttendanceUseCase(),
-                                                  params:
-                                                      AttandanceTeacherEntity(
-                                                    teacherId: teacher.id,
-                                                    status: "Sakit",
-                                                  ),
-                                                );
-                                              },
-                                              title: "Sakit",
-                                            ),
-                                            BasicButton(
-                                              onPressed: () {
-                                                buttonCubit.execute(
-                                                  usecase:
-                                                      AddTeacherAttendanceUseCase(),
-                                                  params:
-                                                      AttandanceTeacherEntity(
-                                                    teacherId: teacher.id,
-                                                    status: "Dinas",
-                                                  ),
-                                                );
-                                              },
-                                              title: "Dinas",
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                              title: 'Absen Masuk',
-                            );
-                          });
-                        } else {
+                    }
+                    if (state is GetTeacherAttendanceFailure) {
+                      if (state.errorMessage ==
+                          "Something error: (null):(404):data kehadiran tidak ditemukan") {
+                        return Builder(builder: (context) {
                           return CardBasic(
-                            title: state.errorMessage,
                             image: AppImages.attendance,
-                            onpressed: () {},
+                            onpressed: () async {
+                              final distanceCubit =
+                                  context.read<GetDistanceCubit>();
+                              final buttonCubit =
+                                  context.read<ButtonStateCubit>();
+                              final messenger = ScaffoldMessenger.of(context);
+
+                              await distanceCubit.getDistance();
+                              final state = distanceCubit.state;
+
+                              if (state is GetDistanceLoaded && state.isNear) {
+                                buttonCubit.execute(
+                                  usecase: AddTeacherCompletionUsecase(),
+                                  params: teacher.id,
+                                );
+                              } else {
+                                messenger.showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        "Anda tidak berada di lingkungan SMA N 2 Metro, harap melakukan absen di sekolah"),
+                                  ),
+                                );
+                              }
+                            },
+                            title: 'Absen Pulang',
                           );
-                        }
-                      }
-                      return Container();
-                    },
-                  ),
-                  BlocBuilder<GetTeacherAttendanceCubit,
-                      GetTeacherAttendanceState>(
-                    builder: (context, state) {
-                      if (state is GetTeacherAttendanceLoading) {
+                        });
+                      } else {
                         return CardBasic(
-                          title: "Tunggu Sebentar...",
+                          title: state.errorMessage,
                           image: AppImages.attendance,
                           onpressed: () {},
                         );
                       }
-                      if (state is GetTeacherAttendanceCurrentLoaded) {
-                        String formattedTime = DateFormat('HH:mm')
-                            .format(state.attendance.checkOut!);
-                        if (formattedTime == "00:00") {
-                          return Builder(builder: (context) {
-                            return CardBasic(
-                              image: AppImages.attendance,
-                              onpressed: () async {
-                                final distanceCubit =
-                                    context.read<GetDistanceCubit>();
-                                final buttonCubit =
-                                    context.read<ButtonStateCubit>();
-                                final messenger = ScaffoldMessenger.of(context);
-
-                                await distanceCubit.getDistance();
-                                final state = distanceCubit.state;
-
-                                if (state is GetDistanceLoaded &&
-                                    state.isNear) {
-                                  buttonCubit.execute(
-                                    usecase: AddTeacherCompletionUsecase(),
-                                    params: teacher.id,
-                                  );
-                                } else {
-                                  messenger.showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          "Anda tidak berada di lingkungan SMA N 2 Metro, harap melakukan absen di sekolah"),
-                                    ),
-                                  );
-                                }
-                              },
-                              title: 'Absen Pulang',
-                            );
-                          });
-                        } else {
-                          return CardBasic(
-                            image: AppImages.attendance,
-                            color: const Color(0XFFA9A9A9),
-                            textColor: Colors.white,
-                            onpressed: () async {},
-                            title: "Anda sudah absen\n$formattedTime",
-                          );
-                        }
-                      }
-                      if (state is GetTeacherAttendanceFailure) {
-                        if (state.errorMessage ==
-                            "Something error: (null):(404):data kehadiran tidak ditemukan") {
-                          return Builder(builder: (context) {
-                            return CardBasic(
-                              image: AppImages.attendance,
-                              onpressed: () async {
-                                final distanceCubit =
-                                    context.read<GetDistanceCubit>();
-                                final buttonCubit =
-                                    context.read<ButtonStateCubit>();
-                                final messenger = ScaffoldMessenger.of(context);
-
-                                await distanceCubit.getDistance();
-                                final state = distanceCubit.state;
-
-                                if (state is GetDistanceLoaded &&
-                                    state.isNear) {
-                                  buttonCubit.execute(
-                                    usecase: AddTeacherCompletionUsecase(),
-                                    params: teacher.id,
-                                  );
-                                } else {
-                                  messenger.showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          "Anda tidak berada di lingkungan SMA N 2 Metro, harap melakukan absen di sekolah"),
-                                    ),
-                                  );
-                                }
-                              },
-                              title: 'Absen Pulang',
-                            );
-                          });
-                        } else {
-                          return CardBasic(
-                            title: state.errorMessage,
-                            image: AppImages.attendance,
-                            onpressed: () {},
-                          );
-                        }
-                      }
-                      return Container();
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: height * 0.01),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CardBasic(
-                    image: AppImages.studentAttendance,
-                    onpressed: () {
-                      AppNavigator.push(
-                        context,
-                        AttendanceMenuView(teacher: teacher),
-                      );
-                    },
-                    title: 'Lihat Data Absen',
-                  ),
-                  CardBasic(
-                    image: AppImages.camera,
-                    title: 'Rekam Kehadiran Siswa',
-                    onpressed: () {
-                      AppNavigator.push(
-                        context,
-                        const ScanBarcodeView(),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: height * 0.01),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CardBasic(
-                    image: AppImages.megaphone,
-                    onpressed: () => AppNavigator.push(
+                    }
+                    return Container();
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: height * 0.01),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CardBasic(
+                  image: AppImages.studentAttendance,
+                  onpressed: () {
+                    AppNavigator.push(
                       context,
-                      CreateAnnouncementView(
-                        teacherId: teacher.id ?? 0,
-                      ),
-                    ),
-                    title: 'Buat Pengumuman',
-                  ),
-                  CardBasic(
-                    image: AppImages.teaching,
-                    title: 'Ubah jadwal',
-                    onpressed: () => AppNavigator.push(
+                      AttendanceMenuView(teacher: teacher),
+                    );
+                  },
+                  title: 'Lihat Data Absen',
+                ),
+                CardBasic(
+                  image: AppImages.camera,
+                  title: 'Rekam Kehadiran Siswa',
+                  onpressed: () {
+                    AppNavigator.push(
                       context,
-                      EditScheduleView(
-                        teacherId: teacher.id ?? 0,
-                      ),
+                      const ScanBarcodeView(),
+                    );
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: height * 0.01),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CardBasic(
+                  image: AppImages.megaphone,
+                  onpressed: () => AppNavigator.push(
+                    context,
+                    CreateAnnouncementView(
+                      teacher: teacher,
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                  title: 'Buat Pengumuman',
+                ),
+                CardBasic(
+                  image: AppImages.teaching,
+                  title: 'Ubah jadwal',
+                  onpressed: () => AppNavigator.push(
+                    context,
+                    EditScheduleView(
+                      teacherId: teacher.id ?? 0,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

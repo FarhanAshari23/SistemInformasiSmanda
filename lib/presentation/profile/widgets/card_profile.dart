@@ -128,7 +128,6 @@ class CardProfile extends StatelessWidget {
                           )
                         : ChangePhotoView(
                             teacher: teacher,
-                            isProfileTeacher: true,
                           ),
                   ),
                   child: Padding(

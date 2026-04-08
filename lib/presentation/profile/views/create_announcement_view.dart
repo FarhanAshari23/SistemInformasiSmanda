@@ -11,17 +11,18 @@ import '../../../common/widget/landing/succes.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/kelas/kelas.dart';
 import '../../../domain/entities/news/news.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/news/create_news.dart';
 import '../../auth/widgets/button_role.dart';
-import '../../home/views/home_view_admin.dart';
 import '../../manageNews/views/select_kelas_view.dart';
 import '../../manageNews/widgets/field_news.dart';
+import 'profile_teacher_view.dart';
 
 class CreateAnnouncementView extends StatefulWidget {
-  final int teacherId;
+  final TeacherEntity teacher;
   const CreateAnnouncementView({
     super.key,
-    required this.teacherId,
+    required this.teacher,
   });
 
   @override
@@ -66,8 +67,8 @@ class _CreateAnnouncementViewState extends State<CreateAnnouncementView> {
           if (state is ButtonSuccessState) {
             AppNavigator.push(
               context,
-              const SuccesPage(
-                page: HomeViewAdmin(),
+              SuccesPage(
+                page: ProfileTeacher(teacher: widget.teacher),
                 title: "Data Pengumuman Berhasil Ditambahkan",
               ),
             );
@@ -198,7 +199,7 @@ class _CreateAnnouncementViewState extends State<CreateAnnouncementView> {
                                     description: _contentC.text,
                                     classId: classid,
                                     isGlobal: isGlobal,
-                                    teacherId: widget.teacherId,
+                                    teacherId: widget.teacher.id,
                                   ),
                                 );
                           }

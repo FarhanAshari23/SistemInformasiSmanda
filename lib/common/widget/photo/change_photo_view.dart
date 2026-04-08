@@ -7,6 +7,7 @@ import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/teacher/update_teacher.dart';
 import '../../bloc/button/button.cubit.dart';
 import '../../bloc/button/button_state.dart';
+import '../../bloc/teacher/teacher_cubit.dart';
 import '../../bloc/upload_image/upload_image_cubit.dart';
 import '../../bloc/upload_image/upload_image_state.dart';
 import '../appbar/basic_appbar.dart';
@@ -17,13 +18,11 @@ import '../../../core/configs/theme/app_colors.dart';
 class ChangePhotoView extends StatelessWidget {
   final StudentEntity? user;
   final TeacherEntity? teacher;
-  final bool isProfileTeacher;
 
   const ChangePhotoView({
     super.key,
     this.user,
     this.teacher,
-    this.isProfileTeacher = false,
   });
 
   String? _getName() {
@@ -53,6 +52,9 @@ class ChangePhotoView extends StatelessWidget {
         BlocProvider(
           create: (context) => ButtonStateCubit(),
         ),
+        BlocProvider(
+          create: (context) => TeacherCubit(),
+        ),
       ],
       child: Builder(builder: (context) {
         return BlocListener<ButtonStateCubit, ButtonState>(
@@ -65,6 +67,11 @@ class ChangePhotoView extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }
             if (state is ButtonSuccessState) {
+              if (teacher != null) {
+                context
+                    .read<TeacherCubit>()
+                    .displayTeacherById(params: teacher!.id);
+              }
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Berhasil mengubah foto")),
               );
@@ -167,7 +174,7 @@ class ChangePhotoView extends StatelessWidget {
                         onPressed: () async {
                           if (state is UploadImageInitial) return;
                           if (state is UploadImageSuccess) {
-                            if (isProfileTeacher) {
+                            if (teacher != null) {
                               await context.read<ButtonStateCubit>().execute(
                                     usecase: UpdateTeacherUsecase(),
                                     params: TeacherEntity(
