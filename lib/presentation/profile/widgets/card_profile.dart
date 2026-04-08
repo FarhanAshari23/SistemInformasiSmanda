@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/bloc/student/get_student_cubit.dart';
+import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
@@ -126,8 +127,11 @@ class CardProfile extends StatelessWidget {
                             value: context.read<StudentCubit>(),
                             child: EditProfileStudentView(user: student!),
                           )
-                        : ChangePhotoView(
-                            teacher: teacher,
+                        : BlocProvider.value(
+                            value: context.read<TeacherCubit>(),
+                            child: ChangePhotoView(
+                              teacher: teacher,
+                            ),
                           ),
                   ),
                   child: Padding(

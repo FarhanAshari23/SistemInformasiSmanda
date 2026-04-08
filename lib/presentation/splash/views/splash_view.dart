@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/auth/is_admin_usecase.dart';
 import '../../../domain/usecases/auth/profile_student_usecase.dart';
 import '../../../domain/usecases/auth/profile_teacher_usecase.dart';
@@ -63,9 +64,10 @@ class SplashView extends StatelessWidget {
               );
             },
             (data) {
+              TeacherEntity teacher = data;
               AppNavigator.pushReplacement(
                 context,
-                ProfileTeacher(teacher: data),
+                ProfileTeacher(teacherId: teacher.id ?? 0),
               );
             },
           );

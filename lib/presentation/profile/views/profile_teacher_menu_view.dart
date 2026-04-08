@@ -374,7 +374,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
                   onpressed: () => AppNavigator.push(
                     context,
                     CreateAnnouncementView(
-                      teacher: teacher,
+                      teacherId: teacher.id ?? 0,
                     ),
                   ),
                   title: 'Buat Pengumuman',

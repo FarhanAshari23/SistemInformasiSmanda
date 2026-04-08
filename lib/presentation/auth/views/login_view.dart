@@ -8,6 +8,7 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../core/configs/assets/app_lotties.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/student/student.dart';
+import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/auth/is_admin_usecase.dart';
 import '../../../domain/usecases/auth/profile_student_usecase.dart';
 import '../../../domain/usecases/auth/profile_teacher_usecase.dart';
@@ -83,11 +84,12 @@ class LoginView extends StatelessWidget {
                             },
                           );
                         },
-                        (data) {
+                        (teacher) {
+                          TeacherEntity data = teacher;
                           AppNavigator.pushAndRemoveUntil(
                             context,
                             ProfileTeacher(
-                              teacher: data,
+                              teacherId: data.id ?? 0,
                             ),
                           );
                         },

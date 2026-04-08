@@ -52,9 +52,6 @@ class ChangePhotoView extends StatelessWidget {
         BlocProvider(
           create: (context) => ButtonStateCubit(),
         ),
-        BlocProvider(
-          create: (context) => TeacherCubit(),
-        ),
       ],
       child: Builder(builder: (context) {
         return BlocListener<ButtonStateCubit, ButtonState>(
