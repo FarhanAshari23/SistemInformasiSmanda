@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
@@ -30,7 +29,6 @@ class CardEditTeacher extends StatelessWidget {
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
-    String formattedDate = DateFormat('d MMMM yyyy').format(teacher.birthDate!);
     return CustomInkWell(
       borderRadius: 12,
       defaultColor: AppColors.secondary,
@@ -57,10 +55,8 @@ class CardEditTeacher extends StatelessWidget {
                   fallbackAsset: teacher.gender == 1
                       ? AppImages.guruLaki
                       : AppImages.guruPerempuan,
-                  imageUrl: DisplayImage.displayImageTeacher(
-                    teacher.name ?? '',
-                    teacher.nip != '-' ? teacher.nip! : formattedDate,
-                  ),
+                  imageUrl:
+                      DisplayImage.displayImageTeacher(teacher.picture ?? ''),
                 ),
                 Expanded(
                   child: Padding(

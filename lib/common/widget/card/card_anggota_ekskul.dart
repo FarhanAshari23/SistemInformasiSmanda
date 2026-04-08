@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -29,10 +28,8 @@ class CardAnggotaEkskul extends StatelessWidget {
     String imageUrl = murid != null
         ? DisplayImage.displayImageStudent(murid?.picture ?? '')
         : DisplayImage.displayImageTeacher(
-            pembina?.name ?? '',
-            pembina?.nip != '-'
-                ? pembina?.nip ?? ''
-                : DateFormat('d MMMM yyyy').format(pembina!.birthDate!));
+            pembina?.picture ?? '',
+          );
     String fallbackAsset = murid != null
         ? murid!.gender == 1
             ? AppImages.boyStudent

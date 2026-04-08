@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/ekskul/advisor.dart';
 import '../../../domain/entities/ekskul/member.dart';
 import '../../helper/display_image.dart';
+import '../inkwell/custom_inkwell.dart';
 import '../photo/network_photo.dart';
 
 class CardAnggota extends StatelessWidget {
@@ -53,11 +52,7 @@ class CardAnggota extends StatelessWidget {
               imageUrl: murid != null
                   ? DisplayImage.displayImageStudent(murid?.picture ?? '')
                   : DisplayImage.displayImageTeacher(
-                      pembina?.name ?? '',
-                      pembina?.nip != '-'
-                          ? pembina?.nip ?? ''
-                          : DateFormat('d MMMM yyyy')
-                              .format(pembina!.birthDate!),
+                      pembina?.picture ?? '',
                     ),
             ),
             const SizedBox(width: 12),

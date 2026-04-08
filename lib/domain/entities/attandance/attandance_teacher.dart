@@ -1,6 +1,6 @@
 class AttandanceTeacherEntity {
   int? id, teacherId, gender, total;
-  String? name, nip, status;
+  String? name, nip, status, picture;
   DateTime? date, birthDate, checkIn, checkOut;
 
   AttandanceTeacherEntity({
@@ -15,6 +15,7 @@ class AttandanceTeacherEntity {
     this.teacherId,
     this.total,
     this.birthDate,
+    this.picture,
   });
 
   AttandanceTeacherEntity copyWith({
@@ -25,6 +26,7 @@ class AttandanceTeacherEntity {
     String? name,
     String? nip,
     String? status,
+    String? picture,
     DateTime? date,
     DateTime? checkIn,
     DateTime? checkOut,
@@ -42,6 +44,7 @@ class AttandanceTeacherEntity {
       teacherId: teacherId ?? this.teacherId,
       total: total ?? this.total,
       birthDate: birthDate ?? this.birthDate,
+      picture: picture ?? this.picture,
     );
   }
 }

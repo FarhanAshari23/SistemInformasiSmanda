@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
@@ -46,10 +44,8 @@ class CardStaff extends StatelessWidget {
                 height: height * 0.115,
                 fallbackAsset: fallbackAsset,
                 imageUrl: DisplayImage.displayImageTeacher(
-                    teacher.name!,
-                    teacher.nip != null
-                        ? teacher.nip!
-                        : DateFormat('d MMMM yyyy').format(teacher.birthDate!)),
+                  teacher.picture ?? '',
+                ),
               ),
             ),
             SizedBox(height: height * 0.01),

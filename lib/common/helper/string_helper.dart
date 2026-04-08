@@ -85,7 +85,7 @@ class StringHelper {
 
   static String maskEmail(String email, {int maskLength = 5}) {
     final atIndex = email.indexOf('@');
-    if (atIndex == -1) return email; // bukan email valid
+    if (atIndex == -1) return email;
 
     final localPart = email.substring(0, atIndex);
     final domainPart = email.substring(atIndex);

@@ -7,6 +7,7 @@ class AttendanceTeacherModel {
   final int total;
   final String name;
   final String nip;
+  final String picture;
   final String status;
   final DateTime date;
   final DateTime checkIn;
@@ -25,6 +26,7 @@ class AttendanceTeacherModel {
     required this.checkOut,
     required this.total,
     required this.birthDate,
+    required this.picture,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,6 +42,7 @@ class AttendanceTeacherModel {
       "status": status,
       "total": total,
       "birth_date": birthDate,
+      "picture": picture,
     };
     data.removeWhere((key, value) {
       if (value == null) return true;
@@ -86,6 +89,7 @@ class AttendanceTeacherModel {
       status: map['status'] ?? '',
       teacherId: map['teacher_id'] ?? 0,
       total: map['total_guru'] ?? 0,
+      picture: map['picture'] ?? '',
     );
   }
 }
@@ -104,6 +108,7 @@ extension AttendanceTeacherModelX on AttendanceTeacherModel {
       teacherId: teacherId,
       total: total,
       birthDate: birthDate,
+      picture: picture,
     );
   }
 
@@ -119,6 +124,7 @@ extension AttendanceTeacherModelX on AttendanceTeacherModel {
       checkIn: entity.checkIn ?? DateTime(2000, 1, 1),
       checkOut: entity.checkOut ?? DateTime(2000, 1, 1),
       total: entity.total ?? 0,
+      picture: entity.picture ?? '',
       birthDate: entity.birthDate ?? DateTime(2000, 1, 1),
     );
   }

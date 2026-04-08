@@ -72,11 +72,8 @@ class CardTeacherAttendance extends StatelessWidget {
               children: [
                 NetworkPhoto(
                   imageUrl: DisplayImage.displayImageTeacher(
-                      teacher.name!,
-                      teacher.nip != null
-                          ? teacher.nip!
-                          : DateFormat('d MMMM yyyy')
-                              .format(teacher.birthDate!)),
+                    teacher.picture ?? '',
+                  ),
                   fallbackAsset: fallbackAsset,
                   height: mediaQueryHeight * 0.14,
                   width: width * 0.235,

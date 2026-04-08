@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import '../../../common/bloc/student/get_student_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/display_image.dart';
@@ -28,15 +27,7 @@ class CardProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    final nip = teacher?.nip;
-    final birthDate = teacher?.birthDate;
 
-    String nipOrBirthDate = '';
-    if (nip != null && nip.isNotEmpty) {
-      nipOrBirthDate = nip;
-    } else if (birthDate != null) {
-      nipOrBirthDate = DateFormat('d MMMM yyyy', "id_ID").format(birthDate);
-    }
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: width * 0.015),
       child: CustomInkWell(
@@ -83,8 +74,7 @@ class CardProfile extends StatelessWidget {
                               student?.picture ?? '',
                             )
                           : DisplayImage.displayImageTeacher(
-                              teacher?.name ?? '',
-                              nipOrBirthDate.toString(),
+                              teacher?.picture ?? '',
                             ),
                     ),
                     Expanded(

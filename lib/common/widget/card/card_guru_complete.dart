@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/teacher/teacher.dart';
@@ -52,12 +50,8 @@ class CardGuruComplete extends StatelessWidget {
                     left: Radius.circular(12),
                   ),
                   child: NetworkPhoto(
-                    imageUrl: DisplayImage.displayImageTeacher(
-                        teacher.name!,
-                        teacher.nip != "-"
-                            ? teacher.nip!
-                            : DateFormat('d MMMM yyyy')
-                                .format(teacher.birthDate!)),
+                    imageUrl:
+                        DisplayImage.displayImageTeacher(teacher.picture ?? ''),
                     fallbackAsset: fallbackAsset,
                     width: width * 0.285,
                     height: height * 0.15,

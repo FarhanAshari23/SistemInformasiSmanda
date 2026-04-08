@@ -132,11 +132,7 @@ class TeacherDetail extends StatelessWidget {
                                   ? AppImages.guruLaki
                                   : AppImages.guruPerempuan,
                               imageUrl: DisplayImage.displayImageTeacher(
-                                state.teacher.name!,
-                                state.teacher.nip != null
-                                    ? state.teacher.nip!
-                                    : DateFormat('d MMMM yyyy', "id_ID")
-                                        .format(state.teacher.birthDate!),
+                                state.teacher.picture ?? '',
                               ),
                             ),
                             Align(

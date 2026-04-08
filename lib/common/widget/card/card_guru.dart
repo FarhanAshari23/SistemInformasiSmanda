@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -39,11 +38,7 @@ class _CardGuruState extends State<CardGuru> {
           children: [
             NetworkPhoto(
               imageUrl: DisplayImage.displayImageTeacher(
-                  widget.teacher.name!,
-                  widget.teacher.nip != null
-                      ? widget.teacher.nip!
-                      : DateFormat('d MMMM yyyy')
-                          .format(widget.teacher.birthDate!)),
+                  widget.teacher.picture ?? ''),
               fallbackAsset: fallbackAsset,
               width: width * 0.285,
               height: height * 0.135,

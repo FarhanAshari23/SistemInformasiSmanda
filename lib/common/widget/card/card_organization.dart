@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/helper/app_navigation.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
+import '../../helper/app_navigation.dart';
 import '../../helper/display_image.dart';
 import '../detail/teacher_detail.dart';
+import '../inkwell/custom_inkwell.dart';
 import '../photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -49,11 +48,7 @@ class CardOrganization extends StatelessWidget {
                   ? AppImages.guruLaki
                   : AppImages.guruPerempuan,
               imageUrl: DisplayImage.displayImageTeacher(
-                teacher.name ?? '',
-                teacher.nip != null
-                    ? teacher.nip!
-                    : DateFormat('d MMMM yyyy', "id_ID")
-                        .format(teacher.birthDate!),
+                teacher.picture ?? '',
               ),
             ),
           ),
