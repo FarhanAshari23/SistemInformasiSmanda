@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,11 +7,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
-import '../../../common/helper/execute_crud.dart';
 import '../../../common/helper/string_helper.dart';
 import '../../../core/networks/network.dart';
 import '../../../domain/entities/student/student.dart';
@@ -28,7 +25,7 @@ abstract class StudentsFirebaseService {
   Future<Either> updateStudent(StudentEntity updateUserReq);
   Future<Either> deleteStudent(int studentId);
   Future<Either> searchStudentByNISN(String nisnStudent);
-  Future<Either> deleteStudentByClass(String kelas);
+  Future<Either> deleteStudentByClass(int kelasId);
   Future<Either> getStudentsByname(String name);
   Future<Either> createExcellForStudentData();
 }
@@ -111,66 +108,16 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   }
 
   @override
-  Future<Either> deleteStudentByClass(String kelas) async {
-    final firestore = FirebaseFirestore.instance;
-    final collection = firestore.collection('Students');
-    String endpoint = ExecuteCRUD.deleteMultipleImageStudent();
-    final List<Map<String, String>> studentsPayload = [];
+  Future<Either> deleteStudentByClass(int kelasId) async {
     try {
-      Uri? url;
-      try {
-        url = Uri.parse(endpoint);
-      } catch (_) {
-        return Left("URL tidak valid: $endpoint");
+      final responseDelete =
+          await Network.apiClient.delete("/students/delete-by-class/$kelasId");
+      if (responseDelete.statusCode == 500) {
+        return left("Connection error: ${responseDelete.message}");
       }
-
-      QuerySnapshot querySnapshot =
-          await collection.where('kelas', isEqualTo: kelas).get();
-      if (querySnapshot.docs.isEmpty) {
-        return const Left(
-          "Maaf, tidak ada data murid yang bisa dihapus",
-        );
-      }
-
-      for (var doc in querySnapshot.docs) {
-        final data = doc.data() as Map<String, dynamic>;
-
-        studentsPayload.add({
-          "name": data["nama"],
-          "nisn": data["nisn"],
-        });
-      }
-
-      final response = await http
-          .post(
-            url,
-            headers: {
-              "Content-Type": "application/json",
-              "Accept": "application/json",
-            },
-            body: jsonEncode({
-              "students": studentsPayload,
-            }),
-          )
-          .timeout(const Duration(seconds: 5));
-
-      if (response.statusCode != 200) {
-        return Left("Upload gagal (status: ${response.statusCode})");
-      }
-
-      for (var doc in querySnapshot.docs) {
-        await doc.reference.delete();
-      }
-      return const Right('Delete Data Student Success');
-    } on TimeoutException {
-      return const Left(
-          "Gagal terhubung dengan server, cobalah beberapa saat lagi");
-    } on SocketException {
-      return const Left("Tidak ada koneksi internet.");
-    } on HttpException {
-      return const Left("Kesalahan HTTP terjadi.");
+      return const Right('Data siswa berhasil dihapus');
     } catch (e) {
-      return Left(e.toString());
+      return Left('Something wrong: $e');
     }
   }
 

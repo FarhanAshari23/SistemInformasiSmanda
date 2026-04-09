@@ -478,8 +478,11 @@ class MuridDetail extends StatelessWidget {
                                                               CardDetailSiswa(
                                                             title: 'Ekskul',
                                                             content: Text(
-                                                              state
-                                                                  .errorMessage,
+                                                              state.errorMessage ==
+                                                                      "Something error: (null):(404):Data murid tidak ditemukan"
+                                                                  ? "Belum memilih ekskul"
+                                                                  : state
+                                                                      .errorMessage,
                                                               style:
                                                                   const TextStyle(
                                                                 color: AppColors

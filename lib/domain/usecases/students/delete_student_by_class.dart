@@ -4,9 +4,9 @@ import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
 import '../../repository/students/students.dart';
 
-class DeleteStudentByClassUsecase implements Usecase<Either, String> {
+class DeleteStudentByClassUsecase implements Usecase<Either, int> {
   @override
-  Future<Either> call({String? params}) async {
+  Future<Either> call({int? params}) async {
     return await sl<StudentRepository>().deleteStudentByClass(params!);
   }
 }

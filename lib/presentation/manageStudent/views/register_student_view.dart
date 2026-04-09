@@ -6,6 +6,7 @@ import '../../../common/bloc/button/button_state.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/button/basic_button.dart';
+import '../../../common/widget/detail/murid_detail.dart';
 import '../../../common/widget/dialog/choose_dialog.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
@@ -18,7 +19,6 @@ import '../../../domain/usecases/students/update_all_student_account_usecase.dar
 import '../bloc/get_student_registration_cubit.dart';
 import '../bloc/get_student_registration_state.dart';
 import '../widgets/button_all.dart';
-import 'register_account_detail_view.dart';
 
 class RegisterStudentView extends StatelessWidget {
   const RegisterStudentView({super.key});
@@ -211,8 +211,8 @@ class RegisterStudentView extends StatelessWidget {
                                   defaultColor: AppColors.secondary,
                                   onTap: () => AppNavigator.push(
                                     context,
-                                    RegisterAccountDetailView(
-                                      user: students,
+                                    MuridDetail(
+                                      userId: students.id ?? 0,
                                     ),
                                   ),
                                   child: Padding(
