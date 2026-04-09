@@ -72,8 +72,8 @@ class StudentsRepositoryImpl extends StudentRepository {
   }
 
   @override
-  Future<Either> deleteStudentByClass(String kelas) async {
-    return await sl<StudentsFirebaseService>().deleteStudentByClass(kelas);
+  Future<Either> deleteStudentByClass(int kelasId) async {
+    return await sl<StudentsFirebaseService>().deleteStudentByClass(kelasId);
   }
 
   @override
