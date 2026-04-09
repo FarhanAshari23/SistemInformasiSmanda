@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/bloc/kelas/students_state.dart';
 import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/widget/landing/not_found.dart';
-import '../../../domain/entities/student/student.dart';
+import '../../../domain/entities/attandance/attendance_student.dart';
 import '../../../domain/usecases/attendance/get_attendance_name_usecase.dart';
-import '../../manageStudent/widgets/card_edit_user.dart';
+import '../widgets/card_student_attendance.dart';
 import '../widgets/search_student_attendance_appbar.dart';
 
 class SearchStudentAttendance extends StatelessWidget {
@@ -33,14 +33,20 @@ class SearchStudentAttendance extends StatelessWidget {
                     if (state is StudentsDisplayLoading) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    if (state is StudentsDisplayLoaded) {
-                      return state.students.isEmpty
-                          ? const NotFound(objek: 'Murid')
-                          : SizedBox(
-                              width: double.infinity,
-                              height: height * 0.75,
-                              child: _students(state.students, height),
-                            );
+                    if (state is StudentAttendanceDisplayLoaded) {
+                      return SizedBox(
+                        width: double.infinity,
+                        height: height * 0.75,
+                        child: _students(state.students, height),
+                      );
+                    }
+                    if (state is StudentsDisplayFailure) {
+                      if (state.errorMessage ==
+                          "Something error: (null):(404):Data kelas tidak ditemukan") {
+                        return const NotFound(objek: 'Murid');
+                      } else {
+                        return Text(state.errorMessage);
+                      }
                     }
                     return Container();
                   },
@@ -53,12 +59,12 @@ class SearchStudentAttendance extends StatelessWidget {
     );
   }
 
-  Widget _students(List<StudentEntity> students, double height) {
+  Widget _students(List<AttendanceStudentEntity> students, double height) {
     return ListView.separated(
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
-        return CardEditUser(
-          student: students[0],
+        return CardStudentAttendance(
+          student: students[index],
         );
       },
       separatorBuilder: (context, index) => SizedBox(height: height * 0.02),

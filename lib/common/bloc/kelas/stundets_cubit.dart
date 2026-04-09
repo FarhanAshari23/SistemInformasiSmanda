@@ -24,6 +24,21 @@ class StudentsDisplayCubit extends Cubit<StudentsDisplayState> {
     );
   }
 
+  void displayStudentAttendances({dynamic params}) async {
+    emit(StudentsDisplayLoading());
+    var returnedData = await usecase.call(
+      params: params,
+    );
+    returnedData.fold(
+      (error) {
+        emit(StudentsDisplayFailure(errorMessage: error.toString()));
+      },
+      (data) {
+        emit(StudentAttendanceDisplayLoaded(students: data));
+      },
+    );
+  }
+
   void displayStudentsInit({required int params}) async {
     emit(StudentsDisplayLoading());
     var returnedData = await GetStudentsWithKelas().call(params: params);

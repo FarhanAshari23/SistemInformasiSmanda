@@ -1,3 +1,4 @@
+import '../../../domain/entities/attandance/attendance_student.dart';
 import '../../../domain/entities/student/student.dart';
 
 abstract class StudentsDisplayState {}
@@ -9,6 +10,11 @@ class StudentsDisplayLoading extends StudentsDisplayState {}
 class StudentsDisplayLoaded extends StudentsDisplayState {
   final List<StudentEntity> students;
   StudentsDisplayLoaded({required this.students});
+}
+
+class StudentAttendanceDisplayLoaded extends StudentsDisplayState {
+  final List<AttendanceStudentEntity> students;
+  StudentAttendanceDisplayLoaded({required this.students});
 }
 
 class StudentsDisplayFailure extends StudentsDisplayState {

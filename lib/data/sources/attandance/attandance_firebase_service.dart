@@ -175,8 +175,8 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
   @override
   Future<Either> searchStudentAttendance(AttendanceStudentEntity req) async {
     try {
-      final response = await Network.apiClient.get(
-          "/attendancestudent/${req.date}/:studentAttendanceDate/name/${req.name}");
+      final response = await Network.apiClient
+          .get("/attendancestudent/date/${req.date}/name/${req.name}");
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }

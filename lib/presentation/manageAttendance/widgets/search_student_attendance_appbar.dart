@@ -58,7 +58,9 @@ class SearchStudentAttendanceAppbar extends StatelessWidget {
                     if (value.isEmpty) {
                       context.read<StudentsDisplayCubit>().displayInitial();
                     } else {
-                      context.read<StudentsDisplayCubit>().displayStudents(
+                      context
+                          .read<StudentsDisplayCubit>()
+                          .displayStudentAttendances(
                               params: AttendanceStudentEntity(
                             date: date,
                             name: value,
