@@ -134,7 +134,9 @@ class BasicAppbar extends StatelessWidget {
                                     shape: BoxShape.circle,
                                     fallbackAsset: student?.gender == 1
                                         ? AppImages.boyStudent
-                                        : AppImages.girlStudent,
+                                        : student?.religion == "Islam"
+                                            ? AppImages.girlStudent
+                                            : AppImages.girlNonStudent,
                                     imageUrl: DisplayImage.displayImageStudent(
                                         student?.picture ?? ''),
                                   ),

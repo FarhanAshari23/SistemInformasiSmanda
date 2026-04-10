@@ -36,16 +36,19 @@ class SelectTeacherView extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (state is GetTeacherNameLoaded) {
-                      return state.teachers.isEmpty
-                          ? const NotFound(objek: 'Guru')
-                          : SizedBox(
-                              width: width * 0.9,
-                              height: height * 0.75,
-                              child: _teachers(state.teachers, height),
-                            );
+                      return SizedBox(
+                        width: width * 0.9,
+                        height: height * 0.75,
+                        child: _teachers(state.teachers, height),
+                      );
                     }
                     if (state is GetTeacherNameFailure) {
-                      return Text(state.errorMessage);
+                      if (state.errorMessage ==
+                          "Something error: (null):(404):Data guru tidak ditemukan") {
+                        return const NotFound(objek: 'Guru');
+                      } else {
+                        return Text(state.errorMessage);
+                      }
                     }
                     return Container();
                   },

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:new_sistem_informasi_smanda/common/helper/display_image.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
@@ -13,6 +14,8 @@ import '../../../common/bloc/kelas/stundets_cubit.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/box_gender.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../common/widget/photo/network_photo.dart';
+import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/student/student.dart';
 import '../../../domain/usecases/students/update_user.dart';
@@ -391,7 +394,9 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                                     ),
                                   );
                                   if (result != null) {
-                                    imageProfile = result;
+                                    setState(() {
+                                      imageProfile = result;
+                                    });
                                   }
                                 },
                                 child: SizedBox(
@@ -420,7 +425,54 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                             ),
                           )
                         ],
-                      )
+                      ),
+                      SizedBox(height: height * 0.02),
+                      (imageProfile != null ||
+                              (widget.user.picture != null &&
+                                  widget.user.picture!.isNotEmpty))
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Tampilan Foto: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                imageProfile != null
+                                    ? Container(
+                                        width: width * 0.4,
+                                        height: width * 0.5,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          image: DecorationImage(
+                                            image: FileImage(imageProfile!),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(16),
+                                        child: NetworkPhoto(
+                                          width: width * 0.4,
+                                          height: width * 0.5,
+                                          imageUrl:
+                                              DisplayImage.displayImageStudent(
+                                                  widget.user.picture!),
+                                          fallbackAsset: widget.user.gender == 1
+                                              ? AppImages.boyStudent
+                                              : widget.user.religion == "Islam"
+                                                  ? AppImages.girlStudent
+                                                  : AppImages.girlNonStudent,
+                                        ),
+                                      ),
+                              ],
+                            )
+                          : const SizedBox(),
                     ],
                   ),
                 ),

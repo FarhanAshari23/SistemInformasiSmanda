@@ -156,7 +156,10 @@ class _AddNewsViewState extends State<AddNewsView> {
                                                           '');
                                                   classid.add(result[i].id!);
                                                 }
-                                                _toC.text = name.join(", ");
+                                                _toC.text = classid.length ==
+                                                        state.kelas.length
+                                                    ? "Semua Kelas"
+                                                    : name.join(", ");
                                               }
                                             },
                                           ),

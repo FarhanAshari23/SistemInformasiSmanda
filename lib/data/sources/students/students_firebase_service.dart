@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -273,15 +272,13 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
     DateTime now = DateTime.now();
     String formatted = DateFormat('d MMMM yyyy HH:mm').format(now);
     try {
-      var returnedData = await FirebaseFirestore.instance
-          .collection("Students")
-          .where("is_register", isEqualTo: true)
-          .where("nama", isNotEqualTo: "admin")
-          .orderBy('kelas')
-          .get();
-      List<Map<String, dynamic>> students =
-          returnedData.docs.map((e) => e.data()).toList();
-
+      final response = await Network.apiClient.get("/students");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      List<StudentEntity> students = List.from(response.data['data'])
+          .map((e) => StudentModel.fromMap(e).toEntity())
+          .toList();
       sheet
           .getRangeByName('A1')
           .setText("Data diunduh pada tanggal: $formatted");
@@ -297,11 +294,11 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       sheet.getRangeByName('A2:C2').cellStyle = headerStyle;
 
       for (var i = 0; i < students.length; i++) {
-        sheet.getRangeByName('A${i + 3}').setText(students[i]['nama']);
+        sheet.getRangeByName('A${i + 3}').setText(students[i].name);
         sheet
             .getRangeByName('B${i + 3}')
-            .setText(StringHelper.maskEmail(students[i]['email']));
-        sheet.getRangeByName('C${i + 3}').setText(students[i]['kelas']);
+            .setText(StringHelper.maskEmail(students[i].email ?? ''));
+        sheet.getRangeByName('C${i + 3}').setText(students[i].nameClass);
       }
       sheet.autoFitColumn(1);
       sheet.autoFitColumn(2);

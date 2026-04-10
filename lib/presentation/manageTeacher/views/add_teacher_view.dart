@@ -115,6 +115,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: List.generate(7, (index) {
                         return Padding(
                           padding: EdgeInsets.only(bottom: height * 0.01),
@@ -330,7 +331,8 @@ class _AddTeacherViewState extends State<AddTeacherView> {
       );
     } else if (index == 6) {
       return imageProfile != null
-          ? Row(
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
                   'Tampilan Foto: ',
@@ -342,10 +344,10 @@ class _AddTeacherViewState extends State<AddTeacherView> {
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  width: width * 0.2,
-                  height: width * 0.2,
+                  width: width * 0.4,
+                  height: width * 0.5,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
+                    borderRadius: BorderRadius.circular(16),
                     image: DecorationImage(
                         image: FileImage(imageProfile!), fit: BoxFit.fill),
                   ),
