@@ -14,7 +14,7 @@ class GetTeacherCubit extends Cubit<GetTeacherState> {
     );
     returnedData.fold(
       (error) {
-        emit(GetTeacherFailure());
+        emit(GetTeacherFailure(errorMessage: error.toString()));
       },
       (data) {
         emit(GetTeacherLoaded(teachers: data));

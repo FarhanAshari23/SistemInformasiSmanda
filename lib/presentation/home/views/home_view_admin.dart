@@ -41,8 +41,8 @@ class HomeViewAdmin extends StatelessWidget {
       'Edit pengumuman',
       'Tambah data ekskul',
       'Edit data ekskul',
-      'Tambah data jadwal',
-      'Edit data jadwal',
+      'Tambah data kelas',
+      'Edit data kelas',
       'Daftar kegiatan',
       'Daftar tugas tambahan',
     ];

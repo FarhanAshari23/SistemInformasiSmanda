@@ -391,7 +391,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                                                         );
                                                   }
                                                 },
-                                                title: 'Ubah Jadwal',
+                                                title: 'Ubah Kelas',
                                               );
                                             }),
                                           ],

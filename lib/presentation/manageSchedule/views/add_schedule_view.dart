@@ -301,7 +301,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                               );
                         }
                       },
-                      title: 'Tambah Jadwal',
+                      title: 'Tambah Kelas',
                     );
                   }),
                 ],

@@ -50,7 +50,7 @@ class PengumumanScreen extends StatelessWidget {
                                 .read<NewsNavigationCubit>()
                                 .changeColor(index);
                             if (index == 0) {
-                              context.read<NewsCubit>().displayNews();
+                              context.read<NewsCubit>().displayNewsGlobal();
                             }
                             if (index == 1) {
                               context

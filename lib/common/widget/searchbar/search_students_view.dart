@@ -34,13 +34,19 @@ class SearchStudentsView extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (state is StudentsDisplayLoaded) {
-                      return state.students.isEmpty
-                          ? const NotFound(objek: 'Murid')
-                          : SizedBox(
-                              width: width * 0.9,
-                              height: height * 0.75,
-                              child: _students(state.students, height),
-                            );
+                      return SizedBox(
+                        width: width * 0.9,
+                        height: height * 0.75,
+                        child: _students(state.students, height),
+                      );
+                    }
+                    if (state is StudentsDisplayFailure) {
+                      if (state.errorMessage ==
+                          "Something error: (null):(404):Data murid tidak ditemukan") {
+                        return const NotFound(objek: 'Murid');
+                      } else {
+                        return Text(state.errorMessage);
+                      }
                     }
                     return Container();
                   },

@@ -11,4 +11,8 @@ class GetTeacherLoaded extends GetTeacherState {
   GetTeacherLoaded({required this.teachers});
 }
 
-class GetTeacherFailure extends GetTeacherState {}
+class GetTeacherFailure extends GetTeacherState {
+  final String errorMessage;
+
+  GetTeacherFailure({required this.errorMessage});
+}
