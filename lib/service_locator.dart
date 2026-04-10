@@ -48,6 +48,7 @@ import 'domain/usecases/ekskul/update_ekskul.dart';
 import 'domain/usecases/news/delete_news.dart';
 import 'domain/usecases/news/get_news.dart';
 import 'domain/usecases/news/get_news_by_class.dart';
+import 'domain/usecases/news/get_news_global_usecase.dart';
 import 'domain/usecases/news/update_news.dart';
 import 'domain/usecases/schedule/create_activity_usecase.dart';
 import 'domain/usecases/schedule/get_jadwal_guru_usecase.dart';
@@ -200,6 +201,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<GetNewsUseCase>(
     GetNewsUseCase(),
+  );
+  sl.registerSingleton<GetNewsGlobalUsecase>(
+    GetNewsGlobalUsecase(),
   );
   sl.registerSingleton<GetNewsByClassUsecase>(
     GetNewsByClassUsecase(),

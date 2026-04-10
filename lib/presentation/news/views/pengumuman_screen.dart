@@ -25,7 +25,7 @@ class PengumumanScreen extends StatelessWidget {
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => NewsCubit()..displayNews(),
+            create: (context) => NewsCubit()..displayNewsGlobal(),
           ),
           BlocProvider(
             create: (context) => NewsNavigationCubit(),
