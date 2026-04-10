@@ -171,7 +171,10 @@ class _EditNewsViewDetailState extends State<EditNewsViewDetail> {
                                                           '');
                                                   classid.add(result[i].id!);
                                                 }
-                                                _toC.text = name.join(", ");
+                                                _toC.text = classid.length ==
+                                                        state.kelas.length
+                                                    ? "Semua Kelas"
+                                                    : name.join(", ");
                                               }
                                             },
                                           ),
