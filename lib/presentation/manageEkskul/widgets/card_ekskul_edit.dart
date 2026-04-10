@@ -21,6 +21,8 @@ class CardEkskulEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    int totalAnggota =
+        ekskul.members?.where((e) => e.role == "Anggota").length ?? 0;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -98,7 +100,7 @@ class CardEkskulEdit extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        '${ekskul.members!.length} anggota',
+                        '$totalAnggota anggota',
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
