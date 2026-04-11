@@ -86,7 +86,6 @@ class StudentModel {
       'gender': gender,
       'birth_date': birthDate.toUtc().toIso8601String(),
       'ekskul_id': ekskulId,
-      'picture': picture,
     };
 
     data.removeWhere((key, value) {

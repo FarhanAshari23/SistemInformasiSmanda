@@ -52,7 +52,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       final body = model.updateStudent();
       await Network.apiClient.put("/student/${updateUserReq.id}", body: body);
       if (updateUserReq.imageFile != null) {
-        Network.apiClient.postMultipart(
+        await Network.apiClient.postMultipart(
           "/student/${updateUserReq.id}/photo",
           file: updateUserReq.imageFile!,
         );
