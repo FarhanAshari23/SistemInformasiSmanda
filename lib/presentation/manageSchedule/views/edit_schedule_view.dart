@@ -10,6 +10,7 @@ import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import 'edit_schedule_detail.dart';
@@ -86,13 +87,18 @@ class EditScheduleView extends StatelessWidget {
                           ),
                           scrollDirection: Axis.horizontal,
                           builder: (context, index) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: Colors.black,
-                                ),
-                              ),
+                            return CustomInkWell(
+                              defaultColor: Colors.white,
+                              isTeacher: true,
+                              onTap: () {
+                                if (teacherId == null) return;
+                                AppNavigator.push(
+                                    context,
+                                    EditScheduleDetailView(
+                                      currentTeacherId: teacherId,
+                                      schedule: state.kelas[index],
+                                    ));
+                              },
                               child: Stack(
                                 children: [
                                   Center(
@@ -120,61 +126,53 @@ class EditScheduleView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  Positioned(
-                                    right: 0,
-                                    bottom: 0,
-                                    child: PopupMenuButton(
-                                      onSelected: (String value) {
-                                        if (value == 'Edit') {
-                                          AppNavigator.push(
-                                              context,
-                                              EditScheduleDetailView(
-                                                currentTeacherId: teacherId,
-                                                schedule: state.kelas[index],
-                                              ));
-                                        } else if (value == 'Hapus') {
-                                          final outerContext = context;
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return BasicDialog(
-                                                splashImage:
-                                                    AppImages.splashDelete,
-                                                mainTitle:
-                                                    'Apakah anda yakin ingin menghapus jadwal ${state.kelas[index].className}?',
-                                                buttonTitle: 'Hapus',
-                                                onPressed: () {
-                                                  outerContext
-                                                      .read<ButtonStateCubit>()
-                                                      .execute(
-                                                        usecase:
-                                                            DeleteKelasUsecase(),
-                                                        params: state
-                                                            .kelas[index].id,
-                                                      );
-                                                },
-                                              );
-                                            },
-                                          );
-                                        }
-                                      },
-                                      itemBuilder: (context) {
-                                        return <PopupMenuEntry<String>>[
-                                          const PopupMenuItem<String>(
-                                            value: 'Edit',
-                                            child: Text(
-                                              'Edit',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                                color: AppColors.inversePrimary,
-                                              ),
-                                            ),
-                                          ),
-                                          if (teacherId == null)
+                                  Visibility(
+                                    visible: teacherId == null,
+                                    child: Positioned(
+                                      right: 0,
+                                      bottom: 0,
+                                      child: PopupMenuButton(
+                                        onSelected: (String value) {
+                                          if (value == 'Edit') {
+                                            AppNavigator.push(
+                                                context,
+                                                EditScheduleDetailView(
+                                                  currentTeacherId: teacherId,
+                                                  schedule: state.kelas[index],
+                                                ));
+                                          } else if (value == 'Hapus') {
+                                            final outerContext = context;
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return BasicDialog(
+                                                  splashImage:
+                                                      AppImages.splashDelete,
+                                                  mainTitle:
+                                                      'Apakah anda yakin ingin menghapus jadwal ${state.kelas[index].className}?',
+                                                  buttonTitle: 'Hapus',
+                                                  onPressed: () {
+                                                    outerContext
+                                                        .read<
+                                                            ButtonStateCubit>()
+                                                        .execute(
+                                                          usecase:
+                                                              DeleteKelasUsecase(),
+                                                          params: state
+                                                              .kelas[index].id,
+                                                        );
+                                                  },
+                                                );
+                                              },
+                                            );
+                                          }
+                                        },
+                                        itemBuilder: (context) {
+                                          return <PopupMenuEntry<String>>[
                                             const PopupMenuItem<String>(
-                                              value: 'Hapus',
+                                              value: 'Edit',
                                               child: Text(
-                                                'Hapus',
+                                                'Edit',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w800,
                                                   color:
@@ -182,16 +180,29 @@ class EditScheduleView extends StatelessWidget {
                                                 ),
                                               ),
                                             ),
-                                        ];
-                                      },
-                                      child: Container(
-                                        width: width * 0.1,
-                                        height: height * 0.05,
-                                        color: AppColors.primary,
-                                        child: const Center(
-                                          child: Icon(
-                                            Icons.more_vert_rounded,
-                                            color: AppColors.inversePrimary,
+                                            if (teacherId == null)
+                                              const PopupMenuItem<String>(
+                                                value: 'Hapus',
+                                                child: Text(
+                                                  'Hapus',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w800,
+                                                    color: AppColors
+                                                        .inversePrimary,
+                                                  ),
+                                                ),
+                                              ),
+                                          ];
+                                        },
+                                        child: Container(
+                                          width: width * 0.1,
+                                          height: height * 0.05,
+                                          color: AppColors.primary,
+                                          child: const Center(
+                                            child: Icon(
+                                              Icons.more_vert_rounded,
+                                              color: AppColors.inversePrimary,
+                                            ),
                                           ),
                                         ),
                                       ),

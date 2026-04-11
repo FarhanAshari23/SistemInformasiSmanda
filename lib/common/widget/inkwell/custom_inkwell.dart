@@ -7,6 +7,7 @@ class CustomInkWell extends StatefulWidget {
   final Widget child;
   final Color defaultColor, pressedColor;
   final double borderRadius, left, right;
+  final bool isTeacher;
 
   const CustomInkWell({
     super.key,
@@ -17,6 +18,7 @@ class CustomInkWell extends StatefulWidget {
     this.borderRadius = 0,
     this.left = 0,
     this.right = 0,
+    this.isTeacher = false,
   });
 
   @override
@@ -47,6 +49,9 @@ class _CustomInkWellState extends State<CustomInkWell> {
                   widget.left != 0 ? widget.left : widget.borderRadius),
               right: Radius.circular(
                   widget.right != 0 ? widget.right : widget.borderRadius),
+            ),
+            border: Border.all(
+              color: widget.isTeacher ? Colors.black : Colors.transparent,
             ),
           ),
           child: widget.child,
