@@ -196,7 +196,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         return const Right('No Students to Update');
       }
 
-      final dataList = response.data['data'] as List<Map<String, dynamic>>;
+      final dataList = response.data['data'] as List<dynamic>;
 
       final FirebaseApp secondaryApp = await Firebase.initializeApp(
         name: 'SecondaryApp',
@@ -256,7 +256,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
   Future<Either> deleteAllStudentAccount() async {
     try {
       final responseDelete =
-          await Network.apiClient.delete("/student/unregister");
+          await Network.apiClient.delete("/students/unregister");
       if (responseDelete.statusCode == 500) {
         return left("Connection error: ${responseDelete.message}");
       }
@@ -324,7 +324,11 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
         return const Left("Pilihi directory dulu");
       }
 
-      final String filePath = '$selectedDirectory/daftar_akun_siswa.xlsx';
+      String formattedDate =
+          DateFormat('d MMMM yyyy', 'id_ID').format(DateTime.now());
+
+      final String filePath =
+          '$selectedDirectory/daftar_akun_siswa_$formattedDate.xlsx';
 
       final File file = File(filePath);
       await file.writeAsBytes(bytes, flush: true);

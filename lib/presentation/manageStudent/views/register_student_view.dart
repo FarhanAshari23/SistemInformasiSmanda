@@ -128,6 +128,7 @@ class RegisterStudentView extends StatelessWidget {
                                                             usecase:
                                                                 UpdateAllStudentAccountUsecase(),
                                                           );
+                                                      Navigator.pop(context);
                                                     },
                                                   ),
                                                 );
@@ -158,6 +159,7 @@ class RegisterStudentView extends StatelessWidget {
                                                             usecase:
                                                                 DeleteAllStudentAccountUsecase(),
                                                           );
+                                                      Navigator.pop(context);
                                                     },
                                                   ),
                                                 );
