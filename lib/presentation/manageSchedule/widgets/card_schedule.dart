@@ -167,7 +167,7 @@ class _CardScheduleState extends State<CardSchedule> {
                               hintStyle: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,
-                                color: Colors.black, // <-- warna hint
+                                color: Colors.black,
                               ),
                             ),
                             menuHeight: 200,
@@ -195,9 +195,12 @@ class _CardScheduleState extends State<CardSchedule> {
                             }).toList(),
                             onSelected: (value) {
                               if (value != null) {
+                                final selectedDoc = state.activities
+                                    .firstWhere((doc) => doc.id == value);
                                 setState(() {
                                   subjectId = value;
                                 });
+                                _kegiatanC.text = selectedDoc.name;
                               }
                               FocusScope.of(context).unfocus();
                             },
@@ -287,11 +290,11 @@ class _CardScheduleState extends State<CardSchedule> {
                               borderRadius: 12,
                               defaultColor: AppColors.primary,
                               onTap: () {
-                                if (teacherId != null &&
-                                        widget.currentTeacherId != null ||
+                                if ((teacherId == null &&
+                                        widget.currentTeacherId == null) ||
                                     _durasiMulaiC.text.isEmpty ||
-                                    _durasiMulaiC.text.isEmpty ||
-                                    subjectId != null) {
+                                    _durasiSelesaiC.text.isEmpty ||
+                                    subjectId == null) {
                                   var snackbar = const SnackBar(
                                     content:
                                         Text("Tolong isi semua field yang ada"),

@@ -42,7 +42,7 @@ class CardEkskulEdit extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                     color: AppColors.inversePrimary,
                   ),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.start,
                 ),
               ),
               Padding(

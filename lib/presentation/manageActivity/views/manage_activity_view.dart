@@ -9,7 +9,9 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/schedule/delete_acti
 import '../../../common/bloc/activities/get_activities_cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/dialog/basic_dialog.dart';
 import '../../../common/widget/dialog/input_dialog.dart';
+import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/schedule/activity.dart';
 import '../../../domain/usecases/schedule/update_activity_usecase.dart';
@@ -193,28 +195,49 @@ class _ManageActivityViewState extends State<ManageActivityView> {
                                       right: 16,
                                       defaultColor: Colors.red,
                                       onTap: () async {
-                                        var delete =
-                                            await sl<DeleteActivityUsecase>()
-                                                .call(params: activity.id);
-                                        return delete.fold(
-                                          (error) {
-                                            var snackbar = const SnackBar(
-                                              content: Text(
-                                                  "Gagal Menghapus kegiatan, Coba Lagi"),
+                                        final outerContext = context;
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return BasicDialog(
+                                              splashImage:
+                                                  AppImages.splashDelete,
+                                              mainTitle:
+                                                  "Apakah anda yakin ingin menghapus ${activity.name}",
+                                              buttonTitle: "Hapus",
+                                              onPressed: () async {
+                                                var delete = await sl<
+                                                        DeleteActivityUsecase>()
+                                                    .call(params: activity.id);
+                                                return delete.fold(
+                                                  (error) {
+                                                    var snackbar =
+                                                        const SnackBar(
+                                                      content: Text(
+                                                          "Gagal Menghapus kegiatan, Coba Lagi"),
+                                                    );
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackbar);
+                                                  },
+                                                  (r) {
+                                                    Navigator.pop(context);
+                                                    var snackbar =
+                                                        const SnackBar(
+                                                      content: Text(
+                                                          "Data Berhasil Dihapus"),
+                                                    );
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackbar);
+                                                    outerContext
+                                                        .read<
+                                                            GetActivitiesCubit>()
+                                                        .displayActivites();
+                                                  },
+                                                );
+                                              },
                                             );
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackbar);
-                                          },
-                                          (r) {
-                                            var snackbar = const SnackBar(
-                                              content:
-                                                  Text("Data Berhasil Dihapus"),
-                                            );
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackbar);
-                                            context
-                                                .read<GetActivitiesCubit>()
-                                                .displayActivites();
                                           },
                                         );
                                       },

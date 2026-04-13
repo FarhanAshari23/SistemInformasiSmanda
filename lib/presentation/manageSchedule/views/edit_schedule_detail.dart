@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
 
 import '../../../common/bloc/button/button.cubit.dart';
 import '../../../common/bloc/button/button_state.dart';
@@ -107,6 +108,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
             ScaffoldMessenger.of(context).showSnackBar(snackbar);
           }
           if (state is ButtonSuccessState) {
+            context.read<GetAllKelasCubit>().displayAll();
             var snackbar = const SnackBar(
               content: Text("Berhasil mengubah jadwal"),
               behavior: SnackBarBehavior.floating,

@@ -321,8 +321,15 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                             ),
                           );
                           setState(() {
-                            selectedPembina =
-                                AdvisorEntity(id: result.id, status: "Aktif");
+                            selectedPembina = AdvisorEntity(
+                              id: result.id,
+                              status: "Aktif",
+                              birthDate: result.birthDate,
+                              gender: result.gender,
+                              name: result.name,
+                              nip: result.nip,
+                              picture: result.picture,
+                            );
                             _namePembinaC.text = result.name ?? '';
                           });
                         },
@@ -368,6 +375,11 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                   selectedAnggota!.add(MemberEntity(
                                     id: result.id,
                                     role: role,
+                                    gender: result.gender,
+                                    name: result.name,
+                                    nisn: result.nisn,
+                                    picture: result.picture,
+                                    religion: result.religion,
                                   ));
                                   targetController?.text = result.name ?? '';
                                 }

@@ -370,6 +370,14 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
           )
         ],
       );
+    } else if (index == 1) {
+      return TextField(
+        keyboardType: TextInputType.number,
+        controller: controller[index],
+        decoration: InputDecoration(
+          hintText: hinttext[index],
+        ),
+      );
     }
 
     // Default TextField

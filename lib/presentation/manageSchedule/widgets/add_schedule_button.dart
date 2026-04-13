@@ -271,8 +271,8 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                         borderRadius: 12,
                         defaultColor: AppColors.primary,
                         onTap: () {
-                          if (teacherId == null &&
-                                  widget.currentTeacherId == null ||
+                          if ((teacherId == null &&
+                                  widget.currentTeacherId == null) ||
                               _durasiMulaiC.text.isEmpty ||
                               _durasiSelesaiC.text.isEmpty ||
                               subjectId == null) {

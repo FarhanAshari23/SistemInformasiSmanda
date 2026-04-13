@@ -356,8 +356,15 @@ class _AddTeacherViewState extends State<AddTeacherView> {
               ],
             )
           : const SizedBox();
+    } else if (index == 2) {
+      return TextField(
+        controller: controller[index],
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          hintText: hinttext[index],
+        ),
+      );
     }
-    // Default TextField
     return TextField(
       controller: controller[index],
       decoration: InputDecoration(
