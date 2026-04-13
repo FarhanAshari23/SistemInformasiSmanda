@@ -47,6 +47,7 @@ class _ManageActivityViewState extends State<ManageActivityView> {
         child: SafeArea(
           child: BlocListener<ButtonStateCubit, ButtonState>(
             listener: (context, state) {
+              if (state is ButtonLoadingState) return;
               if (state is ButtonSuccessState) {
                 context.read<GetActivitiesCubit>().displayActivites();
                 var snackbar = const SnackBar(

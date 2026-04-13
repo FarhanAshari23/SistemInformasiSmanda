@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 import '../../../common/helper/string_helper.dart';
@@ -306,6 +307,13 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
 
       final List<int> bytes = workbook.saveAsStream();
       workbook.dispose();
+
+      if (Platform.isAndroid) {
+        if (await Permission.manageExternalStorage.request().isGranted) {
+        } else {
+          await Permission.storage.request();
+        }
+      }
 
       final String? selectedDirectory =
           await FilePicker.platform.getDirectoryPath(

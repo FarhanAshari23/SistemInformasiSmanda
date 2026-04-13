@@ -49,6 +49,7 @@ class _ManageJabatanViewsState extends State<ManageJabatanViews> {
         child: SafeArea(
           child: BlocListener<ButtonStateCubit, ButtonState>(
             listener: (context, state) {
+              if (state is ButtonLoadingState) return;
               if (state is ButtonSuccessState) {
                 context.read<GetRolesCubit>().displayRoles();
                 var snackbar = const SnackBar(

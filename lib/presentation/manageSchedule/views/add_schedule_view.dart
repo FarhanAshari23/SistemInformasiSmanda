@@ -75,6 +75,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
       ],
       child: BlocListener<ButtonStateCubit, ButtonState>(
         listener: (context, state) async {
+          if (state is ButtonLoadingState) return;
           if (state is ButtonFailureState) {
             var snackbar = SnackBar(
               content: Text(state.errorMessage),

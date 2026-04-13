@@ -73,6 +73,7 @@ class _EditNewsViewDetailState extends State<EditNewsViewDetail> {
         ],
         child: BlocListener<ButtonStateCubit, ButtonState>(
           listener: (context, state) {
+            if (state is ButtonLoadingState) return;
             if (state is ButtonFailureState) {
               var snackbar = SnackBar(
                 content: Text(state.errorMessage),

@@ -117,6 +117,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
         ],
         child: BlocListener<ButtonStateCubit, ButtonState>(
           listener: (context, state) {
+            if (state is ButtonLoadingState) return;
             if (state is ButtonFailureState) {
               var snackbar = SnackBar(
                 content: Text(state.errorMessage),

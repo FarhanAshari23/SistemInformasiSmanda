@@ -41,6 +41,7 @@ class RegisterStudentView extends StatelessWidget {
         child: SafeArea(
           child: BlocListener<ButtonStateCubit, ButtonState>(
             listener: (context, state) {
+              if (state is ButtonLoadingState) return;
               if (state is ButtonSuccessState) {
                 context
                     .read<GetStudentRegistrationCubit>()

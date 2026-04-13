@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 import '../../../core/networks/api_exception.dart';
@@ -235,6 +236,13 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       final List<int> bytes = workbook.saveAsStream();
       workbook.dispose();
 
+      if (Platform.isAndroid) {
+        if (await Permission.manageExternalStorage.request().isGranted) {
+        } else {
+          await Permission.storage.request();
+        }
+      }
+
       final String? selectedDirectory =
           await FilePicker.platform.getDirectoryPath(
         dialogTitle: 'Pilih folder untuk menyimpan Excel',
@@ -244,8 +252,11 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
         return const Left("Pilihi directory dulu");
       }
 
+      String formattedDate =
+          DateFormat('d MMMM yyyy', 'id_ID').format(req.date);
+
       final String filePath =
-          '$selectedDirectory/data_kehadiran_guru${req.date}.xlsx';
+          '$selectedDirectory/data_kehadiran_guru_$formattedDate.xlsx';
 
       final File file = File(filePath);
       await file.writeAsBytes(bytes, flush: true);
