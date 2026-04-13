@@ -91,7 +91,7 @@ class CardEkskul extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    '${ekskul.members!.length} anggota',
+                    '${ekskul.members!.where((e) => e.role == "Anggota").toList().length} anggota',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,

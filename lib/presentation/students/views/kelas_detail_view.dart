@@ -102,9 +102,17 @@ class KelasDetailView extends StatelessWidget {
                                   );
                           }
                           if (state is StudentsDisplayFailure) {
-                            return const Center(
-                              child: Text('Something wrongs'),
-                            );
+                            if (state.errorMessage ==
+                                "Something error: (null):(404):Data murid tidak ditemukan") {
+                              return const Center(
+                                child: Text('Data siswa belum ada'),
+                              );
+                            } else {
+                              return Center(
+                                child: Text(
+                                    'Something wrongs: ${state.errorMessage}'),
+                              );
+                            }
                           }
                           return Container();
                         },

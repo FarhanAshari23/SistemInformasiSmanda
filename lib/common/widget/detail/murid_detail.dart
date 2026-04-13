@@ -32,12 +32,9 @@ class MuridDetail extends StatelessWidget {
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
 
-    Event buildEvent(String tanggal, nama) {
-      DateFormat format = DateFormat("d MMMM yyyy", "id_ID");
-      DateTime parsedDate = format.parse(tanggal);
+    Event buildEvent(DateTime tanggal, String nama) {
       int currentYear = DateTime.now().year;
-      DateTime finalDate =
-          DateTime(currentYear, parsedDate.month, parsedDate.day);
+      DateTime finalDate = DateTime(currentYear, tanggal.month, tanggal.day);
       return Event(
         title: 'Ulang tahun $nama',
         description: 'Mari rayakan ulang tahun teman kamu!',
@@ -281,11 +278,11 @@ class MuridDetail extends StatelessWidget {
                                                   child: CardDetailSiswa(
                                                     title: 'Tanggal Lahir',
                                                     onTap: () => Add2Calendar
-                                                        .addEvent2Cal(buildEvent(
-                                                            state.student.name!,
-                                                            state.student
-                                                                .birthDate
-                                                                .toString())),
+                                                        .addEvent2Cal(
+                                                            buildEvent(
+                                                      state.student.birthDate!,
+                                                      state.student.name!,
+                                                    )),
                                                     content: Text(
                                                       DateFormat('d MMMM yyyy',
                                                               "id_ID")
