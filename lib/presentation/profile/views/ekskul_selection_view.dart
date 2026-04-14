@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/member.dart';
 
 import '../../../common/bloc/ekskul/ekskul_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
@@ -11,6 +9,8 @@ import '../../../common/bloc/ekskul/ekskul_cubit.dart';
 import '../../../common/bloc/ekskul/select_ekskul_cubit.dart';
 import '../../../common/bloc/ekskul/get_student_ekskul_cubit.dart';
 import '../../../common/bloc/ekskul/get_student_ekskul_state.dart';
+import '../../../domain/entities/ekskul/ekskul.dart';
+import '../../../domain/entities/ekskul/member.dart';
 
 class EkskulSelectionView extends StatefulWidget {
   final int studentId;
@@ -124,7 +124,7 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                             scrollDirection: Axis.vertical,
                             padding: const EdgeInsets.all(8.0),
                             itemBuilder: (context, index) {
-                              final role = state.ekskuls[index];
+                              final role = mainRole[index];
                               return Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12,
@@ -135,7 +135,7 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
-                                  "//${role.role} ${role.ekskulName}",
+                                  "${role.role} ${role.ekskulName}",
                                   style: const TextStyle(
                                     color: AppColors.inversePrimary,
                                     fontWeight: FontWeight.bold,
@@ -146,7 +146,7 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                             },
                             separatorBuilder: (context, index) =>
                                 const SizedBox(height: 8),
-                            itemCount: state.ekskuls.length,
+                            itemCount: mainRole.length,
                           ),
                         );
                       }

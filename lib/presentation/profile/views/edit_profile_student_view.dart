@@ -204,8 +204,7 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                                 data: Theme.of(context).copyWith(
                                   inputDecorationTheme: InputDecorationTheme(
                                     filled: true,
-                                    fillColor: AppColors
-                                        .inversePrimary, // warna background field input tanggal
+                                    fillColor: AppColors.inversePrimary,
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -244,7 +243,7 @@ class _EditProfileStudentViewState extends State<EditProfileStudentView> {
                               hintStyle: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
-                                color: Colors.black, // <-- warna hint
+                                color: Colors.black,
                               ),
                             ),
                             menuHeight: 200,

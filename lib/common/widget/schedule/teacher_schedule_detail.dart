@@ -56,6 +56,23 @@ class TeacherScheduleDetail extends StatelessWidget {
                         },
                       );
                     }
+                    if (state is JadwalDisplayFailure) {
+                      if (state.errorMessage ==
+                          "Something error: (null):(404):Data jadwal tidak ditemukan") {
+                        return const Center(
+                          child: Text(
+                            "Tidak mengajar",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Text(state.errorMessage);
+                      }
+                    }
                     return const SizedBox.shrink();
                   },
                 ),
