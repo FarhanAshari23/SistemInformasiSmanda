@@ -71,12 +71,17 @@ class CardStudentAttendance extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                NetworkPhoto(
-                  height: mediaQueryHeight * 0.14,
-                  width: width * 0.235,
-                  fallbackAsset: fallbackAsset,
-                  imageUrl:
-                      DisplayImage.displayImageStudent(student.picture ?? ''),
+                ClipRRect(
+                  borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(12),
+                  ),
+                  child: NetworkPhoto(
+                    height: mediaQueryHeight * 0.14,
+                    width: width * 0.235,
+                    fallbackAsset: fallbackAsset,
+                    imageUrl:
+                        DisplayImage.displayImageStudent(student.picture ?? ''),
+                  ),
                 ),
                 Expanded(
                   child: Padding(

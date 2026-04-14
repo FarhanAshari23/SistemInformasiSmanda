@@ -116,9 +116,15 @@ class _MainContent extends StatelessWidget {
                   String today = format.format(DateTime.now());
 
                   if (lastTimestamp == today) {
-                    context
-                        .read<SelectTimestampCubit>()
-                        .select(state.attendances.last.checkIn!);
+                    if (context.read<SelectAttendanceCubit>().state == 0) {
+                      context
+                          .read<SelectTimestampCubit>()
+                          .select(state.attendances.last.checkIn!);
+                    } else {
+                      context
+                          .read<SelectTimestampCubit>()
+                          .select(state.attendances.last.checkOut!);
+                    }
                   }
                 }
               },

@@ -94,9 +94,12 @@ class EditScheduleView extends StatelessWidget {
                                 if (teacherId == null) return;
                                 AppNavigator.push(
                                     context,
-                                    EditScheduleDetailView(
-                                      currentTeacherId: teacherId,
-                                      schedule: state.kelas[index],
+                                    BlocProvider.value(
+                                      value: context.read<GetAllKelasCubit>(),
+                                      child: EditScheduleDetailView(
+                                        currentTeacherId: teacherId,
+                                        schedule: state.kelas[index],
+                                      ),
                                     ));
                               },
                               child: Stack(

@@ -145,7 +145,10 @@ class _CreateAnnouncementViewState extends State<CreateAnnouncementView> {
                                             name.add(result[i].className ?? '');
                                             classid.add(result[i].id!);
                                           }
-                                          _toC.text = name.join(", ");
+                                          _toC.text = classid.length ==
+                                                  state.kelas.length
+                                              ? "Semua Kelas"
+                                              : name.join(", ");
                                         }
                                       },
                                     ),
