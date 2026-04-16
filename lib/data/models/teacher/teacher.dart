@@ -31,7 +31,7 @@ class TeacherModel {
       'additional_tasks': tasksId,
       'wali_kelas': waliKelas,
       'gender': gender,
-      'birth_date': birthDate.toUtc().toIso8601String(),
+      'birth_date': birthDate.toIso8601String(),
       'email': email,
       'tugas_tambahan': tasksName,
       'picture': picture,
