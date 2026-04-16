@@ -49,6 +49,7 @@ class LoginView extends StatelessWidget {
             child: BlocListener<ButtonStateCubit, ButtonState>(
               listener: (context, state) async {
                 String email = _emailC.text;
+                if (state is ButtonLoadingState) return;
                 if (state is ButtonFailureState) {
                   var snackbar = SnackBar(
                     content: Text(state.errorMessage),

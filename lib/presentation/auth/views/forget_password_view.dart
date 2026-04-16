@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/button/button_state.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/landing/succes.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
-import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
-import 'package:new_sistem_informasi_smanda/domain/usecases/auth/forgot_password_usecase.dart';
-import 'package:new_sistem_informasi_smanda/presentation/auth/widgets/button_role.dart';
 
+import '../../../common/bloc/button/button.cubit.dart';
+import '../../../common/bloc/button/button_state.dart';
 import '../../../common/helper/app_navigation.dart';
+import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/landing/succes.dart';
+import '../../../core/configs/assets/app_images.dart';
+import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/usecases/auth/forgot_password_usecase.dart';
+import '../widgets/button_role.dart';
 import 'login_view.dart';
 
 class ForgetPasswordView extends StatefulWidget {
@@ -35,7 +35,8 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
       body: BlocProvider(
         create: (context) => ButtonStateCubit(),
         child: BlocListener<ButtonStateCubit, ButtonState>(
-          listener: (context, state) async {
+          listener: (context, state) {
+            if (state is ButtonLoadingState) return;
             if (state is ButtonFailureState) {
               var snackbar = SnackBar(
                 content: Text(state.errorMessage),

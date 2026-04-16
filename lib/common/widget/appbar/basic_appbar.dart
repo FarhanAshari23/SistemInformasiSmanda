@@ -56,6 +56,7 @@ class BasicAppbar extends StatelessWidget {
       ],
       child: BlocListener<ButtonStateCubit, ButtonState>(
         listener: (context, state) {
+          if (state is ButtonLoadingState) return;
           if (state is ButtonSuccessState) {
             AppNavigator.pushReplacement(context, LoginView());
           }
