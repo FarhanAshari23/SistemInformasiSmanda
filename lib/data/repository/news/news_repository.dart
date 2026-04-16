@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/data/models/news/news.dart';
-import 'package:new_sistem_informasi_smanda/data/sources/news/news_firebase_service.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/news/news.dart';
-import 'package:new_sistem_informasi_smanda/domain/repository/news/news.dart';
-import 'package:new_sistem_informasi_smanda/service_locator.dart';
+
+import '../../../domain/entities/news/news.dart';
+import '../../../domain/repository/news/news.dart';
+import '../../../service_locator.dart';
+import '../../models/news/news.dart';
+import '../../sources/news/news_firebase_service.dart';
 
 class NewsRepositoryImpl extends NewsRepository {
   @override

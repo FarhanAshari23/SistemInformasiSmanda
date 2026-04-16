@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/news/news.dart';
-import 'package:new_sistem_informasi_smanda/domain/repository/news/news.dart';
 
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
+import '../../entities/news/news.dart';
+import '../../repository/news/news.dart';
 
 class UpdateNewsUsecase implements Usecase<Either, NewsEntity> {
   @override

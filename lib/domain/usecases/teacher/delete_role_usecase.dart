@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/domain/repository/teacher/teacher.dart';
 
 import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
+import '../../repository/teacher/teacher.dart';
 
 class DeleteRoleUsecase implements Usecase<Either, int> {
   @override

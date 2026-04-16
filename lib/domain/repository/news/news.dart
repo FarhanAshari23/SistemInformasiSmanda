@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_sistem_informasi_smanda/domain/entities/news/news.dart';
+
+import '../../entities/news/news.dart';
 
 abstract class NewsRepository {
   Future<Either> createNews(NewsEntity createNewsReq);
