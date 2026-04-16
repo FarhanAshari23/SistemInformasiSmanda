@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class StringHelper {
   static List<int> extractFirstAndLastNumbers(String input) {
     final RegExp regExp = RegExp(r'\d+');
@@ -20,19 +18,6 @@ class StringHelper {
       if (word.isEmpty) return word;
       return word[0].toUpperCase() + word.substring(1);
     }).join(' ');
-  }
-
-  static Future<bool> isUrlReachable(String url) async {
-    try {
-      final uri = Uri.parse(url);
-
-      final request = await HttpClient().headUrl(uri);
-      final response = await request.close();
-
-      return response.statusCode >= 200 && response.statusCode < 400;
-    } catch (e) {
-      return false;
-    }
   }
 
   static String extractName(String name) {

@@ -4,7 +4,6 @@ class DividedRangeTime {
 
   DividedRangeTime({required this.start, required this.end});
 
-  /// Factory untuk membuat TimeRange dari string "HH:mm - HH:mm"
   factory DividedRangeTime.fromString(String value) {
     final parts = value.split(" - ");
     if (parts.length != 2) {

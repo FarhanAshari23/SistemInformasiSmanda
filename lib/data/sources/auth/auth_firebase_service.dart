@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -11,7 +10,6 @@ abstract class AuthFirebaseService {
   Future<Either> signin(StudentEntity signinUserReq);
   Future<Either> signUp(StudentEntity murid);
   Future<Either> forgotPassword(String email);
-  Future<Either> checkEmailUsed(String email);
   Future<Either> profileTeacher(String email);
   Future<Either> profileStudent(String email);
   Future<Either> isAdmin(String email);
@@ -103,26 +101,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       return Left(message);
     } catch (e) {
       return left(e.toString());
-    }
-  }
-
-  @override
-  Future<Either> checkEmailUsed(String email) async {
-    try {
-      QuerySnapshot murid = await FirebaseFirestore.instance
-          .collection('Students')
-          .where('email', isEqualTo: email)
-          .limit(1)
-          .get();
-      if (murid.docs.isNotEmpty) {
-        return const Left(
-          'Email ini sudah digunakan. Kemungkinan akun anda sedang dalam proses pengecekan. Harap bersabar atau silakan hubungi admin',
-        );
-      } else {
-        return const Right('Ini aman');
-      }
-    } catch (e) {
-      return Left(e.toString());
     }
   }
 

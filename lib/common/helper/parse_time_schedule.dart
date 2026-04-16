@@ -1,8 +1,8 @@
 DateTime parseTimeSchedule(String jam) {
-  final parts = jam.split(" - "); // ["07:00", "08:00"]
-  final start = parts[0]; // "07:00"
+  final parts = jam.split(" - ");
+  final start = parts[0];
 
-  final hm = start.split(":"); // ["07", "00"]
+  final hm = start.split(":");
   final hour = int.parse(hm[0]);
   final minute = int.parse(hm[1]);
 

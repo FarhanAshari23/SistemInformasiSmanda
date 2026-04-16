@@ -1,11 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../core/configs/theme/app_colors.dart';
 
 class NewsDetail extends StatelessWidget {
   final String title;
-  final Timestamp createdAt;
+  final DateTime createdAt;
   final String from;
   final String to;
   final String content;

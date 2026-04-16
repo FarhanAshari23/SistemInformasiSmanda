@@ -29,11 +29,6 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either> checkEmailUsed(String email) async {
-    return await sl<AuthFirebaseService>().checkEmailUsed(email);
-  }
-
-  @override
   Future<bool> isLoggedIn() async {
     return await sl<AuthFirebaseService>().isLoggedIn();
   }

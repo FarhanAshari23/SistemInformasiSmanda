@@ -1,7 +1,5 @@
 class AppUrl {
-  static const mainRoute = 'http://puskomsmanda.com:804/api';
-  static const storageStudent =
-      'http://192.168.18.3:3000/storage/images/students';
-  static const storageTeacher =
-      'http://192.168.18.3:3000/storage/images/teachers';
+  static const mainRoute = 'http://puskomsmanda.com:804';
+  static const storageStudent = '$mainRoute/storage/images/students';
+  static const storageTeacher = '$mainRoute/storage/images/teachers';
 }

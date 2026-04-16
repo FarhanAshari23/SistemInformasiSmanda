@@ -8,8 +8,4 @@ class DisplayImage {
   static String displayImageTeacher(String url) {
     return '${AppUrl.storageTeacher}/$url';
   }
-
-  static String displayImageStaff(String name) {
-    return '${AppUrl.storageStudent}/$name.jpg';
-  }
 }

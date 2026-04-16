@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:new_sistem_informasi_smanda/domain/entities/schedule/activity.dart';
+import '../../../domain/entities/schedule/activity.dart';
 
 class ActivityModel {
   final String name;
