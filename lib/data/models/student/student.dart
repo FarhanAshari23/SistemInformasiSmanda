@@ -44,6 +44,8 @@ class StudentModel {
   });
 
   Map<String, dynamic> toMap() {
+    final birthDateFixed =
+        DateTime(birthDate.year, birthDate.month, birthDate.day, 12, 0, 0);
     final Map<String, dynamic> data = {
       'id': id,
       'nisn': nisn,
@@ -55,7 +57,7 @@ class StudentModel {
       'mobile_num': mobileNum,
       "list_ekskul": ekskul,
       'gender': gender,
-      'birth_date': birthDate.toIso8601String(),
+      'birth_date': birthDateFixed.toUtc().toIso8601String(),
       'email': email,
       'password': password,
       'is_register': isRegister,
