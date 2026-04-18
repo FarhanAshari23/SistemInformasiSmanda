@@ -121,106 +121,128 @@ class ProfileTeacherMenuView extends StatelessWidget {
                             onpressed: () async {
                               final buttonCubit =
                                   context.read<ButtonStateCubit>();
-                              showDialog(
+                              showModalBottomSheet(
                                 context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(16),
+                                  ),
+                                ),
+                                isScrollControlled: true,
                                 builder: (_) {
-                                  return Dialog(
-                                    backgroundColor: Colors.white,
-                                    alignment: Alignment.center,
-                                    insetPadding: const EdgeInsets.all(16),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 8),
+                                        child: Text(
+                                          "Jenis absen apa yang ingin anda lakukan?",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w900,
+                                            color: AppColors.primary,
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          const Text(
-                                            "Jenis absen apa yang ingin anda lakukan?",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w900,
-                                              color: AppColors.primary,
+                                          Expanded(
+                                            child: BasicButton(
+                                              onPressed: () async {
+                                                final distanceCubit = context
+                                                    .read<GetDistanceCubit>();
+                                                final messenger =
+                                                    ScaffoldMessenger.of(
+                                                        context);
+                                                final navigator = Navigator.of(
+                                                    context,
+                                                    rootNavigator: true);
+                                                await distanceCubit
+                                                    .getDistance();
+                                                if (!context.mounted) return;
+
+                                                final state =
+                                                    distanceCubit.state;
+                                                if (state
+                                                        is GetDistanceLoaded &&
+                                                    state.isNear) {
+                                                  buttonCubit.execute(
+                                                    usecase:
+                                                        AddTeacherAttendanceUseCase(),
+                                                    params:
+                                                        AttandanceTeacherEntity(
+                                                      teacherId: teacher.id,
+                                                      status: "Hadir",
+                                                    ),
+                                                  );
+                                                } else {
+                                                  navigator.pop();
+                                                  messenger.showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text(
+                                                          "Anda tidak berada di lingkungan SMA N 2 Metro, harap melakukan absen di sekolah"),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              title: "Hadir",
                                             ),
                                           ),
-                                          BasicButton(
-                                            onPressed: () async {
-                                              final distanceCubit = context
-                                                  .read<GetDistanceCubit>();
-                                              final messenger =
-                                                  ScaffoldMessenger.of(context);
-                                              final navigator = Navigator.of(
-                                                  context,
-                                                  rootNavigator: true);
-                                              await distanceCubit.getDistance();
-                                              if (!context.mounted) return;
-
-                                              final state = distanceCubit.state;
-                                              if (state is GetDistanceLoaded &&
-                                                  state.isNear) {
+                                          Expanded(
+                                            child: BasicButton(
+                                              onPressed: () {
                                                 buttonCubit.execute(
                                                   usecase:
                                                       AddTeacherAttendanceUseCase(),
                                                   params:
                                                       AttandanceTeacherEntity(
                                                     teacherId: teacher.id,
-                                                    status: "Hadir",
+                                                    status: "Izin",
                                                   ),
                                                 );
-                                              } else {
-                                                navigator.pop();
-                                                messenger.showSnackBar(
-                                                  const SnackBar(
-                                                    content: Text(
-                                                        "Anda tidak berada di lingkungan SMA N 2 Metro, harap melakukan absen di sekolah"),
+                                              },
+                                              title: "Izin",
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: BasicButton(
+                                              onPressed: () {
+                                                buttonCubit.execute(
+                                                  usecase:
+                                                      AddTeacherAttendanceUseCase(),
+                                                  params:
+                                                      AttandanceTeacherEntity(
+                                                    teacherId: teacher.id,
+                                                    status: "Sakit",
                                                   ),
                                                 );
-                                              }
-                                            },
-                                            title: "Hadir",
+                                              },
+                                              title: "Sakit",
+                                            ),
                                           ),
-                                          BasicButton(
-                                            onPressed: () {
-                                              buttonCubit.execute(
-                                                usecase:
-                                                    AddTeacherAttendanceUseCase(),
-                                                params: AttandanceTeacherEntity(
-                                                  teacherId: teacher.id,
-                                                  status: "Izin",
-                                                ),
-                                              );
-                                            },
-                                            title: "Izin",
-                                          ),
-                                          BasicButton(
-                                            onPressed: () {
-                                              buttonCubit.execute(
-                                                usecase:
-                                                    AddTeacherAttendanceUseCase(),
-                                                params: AttandanceTeacherEntity(
-                                                  teacherId: teacher.id,
-                                                  status: "Sakit",
-                                                ),
-                                              );
-                                            },
-                                            title: "Sakit",
-                                          ),
-                                          BasicButton(
-                                            onPressed: () {
-                                              buttonCubit.execute(
-                                                usecase:
-                                                    AddTeacherAttendanceUseCase(),
-                                                params: AttandanceTeacherEntity(
-                                                  teacherId: teacher.id,
-                                                  status: "Dinas",
-                                                ),
-                                              );
-                                            },
-                                            title: "Dinas",
+                                          Expanded(
+                                            child: BasicButton(
+                                              onPressed: () {
+                                                buttonCubit.execute(
+                                                  usecase:
+                                                      AddTeacherAttendanceUseCase(),
+                                                  params:
+                                                      AttandanceTeacherEntity(
+                                                    teacherId: teacher.id,
+                                                    status: "Dinas",
+                                                  ),
+                                                );
+                                              },
+                                              title: "Dinas",
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ),
+                                    ],
                                   );
                                 },
                               );
