@@ -37,6 +37,8 @@ class _CardScheduleState extends State<CardSchedule> {
   final _kegiatanC = TextEditingController();
   final _durasiMulaiC = TextEditingController();
   final _durasiSelesaiC = TextEditingController();
+  final FocusNode _focusTeacher = FocusNode();
+  final FocusNode _focusSubject = FocusNode();
   int? teacherId, subjectId;
 
   @override
@@ -46,6 +48,12 @@ class _CardScheduleState extends State<CardSchedule> {
     _durasiSelesaiC.text = widget.schedule.endTime!;
     teacherId = widget.schedule.teacherId;
     subjectId = widget.schedule.subjectId;
+    _pelaksanaC.addListener(() {
+      setState(() {});
+    });
+    _kegiatanC.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -94,10 +102,11 @@ class _CardScheduleState extends State<CardSchedule> {
                               }
                               if (state is TeacherListLoaded) {
                                 return DropdownMenu<int>(
+                                  controller: _pelaksanaC,
                                   width: width * 0.92,
                                   enableFilter: true,
                                   requestFocusOnTap: false,
-                                  focusNode: FocusNode(),
+                                  focusNode: _focusTeacher,
                                   inputDecorationTheme:
                                       const InputDecorationTheme(
                                     fillColor: AppColors.tertiary,
@@ -125,20 +134,35 @@ class _CardScheduleState extends State<CardSchedule> {
                                     ),
                                   ),
                                   hintText: "Pelaksana:",
-                                  dropdownMenuEntries:
-                                      state.teachers.map((doc) {
-                                    return DropdownMenuEntry<int>(
-                                      value: doc.id ?? 0,
-                                      label: doc.name ?? '',
-                                    );
-                                  }).toList(),
+                                  dropdownMenuEntries: _pelaksanaC.text.length <
+                                          3
+                                      ? []
+                                      : state.teachers
+                                          .where(
+                                            (doc) {
+                                              final String name =
+                                                  doc.name?.toLowerCase() ?? '';
+                                              final String query = _pelaksanaC
+                                                  .text
+                                                  .toLowerCase();
+                                              return name.contains(query);
+                                            },
+                                          )
+                                          .take(5)
+                                          .map((doc) {
+                                            return DropdownMenuEntry<int>(
+                                              value: doc.id ?? 0,
+                                              label: doc.name ?? '',
+                                            );
+                                          })
+                                          .toList(),
                                   onSelected: (value) {
                                     if (value != null) {
                                       setState(() {
                                         teacherId = value;
                                       });
+                                      FocusScope.of(context).unfocus();
                                     }
-                                    FocusScope.of(context).unfocus();
                                   },
                                 );
                               }
@@ -159,7 +183,8 @@ class _CardScheduleState extends State<CardSchedule> {
                         }
                         if (state is GetActivitiesLoaded) {
                           return DropdownMenu<int>(
-                            focusNode: FocusNode(),
+                            focusNode: _focusSubject,
+                            controller: _kegiatanC,
                             width: width * 0.92,
                             inputDecorationTheme: const InputDecorationTheme(
                               fillColor: AppColors.tertiary,
@@ -187,12 +212,19 @@ class _CardScheduleState extends State<CardSchedule> {
                               ),
                             ),
                             hintText: 'Kegiatan:',
-                            dropdownMenuEntries: state.activities.map((doc) {
-                              return DropdownMenuEntry<int>(
-                                value: doc.id,
-                                label: doc.name,
-                              );
-                            }).toList(),
+                            dropdownMenuEntries: _kegiatanC.text.length < 3
+                                ? []
+                                : state.activities
+                                    .where((doc) => doc.name
+                                        .toLowerCase()
+                                        .contains(
+                                            _kegiatanC.text.toLowerCase()))
+                                    .map((doc) {
+                                    return DropdownMenuEntry<int>(
+                                      value: doc.id,
+                                      label: doc.name,
+                                    );
+                                  }).toList(),
                             onSelected: (value) {
                               if (value != null) {
                                 final selectedDoc = state.activities
@@ -201,8 +233,8 @@ class _CardScheduleState extends State<CardSchedule> {
                                   subjectId = value;
                                 });
                                 _kegiatanC.text = selectedDoc.name;
+                                FocusScope.of(context).unfocus();
                               }
-                              FocusScope.of(context).unfocus();
                             },
                           );
                         }

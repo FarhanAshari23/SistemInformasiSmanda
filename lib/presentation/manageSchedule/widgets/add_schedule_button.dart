@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/add_schedule_cubit.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageSchedule/bloc/create_schedule_cubit.dart';
 
 import '../../../common/bloc/activities/get_activities_cubit.dart';
 import '../../../common/bloc/activities/get_activities_state.dart';
 import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/bloc/teacher/teacher_state.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../bloc/add_schedule_cubit.dart';
 import '../bloc/add_schedule_state.dart';
+import '../bloc/create_schedule_cubit.dart';
 import '../bloc/schedule_picker_cubit.dart';
 import 'duration_picker.dart';
 
@@ -32,6 +32,8 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
   final _kegiatanC = TextEditingController();
   final _durasiMulaiC = TextEditingController();
   final _durasiSelesaiC = TextEditingController();
+  final FocusNode _focusTeacher = FocusNode();
+  final FocusNode _focusSubject = FocusNode();
   int? teacherId, subjectId;
 
   @override
@@ -41,6 +43,17 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
     _durasiMulaiC.dispose();
     _durasiSelesaiC.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pelaksanaC.addListener(() {
+      setState(() {});
+    });
+    _kegiatanC.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -79,10 +92,11 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                             }
                             if (state is TeacherListLoaded) {
                               return DropdownMenu<int>(
+                                controller: _pelaksanaC,
                                 width: width * 0.92,
                                 enableFilter: true,
                                 requestFocusOnTap: false,
-                                focusNode: FocusNode(),
+                                focusNode: _focusTeacher,
                                 inputDecorationTheme:
                                     const InputDecorationTheme(
                                   fillColor: AppColors.tertiary,
@@ -110,19 +124,33 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                                   ),
                                 ),
                                 hintText: 'Pelaksana:',
-                                dropdownMenuEntries: state.teachers.map((doc) {
-                                  return DropdownMenuEntry<int>(
-                                    value: doc.id ?? 0,
-                                    label: doc.name ?? '',
-                                  );
-                                }).toList(),
+                                dropdownMenuEntries: _pelaksanaC.text.length < 3
+                                    ? []
+                                    : state.teachers
+                                        .where(
+                                          (doc) {
+                                            final String name =
+                                                doc.name?.toLowerCase() ?? '';
+                                            final String query =
+                                                _pelaksanaC.text.toLowerCase();
+                                            return name.contains(query);
+                                          },
+                                        )
+                                        .take(5)
+                                        .map((doc) {
+                                          return DropdownMenuEntry<int>(
+                                            value: doc.id ?? 0,
+                                            label: doc.name ?? '',
+                                          );
+                                        })
+                                        .toList(),
                                 onSelected: (value) {
                                   if (value != null) {
                                     setState(() {
                                       teacherId = value;
                                     });
+                                    FocusScope.of(context).unfocus();
                                   }
-                                  FocusScope.of(context).unfocus();
                                 },
                               );
                             }
@@ -143,9 +171,10 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                       }
                       if (state is GetActivitiesLoaded) {
                         return DropdownMenu<int>(
+                          controller: _kegiatanC,
                           width: width * 0.92,
                           enableFilter: true,
-                          focusNode: FocusNode(),
+                          focusNode: _focusSubject,
                           requestFocusOnTap: false,
                           inputDecorationTheme: const InputDecorationTheme(
                             fillColor: AppColors.tertiary,
@@ -173,12 +202,18 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                             ),
                           ),
                           hintText: 'Kegiatan:',
-                          dropdownMenuEntries: state.activities.map((doc) {
-                            return DropdownMenuEntry<int>(
-                              value: doc.id,
-                              label: doc.name,
-                            );
-                          }).toList(),
+                          dropdownMenuEntries: _kegiatanC.text.length < 3
+                              ? []
+                              : state.activities
+                                  .where((doc) => doc.name
+                                      .toLowerCase()
+                                      .contains(_kegiatanC.text.toLowerCase()))
+                                  .map((doc) {
+                                  return DropdownMenuEntry<int>(
+                                    value: doc.id,
+                                    label: doc.name,
+                                  );
+                                }).toList(),
                           onSelected: (value) {
                             if (value != null) {
                               final selectedDoc = state.activities
@@ -187,8 +222,8 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                                 subjectId = value;
                               });
                               _kegiatanC.text = selectedDoc.name;
+                              FocusScope.of(context).unfocus();
                             }
-                            FocusScope.of(context).unfocus();
                           },
                         );
                       }
