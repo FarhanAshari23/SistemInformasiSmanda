@@ -11,7 +11,7 @@ import '../../../domain/entities/attandance/attendance_student.dart';
 import '../../../domain/entities/student/student.dart';
 import '../../../domain/usecases/attendance/add_student_attendance.dart';
 import '../../../domain/usecases/students/search_student_by_nisn.dart';
-import '../../manageAttendance/widgets/scan_qr.dart';
+import '../../admin/attendance/widgets/scan_qr.dart';
 import '../bloc/student_nisn_cubit.dart';
 import '../bloc/student_nisn_state.dart';
 

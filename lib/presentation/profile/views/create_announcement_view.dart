@@ -13,8 +13,8 @@ import '../../../domain/entities/kelas/kelas.dart';
 import '../../../domain/entities/news/news.dart';
 import '../../../domain/usecases/news/create_news.dart';
 import '../../auth/widgets/button_role.dart';
-import '../../manageNews/views/select_kelas_view.dart';
-import '../../manageNews/widgets/field_news.dart';
+import '../../admin/news/views/select_kelas_view.dart';
+import '../../admin/news/widgets/field_news.dart';
 import 'profile_teacher_view.dart';
 
 class CreateAnnouncementView extends StatefulWidget {

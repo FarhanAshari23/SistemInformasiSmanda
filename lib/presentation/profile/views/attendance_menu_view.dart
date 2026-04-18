@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/card/card_basic.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/teacher/teacher.dart';
-import 'package:new_sistem_informasi_smanda/presentation/manageAttendance/views/see_all_data_attandance_students.dart';
+import 'package:new_sistem_informasi_smanda/presentation/admin/attendance/views/see_all_data_attandance_students.dart';
 
 import '../../../common/helper/app_navigation.dart';
 import '../../../core/configs/assets/app_images.dart';

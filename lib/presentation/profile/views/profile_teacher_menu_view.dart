@@ -13,7 +13,7 @@ import '../../../domain/entities/attandance/attandance_teacher.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/attendance/add_teacher_attendance.dart';
 import '../../../domain/usecases/attendance/add_teacher_completion_usecase.dart';
-import '../../manageSchedule/views/edit_schedule_view.dart';
+import '../../admin/schedule/views/edit_schedule_view.dart';
 import '../bloc/get_teacher_attendance_cubit.dart';
 import '../bloc/get_teacher_attendance_state.dart';
 import 'attendance_menu_view.dart';

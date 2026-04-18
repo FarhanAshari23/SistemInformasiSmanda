@@ -1,54 +1,20 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/presentation/teachers/blocs/get_teacher_cubit.dart';
 
-import '../../../core/configs/theme/app_colors.dart';
-import '../../../presentation/admin/news/bloc/select_teacher_name_cubit.dart';
+import '../../../../common/bloc/kelas/stundets_cubit.dart';
+import '../../../../core/configs/theme/app_colors.dart';
+import '../../../../domain/entities/attandance/attendance_student.dart';
 
-class SearchTeacherAppbar extends StatefulWidget {
-  final bool isTeacherGolang;
-  const SearchTeacherAppbar({
+class SearchStudentAttendanceAppbar extends StatelessWidget {
+  final DateTime date;
+  const SearchStudentAttendanceAppbar({
     super.key,
-    this.isTeacherGolang = false,
+    required this.date,
   });
 
   @override
-  State<SearchTeacherAppbar> createState() => _SearchTeacherAppbarState();
-}
-
-class _SearchTeacherAppbarState extends State<SearchTeacherAppbar> {
-  final TextEditingController searchC = TextEditingController();
-  Timer? _debounce;
-
-  @override
-  void dispose() {
-    searchC.dispose();
-    _debounce?.cancel();
-    super.dispose();
-  }
-
-  void _onSearchChanged(String value) {
-    // cancel timer sebelumnya
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
-
-    // set timer baru
-    _debounce = Timer(const Duration(milliseconds: 500), () {
-      if (value.isEmpty) {
-        widget.isTeacherGolang
-            ? context.read<GetTeacherNameCubit>().displayInitial()
-            : context.read<GetTeacherCubit>().displayInitial();
-      } else {
-        widget.isTeacherGolang
-            ? context.read<GetTeacherNameCubit>().displayTeacher(params: value)
-            : context.read<GetTeacherCubit>().displayTeacher(params: value);
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final TextEditingController searchC = TextEditingController();
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
@@ -88,10 +54,22 @@ class _SearchTeacherAppbarState extends State<SearchTeacherAppbar> {
               child: Center(
                 child: TextField(
                   controller: searchC,
-                  onChanged: (value) => _onSearchChanged(value),
+                  onChanged: (value) {
+                    if (value.isEmpty) {
+                      context.read<StudentsDisplayCubit>().displayInitial();
+                    } else {
+                      context
+                          .read<StudentsDisplayCubit>()
+                          .displayStudentAttendances(
+                              params: AttendanceStudentEntity(
+                            date: date,
+                            name: value,
+                          ));
+                    }
+                  },
                   decoration: const InputDecoration(
-                    fillColor: AppColors.inversePrimary,
                     hintText: 'Masukkan Nama:',
+                    fillColor: AppColors.inversePrimary,
                   ),
                 ),
               ),
