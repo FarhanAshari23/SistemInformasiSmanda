@@ -188,7 +188,8 @@ class TeacherDetail extends StatelessWidget {
                                     ),
                                     Text(
                                       (state.teacher.nip != null &&
-                                              state.teacher.nip!.isNotEmpty)
+                                              state.teacher.nip!.isNotEmpty &&
+                                              state.teacher.nip!.length > 3)
                                           ? state.teacher.nip!
                                           : "-",
                                       style: const TextStyle(

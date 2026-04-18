@@ -19,9 +19,13 @@ class CardGuru extends StatefulWidget {
   State<CardGuru> createState() => _CardGuruState();
 }
 
-class _CardGuruState extends State<CardGuru> {
+class _CardGuruState extends State<CardGuru>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     String fallbackAsset = widget.teacher.gender == 1

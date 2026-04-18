@@ -7,7 +7,7 @@ import '../../helper/display_image.dart';
 import '../inkwell/custom_inkwell.dart';
 import '../photo/network_photo.dart';
 
-class CardUser extends StatelessWidget {
+class CardUser extends StatefulWidget {
   final StudentEntity user;
   final VoidCallback? onTap;
   final bool forceRefresh;
@@ -19,22 +19,31 @@ class CardUser extends StatelessWidget {
   });
 
   @override
+  State<CardUser> createState() => _CardUserState();
+}
+
+class _CardUserState extends State<CardUser>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final bodyHeight = mediaQueryHeight -
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
     double width = MediaQuery.of(context).size.width;
-    String fallbackAsset = user.gender == 1
+    String fallbackAsset = widget.user.gender == 1
         ? AppImages.boyStudent
-        : user.religion == "Islam"
+        : widget.user.religion == "Islam"
             ? AppImages.girlStudent
             : AppImages.girlNonStudent;
 
     return CustomInkWell(
       borderRadius: 12,
       defaultColor: AppColors.secondary,
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -51,8 +60,8 @@ class CardUser extends StatelessWidget {
                     width: width * 0.235,
                     height: bodyHeight * 0.14,
                     fallbackAsset: fallbackAsset,
-                    imageUrl:
-                        DisplayImage.displayImageStudent(user.picture ?? ''),
+                    imageUrl: DisplayImage.displayImageStudent(
+                        widget.user.picture ?? ''),
                   ),
                 ),
                 SizedBox(width: width * 0.05),
@@ -64,7 +73,7 @@ class CardUser extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          user.name ?? '',
+                          widget.user.name ?? '',
                           maxLines: 2,
                           style: const TextStyle(
                             fontSize: 16,
@@ -74,7 +83,7 @@ class CardUser extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          user.nisn ?? '',
+                          widget.user.nisn ?? '',
                           maxLines: 1,
                           style: const TextStyle(
                             fontSize: 12,

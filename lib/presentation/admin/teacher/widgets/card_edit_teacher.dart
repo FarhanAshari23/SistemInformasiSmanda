@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../../common/helper/app_navigation.dart';
@@ -15,7 +16,7 @@ import '../../../../domain/usecases/teacher/delete_teacher.dart';
 import '../../../../service_locator.dart';
 import '../views/edit_teacher_detail_view.dart';
 
-class CardEditTeacher extends StatelessWidget {
+class CardEditTeacher extends StatefulWidget {
   final TeacherEntity teacher;
   const CardEditTeacher({
     super.key,
@@ -23,7 +24,16 @@ class CardEditTeacher extends StatelessWidget {
   });
 
   @override
+  State<CardEditTeacher> createState() => _CardEditTeacherState();
+}
+
+class _CardEditTeacherState extends State<CardEditTeacher>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final bodyHeight = mediaQueryHeight -
         MediaQuery.of(context).padding.top -
@@ -36,7 +46,7 @@ class CardEditTeacher extends StatelessWidget {
         AppNavigator.push(
           context,
           TeacherDetail(
-            teacherId: teacher.id ?? 0,
+            teacherId: widget.teacher.id ?? 0,
           ),
         );
       },
@@ -54,13 +64,14 @@ class CardEditTeacher extends StatelessWidget {
                     left: Radius.circular(12),
                   ),
                   child: NetworkPhoto(
+                    forceRefresh: false,
                     height: mediaQueryHeight * 0.14,
                     width: width * 0.235,
-                    fallbackAsset: teacher.gender == 1
+                    fallbackAsset: widget.teacher.gender == 1
                         ? AppImages.guruLaki
                         : AppImages.guruPerempuan,
-                    imageUrl:
-                        DisplayImage.displayImageTeacher(teacher.picture ?? ''),
+                    imageUrl: DisplayImage.displayImageTeacher(
+                        widget.teacher.picture ?? ''),
                   ),
                 ),
                 Expanded(
@@ -69,7 +80,7 @@ class CardEditTeacher extends StatelessWidget {
                     child: RichText(
                       textAlign: TextAlign.left,
                       text: TextSpan(
-                        text: '${teacher.name}\n',
+                        text: '${widget.teacher.name}\n',
                         style: const TextStyle(
                           fontWeight: FontWeight.w900,
                           color: AppColors.primary,
@@ -82,7 +93,11 @@ class CardEditTeacher extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: teacher.nip ?? "-",
+                            text: widget.teacher.nip!.length < 3
+                                ? DateFormat('d MMMM yyyy', "id_ID").format(
+                                    widget.teacher.birthDate ??
+                                        DateTime(2000, 1, 1))
+                                : widget.teacher.nip,
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -106,7 +121,7 @@ class CardEditTeacher extends StatelessWidget {
                     context,
                     BlocProvider.value(
                       value: context.read<TeacherCubit>(),
-                      child: EditTeacherDetailView(teacher: teacher),
+                      child: EditTeacherDetailView(teacher: widget.teacher),
                     ),
                   );
                 } else if (value == 'Hapus') {
@@ -116,11 +131,11 @@ class CardEditTeacher extends StatelessWidget {
                       return BasicDialog(
                         splashImage: AppImages.splashDelete,
                         mainTitle:
-                            'Apakah anda yakin ingin menghapus data ${teacher.name}?',
+                            'Apakah anda yakin ingin menghapus data ${widget.teacher.name}?',
                         buttonTitle: 'Hapus',
                         onPressed: () async {
                           var delete = await sl<DeleteTeacherUsecase>()
-                              .call(params: teacher.id);
+                              .call(params: widget.teacher.id);
                           return delete.fold(
                             (error) {
                               var snackbar = SnackBar(
