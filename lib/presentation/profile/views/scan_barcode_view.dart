@@ -12,6 +12,8 @@ import '../../../domain/entities/student/student.dart';
 import '../../../domain/usecases/attendance/add_student_attendance.dart';
 import '../../../domain/usecases/students/search_student_by_nisn.dart';
 import '../../admin/attendance/widgets/scan_qr.dart';
+import '../bloc/get_distace_state.dart';
+import '../bloc/get_distance_cubit.dart';
 import '../bloc/student_nisn_cubit.dart';
 import '../bloc/student_nisn_state.dart';
 
@@ -28,6 +30,9 @@ class ScanBarcodeView extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 StudentsNISNCubit(usecase: SearchStudentByNisn()),
+          ),
+          BlocProvider(
+            create: (context) => GetDistanceCubit(),
           ),
           BlocProvider(
             create: (context) => ButtonStateCubit(),
@@ -61,113 +66,11 @@ class ScanBarcodeView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                               color: AppColors.inversePrimary,
                             ),
-                            child: BlocBuilder<StudentsNISNCubit,
-                                StudentsNISNState>(
+                            child:
+                                BlocBuilder<GetDistanceCubit, GetDistanceState>(
                               builder: (context, state) {
-                                if (state is StudentsNISNLoading) {
-                                  return const Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Tunggu Sebentar...',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w800,
-                                          color: AppColors.primary,
-                                        ),
-                                      ),
-                                      CircularProgressIndicator(),
-                                    ],
-                                  );
-                                }
-                                if (state is StudentsNISNLoaded) {
-                                  return BlocBuilder<ButtonStateCubit,
-                                      ButtonState>(
-                                    builder: (context, btnState) {
-                                      if (btnState is ButtonFailureState) {
-                                        return Column(
-                                          children: [
-                                            Text(
-                                              btnState.errorMessage,
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w800,
-                                                color: AppColors.primary,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              '${state.student.name} - ${state.student.nisn}',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors.primary,
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                      if (btnState is ButtonSuccessState) {
-                                        return Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              'Absen berhasil dilakukan!',
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w800,
-                                                color: AppColors.primary,
-                                              ),
-                                            ),
-                                            SizedBox(height: height * 0.02),
-                                            Text(
-                                              'Nama: ${state.student.name}',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors.primary,
-                                              ),
-                                            ),
-                                            Text(
-                                              'NISN: ${state.student.nisn}',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors.primary,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Kelas: ${state.student.nameClass}',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors.primary,
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                      return const SizedBox();
-                                    },
-                                  );
-                                }
-                                if (state is StudentsNISNFailure) {
-                                  return const Center(
-                                    child: Text(
-                                      'Data Tidak Ditemukan',
-                                      style: TextStyle(
-                                        fontSize: 32,
-                                        color: AppColors.primary,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  );
-                                }
-                                return const Center(
-                                  child: Text(
+                                if (state is GetDistanceLoading) {
+                                  return const Text(
                                     'Arahkan Kamera ke Barcode Siswa',
                                     style: TextStyle(
                                       fontSize: 32,
@@ -175,8 +78,167 @@ class ScanBarcodeView extends StatelessWidget {
                                       fontWeight: FontWeight.w800,
                                     ),
                                     textAlign: TextAlign.center,
-                                  ),
-                                );
+                                  );
+                                }
+                                if (state is GetDistanceLoaded) {
+                                  if (state.isNear) {
+                                    return BlocBuilder<StudentsNISNCubit,
+                                        StudentsNISNState>(
+                                      builder: (context, state) {
+                                        if (state is StudentsNISNLoading) {
+                                          return const Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Tunggu Sebentar...',
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w800,
+                                                  color: AppColors.primary,
+                                                ),
+                                              ),
+                                              CircularProgressIndicator(),
+                                            ],
+                                          );
+                                        }
+                                        if (state is StudentsNISNLoaded) {
+                                          return BlocBuilder<ButtonStateCubit,
+                                              ButtonState>(
+                                            builder: (context, btnState) {
+                                              if (btnState
+                                                  is ButtonFailureState) {
+                                                return Column(
+                                                  children: [
+                                                    Text(
+                                                      btnState.errorMessage,
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                        color:
+                                                            AppColors.primary,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Text(
+                                                      '${state.student.name} - ${state.student.nisn}',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            AppColors.primary,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                              if (btnState
+                                                  is ButtonSuccessState) {
+                                                return Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                      'Absen berhasil dilakukan!',
+                                                      style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                        color:
+                                                            AppColors.primary,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        height: height * 0.02),
+                                                    Text(
+                                                      'Nama: ${state.student.name}',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            AppColors.primary,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'NISN: ${state.student.nisn}',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            AppColors.primary,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'Kelas: ${state.student.nameClass}',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            AppColors.primary,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                              return const SizedBox();
+                                            },
+                                          );
+                                        }
+                                        if (state is StudentsNISNFailure) {
+                                          return const Center(
+                                            child: Text(
+                                              'Data Tidak Ditemukan',
+                                              style: TextStyle(
+                                                fontSize: 32,
+                                                color: AppColors.primary,
+                                                fontWeight: FontWeight.w800,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          );
+                                        }
+                                        return const Center(
+                                          child: Text(
+                                            'Arahkan Kamera ke Barcode Siswa',
+                                            style: TextStyle(
+                                              fontSize: 32,
+                                              color: AppColors.primary,
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    return const Text(
+                                      "Anda tidak berada di lingkungan SMA N 2 Metro, harap melakukan absen di sekolah",
+                                      style: TextStyle(
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    );
+                                  }
+                                }
+                                if (state is GetDistanceFailure) {
+                                  return Text(
+                                    "Error: ${state.errorMessage}",
+                                    style: const TextStyle(
+                                      fontSize: 32,
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  );
+                                }
+                                return const SizedBox();
                               },
                             ),
                           ),
