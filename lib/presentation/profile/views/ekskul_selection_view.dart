@@ -97,11 +97,12 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                     ),
                   ),
                 ),
+                Container(),
                 const SizedBox(height: 8),
                 BlocBuilder<GetStudentEkskulCubit, GetStudentEkskulState>(
                   builder: (context, state) {
                     if (state is GetStudentEkskulLoading) {
-                      return const SizedBox();
+                      return const Center(child: CircularProgressIndicator());
                     }
                     if (state is GetStudentEkskulLoaded) {
                       List<MemberEntity> mainRole = state.ekskuls
@@ -119,9 +120,11 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                           ),
                         );
                       } else {
-                        return Expanded(
+                        return Flexible(
                           child: ListView.separated(
                             scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            physics: const ClampingScrollPhysics(),
                             padding: const EdgeInsets.all(8.0),
                             itemBuilder: (context, index) {
                               final role = mainRole[index];
@@ -195,8 +198,28 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                           children: [
                             BlocBuilder<SelectEkskulCubit, List<EkskulEntity>>(
                               builder: (context, selectedEkskul) {
+                                List<EkskulEntity> filterEkskul =
+                                    state.ekskul.where((ekskul) {
+                                  if (ekskul.members == null ||
+                                      ekskul.members!.isEmpty) {
+                                    return true;
+                                  }
+
+                                  final memberTerkait = ekskul.members!
+                                      .cast<MemberEntity?>()
+                                      .firstWhere(
+                                        (m) => m?.id == widget.studentId,
+                                        orElse: () => null,
+                                      );
+
+                                  if (memberTerkait == null) {
+                                    return true;
+                                  } else {
+                                    return memberTerkait.role == "Anggota";
+                                  }
+                                }).toList();
                                 return GridView.builder(
-                                  itemCount: state.ekskul.length,
+                                  itemCount: filterEkskul.length,
                                   scrollDirection: Axis.vertical,
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 8),
@@ -208,7 +231,7 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                                     mainAxisExtent: height * 0.25,
                                   ),
                                   itemBuilder: (context, index) {
-                                    final ekskul = state.ekskul[index];
+                                    final ekskul = filterEkskul[index];
 
                                     final isSelected = selectedEkskul.any((e) =>
                                         e.nameEkskul == ekskul.nameEkskul);
@@ -243,32 +266,29 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                             ),
                             Align(
                               alignment: Alignment.bottomCenter,
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 16),
-                                child: CustomInkWell(
-                                  borderRadius: 8,
-                                  defaultColor: AppColors.primary,
-                                  onTap: () {
-                                    final selected =
-                                        context.read<SelectEkskulCubit>().state;
+                              child: CustomInkWell(
+                                borderRadius: 8,
+                                defaultColor: AppColors.primary,
+                                onTap: () {
+                                  final selected =
+                                      context.read<SelectEkskulCubit>().state;
 
-                                    Navigator.pop(
-                                      context,
-                                      selected,
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 32,
-                                      vertical: 24,
-                                    ),
-                                    child: const Text(
-                                      'Pilih',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: AppColors.inversePrimary,
-                                      ),
+                                  Navigator.pop(
+                                    context,
+                                    selected,
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 32,
+                                    vertical: 24,
+                                  ),
+                                  child: const Text(
+                                    'Pilih',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: AppColors.inversePrimary,
                                     ),
                                   ),
                                 ),
