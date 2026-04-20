@@ -5,3 +5,4 @@ class AppUrl {
 }
 
 //ip local = http://192.168.18.3:3000
+//ip smanda = http://puskomsmanda.com:804

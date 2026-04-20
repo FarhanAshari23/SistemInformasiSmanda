@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/usecases/teacher/get_teacher.dart';
 import '../../../domain/usecases/teacher/get_teacher_by_id_usecase.dart';
+import '../../../domain/usecases/teacher/get_teacher_for_schedule_usecase.dart';
 import '../../../service_locator.dart';
 import 'teacher_state.dart';
 
@@ -10,6 +11,18 @@ class TeacherCubit extends Cubit<TeacherState> {
 
   void displayTeacher({dynamic params}) async {
     var returnedData = await sl<GetTeacher>().call();
+    returnedData.fold(
+      (error) {
+        return emit(TeacherFailure(errorMessage: error));
+      },
+      (data) {
+        return emit(TeacherListLoaded(teachers: data));
+      },
+    );
+  }
+
+  void displayTeacherForSchedule({dynamic params}) async {
+    var returnedData = await sl<GetTeacherForScheduleUsecase>().call();
     returnedData.fold(
       (error) {
         return emit(TeacherFailure(errorMessage: error));

@@ -69,6 +69,7 @@ import 'domain/usecases/teacher/delete_teacher.dart';
 import 'domain/usecases/teacher/get_teacher.dart';
 import 'domain/usecases/teacher/get_teacher_by_id_usecase.dart';
 import 'domain/usecases/teacher/get_teacher_by_name.dart';
+import 'domain/usecases/teacher/get_teacher_for_schedule_usecase.dart';
 import 'domain/usecases/teacher/update_role_usecase.dart';
 import 'domain/usecases/teacher/update_teacher.dart';
 
@@ -189,6 +190,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<GetTeacherByIdUsecase>(
     GetTeacherByIdUsecase(),
+  );
+  sl.registerSingleton<GetTeacherForScheduleUsecase>(
+    GetTeacherForScheduleUsecase(),
   );
 
   //news

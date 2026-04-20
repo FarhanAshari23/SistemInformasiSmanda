@@ -214,7 +214,7 @@ class TeacherScreen extends StatelessWidget {
                           return CardGuruComplete(
                             teacher: teachersEntity[tabIndex][index],
                             desc: tabIndex == 1
-                                ? "Kelas: //${teachersEntity[tabIndex][index].waliKelas}"
+                                ? "Kelas: ${teachersEntity[tabIndex][index].waliKelas}"
                                 : "Tugas: ${teachersEntity[tabIndex][index].tasksName!.join(", ")}",
                           );
                         },

@@ -82,7 +82,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
               JadwalDisplayCubit()..displayJadwal(params: widget.schedule.id),
         ),
         BlocProvider(
-          create: (context) => TeacherCubit()..displayTeacher(),
+          create: (context) => TeacherCubit()..displayTeacherForSchedule(),
         ),
         BlocProvider(
           create: (context) => GetActivitiesCubit()..displayActivites(),

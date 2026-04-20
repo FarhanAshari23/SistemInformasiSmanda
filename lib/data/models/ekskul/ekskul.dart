@@ -80,7 +80,7 @@ extension EkskulModelX on EkskulModel {
 
   static EkskulModel fromEntity(EkskulEntity entity) {
     return EkskulModel(
-      id: 0, // Entity biasanya tidak membawa ID saat dari UI ke Model
+      id: 0,
       name: entity.nameEkskul ?? '',
       description: entity.description ?? '',
       advisor: AdvisorModelX.fromEntity(entity.advisor ?? AdvisorEntity()),

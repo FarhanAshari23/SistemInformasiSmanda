@@ -32,7 +32,6 @@ class TeacherScheduleDetail extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (state is JadwalDisplayLoaded) {
-                      // 1. Definisikan list hari yang ingin ditampilkan
                       final List<String> days = [
                         "Senin",
                         "Selasa",
@@ -47,7 +46,6 @@ class TeacherScheduleDetail extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final dayName = days[index];
 
-                          // 2. Filter data berdasarkan hari saat ini dalam loop
                           final schedulesByDay = state.jadwals
                               .where((element) => element.day == dayName)
                               .toList();

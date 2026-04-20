@@ -201,7 +201,7 @@ class _SeeAllDataAttendanceTeacherState
                                 ),
                               );
                             }
-                            return null; // default style
+                            return null;
                           },
                         ),
                       ),

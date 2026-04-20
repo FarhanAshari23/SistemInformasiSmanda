@@ -20,6 +20,9 @@ class TeacherRepositoryImpl extends TeacherRepository {
         return Right(
           List.from(data)
               .map((e) => TeacherModel.fromMap(e).toEntity())
+              .where(
+                (e) => e.name != "Seluruh siswa",
+              )
               .toList(),
         );
       },
@@ -54,6 +57,9 @@ class TeacherRepositoryImpl extends TeacherRepository {
           List.from(data)
               .map(
                 (e) => TeacherModel.fromMap(e).toEntity(),
+              )
+              .where(
+                (e) => e.name != "Seluruh siswa",
               )
               .toList(),
         );
@@ -102,6 +108,23 @@ class TeacherRepositoryImpl extends TeacherRepository {
       (data) {
         return Right(
           TeacherModel.fromMap(data).toEntity(),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<Either> getTeacherForSchedule() async {
+    var returnedData = await sl<TeacherFirebaseService>().getTeacher();
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          List.from(data)
+              .map((e) => TeacherModel.fromMap(e).toEntity())
+              .toList(),
         );
       },
     );

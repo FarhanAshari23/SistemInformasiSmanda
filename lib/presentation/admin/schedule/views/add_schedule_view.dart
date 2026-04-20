@@ -58,7 +58,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
           create: (context) => CreateScheduleCubit(),
         ),
         BlocProvider(
-          create: (context) => TeacherCubit()..displayTeacher(),
+          create: (context) => TeacherCubit()..displayTeacherForSchedule(),
         ),
         BlocProvider(
           create: (context) => GetActivitiesCubit()..displayActivites(),
