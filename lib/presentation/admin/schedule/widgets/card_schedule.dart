@@ -461,12 +461,24 @@ class _CardScheduleState extends State<CardSchedule> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    widget.schedule.subjectName ?? '',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.schedule.subjectName ?? '',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        widget.schedule.teacherName ?? '',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                   Text(
                     "${widget.schedule.startTime} - ${widget.schedule.endTime}",

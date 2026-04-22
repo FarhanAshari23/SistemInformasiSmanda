@@ -406,7 +406,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                               ),
                             );
                           }
-                          return const Text("Default State");
+                          return const Center(child: Text("Default State"));
                         },
                       );
                     },
