@@ -417,12 +417,24 @@ class _CardScheduleState extends State<CardSchedule> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    widget.schedule.kegiatan,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.schedule.kegiatan,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        widget.schedule.pelaksana,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                   Text(
                     widget.schedule.jam,
