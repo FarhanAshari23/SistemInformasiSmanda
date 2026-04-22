@@ -468,6 +468,7 @@ class _CardScheduleState extends State<CardSchedule> {
                         widget.schedule.subjectName ?? '',
                         style: const TextStyle(
                           fontWeight: FontWeight.w900,
+                          fontSize: 13,
                           color: Colors.white,
                         ),
                       ),
@@ -475,6 +476,7 @@ class _CardScheduleState extends State<CardSchedule> {
                         widget.schedule.teacherName ?? '',
                         style: const TextStyle(
                           fontWeight: FontWeight.w900,
+                          fontSize: 12,
                           color: Colors.white,
                         ),
                       ),

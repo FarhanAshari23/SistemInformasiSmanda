@@ -44,25 +44,30 @@ class SelectClass extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CardKelas(
-                          title: 'Kelas\n10',
-                          nextPage: BlocProvider.value(
-                            value: context.read<GetAllKelasCubit>()
-                              ..displayAll(),
-                            child: StudentAttendancesView(
-                              date: date,
-                              kelas: 10,
+                        Expanded(
+                          child: CardKelas(
+                            title: 'Kelas\n10',
+                            nextPage: BlocProvider.value(
+                              value: context.read<GetAllKelasCubit>()
+                                ..displayAll(),
+                              child: StudentAttendancesView(
+                                date: date,
+                                kelas: 10,
+                              ),
                             ),
                           ),
                         ),
-                        CardKelas(
-                          title: 'Kelas\n11',
-                          nextPage: BlocProvider.value(
-                            value: context.read<GetAllKelasCubit>()
-                              ..displayAll(),
-                            child: StudentAttendancesView(
-                              date: date,
-                              kelas: 11,
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: CardKelas(
+                            title: 'Kelas\n11',
+                            nextPage: BlocProvider.value(
+                              value: context.read<GetAllKelasCubit>()
+                                ..displayAll(),
+                              child: StudentAttendancesView(
+                                date: date,
+                                kelas: 11,
+                              ),
                             ),
                           ),
                         )
@@ -72,17 +77,20 @@ class SelectClass extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CardKelas(
-                          title: 'Kelas\n12',
-                          nextPage: BlocProvider.value(
-                            value: context.read<GetAllKelasCubit>()
-                              ..displayAll(),
-                            child: StudentAttendancesView(
-                              date: date,
-                              kelas: 12,
+                        Expanded(
+                          child: CardKelas(
+                            title: 'Kelas\n12',
+                            nextPage: BlocProvider.value(
+                              value: context.read<GetAllKelasCubit>()
+                                ..displayAll(),
+                              child: StudentAttendancesView(
+                                date: date,
+                                kelas: 12,
+                              ),
                             ),
                           ),
                         ),
+                        const SizedBox(width: 8),
                         CardSearch(
                           nextPage: SearchStudentAttendance(
                             date: date,

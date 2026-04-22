@@ -45,6 +45,7 @@ class EditScheduleDetailView extends StatefulWidget {
 class _EditScheduleDetailState extends State<EditScheduleDetailView> {
   late TextEditingController _kelasC;
   late TextEditingController _waliKelasC;
+  final ScrollController _scrollController = ScrollController();
   late int? teacherId;
 
   @override
@@ -60,6 +61,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
     super.dispose();
     _kelasC.dispose();
     _waliKelasC.dispose();
+    _scrollController.dispose();
   }
 
   @override
@@ -97,26 +99,44 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
           create: (context) => PickerCubit(),
         ),
       ],
-      child: BlocListener<ButtonStateCubit, ButtonState>(
-        listener: (context, state) {
-          if (state is ButtonLoadingState) return;
-          if (state is ButtonFailureState) {
-            var snackbar = SnackBar(
-              content: Text(state.errorMessage),
-              behavior: SnackBarBehavior.floating,
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackbar);
-          }
-          if (state is ButtonSuccessState) {
-            context.read<GetAllKelasCubit>().displayAll();
-            var snackbar = const SnackBar(
-              content: Text("Berhasil mengubah jadwal"),
-              behavior: SnackBarBehavior.floating,
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackbar);
-            Navigator.pop(context);
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<ButtonStateCubit, ButtonState>(
+            listener: (context, state) {
+              if (state is ButtonLoadingState) return;
+              if (state is ButtonFailureState) {
+                var snackbar = SnackBar(
+                  content: Text(state.errorMessage),
+                  behavior: SnackBarBehavior.floating,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              }
+              if (state is ButtonSuccessState) {
+                context.read<GetAllKelasCubit>().displayAll();
+                var snackbar = const SnackBar(
+                  content: Text("Berhasil mengubah jadwal"),
+                  behavior: SnackBarBehavior.floating,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                Navigator.pop(context);
+              }
+            },
+          ),
+          BlocListener<PickerCubit, String>(
+            listener: (context, state) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (_scrollController.hasClients) {
+                  double offsetAdjustment = (state == "show") ? -100 : 100;
+                  _scrollController.animateTo(
+                    _scrollController.offset + offsetAdjustment,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
+              });
+            },
+          ),
+        ],
         child: PopScope(
           canPop: false,
           onPopInvokedWithResult: (didPop, result) async {
@@ -267,6 +287,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                                           children: [
                                             Expanded(
                                               child: ListView(
+                                                controller: _scrollController,
                                                 physics: pickerState == "show"
                                                     ? const NeverScrollableScrollPhysics()
                                                     : const BouncingScrollPhysics(),

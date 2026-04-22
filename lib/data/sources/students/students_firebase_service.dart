@@ -296,9 +296,7 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
 
       for (var i = 0; i < students.length; i++) {
         sheet.getRangeByName('A${i + 3}').setText(students[i].name);
-        sheet
-            .getRangeByName('B${i + 3}')
-            .setText(StringHelper.maskEmail(students[i].email ?? ''));
+        sheet.getRangeByName('B${i + 3}').setText(students[i].email);
         sheet.getRangeByName('C${i + 3}').setText(students[i].nameClass);
       }
       sheet.autoFitColumn(1);

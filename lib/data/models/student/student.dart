@@ -159,6 +159,7 @@ extension StudentModelX on StudentModel {
       ekskul: ekskul,
       ekskulId: ekskulId,
       picture: picture,
+      email: email,
     );
   }
 

@@ -21,7 +21,6 @@ class CardKelas extends StatelessWidget {
       onTap: () => AppNavigator.push(context, nextPage),
       defaultColor: AppColors.secondary,
       child: SizedBox(
-        width: width * 0.45,
         height: width * 0.45,
         child: Center(
           child: Text(
