@@ -325,6 +325,7 @@ class _AddScheduleButtonState extends State<AddScheduleButton> {
                               widget.currentTeacherId ?? teacherId,
                               subjectId,
                               _kegiatanC.text,
+                              _pelaksanaC.text,
                             );
                             _kegiatanC.clear();
                             _durasiMulaiC.clear();

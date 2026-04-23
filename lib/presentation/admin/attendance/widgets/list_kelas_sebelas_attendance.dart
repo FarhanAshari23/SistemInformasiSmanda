@@ -32,54 +32,50 @@ class ListKelasSebelasAttendance extends StatelessWidget {
           if (state is KelasDisplayLoaded) {
             final kelas =
                 state.kelas.where((element) => element.degree == 11).toList();
-            return BlocProvider(
-              create: (context) => KelasNavigationCubit(),
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      context.read<KelasNavigationCubit>().changeColor(index);
-                      context
-                          .read<AttendanceStudentCubit>()
-                          .displayAttendanceStudent(
-                            params: AttendanceStudentEntity(
-                              date: date,
-                              className: kelas[index].className,
-                            ),
-                          );
-                    },
-                    child: Container(
-                      width: width * 0.2,
-                      height: height * 0.035,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color:
-                            context.watch<KelasNavigationCubit>().state == index
-                                ? AppColors.primary
-                                : AppColors.tertiary,
-                      ),
-                      child: Center(
-                        child: Text(
-                          kelas[index].className ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color:
-                                context.watch<KelasNavigationCubit>().state ==
-                                        index
-                                    ? AppColors.tertiary
-                                    : AppColors.primary,
+            return ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    context.read<KelasNavigationCubit>().changeColor(index);
+                    context
+                        .read<AttendanceStudentCubit>()
+                        .displayAttendanceStudent(
+                          params: AttendanceStudentEntity(
+                            date: date,
+                            className: kelas[index].className,
                           ),
+                        );
+                  },
+                  child: Container(
+                    width: width * 0.2,
+                    height: height * 0.035,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color:
+                          context.watch<KelasNavigationCubit>().state == index
+                              ? AppColors.primary
+                              : AppColors.tertiary,
+                    ),
+                    child: Center(
+                      child: Text(
+                        kelas[index].className ?? '',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: context.watch<KelasNavigationCubit>().state ==
+                                  index
+                              ? AppColors.tertiary
+                              : AppColors.primary,
                         ),
                       ),
                     ),
-                  );
-                },
-                separatorBuilder: (context, index) =>
-                    SizedBox(width: width * 0.01),
-                itemCount: kelas.length,
-              ),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) =>
+                  SizedBox(width: width * 0.01),
+              itemCount: kelas.length,
             );
           }
           return Container();

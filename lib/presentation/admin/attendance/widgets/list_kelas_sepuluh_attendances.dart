@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/kelas_display_state.dart';
 
+import '../../../../common/bloc/kelas/get_all_kelas_cubit.dart';
+import '../../../../common/bloc/kelas/kelas_display_state.dart';
 import '../../../../common/bloc/kelas/kelas_navigation.dart';
 import '../../../../common/widget/loading/list_kelas_loading.dart';
 import '../../../../core/configs/theme/app_colors.dart';
@@ -29,54 +29,50 @@ class ListKelasSepuluhAttendances extends StatelessWidget {
           if (state is KelasDisplayLoaded) {
             final kelas =
                 state.kelas.where((element) => element.degree == 10).toList();
-            return BlocProvider(
-              create: (context) => KelasNavigationCubit(),
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      context.read<KelasNavigationCubit>().changeColor(index);
-                      context
-                          .read<AttendanceStudentCubit>()
-                          .displayAttendanceStudent(
-                            params: AttendanceStudentEntity(
-                              date: date,
-                              className: kelas[index].className,
-                            ),
-                          );
-                    },
-                    child: Container(
-                      width: width * 0.2,
-                      height: height * 0.035,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color:
-                            context.watch<KelasNavigationCubit>().state == index
-                                ? AppColors.primary
-                                : AppColors.tertiary,
-                      ),
-                      child: Center(
-                        child: Text(
-                          kelas[index].className ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color:
-                                context.watch<KelasNavigationCubit>().state ==
-                                        index
-                                    ? AppColors.tertiary
-                                    : AppColors.primary,
+            return ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    context.read<KelasNavigationCubit>().changeColor(index);
+                    context
+                        .read<AttendanceStudentCubit>()
+                        .displayAttendanceStudent(
+                          params: AttendanceStudentEntity(
+                            date: date,
+                            className: kelas[index].className,
                           ),
+                        );
+                  },
+                  child: Container(
+                    width: width * 0.2,
+                    height: height * 0.035,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color:
+                          context.watch<KelasNavigationCubit>().state == index
+                              ? AppColors.primary
+                              : AppColors.tertiary,
+                    ),
+                    child: Center(
+                      child: Text(
+                        kelas[index].className ?? '',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: context.watch<KelasNavigationCubit>().state ==
+                                  index
+                              ? AppColors.tertiary
+                              : AppColors.primary,
                         ),
                       ),
                     ),
-                  );
-                },
-                separatorBuilder: (context, index) =>
-                    SizedBox(width: width * 0.01),
-                itemCount: kelas.length,
-              ),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) =>
+                  SizedBox(width: width * 0.01),
+              itemCount: kelas.length,
             );
           }
           return Container();

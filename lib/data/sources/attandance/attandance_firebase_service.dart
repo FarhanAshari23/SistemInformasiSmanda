@@ -28,6 +28,7 @@ abstract class AttandanceFirebaseService {
   Future<Either> addTeacherCompletion(int teacherId);
   Future<Either> searchStudentAttendance(AttendanceStudentEntity req);
   Future<Either> downloadAttendanceTeachers(AttendanceWorkBookEntity req);
+  Future<Either> downloadAttendanceStudents(AttendanceStudentEntity req);
 }
 
 class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
@@ -294,6 +295,83 @@ class AttandanceFirebaseServiceImpl extends AttandanceFirebaseService {
       return Right(data);
     } catch (e) {
       return Left("Something error: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<Either> downloadAttendanceStudents(AttendanceStudentEntity req) async {
+    final Workbook workbook = Workbook();
+    final Worksheet sheet = workbook.worksheets[0];
+
+    try {
+      final response = await Network.apiClient.get(
+          "/attendancestudent/date/${req.date}/className/${req.className}");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      List<AttendanceStudentEntity> students = List.from(response.data['data'])
+          .map((e) => AttendanceStudentModel.fromMap(e).toEntity())
+          .toList();
+      sheet.getRangeByName('A1').setText('No');
+      sheet.getRangeByName('B1').setText('Nama');
+      sheet.getRangeByName('C1').setText('Jam Masuk');
+
+      final headerStyle = workbook.styles.add('HeaderStyle');
+      headerStyle.bold = true;
+      headerStyle.backColor = '#E0E0E0';
+      sheet.getRangeByName('A1:C1').cellStyle = headerStyle;
+
+      for (var i = 0; i < students.length; i++) {
+        DateTime? timestamp;
+
+        timestamp = students[i].checkIn ?? DateTime.now();
+
+        String formattedDate = '-';
+
+        formattedDate = DateFormat(
+          'd MMMM yyyy HH:mm',
+          'id_ID',
+        ).format(timestamp);
+
+        sheet.getRangeByName('A${i + 2}').setText("${i + 1}");
+        sheet.getRangeByName('B${i + 2}').setText(students[i].name);
+        sheet.getRangeByName('C${i + 2}').setText(formattedDate);
+      }
+
+      sheet.autoFitColumn(1);
+      sheet.autoFitColumn(2);
+      sheet.autoFitColumn(3);
+
+      final List<int> bytes = workbook.saveAsStream();
+      workbook.dispose();
+
+      if (Platform.isAndroid) {
+        if (await Permission.manageExternalStorage.request().isGranted) {
+        } else {
+          await Permission.storage.request();
+        }
+      }
+
+      final String? selectedDirectory =
+          await FilePicker.platform.getDirectoryPath(
+        dialogTitle: 'Pilih folder untuk menyimpan Excel',
+      );
+
+      if (selectedDirectory == null) {
+        return const Left("Pilihi directory dulu");
+      }
+
+      String formattedDate =
+          DateFormat('d MMMM yyyy', 'id_ID').format(req.date!);
+
+      final String filePath =
+          '$selectedDirectory/data_kehadiran_siswa_kelas_${req.className}_$formattedDate.xlsx';
+
+      final File file = File(filePath);
+      await file.writeAsBytes(bytes, flush: true);
+      return Right("Data excel berhasil di simpan di: $filePath");
+    } catch (e) {
+      return left(e.toString());
     }
   }
 }

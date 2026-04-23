@@ -17,4 +17,5 @@ abstract class AttandanceRepository {
   Future<Either> getAttendanceStudent(int studentId);
   Future<Either> searchStudentAttendance(AttendanceStudentEntity req);
   Future<Either> downloadAttendanceTeachers(AttendanceWorkBookEntity req);
+  Future<Either> downloadAttendanceStudents(AttendanceStudentEntity req);
 }

@@ -344,6 +344,7 @@ class _CardScheduleState extends State<CardSchedule> {
                                     subjectId,
                                     widget.schedule.classId,
                                     _kegiatanC.text,
+                                    _pelaksanaC.text,
                                   );
                                 }
                                 cubitEditSchedule.toggleEdit(
@@ -472,6 +473,7 @@ class _CardScheduleState extends State<CardSchedule> {
                           color: Colors.white,
                         ),
                       ),
+                      Container(),
                       Text(
                         widget.schedule.teacherName ?? '',
                         style: const TextStyle(

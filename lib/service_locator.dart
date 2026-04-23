@@ -24,6 +24,7 @@ import 'domain/repository/teacher/teacher.dart';
 import 'domain/usecases/attendance/add_student_attendance.dart';
 import 'domain/usecases/attendance/add_teacher_attendance.dart';
 import 'domain/usecases/attendance/add_teacher_completion_usecase.dart';
+import 'domain/usecases/attendance/download_attendance_students_usecase.dart';
 import 'domain/usecases/attendance/download_attendance_teachers_usecase.dart';
 import 'domain/usecases/attendance/get_attendance_all_teacher_usecase.dart';
 import 'domain/usecases/attendance/get_attendance_name_usecase.dart';
@@ -310,6 +311,9 @@ Future<void> initializeDependecies() async {
   );
   sl.registerSingleton<DownloadAttendanceTeachersUsecase>(
     DownloadAttendanceTeachersUsecase(),
+  );
+  sl.registerSingleton<DownloadAttendanceStudentsUsecase>(
+    DownloadAttendanceStudentsUsecase(),
   );
 
   //schedule
