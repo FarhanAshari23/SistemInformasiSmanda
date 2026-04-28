@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/kelas/get_all_kelas_cubit.dart';
 
 import '../../../../common/bloc/button/button.cubit.dart';
 import '../../../../common/bloc/button/button_state.dart';
+import '../../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../../common/bloc/schedule/jadwal_display_cubit.dart';
 import '../../../../common/bloc/schedule/jadwal_display_state.dart';
 import '../../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../../common/helper/convert_list_day_entity.dart';
 import '../../../../common/helper/string_helper.dart';
 import '../../../../common/widget/appbar/basic_appbar.dart';
-import '../../../../common/widget/button/basic_button.dart';
 import '../../../../common/widget/dialog/confirmation_dialog.dart';
 import '../../../../common/widget/searchbar/search_teachers_views.dart';
 import '../../../../core/configs/assets/app_images.dart';
@@ -18,6 +17,7 @@ import '../../../../core/configs/theme/app_colors.dart';
 import '../../../../domain/entities/kelas/kelas.dart';
 import '../../../../domain/entities/teacher/teacher.dart';
 import '../../../../domain/usecases/schedule/update_schedule_usecase.dart';
+import '../../../auth/widgets/button_role.dart';
 import '../bloc/add_schedule_cubit.dart';
 import '../bloc/form_field_cubit.dart';
 import '../bloc/create_schedule_cubit.dart';
@@ -357,7 +357,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
                                             Builder(builder: (context) {
                                               final cubit = context
                                                   .read<CreateScheduleCubit>();
-                                              return BasicButton(
+                                              return ButtonRole(
                                                 onPressed: () async {
                                                   final allEmpty = cubit
                                                       .state.schedules.values

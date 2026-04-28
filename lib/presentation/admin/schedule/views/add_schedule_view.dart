@@ -7,7 +7,6 @@ import '../../../../common/bloc/button/button_state.dart';
 import '../../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../../common/helper/string_helper.dart';
 import '../../../../common/widget/appbar/basic_appbar.dart';
-import '../../../../common/widget/button/basic_button.dart';
 import '../../../../common/widget/dialog/confirmation_dialog.dart';
 import '../../../../common/widget/searchbar/search_teachers_views.dart';
 import '../../../../core/configs/assets/app_images.dart';
@@ -15,6 +14,7 @@ import '../../../../core/configs/theme/app_colors.dart';
 import '../../../../domain/entities/kelas/kelas.dart';
 import '../../../../domain/entities/teacher/teacher.dart';
 import '../../../../domain/usecases/schedule/create_class_usecase.dart';
+import '../../../auth/widgets/button_role.dart';
 import '../bloc/add_schedule_cubit.dart';
 import '../bloc/create_schedule_state.dart';
 import '../bloc/form_field_cubit.dart';
@@ -90,7 +90,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
               if (state is ButtonSuccessState) {
                 var snackbar = SnackBar(
                   content: Text(
-                    'Berhasil menambahkan jadwal untuk kelas //${_kelasC.text}',
+                    'Berhasil menambahkan jadwal untuk kelas ${_kelasC.text}',
                   ),
                   behavior: SnackBarBehavior.floating,
                 );
@@ -286,7 +286,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                   ),
                   Builder(builder: (context) {
                     final cubit = context.read<CreateScheduleCubit>();
-                    return BasicButton(
+                    return ButtonRole(
                       onPressed: () {
                         final allEmpty = cubit.state.schedules.values.every(
                           (list) => list.isEmpty,
