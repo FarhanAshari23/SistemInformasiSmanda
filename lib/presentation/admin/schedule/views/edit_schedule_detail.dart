@@ -126,7 +126,7 @@ class _EditScheduleDetailState extends State<EditScheduleDetailView> {
             listener: (context, state) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (_scrollController.hasClients) {
-                  double offsetAdjustment = (state == "show") ? -100 : 100;
+                  double offsetAdjustment = (state == "show") ? -80 : 80;
                   _scrollController.animateTo(
                     _scrollController.offset + offsetAdjustment,
                     duration: const Duration(milliseconds: 300),
