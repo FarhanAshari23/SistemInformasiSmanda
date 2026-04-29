@@ -136,11 +136,14 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
 
   @override
   Future<Either> acceptStudentAccount(int studentId) async {
+    FirebaseApp? secondaryApp;
+
     try {
       final response = await Network.apiClient.get("/student/id/$studentId");
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
+
       final data = StudentModel.fromMap(response.data['data']);
 
       final key = encrypt.Key.fromUtf8('1234567890123456');
@@ -148,8 +151,8 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
       final decryptedPassword = encrypter.decrypt64(data.password, iv: iv);
 
-      final FirebaseApp secondaryApp = await Firebase.initializeApp(
-        name: 'SecondaryApp',
+      secondaryApp = await Firebase.initializeApp(
+        name: 'SecondaryApp_${DateTime.now().millisecondsSinceEpoch}',
         options: Firebase.app().options,
       );
 
@@ -163,11 +166,12 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
 
       final updateRegister =
           await Network.apiClient.put("/student/$studentId/register");
-      if (updateRegister.statusCode == 500) {
-        return left("Connection error: ${updateRegister.message}");
+
+      if (updateRegister.statusCode != 200) {
+        return left("Backend update failed: ${updateRegister.message}");
       }
 
-      return const Right("Accept student account succes");
+      return const Right("Accept student account success");
     } on FirebaseAuthException catch (e) {
       String message = '';
       if (e.code == "weak-password") {
@@ -180,6 +184,8 @@ class StudentsFirebaseServiceImpl extends StudentsFirebaseService {
       return Left(message);
     } catch (e) {
       return Left('Something Wrong: $e');
+    } finally {
+      await secondaryApp?.delete();
     }
   }
 
