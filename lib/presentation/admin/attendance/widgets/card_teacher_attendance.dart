@@ -70,14 +70,20 @@ class CardTeacherAttendance extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                NetworkPhoto(
-                  imageUrl: DisplayImage.displayImageTeacher(
-                    teacher.picture ?? '',
+                Container(),
+                ClipRRect(
+                  borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(12),
                   ),
-                  fallbackAsset: fallbackAsset,
-                  height: mediaQueryHeight * 0.14,
-                  width: width * 0.235,
-                  forceRefresh: false,
+                  child: NetworkPhoto(
+                    imageUrl: DisplayImage.displayImageTeacher(
+                      teacher.picture ?? '',
+                    ),
+                    fallbackAsset: fallbackAsset,
+                    height: mediaQueryHeight * 0.14,
+                    width: width * 0.235,
+                    forceRefresh: false,
+                  ),
                 ),
                 Expanded(
                   child: Padding(
