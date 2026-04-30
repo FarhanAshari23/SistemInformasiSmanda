@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
+import '../../common/helper/app_navigation.dart';
+import '../../presentation/splash/views/no_internet_view.dart';
 import 'api_exception.dart';
 import 'api_response.dart';
 
@@ -182,9 +184,11 @@ class ApiClient {
 
       return _handleResponse(response);
     } on SocketException {
+      AppNavigator.navigateToErrorPage(const NoInternetView());
       throw ApiException(message: "Tidak ada koneksi internet.");
     } on TimeoutException {
-      throw ApiException(message: "Waktu koneksi habis. Silakan coba lagi.");
+      AppNavigator.navigateToErrorPage(const NoInternetView());
+      throw ApiException(message: "Waktu koneksi habis.");
     } catch (e) {
       throw ApiException(message: e.toString());
     }

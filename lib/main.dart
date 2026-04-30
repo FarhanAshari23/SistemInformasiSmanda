@@ -10,8 +10,10 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:new_sistem_informasi_smanda/firebase_options.dart';
 
+import 'common/helper/app_navigation.dart';
 import 'core/configs/theme/app_theme.dart';
 import 'presentation/splash/bloc/splash_cubit.dart';
+import 'presentation/splash/views/no_internet_view.dart';
 import 'presentation/splash/views/splash_view.dart';
 import 'service_locator.dart';
 
@@ -44,6 +46,10 @@ class MyApp extends StatelessWidget {
       create: (context) => SplashCubit()..appStarted(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        navigatorKey: AppNavigator.navigatorKey,
+        routes: {
+          '/no-internet': (context) => const NoInternetView(),
+        },
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

@@ -33,4 +33,5 @@ class AppImages {
   static const String emptyRegistrationChara = "${basePath}chibi_sma.png";
   static const String subjectsIcon = "${basePath}books.png";
   static const String roleIcon = "${basePath}roles.png";
+  static const String noInternet = "${basePath}connection_lost.png";
 }
