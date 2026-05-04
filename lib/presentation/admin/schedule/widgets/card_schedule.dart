@@ -454,7 +454,13 @@ class _CardScheduleState extends State<CardSchedule> {
         return Padding(
           padding: const EdgeInsets.only(bottom: 4),
           child: CustomInkWell(
-            onTap: () => cubitEditSchedule.toggleEdit(widget.index, widget.day),
+            onTap: () {
+              if (widget.currentTeacherId != null &&
+                  widget.schedule.teacherName == "Seluruh Siswa") {
+                return;
+              }
+              cubitEditSchedule.toggleEdit(widget.index, widget.day);
+            },
             borderRadius: 12,
             defaultColor: AppColors.primary,
             child: Padding(
