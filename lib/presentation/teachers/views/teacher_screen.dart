@@ -36,8 +36,36 @@ class TeacherScreen extends StatelessWidget {
           }
           if (state is TeacherListLoaded) {
             List<List<TeacherEntity>> teachersEntity = [
-              state.teachers,
-              state.teachers.where((e) => e.waliKelas!.isNotEmpty).toList(),
+              state.teachers.where((e) {
+                final tasks = e.tasksName ?? [];
+
+                return !tasks.any((t) => t.contains("Kepala Sekolah")) &&
+                    !tasks.any((t) => t.contains("Wakil Kepala Sekolah"));
+              }).toList(),
+              state.teachers
+                  .where((e) => e.waliKelas != null && e.waliKelas!.isNotEmpty)
+                  .toList()
+                ..sort((a, b) {
+                  final regex = RegExp(r'\d+');
+
+                  final matchesA = regex
+                      .allMatches(a.waliKelas!)
+                      .map((m) => int.parse(m.group(0)!))
+                      .toList();
+                  final matchesB = regex
+                      .allMatches(b.waliKelas!)
+                      .map((m) => int.parse(m.group(0)!))
+                      .toList();
+
+                  if (matchesA.length >= 2 && matchesB.length >= 2) {
+                    if (matchesA[0] != matchesB[0]) {
+                      return matchesA[0].compareTo(matchesB[0]);
+                    }
+                    return matchesA.last.compareTo(matchesB.last);
+                  }
+
+                  return a.waliKelas!.compareTo(b.waliKelas!);
+                }),
               state.teachers.where((e) {
                 final tasks = e.tasksName ?? [];
 
