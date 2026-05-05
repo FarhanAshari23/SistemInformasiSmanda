@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_sistem_informasi_smanda/common/widget/appbar/basic_appbar.dart';
+import 'package:new_sistem_informasi_smanda/core/configs/assets/app_images.dart';
 import 'package:new_sistem_informasi_smanda/core/configs/theme/app_colors.dart';
 import 'package:new_sistem_informasi_smanda/presentation/news/bloc/news_cubit.dart';
 import 'package:new_sistem_informasi_smanda/presentation/admin/news/widgets/card_news_edit.dart';
@@ -61,6 +62,26 @@ class EditNewsView extends StatelessWidget {
                     );
                   }
                   if (state is NewsFailure) {
+                    if (state.errorMessage ==
+                        "Something error: type 'Null' is not a subtype of type 'List<dynamic>' in type cast") {
+                      return Column(
+                        children: [
+                          Image.asset(
+                            AppImages.notfound,
+                            width: 250,
+                            height: 250,
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            "Belum ada pengumuman",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      );
+                    }
                     return Text(state.errorMessage);
                   }
                   return Container();

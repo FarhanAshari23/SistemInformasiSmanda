@@ -80,6 +80,32 @@ class EkskulScreen extends StatelessWidget {
                 );
               }
             }
+            if (state is EkskulFailure) {
+              if (state.errorMessage ==
+                  "Something error: type 'Null' is not a subtype of type 'List<dynamic>' in type cast") {
+                return Center(
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        AppImages.notfound,
+                        width: 250,
+                        height: 250,
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        "Belum ada ekskul",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return Text(state.errorMessage);
+              }
+            }
             return Container();
           },
         ),
