@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../../common/bloc/button/button.cubit.dart';
 import '../../../../common/bloc/button/button_state.dart';
 import '../../../../common/helper/app_navigation.dart';
 import '../../../../common/widget/appbar/basic_appbar.dart';
+import '../../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../../common/widget/landing/succes.dart';
 import '../../../../common/widget/searchbar/search_students_view.dart';
 import '../../../../common/widget/searchbar/search_teachers_views.dart';
@@ -13,6 +13,7 @@ import '../../../../core/configs/theme/app_colors.dart';
 import '../../../../domain/entities/ekskul/advisor.dart';
 import '../../../../domain/entities/ekskul/member.dart';
 import '../../../../domain/entities/ekskul/ekskul.dart';
+import '../../../../domain/entities/teacher/teacher.dart';
 import '../../../../domain/usecases/ekskul/create_ekskul.dart';
 import '../../../auth/widgets/button_role.dart';
 import '../../../home/views/home_view_admin.dart';
@@ -33,11 +34,12 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
   final TextEditingController _nameBendaharaC = TextEditingController();
   final TextEditingController _deskripsiC = TextEditingController();
 
-  final List<AdvisorEntity> _selectedPembina = [];
-  final List<MemberEntity> members = [];
+  List<AdvisorEntity>? _selectedPembina;
+  List<MemberEntity>? members;
 
   @override
   void initState() {
+    _selectedPembina = [];
     super.initState();
     _addTextField();
   }
@@ -172,22 +174,22 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                                     builder: (_) =>
                                         const SearchTeachersViews());
 
-                                final result =
+                                final TeacherEntity result =
                                     await Navigator.push(context, route);
 
-                                if (result != null) {
-                                  setState(() {
-                                    _selectedPembina.add(AdvisorEntity(
-                                      id: result.id,
-                                      status: "Aktif",
-                                      birthDate: result.birthDate,
-                                      gender: result.gender,
-                                      name: result.name,
-                                      nip: result.nip,
-                                      picture: result.picture,
-                                    ));
-                                  });
-                                }
+                                setState(() {
+                                  _selectedPembina!.add(AdvisorEntity(
+                                    id: result.id,
+                                    status: "Aktif",
+                                    birthDate: result.birthDate,
+                                    gender: result.gender,
+                                    name: result.name,
+                                    nip: result.nip,
+                                    picture: result.picture,
+                                  ));
+                                  _controllers[index].text =
+                                      result.name ?? "Kosong";
+                                });
                               },
                             ),
                           );
@@ -245,28 +247,31 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
 
                                   if (result != null) {
                                     setState(() {
+                                      members ??= [];
                                       String role = "";
                                       TextEditingController? targetController;
                                       switch (index) {
-                                        case 1:
+                                        case 0:
                                           role = "Ketua";
                                           targetController = _nameKetuaC;
                                           break;
-                                        case 2:
+                                        case 1:
                                           role = "Wakil Ketua";
                                           targetController = _nameWakilC;
                                           break;
-                                        case 3:
+                                        case 2:
                                           role = "Sekretaris";
                                           targetController = _nameSekretarisC;
                                           break;
-                                        case 4:
+                                        case 3:
                                           role = "Bendahara";
                                           targetController = _nameBendaharaC;
                                           break;
                                       }
                                       if (role.isNotEmpty) {
-                                        members.add(MemberEntity(
+                                        members!
+                                            .removeWhere((m) => m.role == role);
+                                        members!.add(MemberEntity(
                                           id: result.id,
                                           role: role,
                                           gender: result.gender,
@@ -306,8 +311,8 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                   return ButtonRole(
                     onPressed: () {
                       if (_namaEkskulC.text.isEmpty ||
-                          _selectedPembina.isEmpty ||
-                          members.isEmpty ||
+                          _selectedPembina == null ||
+                          members == null ||
                           _deskripsiC.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
