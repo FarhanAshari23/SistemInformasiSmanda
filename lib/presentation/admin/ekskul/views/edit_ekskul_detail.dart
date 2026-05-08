@@ -33,19 +33,19 @@ class EditEkskulDetail extends StatefulWidget {
 
 class _EditEkskulDetailState extends State<EditEkskulDetail> {
   late TextEditingController _nameEkskulC;
-  late TextEditingController _namePembinaC;
+  late List<TextEditingController> _controllers;
   late TextEditingController _nameKetuaC;
   late TextEditingController _nameWakilC;
   late TextEditingController _nameSekretarisC;
   late TextEditingController _nameBendaharaC;
   late TextEditingController _deskripsiC;
-  AdvisorEntity? selectedPembina;
+  late List<AdvisorEntity> selectedPembina;
   List<MemberEntity>? selectedAnggota;
 
   @override
   void initState() {
     selectedAnggota = widget.ekskul.members;
-    selectedPembina = widget.ekskul.advisor;
+    selectedPembina = widget.ekskul.advisors!;
     MemberEntity ketua =
         selectedAnggota!.where((element) => element.role == "Ketua").first;
     MemberEntity wakilKetua = selectedAnggota!
@@ -57,7 +57,9 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
         selectedAnggota!.where((element) => element.role == "Bendahara").first;
     super.initState();
     _nameEkskulC = TextEditingController(text: widget.ekskul.nameEkskul);
-    _namePembinaC = TextEditingController(text: selectedPembina!.name);
+    for (int i = 0; i < selectedPembina.length; i++) {
+      _controllers.add(TextEditingController(text: selectedPembina[i].name));
+    }
     _nameKetuaC = TextEditingController(text: ketua.name);
     _nameWakilC = TextEditingController(text: wakilKetua.name);
     _nameSekretarisC = TextEditingController(text: sekretaris.name);
@@ -69,7 +71,9 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
   void dispose() {
     super.dispose();
     _nameEkskulC.dispose();
-    _namePembinaC.dispose();
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
     _nameKetuaC.dispose();
     _nameWakilC.dispose();
     _nameSekretarisC.dispose();
@@ -309,29 +313,35 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                         ),
                       ),
                       SizedBox(height: height * 0.02),
-                      CardAnggota(
-                        pembina: selectedPembina,
-                        title: _namePembinaC.text,
-                        desc: "Pembina",
-                        onTap: () async {
-                          TeacherEntity result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SearchTeachersViews(),
-                            ),
+                      ...List.generate(
+                        selectedPembina.length,
+                        (index) {
+                          return CardAnggota(
+                            pembina: selectedPembina[index],
+                            title: _controllers[index].text,
+                            desc: "Pembina",
+                            onTap: () async {
+                              TeacherEntity result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SearchTeachersViews(),
+                                ),
+                              );
+                              setState(() {
+                                selectedPembina.add(AdvisorEntity(
+                                  id: result.id,
+                                  status: "Aktif",
+                                  birthDate: result.birthDate,
+                                  gender: result.gender,
+                                  name: result.name,
+                                  nip: result.nip,
+                                  picture: result.picture,
+                                ));
+                                _controllers[index].text = result.name ?? '';
+                              });
+                            },
                           );
-                          setState(() {
-                            selectedPembina = AdvisorEntity(
-                              id: result.id,
-                              status: "Aktif",
-                              birthDate: result.birthDate,
-                              gender: result.gender,
-                              name: result.name,
-                              nip: result.nip,
-                              picture: result.picture,
-                            );
-                            _namePembinaC.text = result.name ?? '';
-                          });
                         },
                       ),
                       SizedBox(height: height * 0.01),
@@ -489,7 +499,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                               usecase: UpdateEkskulUsecase(),
                               params: EkskulEntity(
                                 id: widget.ekskul.id,
-                                advisor: selectedPembina,
+                                advisors: selectedPembina,
                                 description: _deskripsiC.text,
                                 members: finalMembers,
                                 nameEkskul: _nameEkskulC.text,

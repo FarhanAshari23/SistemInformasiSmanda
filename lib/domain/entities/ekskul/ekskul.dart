@@ -4,12 +4,12 @@ import 'member.dart';
 class EkskulEntity {
   int? id;
   String? nameEkskul, description;
-  AdvisorEntity? advisor;
+  List<AdvisorEntity>? advisors;
   List<MemberEntity>? members;
 
   EkskulEntity({
     this.id,
-    this.advisor,
+    this.advisors,
     this.description,
     this.members,
     this.nameEkskul,
@@ -19,14 +19,14 @@ class EkskulEntity {
     int? id,
     String? nameEkskul,
     String? description,
-    AdvisorEntity? advisor,
+    List<AdvisorEntity>? advisors,
     List<MemberEntity>? members,
   }) {
     return EkskulEntity(
       id: id ?? this.id,
       description: description ?? this.description,
       nameEkskul: nameEkskul ?? this.nameEkskul,
-      advisor: advisor ?? this.advisor,
+      advisors: advisors ?? this.advisors,
       members: members ?? this.members,
     );
   }

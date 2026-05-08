@@ -36,7 +36,7 @@ class CardEkskul extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              crossAxisAlignment: ekskul.advisor!.name!.length > 25
+              crossAxisAlignment: ekskul.advisors![0].name!.length > 25
                   ? CrossAxisAlignment.start
                   : CrossAxisAlignment.center,
               children: [
@@ -56,7 +56,7 @@ class CardEkskul extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    ekskul.advisor!.name ?? '',
+                    ekskul.advisors![0].name ?? '',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -71,7 +71,7 @@ class CardEkskul extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              crossAxisAlignment: ekskul.advisor!.name!.length > 25
+              crossAxisAlignment: ekskul.advisors![0].name!.length > 25
                   ? CrossAxisAlignment.start
                   : CrossAxisAlignment.center,
               children: [

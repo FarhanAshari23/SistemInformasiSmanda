@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import '../../../domain/entities/ekskul/advisor.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
 import 'advisor.dart';
 import 'member.dart';
@@ -8,11 +7,11 @@ import 'member.dart';
 class EkskulModel {
   final int id;
   final String name, description;
-  final AdvisorModel advisor;
+  final List<AdvisorModel> advisors;
   final List<MemberModel> members;
 
   EkskulModel({
-    required this.advisor,
+    required this.advisors,
     required this.description,
     required this.id,
     required this.members,
@@ -24,7 +23,7 @@ class EkskulModel {
       'id': id,
       'name': name,
       'description': description,
-      'advisor': advisor.toMap(),
+      'advisor': advisors.map((x) => x.toMap()).toList(),
       'memberships': members.map((x) => x.toMap()).toList(),
     };
   }
@@ -33,7 +32,7 @@ class EkskulModel {
     return {
       'name': name,
       'description': description,
-      'advisor': advisor.createMap(),
+      'advisor': advisors.map((x) => x.createMap()).toList(),
       'memberships': members.map((x) => x.createMap()).toList(),
     };
   }
@@ -43,7 +42,7 @@ class EkskulModel {
       'id': id,
       'name': name,
       'description': description,
-      'advisor': advisor.createMap(),
+      'advisor': advisors.map((x) => x.createMap()).toList(),
       'memberships': members.map((x) => x.createMap()).toList(),
     };
   }
@@ -53,7 +52,10 @@ class EkskulModel {
       id: map['id'] ?? 0,
       name: map['name'] ?? '',
       description: map['description'] ?? '',
-      advisor: AdvisorModel.fromMap(map['advisor'] ?? {}),
+      advisors: map['advisor'] != null
+          ? List<AdvisorModel>.from(
+              map['advisor'].map((x) => AdvisorModel.fromMap(x)))
+          : [],
       members: map['memberships'] != null
           ? List<MemberModel>.from(
               map['memberships'].map((x) => MemberModel.fromMap(x)))
@@ -73,7 +75,7 @@ extension EkskulModelX on EkskulModel {
       id: id,
       nameEkskul: name,
       description: description,
-      advisor: advisor.toEntity(),
+      advisors: advisors.map((e) => e.toEntity()).toList(),
       members: members.map((e) => e.toEntity()).toList(),
     );
   }
@@ -83,7 +85,9 @@ extension EkskulModelX on EkskulModel {
       id: 0,
       name: entity.nameEkskul ?? '',
       description: entity.description ?? '',
-      advisor: AdvisorModelX.fromEntity(entity.advisor ?? AdvisorEntity()),
+      advisors:
+          entity.advisors?.map((e) => AdvisorModelX.fromEntity(e)).toList() ??
+              [],
       members:
           entity.members?.map((e) => MemberModelX.fromEntity(e)).toList() ?? [],
     );

@@ -11,8 +11,6 @@ import '../../../../common/widget/searchbar/search_teachers_views.dart';
 import '../../../../core/configs/theme/app_colors.dart';
 import '../../../../domain/entities/ekskul/advisor.dart';
 import '../../../../domain/entities/ekskul/member.dart';
-import '../../../../domain/entities/student/student.dart';
-import '../../../../domain/entities/teacher/teacher.dart';
 import '../../../../domain/entities/ekskul/ekskul.dart';
 import '../../../../domain/usecases/ekskul/create_ekskul.dart';
 import '../../../auth/widgets/button_role.dart';
@@ -26,22 +24,36 @@ class AddDataEkskulView extends StatefulWidget {
 }
 
 class _AddDataEkskulViewState extends State<AddDataEkskulView> {
+  final List<TextEditingController> _controllers = [];
   final TextEditingController _namaEkskulC = TextEditingController();
-  final TextEditingController _namePembinaC = TextEditingController();
   final TextEditingController _nameKetuaC = TextEditingController();
   final TextEditingController _nameWakilC = TextEditingController();
   final TextEditingController _nameSekretarisC = TextEditingController();
   final TextEditingController _nameBendaharaC = TextEditingController();
   final TextEditingController _deskripsiC = TextEditingController();
 
-  AdvisorEntity? _selectedPembina;
-  List<MemberEntity>? members;
+  final List<AdvisorEntity> _selectedPembina = [];
+  final List<MemberEntity> members = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _addTextField();
+  }
+
+  void _addTextField() {
+    setState(() {
+      _controllers.add(TextEditingController());
+    });
+  }
 
   @override
   void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
     super.dispose();
     _namaEkskulC.dispose();
-    _namePembinaC.dispose();
     _nameKetuaC.dispose();
     _nameWakilC.dispose();
     _nameSekretarisC.dispose();
@@ -54,32 +66,18 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
     double height = MediaQuery.of(context).size.height;
 
     List<TextEditingController> listC = [
-      _namaEkskulC,
-      _namePembinaC,
       _nameKetuaC,
       _nameWakilC,
       _nameSekretarisC,
       _nameBendaharaC,
-      _deskripsiC,
     ];
     List<String> hintText = [
-      'Nama Ekstrakulikuler:',
-      'Nama Pembina:',
       'Nama Ketua',
       'Nama Wakil Ketua',
       'Nama Sekretaris',
       'Nama Bendahara',
-      'Deskripsi:'
     ];
-    List<int> maxLines = [
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      5,
-    ];
+
     return BlocProvider(
       create: (context) => ButtonStateCubit(),
       child: BlocListener<ButtonStateCubit, ButtonState>(
@@ -119,112 +117,139 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                 ),
                 SizedBox(height: height * 0.02),
                 Expanded(
-                  child: ListView.separated(
+                  child: ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemBuilder: (context, index) {
-                      if (index == 0 || index == 6) {
-                        return TextField(
-                          controller: listC[index],
-                          maxLines: maxLines[index],
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                            labelText: hintText[index],
-                            labelStyle: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        );
-                      }
-                      return TextField(
-                        readOnly: true,
-                        controller: listC[index],
-                        maxLines: maxLines[index],
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      TextField(
+                        controller: _namaEkskulC,
+                        maxLines: 1,
                         autocorrect: false,
-                        decoration: InputDecoration(
-                          labelText: hintText[index],
-                          labelStyle: const TextStyle(
+                        decoration: const InputDecoration(
+                          labelText: 'Nama Ekstrakulikuler:',
+                          labelStyle: TextStyle(
                             fontSize: 12,
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        onTap: () async {
-                          final route = (index == 1)
-                              ? MaterialPageRoute(
-                                  builder: (_) => const SearchTeachersViews())
-                              : MaterialPageRoute(
-                                  builder: (_) => const SearchStudentsView());
+                      ),
+                      ListView.separated(
+                        itemBuilder: (context, index) {
+                          return TextField(
+                            readOnly: true,
+                            controller: _controllers[index],
+                            autocorrect: false,
+                            decoration: InputDecoration(
+                              labelText: hintText[index],
+                              labelStyle: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            onTap: () async {
+                              final route = MaterialPageRoute(
+                                  builder: (_) => const SearchTeachersViews());
 
-                          final result = await Navigator.push(context, route);
+                              final result =
+                                  await Navigator.push(context, route);
 
-                          if (result != null) {
-                            setState(() {
-                              if (index == 1 && result is TeacherEntity) {
-                                _selectedPembina = AdvisorEntity(
-                                  id: result.id,
-                                  status: "Aktif",
-                                  birthDate: result.birthDate,
-                                  gender: result.gender,
-                                  name: result.name,
-                                  nip: result.nip,
-                                  picture: result.picture,
-                                );
-                                _namePembinaC.text = result.name ?? '';
-                              } else if (result is StudentEntity) {
-                                members ??= [];
-                                String role = "";
-                                TextEditingController? targetController;
-
-                                switch (index) {
-                                  case 2:
-                                    role = "Ketua";
-                                    targetController = _nameKetuaC;
-                                    break;
-                                  case 3:
-                                    role = "Wakil Ketua";
-                                    targetController = _nameWakilC;
-                                    break;
-                                  case 4:
-                                    role = "Sekretaris";
-                                    targetController = _nameSekretarisC;
-                                    break;
-                                  case 5:
-                                    role = "Bendahara";
-                                    targetController = _nameBendaharaC;
-                                    break;
-                                }
-                                if (role.isNotEmpty) {
-                                  members!.add(MemberEntity(
+                              if (result != null) {
+                                setState(() {
+                                  _selectedPembina.add(AdvisorEntity(
                                     id: result.id,
-                                    role: role,
+                                    status: "Aktif",
+                                    birthDate: result.birthDate,
                                     gender: result.gender,
                                     name: result.name,
-                                    nisn: result.nisn,
+                                    nip: result.nip,
                                     picture: result.picture,
-                                    religion: result.religion,
                                   ));
-                                  targetController?.text = result.name ?? '';
-                                }
+                                });
                               }
-                            });
-                          }
+                            },
+                          );
                         },
-                      );
-                    },
-                    separatorBuilder: (context, index) => SizedBox(
-                      height: height * 0.01,
-                    ),
-                    itemCount: listC.length,
+                        separatorBuilder: (context, index) => SizedBox(
+                          height: height * 0.01,
+                        ),
+                        itemCount: listC.length,
+                      ),
+                      Column(
+                        children: List.generate(
+                          4,
+                          (index) {
+                            return TextField(
+                              readOnly: true,
+                              controller: listC[index],
+                              autocorrect: false,
+                              decoration: InputDecoration(
+                                labelText: hintText[index],
+                                labelStyle: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              onTap: () async {
+                                final route = MaterialPageRoute(
+                                    builder: (_) => const SearchStudentsView());
+
+                                final result =
+                                    await Navigator.push(context, route);
+
+                                if (result != null) {
+                                  setState(() {
+                                    String role = "";
+                                    TextEditingController? targetController;
+                                    switch (index) {
+                                      case 1:
+                                        role = "Ketua";
+                                        targetController = _nameKetuaC;
+                                        break;
+                                      case 2:
+                                        role = "Wakil Ketua";
+                                        targetController = _nameWakilC;
+                                        break;
+                                      case 3:
+                                        role = "Sekretaris";
+                                        targetController = _nameSekretarisC;
+                                        break;
+                                      case 4:
+                                        role = "Bendahara";
+                                        targetController = _nameBendaharaC;
+                                        break;
+                                    }
+                                    if (role.isNotEmpty) {
+                                      members.add(MemberEntity(
+                                        id: result.id,
+                                        role: role,
+                                        gender: result.gender,
+                                        name: result.name,
+                                        nisn: result.nisn,
+                                        picture: result.picture,
+                                        religion: result.religion,
+                                      ));
+                                      targetController?.text =
+                                          result.name ?? '';
+                                    }
+                                  });
+                                }
+                              },
+                            );
+                          },
+                        ),
+                      )
+                    ],
                   ),
                 ),
                 Builder(builder: (context) {
                   return ButtonRole(
                     onPressed: () {
                       if (_namaEkskulC.text.isEmpty ||
-                          _selectedPembina == null ||
-                          members == null ||
+                          _selectedPembina.isEmpty ||
+                          members.isEmpty ||
                           _deskripsiC.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -241,7 +266,7 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                         context.read<ButtonStateCubit>().execute(
                               usecase: CreateEkskulUseCase(),
                               params: EkskulEntity(
-                                advisor: _selectedPembina,
+                                advisors: _selectedPembina,
                                 description: _deskripsiC.text,
                                 members: members,
                                 nameEkskul: _namaEkskulC.text,
