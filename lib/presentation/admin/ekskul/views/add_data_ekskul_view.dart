@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../../common/bloc/button/button.cubit.dart';
 import '../../../../common/bloc/button/button_state.dart';
@@ -134,113 +135,170 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                           ),
                         ),
                       ),
-                      ListView.separated(
-                        itemBuilder: (context, index) {
-                          return TextField(
-                            readOnly: true,
-                            controller: _controllers[index],
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              labelText: hintText[index],
-                              labelStyle: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            onTap: () async {
-                              final route = MaterialPageRoute(
-                                  builder: (_) => const SearchTeachersViews());
-
-                              final result =
-                                  await Navigator.push(context, route);
-
-                              if (result != null) {
-                                setState(() {
-                                  _selectedPembina.add(AdvisorEntity(
-                                    id: result.id,
-                                    status: "Aktif",
-                                    birthDate: result.birthDate,
-                                    gender: result.gender,
-                                    name: result.name,
-                                    nip: result.nip,
-                                    picture: result.picture,
-                                  ));
-                                });
-                              }
-                            },
-                          );
-                        },
-                        separatorBuilder: (context, index) => SizedBox(
-                          height: height * 0.01,
-                        ),
-                        itemCount: listC.length,
-                      ),
+                      SizedBox(height: height * 0.02),
                       Column(
-                        children: List.generate(
-                          4,
-                          (index) {
-                            return TextField(
+                          children: List.generate(
+                        _controllers.length,
+                        (index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: TextField(
                               readOnly: true,
-                              controller: listC[index],
+                              controller: _controllers[index],
                               autocorrect: false,
                               decoration: InputDecoration(
-                                labelText: hintText[index],
+                                labelText: "Nama Pembina",
                                 labelStyle: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,
                                 ),
+                                suffixIcon: index > 0
+                                    ? IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _controllers.removeAt(index);
+                                          });
+                                        },
+                                        icon: const Icon(
+                                          Icons.remove,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : null,
                               ),
                               onTap: () async {
                                 final route = MaterialPageRoute(
-                                    builder: (_) => const SearchStudentsView());
+                                    builder: (_) =>
+                                        const SearchTeachersViews());
 
                                 final result =
                                     await Navigator.push(context, route);
 
                                 if (result != null) {
                                   setState(() {
-                                    String role = "";
-                                    TextEditingController? targetController;
-                                    switch (index) {
-                                      case 1:
-                                        role = "Ketua";
-                                        targetController = _nameKetuaC;
-                                        break;
-                                      case 2:
-                                        role = "Wakil Ketua";
-                                        targetController = _nameWakilC;
-                                        break;
-                                      case 3:
-                                        role = "Sekretaris";
-                                        targetController = _nameSekretarisC;
-                                        break;
-                                      case 4:
-                                        role = "Bendahara";
-                                        targetController = _nameBendaharaC;
-                                        break;
-                                    }
-                                    if (role.isNotEmpty) {
-                                      members.add(MemberEntity(
-                                        id: result.id,
-                                        role: role,
-                                        gender: result.gender,
-                                        name: result.name,
-                                        nisn: result.nisn,
-                                        picture: result.picture,
-                                        religion: result.religion,
-                                      ));
-                                      targetController?.text =
-                                          result.name ?? '';
-                                    }
+                                    _selectedPembina.add(AdvisorEntity(
+                                      id: result.id,
+                                      status: "Aktif",
+                                      birthDate: result.birthDate,
+                                      gender: result.gender,
+                                      name: result.name,
+                                      nip: result.nip,
+                                      picture: result.picture,
+                                    ));
                                   });
                                 }
                               },
+                            ),
+                          );
+                        },
+                      )),
+                      Row(
+                        children: [
+                          Expanded(child: Container()),
+                          Visibility(
+                            visible: _controllers.length < 2,
+                            child: CustomInkWell(
+                              borderRadius: 12,
+                              onTap: _addTextField,
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Tambah Pembina",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Column(
+                        children: List.generate(
+                          4,
+                          (index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: TextField(
+                                readOnly: true,
+                                controller: listC[index],
+                                autocorrect: false,
+                                decoration: InputDecoration(
+                                  labelText: hintText[index],
+                                  labelStyle: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                onTap: () async {
+                                  final route = MaterialPageRoute(
+                                      builder: (_) =>
+                                          const SearchStudentsView());
+
+                                  final result =
+                                      await Navigator.push(context, route);
+
+                                  if (result != null) {
+                                    setState(() {
+                                      String role = "";
+                                      TextEditingController? targetController;
+                                      switch (index) {
+                                        case 1:
+                                          role = "Ketua";
+                                          targetController = _nameKetuaC;
+                                          break;
+                                        case 2:
+                                          role = "Wakil Ketua";
+                                          targetController = _nameWakilC;
+                                          break;
+                                        case 3:
+                                          role = "Sekretaris";
+                                          targetController = _nameSekretarisC;
+                                          break;
+                                        case 4:
+                                          role = "Bendahara";
+                                          targetController = _nameBendaharaC;
+                                          break;
+                                      }
+                                      if (role.isNotEmpty) {
+                                        members.add(MemberEntity(
+                                          id: result.id,
+                                          role: role,
+                                          gender: result.gender,
+                                          name: result.name,
+                                          nisn: result.nisn,
+                                          picture: result.picture,
+                                          religion: result.religion,
+                                        ));
+                                        targetController?.text =
+                                            result.name ?? '';
+                                      }
+                                    });
+                                  }
+                                },
+                              ),
                             );
                           },
                         ),
-                      )
+                      ),
+                      TextField(
+                        controller: _deskripsiC,
+                        maxLines: 5,
+                        autocorrect: false,
+                        decoration: const InputDecoration(
+                          labelText: 'Deskripsi:',
+                          labelStyle: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
