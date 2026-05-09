@@ -44,27 +44,27 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
 
   @override
   void initState() {
-    selectedAnggota = widget.ekskul.members;
-    selectedPembina = widget.ekskul.advisors!;
-    MemberEntity ketua =
-        selectedAnggota!.where((element) => element.role == "Ketua").first;
-    MemberEntity wakilKetua = selectedAnggota!
-        .where((element) => element.role == "Wakil Ketua")
-        .first;
-    MemberEntity sekretaris =
-        selectedAnggota!.where((element) => element.role == "Sekretaris").first;
-    MemberEntity bendahara =
-        selectedAnggota!.where((element) => element.role == "Bendahara").first;
     super.initState();
+
+    selectedAnggota = List.from(widget.ekskul.members ?? []);
+    selectedPembina = List.from(widget.ekskul.advisors ?? []);
+    _controllers = [];
+
+    MemberEntity findRole(String role) => selectedAnggota!.firstWhere(
+          (e) => e.role == role,
+          orElse: () => MemberEntity(role: role, name: ''),
+        );
+
     _nameEkskulC = TextEditingController(text: widget.ekskul.nameEkskul);
-    for (int i = 0; i < selectedPembina.length; i++) {
-      _controllers.add(TextEditingController(text: selectedPembina[i].name));
-    }
-    _nameKetuaC = TextEditingController(text: ketua.name);
-    _nameWakilC = TextEditingController(text: wakilKetua.name);
-    _nameSekretarisC = TextEditingController(text: sekretaris.name);
-    _nameBendaharaC = TextEditingController(text: bendahara.name);
+    _nameKetuaC = TextEditingController(text: findRole("Ketua").name);
+    _nameWakilC = TextEditingController(text: findRole("Wakil Ketua").name);
+    _nameSekretarisC = TextEditingController(text: findRole("Sekretaris").name);
+    _nameBendaharaC = TextEditingController(text: findRole("Bendahara").name);
     _deskripsiC = TextEditingController(text: widget.ekskul.description);
+
+    for (var pembina in selectedPembina) {
+      _controllers.add(TextEditingController(text: pembina.name));
+    }
   }
 
   @override
@@ -316,35 +316,37 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                       ...List.generate(
                         selectedPembina.length,
                         (index) {
-                          return CardAnggota(
-                            pembina: selectedPembina[index],
-                            title: _controllers[index].text,
-                            desc: "Pembina",
-                            onTap: () async {
-                              TeacherEntity result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SearchTeachersViews(),
-                                ),
-                              );
-                              setState(() {
-                                selectedPembina.add(AdvisorEntity(
-                                  id: result.id,
-                                  status: "Aktif",
-                                  birthDate: result.birthDate,
-                                  gender: result.gender,
-                                  name: result.name,
-                                  nip: result.nip,
-                                  picture: result.picture,
-                                ));
-                                _controllers[index].text = result.name ?? '';
-                              });
-                            },
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: height * 0.01),
+                            child: CardAnggota(
+                              pembina: selectedPembina[index],
+                              title: _controllers[index].text,
+                              desc: "Pembina",
+                              onTap: () async {
+                                TeacherEntity result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SearchTeachersViews(),
+                                  ),
+                                );
+                                setState(() {
+                                  selectedPembina[index] = AdvisorEntity(
+                                    id: result.id,
+                                    status: "Aktif",
+                                    birthDate: result.birthDate,
+                                    gender: result.gender,
+                                    name: result.name,
+                                    nip: result.nip,
+                                    picture: result.picture,
+                                  );
+                                  _controllers[index].text = result.name ?? '';
+                                });
+                              },
+                            ),
                           );
                         },
                       ),
-                      SizedBox(height: height * 0.01),
                       ...List.generate(jabatan.length, (index) {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 8),
@@ -450,8 +452,10 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                           buttonTitle: 'Hapus',
                                           onPressed: () {
                                             setState(() {
-                                              members.removeWhere((element) =>
-                                                  element.nisn == anggota.nisn);
+                                              selectedAnggota!.removeWhere(
+                                                  (element) =>
+                                                      element.nisn ==
+                                                      anggota.nisn);
                                             });
                                           },
                                         );

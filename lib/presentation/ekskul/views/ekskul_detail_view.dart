@@ -112,12 +112,16 @@ class EkskulDetail extends StatelessWidget {
                   SizedBox(height: height * 0.01),
                   Center(
                       child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
                       ekskul.advisors!.length,
                       (index) {
-                        return CardAnggotaEkskul(
-                          pembina: ekskul.advisors![index],
-                          jabatan: 'Pembina',
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 4),
+                          child: CardAnggotaEkskul(
+                            pembina: ekskul.advisors![index],
+                            jabatan: 'Pembina',
+                          ),
                         );
                       },
                     ),

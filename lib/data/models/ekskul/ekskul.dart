@@ -82,7 +82,7 @@ extension EkskulModelX on EkskulModel {
 
   static EkskulModel fromEntity(EkskulEntity entity) {
     return EkskulModel(
-      id: 0,
+      id: entity.id ?? 0,
       name: entity.nameEkskul ?? '',
       description: entity.description ?? '',
       advisors:

@@ -46,38 +46,49 @@ class CardEkskulEdit extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: ekskul.advisors![0].name!.length > 25
-                      ? CrossAxisAlignment.start
-                      : CrossAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.manage_accounts,
-                      color: AppColors.inversePrimary,
-                    ),
-                    const SizedBox(width: 3),
-                    const Text(
-                      ': ',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.inversePrimary,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                    Expanded(
-                      child: Text(
-                        ekskul.advisors![0].name ?? '',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.inversePrimary,
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
+                  children: List.generate(
+                    ekskul.advisors!.length,
+                    (index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          crossAxisAlignment:
+                              ekskul.advisors![index].name!.length > 25
+                                  ? CrossAxisAlignment.start
+                                  : CrossAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.manage_accounts,
+                              color: AppColors.inversePrimary,
+                            ),
+                            const SizedBox(width: 3),
+                            const Text(
+                              ': ',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.inversePrimary,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                            Expanded(
+                              child: Text(
+                                ekskul.advisors![index].name ?? '',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.inversePrimary,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                          ],
                         ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                 ),
               ),
               Padding(
