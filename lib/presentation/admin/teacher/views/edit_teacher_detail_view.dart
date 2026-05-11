@@ -3,16 +3,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:new_sistem_informasi_smanda/common/bloc/button/button.cubit.dart';
 
 import '../../../../common/bloc/activities/get_activities_cubit.dart';
+import '../../../../common/bloc/button/button.cubit.dart';
 import '../../../../common/bloc/button/button_state.dart';
 import '../../../../common/bloc/gender/gender_selection_cubit.dart';
 import '../../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../../common/bloc/teacher/teacher_cubit.dart';
+import '../../../../common/helper/display_image.dart';
 import '../../../../common/widget/appbar/basic_appbar.dart';
 import '../../../../common/widget/card/box_gender.dart';
 import '../../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../../common/widget/photo/network_photo.dart';
+import '../../../../core/configs/assets/app_images.dart';
 import '../../../../core/configs/theme/app_colors.dart';
 import '../../../../domain/entities/teacher/role.dart';
 import '../../../../domain/entities/teacher/teacher.dart';
@@ -60,18 +63,6 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> hinttext = [
-      'Nama:',
-      'NIP:',
-      'Tanggal Lahir:',
-      'Tugas Tambahan:'
-    ];
-    List<TextEditingController> controller = [
-      _namaC,
-      _nipC,
-      _tanggalC,
-      _jabatanC,
-    ];
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -143,23 +134,226 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
                 ),
                 SizedBox(height: height * 0.02),
                 Expanded(
-                  child: SingleChildScrollView(
+                  child: ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      children: List.generate(5, (index) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: height * 0.01),
-                          child: _buildFieldByIndex(
+                    children: [
+                      TextField(
+                        controller: _namaC,
+                        decoration: const InputDecoration(
+                          hintText: 'Nama:',
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _nipC,
+                        decoration: const InputDecoration(
+                          hintText: 'NIP:',
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _tanggalC,
+                        readOnly: true,
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
                             context: context,
-                            index: index,
-                            width: width,
-                            height: height,
-                            hinttext: hinttext,
-                            controller: controller,
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now(),
+                            initialDate: DateTime.now(),
+                            locale: const Locale('id', 'ID'),
+                            confirmText: "Oke",
+                            cancelText: "Keluar",
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  inputDecorationTheme: InputDecorationTheme(
+                                    filled: true,
+                                    fillColor: AppColors.inversePrimary,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                                child: child!,
+                              );
+                            },
+                          );
+                          _tanggalC.text = DateFormat("d MMMM y", "id_ID")
+                              .format(pickedDate ?? DateTime.now());
+                        },
+                        autocorrect: false,
+                        decoration: const InputDecoration(
+                          hintText: 'Tanggal Lahir:',
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _jabatanC,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          hintText: 'Tugas Tambahan:',
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              _jabatanC.text = '';
+                            },
+                            icon: const Icon(
+                              Icons.delete_forever_rounded,
+                              color: Colors.white,
+                            ),
                           ),
-                        );
-                      }),
-                    ),
+                        ),
+                        onTap: () async {
+                          List<RoleEntity>? result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SelectJabatanView(),
+                            ),
+                          );
+                          if (result != null) {
+                            List<String> name = [];
+                            for (var i = 0; i < result.length; i++) {
+                              name.add(result[i].name);
+                              id.add(result[i].id);
+                            }
+                            _jabatanC.text = name.join(", ");
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Jenis Kelamin: ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              BlocBuilder<GenderSelectionCubit, int>(
+                                builder: (context, state) {
+                                  return Column(
+                                    children: [
+                                      BoxGender(
+                                        gender: 'Laki-laki',
+                                        context: context,
+                                        genderIndex: 1,
+                                      ),
+                                      SizedBox(height: width * 0.01),
+                                      BoxGender(
+                                        gender: 'Perempuan',
+                                        context: context,
+                                        genderIndex: 2,
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: CustomInkWell(
+                                borderRadius: 12,
+                                defaultColor: AppColors.secondary,
+                                onTap: () async {
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChangePhotoView(
+                                        picture:
+                                            "${widget.teacher.name}_${widget.teacher.nip ?? widget.teacher.birthDate}",
+                                      ),
+                                    ),
+                                  );
+                                  if (result != null) {
+                                    setState(() {
+                                      imageProfile = result;
+                                    });
+                                  }
+                                },
+                                child: SizedBox(
+                                    height: height * 0.12,
+                                    child: const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.white,
+                                          size: 24,
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          "Ubah Photo",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      (imageProfile != null ||
+                              (widget.teacher.picture != null &&
+                                  widget.teacher.picture!.isNotEmpty))
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Tampilan Foto: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                imageProfile != null
+                                    ? Container(
+                                        width: width * 0.4,
+                                        height: width * 0.5,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          image: DecorationImage(
+                                            image: FileImage(imageProfile!),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(16),
+                                        child: NetworkPhoto(
+                                          width: width * 0.4,
+                                          height: width * 0.5,
+                                          imageUrl:
+                                              DisplayImage.displayImageTeacher(
+                                                  widget.teacher.picture!),
+                                          fallbackAsset:
+                                              widget.teacher.gender == 1
+                                                  ? AppImages.tendikLaki
+                                                  : AppImages.tendikPerempuan,
+                                        ),
+                                      ),
+                              ],
+                            )
+                          : const SizedBox()
+                    ],
                   ),
                 ),
                 Builder(builder: (context) {
@@ -205,186 +399,6 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildFieldByIndex({
-    required BuildContext context,
-    required int index,
-    required double width,
-    required double height,
-    required List<String> hinttext,
-    required List<TextEditingController> controller,
-  }) {
-    if (index == 2) {
-      return TextField(
-        controller: _tanggalC,
-        readOnly: true,
-        onTap: () async {
-          DateTime? pickedDate = await showDatePicker(
-            context: context,
-            firstDate: DateTime(1900),
-            lastDate: DateTime.now(),
-            initialDate: DateTime.now(),
-            locale: const Locale('id', 'ID'),
-            confirmText: "Oke",
-            cancelText: "Keluar",
-            builder: (context, child) {
-              return Theme(
-                data: Theme.of(context).copyWith(
-                  inputDecorationTheme: InputDecorationTheme(
-                    filled: true,
-                    fillColor: AppColors
-                        .inversePrimary, // warna background field input tanggal
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-                child: child!,
-              );
-            },
-          );
-          _tanggalC.text = DateFormat("d MMMM y", "id_ID")
-              .format(pickedDate ?? DateTime.now());
-        },
-        autocorrect: false,
-        decoration: const InputDecoration(
-          hintText: 'Tanggal Lahir:',
-        ),
-      );
-    } else if (index == 3) {
-      return TextField(
-        controller: controller[index],
-        readOnly: true,
-        decoration: InputDecoration(
-          hintText: hinttext[index],
-          suffixIcon: IconButton(
-            onPressed: () {
-              controller[index].text = '';
-            },
-            icon: const Icon(
-              Icons.delete_forever_rounded,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        onTap: () async {
-          List<RoleEntity>? result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SelectJabatanView(),
-            ),
-          );
-          if (result != null) {
-            List<String> name = [];
-            for (var i = 0; i < result.length; i++) {
-              name.add(result[i].name);
-              id.add(result[i].id);
-            }
-            controller[index].text = name.join(", ");
-          }
-        },
-      );
-    } else if (index == 4) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Jenis Kelamin: ',
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  color: AppColors.primary,
-                ),
-              ),
-              const SizedBox(height: 4),
-              BlocBuilder<GenderSelectionCubit, int>(
-                builder: (context, state) {
-                  return Column(
-                    children: [
-                      BoxGender(
-                        gender: 'Laki-laki',
-                        context: context,
-                        genderIndex: 1,
-                      ),
-                      SizedBox(height: width * 0.01),
-                      BoxGender(
-                        gender: 'Perempuan',
-                        context: context,
-                        genderIndex: 2,
-                      )
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: CustomInkWell(
-                borderRadius: 12,
-                defaultColor: AppColors.secondary,
-                onTap: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChangePhotoView(
-                        teacher: widget.teacher,
-                      ),
-                    ),
-                  );
-                  if (result != null) {
-                    imageProfile = result;
-                  }
-                },
-                child: SizedBox(
-                    height: height * 0.12,
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.camera_alt,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          "Ubah Photo",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    )),
-              ),
-            ),
-          )
-        ],
-      );
-    } else if (index == 1) {
-      return TextField(
-        keyboardType: TextInputType.number,
-        controller: controller[index],
-        decoration: InputDecoration(
-          hintText: hinttext[index],
-        ),
-      );
-    }
-
-    // Default TextField
-    return TextField(
-      controller: controller[index],
-      decoration: InputDecoration(
-        hintText: hinttext[index],
       ),
     );
   }

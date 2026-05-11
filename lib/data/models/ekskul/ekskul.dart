@@ -9,6 +9,7 @@ class EkskulModel {
   final String name, description;
   final List<AdvisorModel> advisors;
   final List<MemberModel> members;
+  final String picture;
 
   EkskulModel({
     required this.advisors,
@@ -16,6 +17,7 @@ class EkskulModel {
     required this.id,
     required this.members,
     required this.name,
+    required this.picture,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +25,7 @@ class EkskulModel {
       'id': id,
       'name': name,
       'description': description,
+      'picture': picture,
       'advisor': advisors.map((x) => x.toMap()).toList(),
       'memberships': members.map((x) => x.toMap()).toList(),
     };
@@ -50,6 +53,7 @@ class EkskulModel {
   factory EkskulModel.fromMap(Map<String, dynamic> map) {
     return EkskulModel(
       id: map['id'] ?? 0,
+      picture: map['picture'] ?? '',
       name: map['name'] ?? '',
       description: map['description'] ?? '',
       advisors: map['advisor'] != null
@@ -77,6 +81,7 @@ extension EkskulModelX on EkskulModel {
       description: description,
       advisors: advisors.map((e) => e.toEntity()).toList(),
       members: members.map((e) => e.toEntity()).toList(),
+      picture: picture,
     );
   }
 
@@ -90,6 +95,7 @@ extension EkskulModelX on EkskulModel {
               [],
       members:
           entity.members?.map((e) => MemberModelX.fromEntity(e)).toList() ?? [],
+      picture: entity.picture ?? '',
     );
   }
 }

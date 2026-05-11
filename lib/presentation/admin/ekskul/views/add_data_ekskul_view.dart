@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../common/bloc/button/button.cubit.dart';
 import '../../../../common/bloc/button/button_state.dart';
@@ -7,6 +10,7 @@ import '../../../../common/helper/app_navigation.dart';
 import '../../../../common/widget/appbar/basic_appbar.dart';
 import '../../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../../common/widget/landing/succes.dart';
+import '../../../../common/widget/photo/add_photo_view.dart';
 import '../../../../common/widget/searchbar/search_students_view.dart';
 import '../../../../common/widget/searchbar/search_teachers_views.dart';
 import '../../../../core/configs/theme/app_colors.dart';
@@ -36,6 +40,7 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
 
   List<AdvisorEntity>? _selectedPembina;
   List<MemberEntity>? members;
+  File? logo;
 
   @override
   void initState() {
@@ -67,7 +72,8 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-
+    DateTime now = DateTime.now();
+    String customId = DateFormat('MMyyyy').format(now);
     List<TextEditingController> listC = [
       _nameKetuaC,
       _nameWakilC,
@@ -139,62 +145,63 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                       ),
                       SizedBox(height: height * 0.02),
                       Column(
-                          children: List.generate(
-                        _controllers.length,
-                        (index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: TextField(
-                              readOnly: true,
-                              controller: _controllers[index],
-                              autocorrect: false,
-                              decoration: InputDecoration(
-                                labelText: "Nama Pembina",
-                                labelStyle: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
+                        children: List.generate(
+                          _controllers.length,
+                          (index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: TextField(
+                                readOnly: true,
+                                controller: _controllers[index],
+                                autocorrect: false,
+                                decoration: InputDecoration(
+                                  labelText: "Nama Pembina",
+                                  labelStyle: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  suffixIcon: index > 0
+                                      ? IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _controllers.removeAt(index);
+                                            });
+                                          },
+                                          icon: const Icon(
+                                            Icons.remove,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : null,
                                 ),
-                                suffixIcon: index > 0
-                                    ? IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            _controllers.removeAt(index);
-                                          });
-                                        },
-                                        icon: const Icon(
-                                          Icons.remove,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    : null,
+                                onTap: () async {
+                                  final route = MaterialPageRoute(
+                                      builder: (_) =>
+                                          const SearchTeachersViews());
+
+                                  final TeacherEntity result =
+                                      await Navigator.push(context, route);
+
+                                  setState(() {
+                                    _selectedPembina!.add(AdvisorEntity(
+                                      id: result.id,
+                                      status: "Aktif",
+                                      birthDate: result.birthDate,
+                                      gender: result.gender,
+                                      name: result.name,
+                                      nip: result.nip,
+                                      picture: result.picture,
+                                    ));
+                                    _controllers[index].text =
+                                        result.name ?? "Kosong";
+                                  });
+                                },
                               ),
-                              onTap: () async {
-                                final route = MaterialPageRoute(
-                                    builder: (_) =>
-                                        const SearchTeachersViews());
-
-                                final TeacherEntity result =
-                                    await Navigator.push(context, route);
-
-                                setState(() {
-                                  _selectedPembina!.add(AdvisorEntity(
-                                    id: result.id,
-                                    status: "Aktif",
-                                    birthDate: result.birthDate,
-                                    gender: result.gender,
-                                    name: result.name,
-                                    nip: result.nip,
-                                    picture: result.picture,
-                                  ));
-                                  _controllers[index].text =
-                                      result.name ?? "Kosong";
-                                });
-                              },
-                            ),
-                          );
-                        },
-                      )),
+                            );
+                          },
+                        ),
+                      ),
                       Row(
                         children: [
                           Expanded(child: Container()),
@@ -304,6 +311,72 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 12),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomInkWell(
+                            borderRadius: 12,
+                            defaultColor: AppColors.secondary,
+                            onTap: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddPhotoView(
+                                    name: _namaEkskulC.text,
+                                    id: customId,
+                                  ),
+                                ),
+                              );
+                              if (result != null) {
+                                setState(() {
+                                  logo = result;
+                                });
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 16,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    logo != null ? "Ubah Foto" : "Tambah Foto",
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          logo != null
+                              ? Container(
+                                  width: height * 0.1,
+                                  height: height * 0.1,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: FileImage(logo!),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -333,6 +406,7 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
                                 description: _deskripsiC.text,
                                 members: members,
                                 nameEkskul: _namaEkskulC.text,
+                                imageFile: logo,
                               ),
                             );
                         FocusScope.of(context).unfocus();

@@ -1,13 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/photo/change_photo_view.dart';
 import '../../../../common/bloc/button/button.cubit.dart';
 import '../../../../common/bloc/button/button_state.dart';
 import '../../../../common/bloc/ekskul/ekskul_cubit.dart';
+import '../../../../common/helper/display_image.dart';
 import '../../../../common/widget/appbar/basic_appbar.dart';
 import '../../../../common/widget/button/basic_button.dart';
 import '../../../../common/widget/card/card_anggota.dart';
 import '../../../../common/widget/dialog/basic_dialog.dart';
 import '../../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../../common/widget/photo/network_photo.dart';
 import '../../../../common/widget/searchbar/search_students_view.dart';
 import '../../../../common/widget/searchbar/search_teachers_views.dart';
 import '../../../../core/configs/assets/app_images.dart';
@@ -41,6 +47,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
   late TextEditingController _deskripsiC;
   late List<AdvisorEntity> selectedPembina;
   List<MemberEntity>? selectedAnggota;
+  File? logo;
 
   @override
   void initState() {
@@ -109,6 +116,8 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
       _nameSekretarisC,
       _nameBendaharaC,
     ];
+    DateTime now = DateTime.now();
+    String customId = DateFormat('MMyyyy').format(now);
     return Scaffold(
       body: MultiBlocProvider(
         providers: [
@@ -403,6 +412,82 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                           ),
                         );
                       }),
+                      const SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomInkWell(
+                            borderRadius: 12,
+                            defaultColor: AppColors.secondary,
+                            onTap: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChangePhotoView(
+                                    picture:
+                                        "${widget.ekskul.nameEkskul}_$customId",
+                                  ),
+                                ),
+                              );
+                              if (result != null) {
+                                setState(() {
+                                  logo = result;
+                                });
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 16,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    logo != null ? "Ubah Foto" : "Tambah Foto",
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          logo != null
+                              ? Container(
+                                  width: height * 0.1,
+                                  height: height * 0.1,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: FileImage(logo!),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                )
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: NetworkPhoto(
+                                    width: height * 0.1,
+                                    height: height * 0.1,
+                                    imageUrl: DisplayImage.displayImageEkskul(
+                                        widget.ekskul.picture!),
+                                    fallbackAsset: AppImages.tendikLaki,
+                                  ),
+                                ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
                       const Padding(
                         padding: EdgeInsets.only(left: 4),
                         child: Text(

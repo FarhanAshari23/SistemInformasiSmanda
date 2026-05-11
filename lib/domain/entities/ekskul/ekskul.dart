@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'advisor.dart';
 import 'member.dart';
 
 class EkskulEntity {
   int? id;
-  String? nameEkskul, description;
+  String? nameEkskul, description, picture;
+  File? imageFile;
   List<AdvisorEntity>? advisors;
   List<MemberEntity>? members;
 
@@ -13,12 +16,16 @@ class EkskulEntity {
     this.description,
     this.members,
     this.nameEkskul,
+    this.picture,
+    this.imageFile,
   });
 
   EkskulEntity copyWith({
     int? id,
     String? nameEkskul,
     String? description,
+    String? picture,
+    File? imageFile,
     List<AdvisorEntity>? advisors,
     List<MemberEntity>? members,
   }) {
@@ -28,6 +35,8 @@ class EkskulEntity {
       nameEkskul: nameEkskul ?? this.nameEkskul,
       advisors: advisors ?? this.advisors,
       members: members ?? this.members,
+      imageFile: imageFile ?? this.imageFile,
+      picture: picture ?? this.picture,
     );
   }
 }

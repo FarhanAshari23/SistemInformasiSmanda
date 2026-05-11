@@ -390,7 +390,8 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ChangePhotoView(
-                                        user: widget.user,
+                                        picture:
+                                            "${widget.user.name}_${widget.user.nisn}",
                                       ),
                                     ),
                                   );

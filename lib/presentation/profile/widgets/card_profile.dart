@@ -5,7 +5,6 @@ import '../../../common/bloc/teacher/teacher_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
-import '../../../common/widget/photo/change_photo_view.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
@@ -13,6 +12,7 @@ import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../common/widget/detail/murid_detail.dart';
 import '../../../common/widget/detail/teacher_detail.dart';
+import '../../admin/teacher/views/edit_teacher_detail_view.dart';
 import '../views/edit_profile_student_view.dart';
 
 class CardProfile extends StatelessWidget {
@@ -129,9 +129,7 @@ class CardProfile extends StatelessWidget {
                           )
                         : BlocProvider.value(
                             value: context.read<TeacherCubit>(),
-                            child: ChangePhotoView(
-                              teacher: teacher,
-                            ),
+                            child: EditTeacherDetailView(teacher: teacher!),
                           ),
                   ),
                   child: Padding(

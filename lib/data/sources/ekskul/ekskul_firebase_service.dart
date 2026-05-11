@@ -27,6 +27,14 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
       }
 
       final data = EkskulModel.fromMap(response.data['data']);
+
+      if (ekskulCreationReq.imageFile != null) {
+        Network.apiClient.postMultipart(
+          "/extracurricular/${data.id}/photo",
+          file: ekskulCreationReq.imageFile!,
+        );
+      }
+
       return Right("Upload ekskul ${data.name} berhasil");
     } catch (e) {
       return Left(e.toString());
@@ -59,7 +67,15 @@ class EkskulFirebaseServiceImpl extends EkskulFirebaseService {
         return left("Connection error: ${response.message}");
       }
 
+      if (ekskulUpdateReq.imageFile != null) {
+        Network.apiClient.postMultipart(
+          "/extracurricular/${ekskulUpdateReq.id}/photo",
+          file: ekskulUpdateReq.imageFile!,
+        );
+      }
+
       final data = EkskulModel.fromMap(response.data['data']);
+
       return Right("Upload ekskul ${data.name} berhasil");
     } catch (e) {
       return Left(e.toString());
