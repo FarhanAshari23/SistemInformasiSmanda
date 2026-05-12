@@ -193,6 +193,8 @@ class EkskulDetail extends StatelessWidget {
                     (index) {
                       return CardPengurus(
                         member: jabatans[index],
+                        background: AppColors.secondary,
+                        text: AppColors.inversePrimary,
                       );
                     },
                   )),
@@ -203,6 +205,8 @@ class EkskulDetail extends StatelessWidget {
                     (index) {
                       return CardPengurus(
                         member: jabatans[index + 2],
+                        background: AppColors.inversePrimary,
+                        text: AppColors.primary,
                       );
                     },
                   )),

@@ -24,7 +24,7 @@ class CardPembina extends StatelessWidget {
         vertical: 8,
       ),
       decoration: BoxDecoration(
-        color: AppColors.inversePrimary,
+        color: AppColors.secondary,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -43,7 +43,7 @@ class CardPembina extends StatelessWidget {
           Text(
             ekskul.advisors![index].name ?? '',
             style: const TextStyle(
-              color: AppColors.primary,
+              color: AppColors.inversePrimary,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
