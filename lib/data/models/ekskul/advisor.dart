@@ -25,14 +25,24 @@ class AdvisorModel {
       'teacher_birth_date': birthDate.toUtc().toIso8601String(),
       'teacher_gender': gender,
       'picture': picture,
+      'status': status,
     };
   }
 
   Map<String, dynamic> createMap() {
-    return {
+    final Map<String, dynamic> data = {
       'teacher_id': id,
       'status': status,
     };
+
+    data.removeWhere((key, value) {
+      if (value == null) return true;
+      if (value == 0) return true;
+      if (value is String && value.isEmpty) return true;
+      return false;
+    });
+
+    return data;
   }
 
   factory AdvisorModel.fromMap(Map<String, dynamic> map) {

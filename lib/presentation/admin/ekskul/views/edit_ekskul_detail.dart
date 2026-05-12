@@ -482,7 +482,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                     height: height * 0.1,
                                     imageUrl: DisplayImage.displayImageEkskul(
                                         widget.ekskul.picture!),
-                                    fallbackAsset: AppImages.tendikLaki,
+                                    fallbackAsset: AppImages.eskul,
                                   ),
                                 ),
                         ],
@@ -578,8 +578,8 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                         );
                       } else {
                         List<MemberEntity> finalMembers = [];
-                        finalMembers.addAll(roleEntity.where((e) =>
-                            e.id != null)); // Hanya tambah yang ada ID-nya
+                        finalMembers
+                            .addAll(roleEntity.where((e) => e.id != null));
                         finalMembers.addAll(members);
                         context
                             .read<EditStateButtonCubit>()
@@ -592,6 +592,7 @@ class _EditEkskulDetailState extends State<EditEkskulDetail> {
                                 description: _deskripsiC.text,
                                 members: finalMembers,
                                 nameEkskul: _nameEkskulC.text,
+                                imageFile: logo,
                               ),
                             );
                       }
