@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../../../common/helper/app_navigation.dart';
+import '../../../common/helper/display_image.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/card/card_anggota.dart';
-import '../../../common/widget/card/card_anggota_ekskul.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
 import '../../../domain/entities/ekskul/member.dart';
 import '../../../common/widget/detail/murid_detail.dart';
+import '../widgets/card_pembina.dart';
+import '../widgets/card_pengurus.dart';
 
 class EkskulDetail extends StatelessWidget {
   final EkskulEntity ekskul;
@@ -18,8 +21,6 @@ class EkskulDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    List<String> jabatan = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
     List<MemberEntity> jabatans = [
       ekskul.members!.where((element) => element.role == "Ketua").first,
       ekskul.members!.where((element) => element.role == "Wakil Ketua").first,
@@ -39,121 +40,185 @@ class EkskulDetail extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: CustomInkWell(
-                        borderRadius: 8,
-                        defaultColor: AppColors.primary,
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(16),
-                              ),
-                            ),
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return SafeArea(
-                                child: Container(
-                                  padding: const EdgeInsets.all(16),
-                                  width: double.infinity,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Deskripsi:",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w900,
-                                        ),
-                                      ),
-                                      Text(
-                                        ekskul.description ?? '',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: NetworkPhoto(
+                                    height: height * 0.125,
+                                    width: height * 0.125,
+                                    imageUrl: DisplayImage.displayImageEkskul(
+                                        ekskul.picture ?? ''),
+                                    fallbackAsset: AppImages.eskul,
                                   ),
                                 ),
-                              );
-                            },
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          margin: const EdgeInsets.all(8),
-                          child: const Icon(
-                            Icons.info,
-                            color: Colors.white,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 12,
+                                  ),
+                                  child: Text(
+                                    ekskul.nameEkskul ?? '',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CustomInkWell(
+                              defaultColor: AppColors.secondary,
+                              borderRadius: 8,
+                              child: const Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Icon(
+                                  Icons.info,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(16),
+                                    ),
+                                  ),
+                                  isScrollControlled: true,
+                                  builder: (context) {
+                                    return SafeArea(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(16),
+                                        width: double.infinity,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "Deskripsi:",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w900,
+                                              ),
+                                            ),
+                                            Text(
+                                              ekskul.description ?? '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Center(
+                  const SizedBox(height: 16),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 4),
                     child: Text(
-                      ekskul.nameEkskul ?? '',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
+                      "PEMBINA",
+                      style: TextStyle(
                         color: AppColors.primary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
                   ),
-                  SizedBox(height: height * 0.01),
+                  const SizedBox(height: 12),
                   Center(
                       child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: ekskul.advisors!.length > 1
+                        ? MainAxisAlignment.spaceEvenly
+                        : MainAxisAlignment.center,
                     children: List.generate(
                       ekskul.advisors!.length,
                       (index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 4),
-                          child: CardAnggotaEkskul(
-                            pembina: ekskul.advisors![index],
-                            jabatan: 'Pembina',
-                          ),
+                        return CardPembina(
+                          ekskul: ekskul,
+                          index: index,
                         );
                       },
                     ),
                   )),
-                  SizedBox(height: height * 0.02),
-                  SizedBox(
-                    height: height * 0.25,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return CardAnggotaEkskul(
-                          murid: jabatans[index],
-                          jabatan: jabatan[index],
-                        );
-                      },
-                      separatorBuilder: (context, index) =>
-                          SizedBox(width: width * 0.04),
-                      itemCount: 4,
-                    ),
-                  ),
+                  const SizedBox(height: 16),
                   const Padding(
-                    padding: EdgeInsets.only(left: 12.0),
+                    padding: EdgeInsets.only(left: 4),
                     child: Text(
-                      'Anggota:',
+                      "PENGURUS INTI",
                       style: TextStyle(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 16,
                         color: AppColors.primary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 12),
+                  Row(
+                      children: List.generate(
+                    2,
+                    (index) {
+                      return CardPengurus(
+                        member: jabatans[index],
+                      );
+                    },
+                  )),
+                  const SizedBox(height: 8),
+                  Row(
+                      children: List.generate(
+                    2,
+                    (index) {
+                      return CardPengurus(
+                        member: jabatans[index + 2],
+                      );
+                    },
+                  )),
+                  const SizedBox(height: 16),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 4),
+                    child: Text(
+                      "ANGGOTA",
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   anggotas.isEmpty
                       ? Center(
                           child: Column(

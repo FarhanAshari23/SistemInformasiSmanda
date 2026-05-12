@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/photo/network_photo.dart';
 import 'package:new_sistem_informasi_smanda/domain/entities/ekskul/ekskul.dart';
 
+import '../../../common/helper/display_image.dart';
+import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 
 class CardEkskul extends StatelessWidget {
@@ -21,12 +24,35 @@ class CardEkskul extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Visibility(
+            visible: ekskul.picture != "",
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(12),
+                  ),
+                ),
+                child: NetworkPhoto(
+                  height: 30,
+                  width: 30,
+                  imageUrl:
+                      DisplayImage.displayImageEkskul(ekskul.picture ?? ''),
+                  fallbackAsset: AppImages.eskul,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               ekskul.nameEkskul ?? '',
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.w800,
                 color: AppColors.inversePrimary,
               ),
@@ -113,7 +139,7 @@ class CardEkskul extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
