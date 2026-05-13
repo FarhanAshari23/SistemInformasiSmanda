@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/helper/app_navigation.dart';
 import '../../../common/helper/display_image.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../common/widget/card/card_anggota.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../common/widget/photo/network_photo.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/ekskul/ekskul.dart';
 import '../../../domain/entities/ekskul/member.dart';
-import '../../../common/widget/detail/murid_detail.dart';
 import '../widgets/card_pembina.dart';
 import '../widgets/card_pengurus.dart';
+import '../widgets/tile_anggota.dart';
 
 class EkskulDetail extends StatelessWidget {
   final EkskulEntity ekskul;
@@ -243,27 +241,30 @@ class EkskulDetail extends StatelessWidget {
                             ],
                           ),
                         )
-                      : ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
-                          itemBuilder: (context, index) {
-                            final anggota = anggotas[index];
-                            return CardAnggota(
-                              onTap: () => AppNavigator.push(
-                                context,
-                                MuridDetail(userId: anggota.id ?? 0),
-                              ),
-                              murid: anggota,
-                              title: anggota.name ?? '',
-                              desc: anggota.nisn ?? '',
-                            );
-                          },
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: 8),
-                          itemCount: anggotas.length,
-                        )
+                      : Expanded(
+                          child: GridView.builder(
+                            itemCount: anggotas.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              crossAxisSpacing: 12.0,
+                              mainAxisSpacing: 12.0,
+                              mainAxisExtent: height * 0.075,
+                            ),
+                            itemBuilder: (BuildContext context, int index) {
+                              final anggota = anggotas[index];
+                              return TileAnggota(
+                                anggota: anggota,
+                              );
+                            },
+                          ),
+                        ),
                 ],
               ),
             ),

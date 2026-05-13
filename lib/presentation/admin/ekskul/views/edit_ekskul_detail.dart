@@ -10,7 +10,7 @@ import '../../../../common/bloc/ekskul/ekskul_cubit.dart';
 import '../../../../common/helper/display_image.dart';
 import '../../../../common/widget/appbar/basic_appbar.dart';
 import '../../../../common/widget/button/basic_button.dart';
-import '../../../../common/widget/card/card_anggota.dart';
+import '../widgets/card_anggota_edit.dart';
 import '../../../../common/widget/dialog/basic_dialog.dart';
 import '../../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../../common/widget/photo/network_photo.dart';

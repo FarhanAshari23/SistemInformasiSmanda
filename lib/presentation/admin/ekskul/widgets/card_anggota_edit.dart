@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/configs/assets/app_images.dart';
-import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/ekskul/advisor.dart';
-import '../../../domain/entities/ekskul/member.dart';
-import '../../helper/display_image.dart';
-import '../inkwell/custom_inkwell.dart';
-import '../photo/network_photo.dart';
+import '../../../../core/configs/assets/app_images.dart';
+import '../../../../core/configs/theme/app_colors.dart';
+import '../../../../domain/entities/ekskul/advisor.dart';
+import '../../../../domain/entities/ekskul/member.dart';
+import '../../../../common/helper/display_image.dart';
+import '../../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../../common/widget/photo/network_photo.dart';
 
 class CardAnggota extends StatelessWidget {
   final String title;
