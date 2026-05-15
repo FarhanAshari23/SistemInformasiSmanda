@@ -117,6 +117,15 @@ class EditStudentDetailClassView extends StatelessWidget {
                                                     .id!
                                                 : kelasDuabelas[selectedIndex]
                                                     .id!;
+                                        final String currentClassName = kelas ==
+                                                10
+                                            ? kelasSepuluh[selectedIndex]
+                                                .className!
+                                            : kelas == 11
+                                                ? kelasSebelas[selectedIndex]
+                                                    .className!
+                                                : kelasDuabelas[selectedIndex]
+                                                    .className!;
                                         if (index == 0) {
                                           return CustomInkWell(
                                             borderRadius: 16,
@@ -130,7 +139,7 @@ class EditStudentDetailClassView extends StatelessWidget {
                                                     splashImage:
                                                         AppImages.splashDelete,
                                                     mainTitle:
-                                                        'Apakah anda yakin ingin menghapus seluruh data siswa dari kelas $currentClass?',
+                                                        'Apakah anda yakin ingin menghapus seluruh data siswa dari kelas $currentClassName?',
                                                     buttonTitle: 'Hapus',
                                                     onPressed: () async {
                                                       await outerContext
