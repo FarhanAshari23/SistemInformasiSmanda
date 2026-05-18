@@ -4,9 +4,9 @@ import '../../../core/usecase/usecase.dart';
 import '../../../service_locator.dart';
 import '../../repository/auth/auth.dart';
 
-class ProfileTeacherUsecase implements Usecase<Either, String> {
+class UserValidationUseCase implements Usecase<Either, String> {
   @override
   Future<Either> call({String? params}) async {
-    return sl<AuthRepository>().profileTeacher(params!);
+    return await sl<AuthRepository>().userValidation(params!);
   }
 }

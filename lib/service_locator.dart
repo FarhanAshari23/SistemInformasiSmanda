@@ -35,11 +35,9 @@ import 'domain/usecases/attendance/get_attendance_teacher_usecase.dart';
 import 'domain/usecases/attendance/get_list_attendaces_teacher_usecase.dart';
 import 'domain/usecases/attendance/get_list_attendances_student.dart';
 import 'domain/usecases/attendance/get_list_completions_teacher_usecase.dart';
-import 'domain/usecases/auth/is_admin_usecase.dart';
-import 'domain/usecases/auth/profile_student_usecase.dart';
-import 'domain/usecases/auth/profile_teacher_usecase.dart';
 import 'domain/usecases/auth/signin.dart';
 import 'domain/usecases/auth/signup.dart';
+import 'domain/usecases/auth/user_validation_usecase.dart';
 import 'domain/usecases/ekskul/create_ekskul.dart';
 import 'domain/usecases/ekskul/delete_ekskul.dart';
 import 'domain/usecases/ekskul/get_ekskul.dart';
@@ -151,14 +149,8 @@ Future<void> initializeDependecies() async {
   sl.registerSingleton<ForgotPasswordUsecase>(
     ForgotPasswordUsecase(),
   );
-  sl.registerSingleton<ProfileTeacherUsecase>(
-    ProfileTeacherUsecase(),
-  );
-  sl.registerSingleton<ProfileStudentUsecase>(
-    ProfileStudentUsecase(),
-  );
-  sl.registerSingleton<IsAdminUsecase>(
-    IsAdminUsecase(),
+  sl.registerSingleton<UserValidationUseCase>(
+    UserValidationUseCase(),
   );
 
   //teacher

@@ -5,14 +5,13 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import '../../../core/networks/network.dart';
 import '../../../domain/entities/student/student.dart';
 import '../../models/student/student.dart';
+import '../../models/teacher/teacher.dart';
 
 abstract class AuthFirebaseService {
   Future<Either> signin(StudentEntity signinUserReq);
   Future<Either> signUp(StudentEntity murid);
   Future<Either> forgotPassword(String email);
-  Future<Either> profileTeacher(String email);
-  Future<Either> profileStudent(String email);
-  Future<Either> isAdmin(String email);
+  Future<Either> userValidation(String email);
   Future<Either> logout();
   Future<bool> isLoggedIn();
 }
@@ -25,10 +24,8 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         email: signinUserReq.email!,
         password: signinUserReq.password!,
       );
-
-      return const Right('Succes Login');
     } on FirebaseAuthException catch (e) {
-      String message = '';
+      String message = 'Terjadi kesalahan autentikasi';
       if (e.code == 'invalid-email') {
         message = 'Email tidak dapat ditemukan';
       } else if (e.code == 'invalid-credential') {
@@ -36,8 +33,63 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       } else if (e.code == 'network-request-failed') {
         message = 'Anda sedang tidak terkoneksi dengan internet';
       }
-
       return Left(message);
+    } catch (e) {
+      return Left("Gagal masuk: ${e.toString()}");
+    }
+
+    final String email = signinUserReq.email!;
+    try {
+      final response = await Network.apiClient.get("/student/email/$email");
+      if (response.statusCode == 500) {
+        return Left("Connection error: ${response.message}");
+      }
+      if (response.statusCode == 200 && response.data['data'] != null) {
+        final data = StudentModel.fromMap(response.data['data']).toEntity();
+        return Right({
+          "role": "student",
+          "id": data.id,
+        });
+      }
+    } catch (e) {
+      // skip, lanjut ke teacher
+    }
+
+    // --- LANGKAH 3: HIT API TEACHER ---
+    try {
+      final response = await Network.apiClient.get("/teacher/email/$email");
+      if (response.statusCode == 500) {
+        return Left("Connection error: ${response.message}");
+      }
+      if (response.statusCode == 200 && response.data['data'] != null) {
+        final data = TeacherModel.fromMap(response.data['data']).toEntity();
+        return Right({
+          "role": "teacher",
+          "id": data.id,
+        });
+      }
+    } catch (e) {
+      // skip, lanjut ke admin
+    }
+
+    // --- LANGKAH 4: HIT API ADMIN ---
+    try {
+      final response = await Network.apiClient.get("/student/admin/$email");
+      if (response.statusCode == 500) {
+        return Left("Connection error: ${response.message}");
+      }
+      if (response.statusCode == 200 && response.data['data'] != null) {
+        final data = StudentModel.fromMap(response.data['data']).toEntity();
+        return Right({
+          "role": "admin",
+          "id": data.id,
+        });
+      }
+      return const Left("Role tidak ditemukan");
+    } catch (e) {
+      return const Left(
+        "Anda gagal login karena akun anda telah dihapus, silakan hubungi admin",
+      );
     }
   }
 
@@ -110,42 +162,43 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   }
 
   @override
-  Future<Either> profileStudent(String email) async {
+  Future<Either> userValidation(String email) async {
     try {
       final response = await Network.apiClient.get("/student/email/$email");
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
-      final dataList = response.data['data'] as Map<String, dynamic>;
-      return Right(dataList);
+      final data = StudentModel.fromMap(response.data['data']).toEntity();
+      return Right({
+        "role": "student",
+        "id": data.id,
+      });
     } catch (e) {
-      return Left("Something error: ${e.toString()}");
+      //skip
     }
-  }
-
-  @override
-  Future<Either> profileTeacher(String email) async {
     try {
       final response = await Network.apiClient.get("/teacher/email/$email");
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
-      final dataList = response.data['data'] as Map<String, dynamic>;
-      return Right(dataList);
+      final data = TeacherModel.fromMap(response.data['data']).toEntity();
+      return Right({
+        "role": "teacher",
+        "id": data.id,
+      });
     } catch (e) {
-      return Left("Something error: ${e.toString()}");
+      //skip
     }
-  }
-
-  @override
-  Future<Either> isAdmin(String email) async {
     try {
       final response = await Network.apiClient.get("/student/admin/$email");
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }
-      final dataList = response.data['data'] as Map<String, dynamic>;
-      return Right(dataList);
+      final data = StudentModel.fromMap(response.data['data']).toEntity();
+      return Right({
+        "role": "admin",
+        "id": data.id,
+      });
     } catch (e) {
       return const Left(
           "Anda gagal login karena akun anda telah dihapus, silakan hubungi admin");

@@ -5,7 +5,7 @@ class ButtonInitialState extends ButtonState {}
 class ButtonLoadingState extends ButtonState {}
 
 class ButtonSuccessState extends ButtonState {
-  String successMessage;
+  dynamic successMessage;
   ButtonSuccessState({
     this.successMessage = '',
   });

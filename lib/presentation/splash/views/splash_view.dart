@@ -5,10 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/teacher/teacher.dart';
-import '../../../domain/usecases/auth/is_admin_usecase.dart';
-import '../../../domain/usecases/auth/profile_student_usecase.dart';
-import '../../../domain/usecases/auth/profile_teacher_usecase.dart';
+import '../../../domain/usecases/auth/user_validation_usecase.dart';
 import '../../../service_locator.dart';
 import '../../auth/views/login_view.dart';
 import '../../home/views/home_view.dart';
@@ -29,46 +26,36 @@ class SplashView extends StatelessWidget {
         }
         if (state is Authenticated) {
           String? email = FirebaseAuth.instance.currentUser?.email;
-          var teacherPage =
-              await sl<ProfileTeacherUsecase>().call(params: email);
-          return teacherPage.fold(
-            (l) async {
-              var studentPage =
-                  await sl<ProfileStudentUsecase>().call(params: email);
-              return studentPage.fold(
-                (l) async {
-                  var isAdmin = await sl<IsAdminUsecase>().call(params: email);
-                  isAdmin.fold(
-                    (l) {
-                      AppNavigator.pushReplacement(context, LoginView());
-                      var snackbar = SnackBar(
-                        content: Text(l.toString()),
-                        behavior: SnackBarBehavior.floating,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                    },
-                    (r) {
-                      AppNavigator.pushAndRemoveUntil(
-                        context,
-                        const HomeViewAdmin(),
-                      );
-                    },
-                  );
-                },
-                (data) {
-                  AppNavigator.pushReplacement(
-                    context,
-                    HomeView(student: data),
-                  );
-                },
+          var user = await sl<UserValidationUseCase>().call(params: email);
+          return user.fold(
+            (l) {
+              var snackbar = SnackBar(
+                content: Text(l.toString()),
+                behavior: SnackBarBehavior.floating,
               );
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
             },
             (data) {
-              TeacherEntity teacher = data;
-              AppNavigator.pushReplacement(
-                context,
-                ProfileTeacher(teacherId: teacher.id ?? 0),
-              );
+              final String role = data["role"];
+              final int id = data["id"];
+              if (role == "student") {
+                AppNavigator.pushAndRemoveUntil(
+                  context,
+                  HomeView(studentId: id),
+                );
+              }
+              if (role == "teacher") {
+                AppNavigator.pushAndRemoveUntil(
+                  context,
+                  ProfileTeacher(teacherId: id),
+                );
+              }
+              if (role == "admin") {
+                AppNavigator.pushAndRemoveUntil(
+                  context,
+                  const HomeViewAdmin(),
+                );
+              }
             },
           );
         }

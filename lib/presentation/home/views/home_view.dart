@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../common/bloc/student/get_student_cubit.dart';
+import '../../../common/bloc/student/get_student_state.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/student/student.dart';
 import '../../ekskul/views/ekskul_view.dart';
 import '../../news/views/pengumuman_screen.dart';
 import '../../students/views/siswa_screen.dart';
@@ -13,10 +14,10 @@ import '../../teachers/views/teacher_screen.dart';
 import '../bloc/bar_navigation_cubit.dart';
 
 class HomeView extends StatelessWidget {
-  final StudentEntity student;
+  final int studentId;
   const HomeView({
     super.key,
-    required this.student,
+    required this.studentId,
   });
 
   @override
@@ -34,12 +35,6 @@ class HomeView extends StatelessWidget {
       'HALAMAN TENDIK',
       'HALAMAN EKSKUL',
     ];
-    List<Widget> page = [
-      PengumumanScreen(classId: student.kelasId ?? 0),
-      const SiswaScreen(),
-      const TeacherScreen(),
-      const EkskulScreen(),
-    ];
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: MultiBlocProvider(
@@ -47,103 +42,191 @@ class HomeView extends StatelessWidget {
           BlocProvider(
             create: (context) => BarNavigationCubit(),
           ),
+          BlocProvider(
+            create: (context) =>
+                StudentCubit()..displayStudentById(params: studentId),
+          ),
         ],
         child: SafeArea(
-          child: Column(
-            children: [
-              BasicAppbar(
-                isBackViewed: false,
-                student: student,
-              ),
-              SizedBox(height: height * 0.0095),
-              Builder(
-                builder: (context) {
-                  return Text(
-                    title[context.watch<BarNavigationCubit>().state],
-                    style: const TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  );
-                },
-              ),
-              SizedBox(height: height * 0.02),
-              Expanded(
-                child: Stack(
+          child: BlocBuilder<StudentCubit, StudentState>(
+            builder: (context, state) {
+              if (state is StudentLoading) {
+                return Column(
                   children: [
+                    const BasicAppbar(
+                      isBackViewed: false,
+                    ),
+                    SizedBox(height: height * 0.3),
+                    const Text(
+                      "Harap tunggu sebentar...",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: height * 0.325),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: List.generate(
+                        4,
+                        (index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: CustomInkWell(
+                              onTap: () {},
+                              defaultColor: AppColors.tertiary,
+                              borderRadius: 8,
+                              child: Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.1),
+                                      blurRadius: 10,
+                                      spreadRadius: 2,
+                                    )
+                                  ],
+                                ),
+                                width: 70,
+                                height: 70,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              }
+              if (state is StudentLoaded) {
+                List<Widget> page = [
+                  PengumumanScreen(classId: state.student.kelasId ?? 0),
+                  const SiswaScreen(),
+                  const TeacherScreen(),
+                  const EkskulScreen(),
+                ];
+                return Column(
+                  children: [
+                    BasicAppbar(
+                      isBackViewed: false,
+                      student: state.student,
+                    ),
+                    SizedBox(height: height * 0.0095),
                     Builder(
                       builder: (context) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
+                        return Text(
+                          title[context.watch<BarNavigationCubit>().state],
+                          style: const TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900,
                           ),
-                          child:
-                              page[context.watch<BarNavigationCubit>().state],
                         );
                       },
                     ),
-                    SizedBox(height: height * 0.01),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Builder(builder: (context) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 24),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: List.generate(
-                              4,
-                              (index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: CustomInkWell(
-                                    onTap: () {
-                                      context
-                                          .read<BarNavigationCubit>()
-                                          .changeColor(index);
-                                    },
-                                    defaultColor: context
-                                                .watch<BarNavigationCubit>()
-                                                .state ==
-                                            index
-                                        ? AppColors.primary
-                                        : AppColors.tertiary,
-                                    borderRadius: 8,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black
-                                                .withValues(alpha: 0.1),
-                                            blurRadius: 10,
-                                            spreadRadius: 2,
-                                          )
-                                        ],
-                                      ),
-                                      width: 70,
-                                      height: 70,
-                                      child: Center(
-                                        child: Image.asset(
-                                          iconImage[index],
-                                          width: 50,
-                                          height: 50,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                    SizedBox(height: height * 0.02),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Builder(
+                            builder: (context) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                child: page[
+                                    context.watch<BarNavigationCubit>().state],
+                              );
+                            },
                           ),
-                        );
-                      }),
-                    )
+                          SizedBox(height: height * 0.01),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Builder(builder: (context) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 24),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: List.generate(
+                                    4,
+                                    (index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: CustomInkWell(
+                                          onTap: () {
+                                            context
+                                                .read<BarNavigationCubit>()
+                                                .changeColor(index);
+                                          },
+                                          defaultColor: context
+                                                      .watch<
+                                                          BarNavigationCubit>()
+                                                      .state ==
+                                                  index
+                                              ? AppColors.primary
+                                              : AppColors.tertiary,
+                                          borderRadius: 8,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(16),
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withValues(alpha: 0.1),
+                                                  blurRadius: 10,
+                                                  spreadRadius: 2,
+                                                )
+                                              ],
+                                            ),
+                                            width: 70,
+                                            height: 70,
+                                            child: Center(
+                                              child: Image.asset(
+                                                iconImage[index],
+                                                width: 50,
+                                                height: 50,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            }),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
-                ),
-              ),
-            ],
+                );
+              }
+              if (state is StudentFailure) {
+                return Column(
+                  children: [
+                    const BasicAppbar(
+                      isBackViewed: false,
+                    ),
+                    Text(
+                      "Ada masalah: ${state.errorMessage}",
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.inversePrimary,
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return Container();
+            },
           ),
         ),
       ),

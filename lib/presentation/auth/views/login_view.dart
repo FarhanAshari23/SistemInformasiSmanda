@@ -8,12 +8,7 @@ import '../../../common/helper/app_navigation.dart';
 import '../../../core/configs/assets/app_lotties.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/student/student.dart';
-import '../../../domain/entities/teacher/teacher.dart';
-import '../../../domain/usecases/auth/is_admin_usecase.dart';
-import '../../../domain/usecases/auth/profile_student_usecase.dart';
-import '../../../domain/usecases/auth/profile_teacher_usecase.dart';
 import '../../../domain/usecases/auth/signin.dart';
-import '../../../service_locator.dart';
 import '../../home/views/home_view.dart';
 import '../../home/views/home_view_admin.dart';
 import '../../profile/views/profile_teacher_view.dart';
@@ -48,7 +43,6 @@ class LoginView extends StatelessWidget {
             ],
             child: BlocListener<ButtonStateCubit, ButtonState>(
               listener: (context, state) async {
-                String email = _emailC.text;
                 if (state is ButtonLoadingState) return;
                 if (state is ButtonFailureState) {
                   var snackbar = SnackBar(
@@ -58,51 +52,26 @@ class LoginView extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(snackbar);
                 }
                 if (state is ButtonSuccessState) {
-                  var studentProfile =
-                      await sl<ProfileStudentUsecase>().call(params: email);
-                  return studentProfile.fold(
-                    (l) async {
-                      var teacherProfile =
-                          await sl<ProfileTeacherUsecase>().call(params: email);
-                      return teacherProfile.fold(
-                        (l) async {
-                          var isAdmin =
-                              await sl<IsAdminUsecase>().call(params: email);
-                          isAdmin.fold(
-                            (l) {
-                              var snackbar = SnackBar(
-                                content: Text(l.toString()),
-                                behavior: SnackBarBehavior.floating,
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackbar);
-                            },
-                            (r) {
-                              AppNavigator.pushAndRemoveUntil(
-                                context,
-                                const HomeViewAdmin(),
-                              );
-                            },
-                          );
-                        },
-                        (teacher) {
-                          TeacherEntity data = teacher;
-                          AppNavigator.pushAndRemoveUntil(
-                            context,
-                            ProfileTeacher(
-                              teacherId: data.id ?? 0,
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    (data) {
-                      AppNavigator.pushAndRemoveUntil(
-                        context,
-                        HomeView(student: data),
-                      );
-                    },
-                  );
+                  final String role = state.successMessage["role"];
+                  final int id = state.successMessage["id"];
+                  if (role == "student") {
+                    AppNavigator.pushAndRemoveUntil(
+                      context,
+                      HomeView(studentId: id),
+                    );
+                  }
+                  if (role == "teacher") {
+                    AppNavigator.pushAndRemoveUntil(
+                      context,
+                      ProfileTeacher(teacherId: id),
+                    );
+                  }
+                  if (role == "admin") {
+                    AppNavigator.pushAndRemoveUntil(
+                      context,
+                      const HomeViewAdmin(),
+                    );
+                  }
                 }
               },
               child: Column(

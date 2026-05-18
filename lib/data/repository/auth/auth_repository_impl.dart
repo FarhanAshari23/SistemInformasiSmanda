@@ -3,8 +3,6 @@ import 'package:dartz/dartz.dart';
 import '../../../domain/entities/student/student.dart';
 import '../../../domain/repository/auth/auth.dart';
 import '../../../service_locator.dart';
-import '../../models/student/student.dart';
-import '../../models/teacher/teacher.dart';
 import '../../sources/auth/auth_firebase_service.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -34,46 +32,14 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either> profileStudent(String email) async {
-    var returnedData = await sl<AuthFirebaseService>().profileStudent(email);
+  Future<Either> userValidation(String email) async {
+    var returnedData = await sl<AuthFirebaseService>().userValidation(email);
     return returnedData.fold(
       (error) {
         return Left(error);
       },
       (data) {
-        return Right(
-          StudentModel.fromMap(data).toEntity(),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<Either> profileTeacher(String email) async {
-    var returnedData = await sl<AuthFirebaseService>().profileTeacher(email);
-    return returnedData.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(
-          TeacherModel.fromMap(data).toEntity(),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<Either> isAdmin(String email) async {
-    var returnedData = await sl<AuthFirebaseService>().isAdmin(email);
-    return returnedData.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        return Right(
-          StudentModel.fromMap(data).toEntity(),
-        );
+        return Right(data);
       },
     );
   }

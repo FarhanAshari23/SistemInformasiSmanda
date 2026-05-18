@@ -29,11 +29,11 @@ class NoInternetView extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "Sambungan ke server terhambat. Mohon periksa paket data/Wi-Fi Anda, atau tunggu sebentar jika server kami sedang dalam perbaikan.",
+                "Sambungan ke server terhambat. Mohon periksa jaringan anda atau tunggu sebentar jika server kami sedang dalam perbaikan.",
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: AppColors.primary,
                 ),
