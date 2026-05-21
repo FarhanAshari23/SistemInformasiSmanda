@@ -132,10 +132,10 @@ class CardProfile extends StatelessWidget {
                             child: EditTeacherDetailView(teacher: teacher!),
                           ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8),
                     child: Icon(
-                      student != null ? Icons.edit : Icons.camera_alt_rounded,
+                      Icons.edit,
                       color: Colors.white,
                       size: 16,
                     ),
