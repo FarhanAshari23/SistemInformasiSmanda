@@ -26,7 +26,6 @@ class EkskulSelectionView extends StatefulWidget {
 class _EkskulSelectionViewState extends State<EkskulSelectionView> {
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: MultiBlocProvider(
         providers: [
