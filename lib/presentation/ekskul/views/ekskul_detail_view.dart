@@ -255,7 +255,7 @@ class EkskulDetail extends StatelessWidget {
                               crossAxisCount: 4,
                               crossAxisSpacing: 12.0,
                               mainAxisSpacing: 12.0,
-                              mainAxisExtent: height * 0.075,
+                              mainAxisExtent: height * 0.085,
                             ),
                             itemBuilder: (BuildContext context, int index) {
                               final anggota = anggotas[index];

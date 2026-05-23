@@ -39,7 +39,28 @@ class EditDataEkskulView extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (state is EkskulLoaded) {
-                    if (state.ekskul.isEmpty) {
+                    return Expanded(
+                      child: GridView.builder(
+                        itemCount: state.ekskul.length,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: width * 0.025,
+                          mainAxisSpacing: 12.0,
+                          mainAxisExtent: height * 0.315,
+                        ),
+                        itemBuilder: (context, index) => CardEkskulEdit(
+                          ekskul: state.ekskul[index],
+                        ),
+                      ),
+                    );
+                  }
+                  if (state is EkskulFailure) {
+                    if (state.errorMessage ==
+                        "Something error: type 'Null' is not a subtype of type 'List<dynamic>' in type cast") {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -59,27 +80,9 @@ class EditDataEkskulView extends StatelessWidget {
                           ),
                         ],
                       );
-                    } else {
-                      return Expanded(
-                        child: GridView.builder(
-                          itemCount: state.ekskul.length,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: width * 0.025,
-                            mainAxisSpacing: 12.0,
-                            mainAxisExtent: height * 0.315,
-                          ),
-                          itemBuilder: (context, index) => CardEkskulEdit(
-                            ekskul: state.ekskul[index],
-                          ),
-                        ),
-                      );
                     }
+
+                    return Center(child: Text(state.errorMessage));
                   }
                   return Container();
                 },

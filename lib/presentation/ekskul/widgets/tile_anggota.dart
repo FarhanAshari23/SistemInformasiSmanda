@@ -39,7 +39,7 @@ class TileAnggota extends StatelessWidget {
             width: height * 0.05,
             height: height * 0.05,
           ),
-          SizedBox(height: height * 0.002),
+          SizedBox(height: height * 0.004),
           Text(
             anggota.name ?? '',
             style: const TextStyle(

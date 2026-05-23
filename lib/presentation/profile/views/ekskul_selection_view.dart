@@ -158,7 +158,7 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                       if (state.errorMessage ==
                           "Something error: (null):(404):Data murid tidak ditemukan") {
                         return const Padding(
-                          padding: EdgeInsets.only(left: 8),
+                          padding: EdgeInsets.only(left: 12),
                           child: Text(
                             'Anda tidak sedang menjabat ekskul apapun',
                             style: TextStyle(
@@ -218,18 +218,11 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                                     return memberTerkait.role == "Anggota";
                                   }
                                 }).toList();
-                                return GridView.builder(
+                                return ListView.builder(
                                   itemCount: filterEkskul.length,
                                   scrollDirection: Axis.vertical,
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 8),
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 12.0,
-                                    mainAxisSpacing: 12.0,
-                                    mainAxisExtent: height * 0.25,
-                                  ),
                                   itemBuilder: (context, index) {
                                     final ekskul = filterEkskul[index];
 
@@ -245,17 +238,14 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                                       defaultColor: isSelected
                                           ? AppColors.primary
                                           : AppColors.secondary,
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            ekskul.nameEkskul ?? '',
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white,
-                                            ),
-                                            textAlign: TextAlign.center,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          ekskul.nameEkskul ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ),
@@ -266,29 +256,32 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
                             ),
                             Align(
                               alignment: Alignment.bottomCenter,
-                              child: CustomInkWell(
-                                borderRadius: 8,
-                                defaultColor: AppColors.primary,
-                                onTap: () {
-                                  final selected =
-                                      context.read<SelectEkskulCubit>().state;
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: CustomInkWell(
+                                  borderRadius: 8,
+                                  defaultColor: AppColors.primary,
+                                  onTap: () {
+                                    final selected =
+                                        context.read<SelectEkskulCubit>().state;
 
-                                  Navigator.pop(
-                                    context,
-                                    selected,
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 32,
-                                    vertical: 24,
-                                  ),
-                                  child: const Text(
-                                    'Pilih',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: AppColors.inversePrimary,
+                                    Navigator.pop(
+                                      context,
+                                      selected,
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 32,
+                                      vertical: 24,
+                                    ),
+                                    child: const Text(
+                                      'Pilih',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: AppColors.inversePrimary,
+                                      ),
                                     ),
                                   ),
                                 ),

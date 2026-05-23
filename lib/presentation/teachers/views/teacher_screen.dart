@@ -206,10 +206,10 @@ class TeacherScreen extends StatelessWidget {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.vertical,
-                        padding: const EdgeInsets.only(
+                        padding: EdgeInsets.only(
                           left: 8,
                           right: 8,
-                          bottom: 48,
+                          bottom: height * 0.1,
                         ),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -238,6 +238,7 @@ class TeacherScreen extends StatelessWidget {
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.only(bottom: height * 0.1),
                         itemBuilder: (context, index) {
                           return CardGuruComplete(
                             teacher: teachersEntity[tabIndex][index],

@@ -1,5 +1,5 @@
 class AppUrl {
-  static const mainRoute = 'http://192.168.18.7:3000';
+  static const mainRoute = 'http://192.168.18.11:3000';
   static const storageStudent = '$mainRoute/images/students';
   static const storageTeacher = '$mainRoute/images/teachers';
   static const storageEkskul = '$mainRoute/images/ekskuls';
