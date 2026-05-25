@@ -227,24 +227,28 @@ class _EkskulSelectionViewState extends State<EkskulSelectionView> {
 
                                     final isSelected = selectedEkskul.any((e) =>
                                         e.nameEkskul == ekskul.nameEkskul);
-                                    return CustomInkWell(
-                                      onTap: () {
-                                        context
-                                            .read<SelectEkskulCubit>()
-                                            .toggleEkskul(ekskul);
-                                      },
-                                      borderRadius: 8,
-                                      defaultColor: isSelected
-                                          ? AppColors.primary
-                                          : AppColors.secondary,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          ekskul.nameEkskul ?? '',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white,
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 8.0),
+                                      child: CustomInkWell(
+                                        onTap: () {
+                                          context
+                                              .read<SelectEkskulCubit>()
+                                              .toggleEkskul(ekskul);
+                                        },
+                                        borderRadius: 8,
+                                        defaultColor: isSelected
+                                            ? AppColors.primary
+                                            : AppColors.secondary,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            ekskul.nameEkskul ?? '',
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ),

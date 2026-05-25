@@ -56,7 +56,7 @@ class HomeView extends StatelessWidget {
                     const BasicAppbar(
                       isBackViewed: false,
                     ),
-                    SizedBox(height: height * 0.3),
+                    SizedBox(height: height * 0.25),
                     const Text(
                       "Harap tunggu sebentar...",
                       style: TextStyle(
@@ -65,7 +65,7 @@ class HomeView extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: height * 0.325),
+                    SizedBox(height: height * 0.25),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: List.generate(
