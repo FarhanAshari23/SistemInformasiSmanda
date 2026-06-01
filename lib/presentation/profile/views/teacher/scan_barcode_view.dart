@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../common/bloc/button/button.cubit.dart';
-import '../../../common/bloc/button/button_state.dart';
-import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../common/widget/inkwell/custom_inkwell.dart';
-import '../../../common/widget/searchbar/search_students_view.dart';
-import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/attandance/attendance_student.dart';
-import '../../../domain/entities/student/student.dart';
-import '../../../domain/usecases/attendance/add_student_attendance.dart';
-import '../../../domain/usecases/students/search_student_by_nisn.dart';
-import '../../admin/attendance/widgets/scan_qr.dart';
-import '../bloc/get_distace_state.dart';
-import '../bloc/get_distance_cubit.dart';
-import '../bloc/student_nisn_cubit.dart';
-import '../bloc/student_nisn_state.dart';
+import '../../../../common/bloc/button/button.cubit.dart';
+import '../../../../common/bloc/button/button_state.dart';
+import '../../../../common/widget/appbar/basic_appbar.dart';
+import '../../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../../common/widget/searchbar/search_students_view.dart';
+import '../../../../core/configs/theme/app_colors.dart';
+import '../../../../domain/entities/attandance/attendance_student.dart';
+import '../../../../domain/entities/student/student.dart';
+import '../../../../domain/usecases/attendance/add_student_attendance.dart';
+import '../../../../domain/usecases/students/search_student_by_nisn.dart';
+import '../../../admin/attendance/widgets/scan_qr.dart';
+import '../../bloc/get_distace_state.dart';
+import '../../bloc/get_distance_cubit.dart';
+import '../../bloc/student_nisn_cubit.dart';
+import '../../bloc/student_nisn_state.dart';
 
 class ScanBarcodeView extends StatelessWidget {
   const ScanBarcodeView({super.key});

@@ -4,11 +4,11 @@ import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/configs/assets/app_images.dart';
-import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/student/student.dart';
-import '../bloc/get_attendance_student_cubit.dart';
-import '../bloc/get_attendance_student_state.dart';
+import '../../../../core/configs/assets/app_images.dart';
+import '../../../../core/configs/theme/app_colors.dart';
+import '../../../../domain/entities/student/student.dart';
+import '../../bloc/get_attendance_student_cubit.dart';
+import '../../bloc/get_attendance_student_state.dart';
 
 class ProfileStudentAttendanceView extends StatelessWidget {
   final StudentEntity? student;

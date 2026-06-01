@@ -9,4 +9,5 @@ abstract class NewsRepository {
   Future<Either> getNews();
   Future<Either> getNewsGlobal();
   Future<Either> getNewsByClass(int classId);
+  Future<Either> getNewsByTeacher(int teacherId);
 }

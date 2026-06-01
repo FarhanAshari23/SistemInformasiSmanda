@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../common/bloc/teacher/teacher_cubit.dart';
-import '../../../common/bloc/teacher/teacher_state.dart';
-import '../bloc/bar_days_cubit.dart';
-import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../core/configs/theme/app_colors.dart';
-import '../bloc/get_schedule_teacher_cubit.dart';
-import '../bloc/section_cubit.dart';
-import '../widgets/card_profile.dart';
-import '../widgets/jadwal_days_selection.dart';
+import '../../../../common/bloc/teacher/teacher_cubit.dart';
+import '../../../../common/bloc/teacher/teacher_state.dart';
+import '../../bloc/bar_days_cubit.dart';
+import '../../../../common/widget/appbar/basic_appbar.dart';
+import '../../../../core/configs/theme/app_colors.dart';
+import '../../bloc/get_schedule_teacher_cubit.dart';
+import '../../bloc/section_cubit.dart';
+import '../../widgets/card_profile.dart';
+import '../../widgets/jadwal_days_selection.dart';
 import 'profile_teacher_menu_view.dart';
 
 class ProfileTeacher extends StatelessWidget {

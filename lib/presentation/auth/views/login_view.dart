@@ -11,7 +11,7 @@ import '../../../domain/entities/student/student.dart';
 import '../../../domain/usecases/auth/signin.dart';
 import '../../home/views/home_view.dart';
 import '../../home/views/home_view_admin.dart';
-import '../../profile/views/profile_teacher_view.dart';
+import '../../profile/views/teacher/profile_teacher_view.dart';
 import '../bloc/password_cubit.dart';
 import '../widgets/button_role.dart';
 import 'add_account_detail_view.dart';

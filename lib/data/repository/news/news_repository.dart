@@ -66,4 +66,20 @@ class NewsRepositoryImpl extends NewsRepository {
       },
     );
   }
+
+  @override
+  Future<Either> getNewsByTeacher(int teacherId) async {
+    var returnedData =
+        await sl<NewsFirebaseService>().getNewsByTeacher(teacherId);
+    return returnedData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(
+          List.from(data).map((e) => NewsModel.fromMap(e).toEntity()).toList(),
+        );
+      },
+    );
+  }
 }

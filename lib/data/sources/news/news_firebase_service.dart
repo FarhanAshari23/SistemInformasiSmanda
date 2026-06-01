@@ -11,6 +11,7 @@ abstract class NewsFirebaseService {
   Future<Either> getNews();
   Future<Either> getNewsGlobal();
   Future<Either> getNewsByClass(int classId);
+  Future<Either> getNewsByTeacher(int teacherId);
 }
 
 class NewsFirebaseServiceImpl extends NewsFirebaseService {
@@ -95,6 +96,21 @@ class NewsFirebaseServiceImpl extends NewsFirebaseService {
   Future<Either> getNewsGlobal() async {
     try {
       final response = await Network.apiClient.get("/announcements/global");
+      if (response.statusCode == 500) {
+        return left("Connection error: ${response.message}");
+      }
+      final dataList = response.data['data'] as List<dynamic>;
+      return Right(dataList);
+    } catch (e) {
+      return Left("Something error: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<Either> getNewsByTeacher(int teacherId) async {
+    try {
+      final response =
+          await Network.apiClient.get("/announcement-teacher-id/$teacherId");
       if (response.statusCode == 500) {
         return left("Connection error: ${response.message}");
       }

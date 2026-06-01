@@ -4,15 +4,16 @@ import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:intl/intl.dart';
 
-import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../common/widget/inkwell/custom_inkwell.dart';
-import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/teacher/teacher.dart';
-import '../bloc/get_teacher_attendance_cubit.dart';
-import '../bloc/get_teacher_attendance_state.dart';
-import '../../../common/bloc/attendance/select_attendance_cubit.dart';
-import '../bloc/select_date_cubit.dart';
-import '../bloc/select_timestamp_cubit.dart';
+import '../../../../common/widget/appbar/basic_appbar.dart';
+import '../../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../../core/configs/assets/app_images.dart';
+import '../../../../core/configs/theme/app_colors.dart';
+import '../../../../domain/entities/teacher/teacher.dart';
+import '../../bloc/get_teacher_attendance_cubit.dart';
+import '../../bloc/get_teacher_attendance_state.dart';
+import '../../../../common/bloc/attendance/select_attendance_cubit.dart';
+import '../../bloc/select_date_cubit.dart';
+import '../../bloc/select_timestamp_cubit.dart';
 
 class ScheduleAttendanceTeacherView extends StatelessWidget {
   final TeacherEntity teacher;
@@ -139,7 +140,30 @@ class _MainContent extends StatelessWidget {
                   }
 
                   if (state is GetTeacherAttendanceFailure) {
-                    return Center(child: Text(state.errorMessage));
+                    if (state.errorMessage ==
+                        "Something error: (null):(404):Data kehadiran tidak ditemukan") {
+                      return Center(
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              AppImages.notfound,
+                              width: 250,
+                              height: 250,
+                            ),
+                            const SizedBox(height: 12),
+                            const Text(
+                              "Data absens tidak ditemukan",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return Center(child: Text(state.errorMessage));
+                    }
                   }
 
                   if (state is GetTeacherAttendanceLoaded) {

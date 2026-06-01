@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../common/helper/app_navigation.dart';
 import '../../../../common/widget/appbar/basic_appbar.dart';
+import '../../../../common/widget/card/card_news.dart';
 import '../../../../core/configs/assets/app_images.dart';
 import '../../../../core/configs/theme/app_colors.dart';
 import '../../../news/bloc/news_cubit.dart';
 import '../../../news/bloc/news_state.dart';
-import '../widgets/card_news_edit.dart';
+import '../../../news/views/pengumuman_detail_screen.dart';
 
-class EditNewsView extends StatelessWidget {
-  const EditNewsView({super.key});
+class ListAnnouncementView extends StatelessWidget {
+  final int teacherId;
+  const ListAnnouncementView({
+    super.key,
+    required this.teacherId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,21 +23,28 @@ class EditNewsView extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: BlocProvider(
-        create: (context) => NewsCubit()..displayNews(),
+        create: (context) => NewsCubit()..displayNewsByTeacher(teacherId),
         child: SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               const BasicAppbar(isBackViewed: true),
-              const Text(
-                'DATA PENGUMUMAN',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.primary,
+              const SizedBox(height: 12),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 24.0,
+                ),
+                child: Text(
+                  'Pengumuman Saya:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
-              SizedBox(height: height * 0.02),
+              const SizedBox(height: 8),
               BlocBuilder<NewsCubit, NewsState>(
                 builder: (context, state) {
                   if (state is NewsLoading) {
@@ -53,8 +66,18 @@ class EditNewsView extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return BlocProvider.value(
                             value: context.read<NewsCubit>(),
-                            child: CardNewsEdit(
-                              news: state.news[index],
+                            child: CardNews(
+                              onPressed: () => AppNavigator.push(
+                                context,
+                                PengumumanDetailView(
+                                  newsEntity: state.news[index],
+                                ),
+                              ),
+                              title: state.news[index].title ?? '',
+                              from: state.news[index].teacherName ?? '',
+                              to: state.news[index].isGlobal!
+                                  ? 'Semua Kelas'
+                                  : state.news[index].className ?? '',
                             ),
                           );
                         },

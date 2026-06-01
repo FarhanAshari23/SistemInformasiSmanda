@@ -2,25 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../../common/bloc/button/button.cubit.dart';
-import '../../../common/bloc/button/button_state.dart';
-import '../../../common/helper/app_navigation.dart';
-import '../../../common/widget/button/basic_button.dart';
-import '../../../common/widget/card/card_basic.dart';
-import '../../../core/configs/assets/app_images.dart';
-import '../../../core/configs/theme/app_colors.dart';
-import '../../../domain/entities/attandance/attandance_teacher.dart';
-import '../../../domain/entities/teacher/teacher.dart';
-import '../../../domain/usecases/attendance/add_teacher_attendance.dart';
-import '../../../domain/usecases/attendance/add_teacher_completion_usecase.dart';
-import '../../admin/schedule/views/edit_schedule_view.dart';
-import '../bloc/get_teacher_attendance_cubit.dart';
-import '../bloc/get_teacher_attendance_state.dart';
-import 'attendance_menu_view.dart';
+import '../../../../common/bloc/button/button.cubit.dart';
+import '../../../../common/bloc/button/button_state.dart';
+import '../../../../common/helper/app_navigation.dart';
+import '../../../../common/widget/button/basic_button.dart';
+import '../../../../common/widget/card/card_basic.dart';
+import '../../../../core/configs/assets/app_images.dart';
+import '../../../../core/configs/theme/app_colors.dart';
+import '../../../../domain/entities/attandance/attandance_teacher.dart';
+import '../../../../domain/entities/teacher/teacher.dart';
+import '../../../../domain/usecases/attendance/add_teacher_attendance.dart';
+import '../../../../domain/usecases/attendance/add_teacher_completion_usecase.dart';
+import '../../../admin/attendance/views/see_all_data_attandance_students.dart';
+import '../../../admin/schedule/views/edit_schedule_view.dart';
+import '../../bloc/get_teacher_attendance_cubit.dart';
+import '../../bloc/get_teacher_attendance_state.dart';
 import 'create_announcement_view.dart';
+import 'list_announcement_view.dart';
 import 'scan_barcode_view.dart';
-import '../bloc/get_distace_state.dart';
-import '../bloc/get_distance_cubit.dart';
+import '../../bloc/get_distace_state.dart';
+import '../../bloc/get_distance_cubit.dart';
+import 'schedule_attendance_teacher_view.dart';
 
 class ProfileTeacherMenuView extends StatelessWidget {
   final TeacherEntity teacher;
@@ -368,9 +370,65 @@ class ProfileTeacherMenuView extends StatelessWidget {
                 CardBasic(
                   image: AppImages.studentAttendance,
                   onpressed: () {
-                    AppNavigator.push(
-                      context,
-                      AttendanceMenuView(teacher: teacher),
+                    showModalBottomSheet(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(16),
+                        ),
+                      ),
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(top: 8),
+                              child: Text(
+                                "Silakan pilih",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w900,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: BasicButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      AppNavigator.push(
+                                        context,
+                                        const SeeAllDataAttandanceStudents(
+                                            isProfileTeacher: true),
+                                      );
+                                    },
+                                    title: "Lihat absen murid",
+                                  ),
+                                ),
+                                Expanded(
+                                  child: BasicButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      AppNavigator.push(
+                                        context,
+                                        ScheduleAttendanceTeacherView(
+                                          teacher: teacher,
+                                        ),
+                                      );
+                                    },
+                                    title: "Lihat absen saya",
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
                   title: 'Lihat Data Absen',
@@ -393,13 +451,69 @@ class ProfileTeacherMenuView extends StatelessWidget {
               children: [
                 CardBasic(
                   image: AppImages.megaphone,
-                  onpressed: () => AppNavigator.push(
-                    context,
-                    CreateAnnouncementView(
-                      teacherId: teacher.id ?? 0,
-                    ),
-                  ),
-                  title: 'Buat Pengumuman',
+                  onpressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(16),
+                        ),
+                      ),
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(top: 8),
+                              child: Text(
+                                "Silakan pilih",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w900,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: BasicButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      AppNavigator.push(
+                                        context,
+                                        CreateAnnouncementView(
+                                            teacherId: teacher.id ?? 0),
+                                      );
+                                    },
+                                    title: "Buat pengumuman",
+                                  ),
+                                ),
+                                Expanded(
+                                  child: BasicButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      AppNavigator.push(
+                                        context,
+                                        ListAnnouncementView(
+                                          teacherId: teacher.id ?? 0,
+                                        ),
+                                      );
+                                    },
+                                    title: "Pengumuman saya",
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  title: 'Pengumuman',
                 ),
                 CardBasic(
                   image: AppImages.teaching,

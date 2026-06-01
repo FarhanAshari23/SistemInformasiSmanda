@@ -13,7 +13,7 @@ import '../../../domain/entities/teacher/teacher.dart';
 import '../../../common/widget/detail/murid_detail.dart';
 import '../../../common/widget/detail/teacher_detail.dart';
 import '../../admin/teacher/views/edit_teacher_detail_view.dart';
-import '../views/edit_profile_student_view.dart';
+import '../views/student/edit_profile_student_view.dart';
 
 class CardProfile extends StatelessWidget {
   final StudentEntity? student;

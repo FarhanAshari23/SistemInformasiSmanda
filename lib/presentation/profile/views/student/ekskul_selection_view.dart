@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../common/bloc/ekskul/ekskul_state.dart';
-import '../../../common/widget/appbar/basic_appbar.dart';
-import '../../../common/widget/inkwell/custom_inkwell.dart';
-import '../../../core/configs/theme/app_colors.dart';
-import '../../../common/bloc/ekskul/ekskul_cubit.dart';
-import '../../../common/bloc/ekskul/select_ekskul_cubit.dart';
-import '../../../common/bloc/ekskul/get_student_ekskul_cubit.dart';
-import '../../../common/bloc/ekskul/get_student_ekskul_state.dart';
-import '../../../domain/entities/ekskul/ekskul.dart';
-import '../../../domain/entities/ekskul/member.dart';
+import '../../../../common/bloc/ekskul/ekskul_state.dart';
+import '../../../../common/widget/appbar/basic_appbar.dart';
+import '../../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../../core/configs/theme/app_colors.dart';
+import '../../../../common/bloc/ekskul/ekskul_cubit.dart';
+import '../../../../common/bloc/ekskul/select_ekskul_cubit.dart';
+import '../../../../common/bloc/ekskul/get_student_ekskul_cubit.dart';
+import '../../../../common/bloc/ekskul/get_student_ekskul_state.dart';
+import '../../../../domain/entities/ekskul/ekskul.dart';
+import '../../../../domain/entities/ekskul/member.dart';
 
 class EkskulSelectionView extends StatefulWidget {
   final int studentId;

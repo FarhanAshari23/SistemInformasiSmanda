@@ -7,7 +7,7 @@ import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
 import '../../../domain/usecases/auth/logout.dart';
 import '../../../presentation/auth/views/login_view.dart';
-import '../../../presentation/profile/views/profile_student_view.dart';
+import '../../../presentation/profile/views/student/profile_student_view.dart';
 import '../../bloc/button/button.cubit.dart';
 import '../../bloc/button/button_state.dart';
 import '../../helper/app_navigation.dart';

@@ -1,43 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../common/helper/parse_time_schedule.dart';
-import '../../../common/widget/button/basic_button.dart';
-import '../../../common/widget/inkwell/custom_inkwell.dart';
-import '../../../core/configs/theme/app_colors.dart';
-import '../../../common/bloc/schedule/jadwal_display_cubit.dart';
-import '../../../common/bloc/schedule/jadwal_display_state.dart';
-import '../../../core/constants/notes.dart';
-import '../../../domain/entities/schedule/day.dart';
-import '../widgets/card_jadwal.dart';
+import '../../../../common/helper/parse_time_schedule.dart';
+import '../../../../common/widget/button/basic_button.dart';
+import '../../../../common/widget/inkwell/custom_inkwell.dart';
+import '../../../../core/configs/theme/app_colors.dart';
+import '../../../../core/constants/notes.dart';
+import '../../../../domain/entities/schedule/day.dart';
+import '../../bloc/get_schedule_teacher_cubit.dart';
+import '../../bloc/get_schedule_teacher_state.dart';
+import '../../widgets/card_jadwal.dart';
 
-class ProfileStudentScheduleView extends StatelessWidget {
+class ProfileTeacherScheduleView extends StatelessWidget {
   final String hari;
-  const ProfileStudentScheduleView({
+  const ProfileTeacherScheduleView({
     super.key,
     required this.hari,
   });
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    return BlocBuilder<JadwalDisplayCubit, JadwalDisplayState>(
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return BlocBuilder<GetScheduleTeacherCubit, GetScheduleTeacherState>(
       builder: (context, state) {
-        if (state is JadwalDisplayLoading) {
+        if (state is GetScheduleTeacherLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
-        if (state is JadwalDisplayLoaded) {
-          if (state.jadwals.isEmpty) {
-            return Padding(
-              padding: EdgeInsets.only(top: height * 0.15),
-              child: const Center(child: Text('Tidak ada jadwal')),
-            );
-          }
-          List<DayEntity> scheduleByDay =
-              state.jadwals.where((element) => element.day == hari).toList();
+        if (state is GetScheduleTeacherLoaded) {
+          List<DayEntity> scheduleByDay = state.teacherSchedule
+              .where((element) => element.day == hari)
+              .toList();
           scheduleByDay.sort(
             (a, b) {
               final startA = parseTimeSchedule(a.startTime!);
@@ -46,7 +41,7 @@ class ProfileStudentScheduleView extends StatelessWidget {
             },
           );
           if (scheduleByDay.isEmpty) {
-            return const Center(child: Text("Tidak ada jadwal di hari ini"));
+            return const Center(child: Text("Tidak mengajar di hari ini"));
           } else {
             return ListView.separated(
               scrollDirection: Axis.vertical,
@@ -82,7 +77,7 @@ class ProfileStudentScheduleView extends StatelessWidget {
                                     ),
                                     const SizedBox(height: 8),
                                     const Text(
-                                      Notes.noteFridayStudents,
+                                      Notes.noteFridayTeachers,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
@@ -111,14 +106,17 @@ class ProfileStudentScheduleView extends StatelessWidget {
                       ),
                     ),
                   );
+                } else {
+                  final item =
+                      scheduleByDay[hari == "Jumat" ? index - 1 : index];
+                  return CardJadwal(
+                    jam: item.className ?? '',
+                    kegiatan: item.subjectName ?? '',
+                    pelaksana: "${item.startTime} - ${item.endTime}",
+                    urutan: index + (hari == "Jumat" ? 0 : 1),
+                    isTeacher: true,
+                  );
                 }
-                final item = scheduleByDay[hari == "Jumat" ? index - 1 : index];
-                return CardJadwal(
-                  jam: "${item.startTime} - ${item.endTime}",
-                  kegiatan: item.subjectName ?? '',
-                  pelaksana: item.teacherName ?? '',
-                  urutan: index + (hari == "Jumat" ? 0 : 1),
-                );
               },
               separatorBuilder: (context, index) => SizedBox(
                 height: height * 0.01,
@@ -129,8 +127,32 @@ class ProfileStudentScheduleView extends StatelessWidget {
             );
           }
         }
-        if (state is JadwalDisplayFailure) {
-          return Text(state.errorMessage);
+        if (state is GetScheduleTeacherFailure) {
+          if (state.errorMessage ==
+              "Something error: (null):(404):Data jadwal tidak ditemukan") {
+            return const Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.event_busy_rounded,
+                  color: AppColors.primary,
+                  size: 48,
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'Tidak ada jadwal',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Text(state.errorMessage);
+          }
         }
         return Container();
       },

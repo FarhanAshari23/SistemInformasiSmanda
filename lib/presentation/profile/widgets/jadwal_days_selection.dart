@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../bloc/bar_days_cubit.dart';
-import '../views/profile_student_schedule_view.dart';
-import '../views/profile_teacher_schedule_view.dart';
+import '../views/student/profile_student_schedule_view.dart';
+import '../views/teacher/profile_teacher_schedule_view.dart';
 
 class JadwalDaysSelection extends StatelessWidget {
   final bool isTeacherSchedule;

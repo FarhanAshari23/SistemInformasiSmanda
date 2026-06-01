@@ -3,6 +3,7 @@ import 'package:new_sistem_informasi_smanda/domain/usecases/news/get_news.dart';
 import 'package:new_sistem_informasi_smanda/domain/usecases/news/get_news_by_class.dart';
 import 'package:new_sistem_informasi_smanda/presentation/news/bloc/news_state.dart';
 
+import '../../../domain/usecases/news/get_news_by_teacher_usecase.dart';
 import '../../../domain/usecases/news/get_news_global_usecase.dart';
 import '../../../service_locator.dart';
 
@@ -38,6 +39,20 @@ class NewsCubit extends Cubit<NewsState> {
   void displayNewsByClass(int classId) async {
     emit(NewsLoading());
     var returnedData = await sl<GetNewsByClassUsecase>().call(params: classId);
+    returnedData.fold(
+      (error) {
+        return emit(NewsFailure(errorMessage: error));
+      },
+      (data) {
+        return emit(NewsLoaded(news: data));
+      },
+    );
+  }
+
+  void displayNewsByTeacher(int teacherId) async {
+    emit(NewsLoading());
+    var returnedData =
+        await sl<GetNewsByTeacherUsecase>().call(params: teacherId);
     returnedData.fold(
       (error) {
         return emit(NewsFailure(errorMessage: error));
