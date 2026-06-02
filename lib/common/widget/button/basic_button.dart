@@ -40,12 +40,16 @@ class _BasicButtonState extends State<BasicButton> {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Center(
-          child: Text(
-            widget.title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: _isPressed ? Colors.black : AppColors.inversePrimary,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Text(
+              widget.title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: _isPressed ? Colors.black : AppColors.inversePrimary,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
         ),

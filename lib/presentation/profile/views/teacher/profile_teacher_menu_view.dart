@@ -244,6 +244,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
                                           ),
                                         ],
                                       ),
+                                      SizedBox(height: height * 0.05),
                                     ],
                                   );
                                 },
@@ -426,6 +427,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            SizedBox(height: height * 0.05),
                           ],
                         );
                       },
@@ -508,6 +510,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            SizedBox(height: height * 0.05),
                           ],
                         );
                       },
