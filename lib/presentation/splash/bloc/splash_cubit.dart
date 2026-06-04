@@ -7,7 +7,13 @@ class SplashCubit extends Cubit<SplashState> {
   SplashCubit() : super(DisplaySplash());
 
   void appStarted() async {
-    var isLoggedIn = await sl<IsLoggedInUsecase>().call();
+    final results = await Future.wait([
+      sl<IsLoggedInUsecase>().call(),
+      Future.delayed(const Duration(seconds: 2)),
+    ]);
+
+    final bool isLoggedIn = results[0] as bool;
+
     if (isLoggedIn) {
       emit(Authenticated());
     } else {
