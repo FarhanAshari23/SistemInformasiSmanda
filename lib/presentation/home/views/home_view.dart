@@ -29,12 +29,6 @@ class HomeView extends StatelessWidget {
       AppImages.teacher,
       AppImages.eskul,
     ];
-    List<String> title = [
-      'HALAMAN PENGUMUMAN',
-      'HALAMAN KELAS',
-      'HALAMAN TENDIK',
-      'HALAMAN EKSKUL',
-    ];
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: MultiBlocProvider(
@@ -117,19 +111,6 @@ class HomeView extends StatelessWidget {
                       student: state.student,
                     ),
                     SizedBox(height: height * 0.0095),
-                    Builder(
-                      builder: (context) {
-                        return Text(
-                          title[context.watch<BarNavigationCubit>().state],
-                          style: const TextStyle(
-                            color: AppColors.primary,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: height * 0.02),
                     Expanded(
                       child: Stack(
                         children: [

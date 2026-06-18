@@ -69,135 +69,119 @@ class BasicAppbar extends StatelessWidget {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 48),
-          child: Stack(
-            alignment: AlignmentDirectional.topCenter,
-            clipBehavior: Clip.none,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                width: double.infinity,
-                height: height * 0.09,
-                color: AppColors.secondary,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      isBackViewed
-                          ? CustomInkWell(
-                              onTap: () => Navigator.pop(context),
-                              borderRadius: 8,
-                              defaultColor: AppColors.tertiary,
-                              child: SizedBox(
-                                width: width * 0.125,
-                                height: height * 0.06,
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.arrow_back,
-                                    color: AppColors.inversePrimary,
-                                    size: 32,
-                                  ),
+              isBackViewed
+                  ? CustomInkWell(
+                      onTap: () => Navigator.pop(context),
+                      borderRadius: 8,
+                      defaultColor: AppColors.tertiary,
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: AppColors.inversePrimary,
+                          size: 32,
+                        ),
+                      ),
+                    )
+                  : teacher != null
+                      ? Text(
+                          'Selamat $greeting $teacherNickname!',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.inversePrimary,
+                          ),
+                        )
+                      : const SizedBox(),
+              student != null
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: AppColors.tertiary,
+                      ),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => AppNavigator.push(
+                              context,
+                              ProfileStudentView(
+                                studentId: student?.id ?? 0,
+                              ),
+                            ),
+                            child: NetworkPhoto(
+                              width: width * 0.05,
+                              height: width * 0.05,
+                              shape: BoxShape.circle,
+                              fallbackAsset: student?.gender == 1
+                                  ? AppImages.boyStudent
+                                  : student?.religion == "Islam"
+                                      ? AppImages.girlStudent
+                                      : AppImages.girlNonStudent,
+                              imageUrl: DisplayImage.displayImageStudent(
+                                  student?.picture ?? ''),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '$greeting, $studentNickname!',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : isLogout ?? false
+                      ? Builder(builder: (outerContext) {
+                          return GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return BasicDialog(
+                                    buttonTitle: 'Keluar',
+                                    mainTitle:
+                                        'Apakah Anda Yakin Ingin Keluar dari Aplikasi?',
+                                    splashImage: AppImages.splashLogout,
+                                    onPressed: () {
+                                      outerContext
+                                          .read<ButtonStateCubit>()
+                                          .execute(
+                                            usecase: LogoutUsecase(),
+                                          );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                            child: Container(
+                              width: width * 0.125,
+                              height: height * 0.06,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: AppColors.tertiary,
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.logout,
+                                  color: AppColors.inversePrimary,
+                                  size: 32,
                                 ),
                               ),
-                            )
-                          : teacher != null
-                              ? Text(
-                                  'Selamat $greeting $teacherNickname!',
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.inversePrimary,
-                                  ),
-                                )
-                              : const SizedBox(),
-                      student != null
-                          ? Row(
-                              children: [
-                                Text(
-                                  '$greeting $studentNickname!',
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.inversePrimary,
-                                  ),
-                                ),
-                                SizedBox(width: width * 0.02),
-                                GestureDetector(
-                                  onTap: () => AppNavigator.push(
-                                    context,
-                                    ProfileStudentView(
-                                      studentId: student?.id ?? 0,
-                                    ),
-                                  ),
-                                  child: NetworkPhoto(
-                                    width: width * 0.105,
-                                    height: height * 0.065,
-                                    shape: BoxShape.circle,
-                                    fallbackAsset: student?.gender == 1
-                                        ? AppImages.boyStudent
-                                        : student?.religion == "Islam"
-                                            ? AppImages.girlStudent
-                                            : AppImages.girlNonStudent,
-                                    imageUrl: DisplayImage.displayImageStudent(
-                                        student?.picture ?? ''),
-                                  ),
-                                ),
-                              ],
-                            )
-                          : isLogout ?? false
-                              ? Builder(builder: (outerContext) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return BasicDialog(
-                                            buttonTitle: 'Keluar',
-                                            mainTitle:
-                                                'Apakah Anda Yakin Ingin Keluar dari Aplikasi?',
-                                            splashImage: AppImages.splashLogout,
-                                            onPressed: () {
-                                              outerContext
-                                                  .read<ButtonStateCubit>()
-                                                  .execute(
-                                                    usecase: LogoutUsecase(),
-                                                  );
-                                            },
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      width: width * 0.125,
-                                      height: height * 0.06,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: AppColors.tertiary,
-                                      ),
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.logout,
-                                          color: AppColors.inversePrimary,
-                                          size: 32,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                })
-                              : const SizedBox(),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 30,
-                left: width * 0.4,
-                child: Image.asset(
-                  AppImages.logoSMA,
-                  width: width * 0.2,
-                  height: height * 0.095,
-                ),
-              ),
+                            ),
+                          );
+                        })
+                      : const SizedBox(),
             ],
           ),
         ),
