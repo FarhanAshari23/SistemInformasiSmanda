@@ -47,6 +47,7 @@ class ProfileTeacher extends StatelessWidget {
                     const BasicAppbar(
                       isBackViewed: false,
                       isLogout: true,
+                      showLogo: true,
                     ),
                     Container(
                       width: double.infinity,
@@ -86,6 +87,7 @@ class ProfileTeacher extends StatelessWidget {
                       isBackViewed: false,
                       isLogout: true,
                       teacher: teacherState.teacher,
+                      showLogo: true,
                     ),
                     Expanded(
                       child: Column(

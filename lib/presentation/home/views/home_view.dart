@@ -49,6 +49,7 @@ class HomeView extends StatelessWidget {
                   children: [
                     const BasicAppbar(
                       isBackViewed: false,
+                      showLogo: true,
                     ),
                     SizedBox(height: height * 0.25),
                     const Text(
@@ -108,6 +109,7 @@ class HomeView extends StatelessWidget {
                   children: [
                     BasicAppbar(
                       isBackViewed: false,
+                      showLogo: true,
                       student: state.student,
                     ),
                     SizedBox(height: height * 0.0095),
