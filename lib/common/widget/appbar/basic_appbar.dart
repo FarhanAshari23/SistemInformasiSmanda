@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../domain/entities/student/student.dart';
 import '../../../domain/entities/teacher/teacher.dart';
-import '../../../domain/usecases/auth/logout.dart';
-import '../../../presentation/auth/views/login_view.dart';
 import '../../../presentation/profile/views/student/profile_student_view.dart';
-import '../../bloc/button/button.cubit.dart';
-import '../../bloc/button/button_state.dart';
 import '../../helper/app_navigation.dart';
 import '../../helper/display_image.dart';
 import '../../helper/string_helper.dart';
-import '../dialog/basic_dialog.dart';
 import '../inkwell/custom_inkwell.dart';
 import '../photo/network_photo.dart';
 
@@ -33,7 +27,6 @@ class BasicAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     DateTime now = DateTime.now();
     String teacherNickname = StringHelper.getFirstRealName(teacher?.name ?? '');
     String studentNickname = StringHelper.extractName(student?.name ?? '');
@@ -48,56 +41,71 @@ class BasicAppbar extends StatelessWidget {
     } else {
       greeting = "Malam";
     }
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => ButtonStateCubit(),
-        ),
-      ],
-      child: BlocListener<ButtonStateCubit, ButtonState>(
-        listener: (context, state) {
-          if (state is ButtonLoadingState) return;
-          if (state is ButtonSuccessState) {
-            AppNavigator.pushReplacement(context, LoginView());
-          }
-          if (state is ButtonFailureState) {
-            var snackbar = SnackBar(
-              content: Text(state.errorMessage),
-              behavior: SnackBarBehavior.floating,
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackbar);
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              isBackViewed
-                  ? CustomInkWell(
-                      onTap: () => Navigator.pop(context),
-                      borderRadius: 8,
-                      defaultColor: AppColors.tertiary,
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: AppColors.inversePrimary,
-                          size: 32,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          isBackViewed
+              ? CustomInkWell(
+                  onTap: () => Navigator.pop(context),
+                  borderRadius: 8,
+                  defaultColor: AppColors.tertiary,
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: AppColors.inversePrimary,
+                      size: 32,
+                    ),
+                  ),
+                )
+              : const SizedBox(),
+          student != null
+              ? Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: AppColors.tertiary,
+                  ),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => AppNavigator.push(
+                          context,
+                          ProfileStudentView(
+                            studentId: student?.id ?? 0,
+                          ),
+                        ),
+                        child: NetworkPhoto(
+                          width: width * 0.05,
+                          height: width * 0.05,
+                          shape: BoxShape.circle,
+                          fallbackAsset: student?.gender == 1
+                              ? AppImages.boyStudent
+                              : student?.religion == "Islam"
+                                  ? AppImages.girlStudent
+                                  : AppImages.girlNonStudent,
+                          imageUrl: DisplayImage.displayImageStudent(
+                              student?.picture ?? ''),
                         ),
                       ),
-                    )
-                  : teacher != null
-                      ? Text(
-                          'Selamat $greeting $teacherNickname!',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.inversePrimary,
-                          ),
-                        )
-                      : const SizedBox(),
-              student != null
+                      const SizedBox(width: 8),
+                      Text(
+                        '$greeting, $studentNickname!',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : teacher != null
                   ? Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 8,
@@ -107,84 +115,17 @@ class BasicAppbar extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                         color: AppColors.tertiary,
                       ),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () => AppNavigator.push(
-                              context,
-                              ProfileStudentView(
-                                studentId: student?.id ?? 0,
-                              ),
-                            ),
-                            child: NetworkPhoto(
-                              width: width * 0.05,
-                              height: width * 0.05,
-                              shape: BoxShape.circle,
-                              fallbackAsset: student?.gender == 1
-                                  ? AppImages.boyStudent
-                                  : student?.religion == "Islam"
-                                      ? AppImages.girlStudent
-                                      : AppImages.girlNonStudent,
-                              imageUrl: DisplayImage.displayImageStudent(
-                                  student?.picture ?? ''),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '$greeting, $studentNickname!',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        'Selamat $greeting $teacherNickname!',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.inversePrimary,
+                        ),
                       ),
                     )
-                  : isLogout ?? false
-                      ? Builder(builder: (outerContext) {
-                          return GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return BasicDialog(
-                                    buttonTitle: 'Keluar',
-                                    mainTitle:
-                                        'Apakah Anda Yakin Ingin Keluar dari Aplikasi?',
-                                    splashImage: AppImages.splashLogout,
-                                    onPressed: () {
-                                      outerContext
-                                          .read<ButtonStateCubit>()
-                                          .execute(
-                                            usecase: LogoutUsecase(),
-                                          );
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                            child: Container(
-                              width: width * 0.125,
-                              height: height * 0.06,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: AppColors.tertiary,
-                              ),
-                              child: const Center(
-                                child: Icon(
-                                  Icons.logout,
-                                  color: AppColors.inversePrimary,
-                                  size: 32,
-                                ),
-                              ),
-                            ),
-                          );
-                        })
-                      : const SizedBox(),
-            ],
-          ),
-        ),
+                  : const SizedBox(),
+        ],
       ),
     );
   }

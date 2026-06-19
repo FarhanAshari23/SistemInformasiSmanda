@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:new_sistem_informasi_smanda/common/widget/inkwell/custom_inkwell.dart';
 
 import '../../../../common/bloc/button/button.cubit.dart';
 import '../../../../common/bloc/button/button_state.dart';
 import '../../../../common/helper/app_navigation.dart';
 import '../../../../common/widget/button/basic_button.dart';
 import '../../../../common/widget/card/card_basic.dart';
+import '../../../../common/widget/dialog/basic_dialog.dart';
 import '../../../../core/configs/assets/app_images.dart';
 import '../../../../core/configs/theme/app_colors.dart';
 import '../../../../domain/entities/attandance/attandance_teacher.dart';
 import '../../../../domain/entities/teacher/teacher.dart';
 import '../../../../domain/usecases/attendance/add_teacher_attendance.dart';
 import '../../../../domain/usecases/attendance/add_teacher_completion_usecase.dart';
+import '../../../../domain/usecases/auth/logout.dart';
 import '../../../admin/attendance/views/see_all_data_attandance_students.dart';
 import '../../../admin/schedule/views/edit_schedule_view.dart';
+import '../../../auth/views/login_view.dart';
 import '../../bloc/get_teacher_attendance_cubit.dart';
 import '../../bloc/get_teacher_attendance_state.dart';
+import '../../bloc/logout_state.cubit.dart';
 import 'create_announcement_view.dart';
 import 'list_announcement_view.dart';
 import 'scan_barcode_view.dart';
@@ -43,6 +48,9 @@ class ProfileTeacherMenuView extends StatelessWidget {
           create: (context) => ButtonStateCubit(),
         ),
         BlocProvider(
+          create: (context) => LogoutStateCubit(),
+        ),
+        BlocProvider(
           create: (context) => GetTeacherAttendanceCubit()
             ..getAttendanceTeacherCurrent(teacher.id ?? 0),
         ),
@@ -63,22 +71,26 @@ class ProfileTeacherMenuView extends StatelessWidget {
           BlocListener<ButtonStateCubit, ButtonState>(
             listener: (context, state) {
               if (state is ButtonSuccessState || state is ButtonFailureState) {
-                Navigator.of(context, rootNavigator: true).pop();
+                if (context.read<LogoutStateCubit>().state == 0) {
+                  Navigator.of(context, rootNavigator: true).pop();
 
-                context
-                    .read<GetTeacherAttendanceCubit>()
-                    .getAttendanceTeacherCurrent(teacher.id ?? 0);
+                  context
+                      .read<GetTeacherAttendanceCubit>()
+                      .getAttendanceTeacherCurrent(teacher.id ?? 0);
 
-                String message = state is ButtonSuccessState
-                    ? "Proses absen berhasil dilakukan"
-                    : (state as ButtonFailureState).errorMessage;
+                  String message = state is ButtonSuccessState
+                      ? "Proses absen berhasil dilakukan"
+                      : (state as ButtonFailureState).errorMessage;
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(message),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                } else {
+                  AppNavigator.pushReplacement(context, LoginView());
+                }
               }
             },
           ),
@@ -244,7 +256,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: height * 0.05),
+                                      SizedBox(height: height * 0.01),
                                     ],
                                   );
                                 },
@@ -427,7 +439,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(height: height * 0.05),
+                            SizedBox(height: height * 0.01),
                           ],
                         );
                       },
@@ -510,7 +522,7 @@ class ProfileTeacherMenuView extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(height: height * 0.05),
+                            SizedBox(height: height * 0.01),
                           ],
                         );
                       },
@@ -530,6 +542,59 @@ class ProfileTeacherMenuView extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: height * 0.01),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Builder(builder: (outerContext) {
+                return CustomInkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return BasicDialog(
+                          buttonTitle: 'Keluar',
+                          mainTitle:
+                              'Apakah Anda Yakin Ingin Keluar dari Aplikasi?',
+                          splashImage: AppImages.splashLogout,
+                          onPressed: () {
+                            outerContext
+                                .read<LogoutStateCubit>()
+                                .changeState(1);
+                            outerContext.read<ButtonStateCubit>().execute(
+                                  usecase: LogoutUsecase(),
+                                );
+                          },
+                        );
+                      },
+                    );
+                  },
+                  borderRadius: 8,
+                  defaultColor: AppColors.primary,
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.logout_rounded,
+                          color: AppColors.inversePrimary,
+                          size: 32,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'Keluar',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.inversePrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            )
           ],
         ),
       ),
