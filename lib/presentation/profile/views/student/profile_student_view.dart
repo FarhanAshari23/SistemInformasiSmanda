@@ -47,7 +47,6 @@ class ProfileStudentView extends StatelessWidget {
             children: [
               const BasicAppbar(
                 isBackViewed: true,
-                isLogout: true,
               ),
               BlocBuilder<StudentCubit, StudentState>(
                 builder: (context, state) {

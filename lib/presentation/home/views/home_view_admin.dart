@@ -5,8 +5,11 @@ import '../../../common/bloc/button/button_state.dart';
 import '../../../common/bloc/kelas/get_all_kelas_cubit.dart';
 import '../../../common/helper/app_navigation.dart';
 import '../../../common/widget/appbar/basic_appbar.dart';
+import '../../../common/widget/dialog/basic_dialog.dart';
+import '../../../common/widget/inkwell/custom_inkwell.dart';
 import '../../../core/configs/assets/app_images.dart';
 import '../../../core/configs/theme/app_colors.dart';
+import '../../../domain/usecases/auth/logout.dart';
 import '../../auth/views/login_view.dart';
 import '../../admin/activity/views/manage_activity_view.dart';
 import '../../admin/attendance/views/see_all_data_attandance_students.dart';
@@ -45,6 +48,8 @@ class HomeViewAdmin extends StatelessWidget {
       'Edit data kelas',
       'Daftar kegiatan',
       'Daftar tugas tambahan',
+      "ini box kosong",
+      "ini buat logout",
     ];
     List<String> images = [
       AppImages.teacherAttendance,
@@ -107,31 +112,9 @@ class HomeViewAdmin extends StatelessWidget {
               children: [
                 const BasicAppbar(
                   isBackViewed: false,
-                  isLogout: true,
+                  showLogo: true,
+                  isAdmin: true,
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'Selamat Datang Admin',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'Apa yang ingin anda lakukan hari ini?',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
                 Expanded(
                   child: GridView.builder(
                     padding: const EdgeInsets.all(12),
@@ -144,6 +127,54 @@ class HomeViewAdmin extends StatelessWidget {
                       mainAxisExtent: height * 0.25,
                     ),
                     itemBuilder: (context, index) {
+                      if (index == title.length - 2) {
+                        return const SizedBox();
+                      }
+                      if (index == title.length - 1) {
+                        return CustomInkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                return BasicDialog(
+                                  buttonTitle: 'Keluar',
+                                  mainTitle:
+                                      'Apakah Anda Yakin Ingin Keluar dari Aplikasi?',
+                                  splashImage: AppImages.splashLogout,
+                                  onPressed: () {
+                                    context.read<ButtonStateCubit>().execute(
+                                          usecase: LogoutUsecase(),
+                                        );
+                                  },
+                                );
+                              },
+                            );
+                          },
+                          borderRadius: 8,
+                          defaultColor: AppColors.primary,
+                          child: const Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.logout_rounded,
+                                  color: AppColors.inversePrimary,
+                                  size: 56,
+                                ),
+                                SizedBox(height: 24),
+                                Text(
+                                  'Keluar',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.inversePrimary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
                       return CardBasic(
                         onpressed: () =>
                             AppNavigator.push(context, pages[index]),
@@ -152,7 +183,7 @@ class HomeViewAdmin extends StatelessWidget {
                       );
                     },
                   ),
-                )
+                ),
               ],
             ),
           ),

@@ -13,18 +13,18 @@ import '../photo/network_photo.dart';
 
 class BasicAppbar extends StatelessWidget {
   final bool isBackViewed;
-  final bool? isLogout;
   final bool showLogo;
   final TeacherEntity? teacher;
   final StudentEntity? student;
+  final bool isAdmin;
 
   const BasicAppbar({
     super.key,
     required this.isBackViewed,
     this.showLogo = false,
-    this.isLogout,
     this.student,
     this.teacher,
+    this.isAdmin = false,
   });
 
   @override
@@ -40,17 +40,30 @@ class BasicAppbar extends StatelessWidget {
         children: [
           _buildLeftSection(context),
           !showLogo
-              ? Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: AppColors.tertiary,
-                  ),
-                  child: Image.asset(
-                    AppImages.logoSMA,
-                    width: 32,
-                    height: 32,
-                  ),
+              ? Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: AppColors.tertiary,
+                      ),
+                      child: Image.asset(
+                        AppImages.logoSMA,
+                        width: 32,
+                        height: 32,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "Smanda Comet",
+                      style: TextStyle(
+                        fontSize: 8,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    )
+                  ],
                 )
               : const SizedBox(),
           _buildRightSection(width, greeting, context),
@@ -101,14 +114,14 @@ class BasicAppbar extends StatelessWidget {
               height: 32,
             ),
           ),
-          const SizedBox(width: 4),
+          const SizedBox(width: 8),
           const Text(
             "Smanda\nComet",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: AppColors.secondary,
+              color: Colors.white,
             ),
           )
         ],
@@ -182,9 +195,27 @@ class BasicAppbar extends StatelessWidget {
         ),
       );
     }
+
+    if (isAdmin == true) {
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: AppColors.tertiary,
+        ),
+        child: Text(
+          'Selamat $greeting Admin!',
+          style: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w800,
+            color: AppColors.inversePrimary,
+          ),
+        ),
+      );
+    }
     return const SizedBox(
-      width: 36,
-      height: 36,
+      width: 40,
+      height: 40,
     );
   }
 }
