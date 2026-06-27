@@ -151,7 +151,7 @@ class HomeViewAdmin extends StatelessWidget {
                             );
                           },
                           borderRadius: 8,
-                          defaultColor: AppColors.primary,
+                          defaultColor: AppColors.secondary,
                           child: const Center(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
