@@ -53,8 +53,8 @@ class EkskulScreen extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   padding: const EdgeInsets.only(
-                    left: 8,
-                    right: 8,
+                    left: 16,
+                    right: 16,
                     bottom: 48,
                   ),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

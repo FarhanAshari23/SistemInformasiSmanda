@@ -42,189 +42,183 @@ class ProfileStudentView extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              const BasicAppbar(
-                isBackViewed: true,
-              ),
-              BlocBuilder<StudentCubit, StudentState>(
-                builder: (context, state) {
-                  if (state is StudentLoading) {
-                    return Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.symmetric(horizontal: width * 0.015),
-                      height: height * 0.2,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: AppColors.secondary,
-                      ),
-                      child: const Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              'Silakan Tunggu Sebentar',
-                              style: TextStyle(
-                                color: AppColors.inversePrimary,
-                                fontWeight: FontWeight.w800,
-                              ),
+        body: Column(
+          children: [
+            BlocBuilder<StudentCubit, StudentState>(
+              builder: (context, state) {
+                if (state is StudentLoading) {
+                  return Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: width * 0.015),
+                    height: height * 0.2,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: AppColors.secondary,
+                    ),
+                    child: const Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            'Silakan Tunggu Sebentar',
+                            style: TextStyle(
+                              color: AppColors.inversePrimary,
+                              fontWeight: FontWeight.w800,
                             ),
-                            CircularProgressIndicator(
-                              color: AppColors.primary,
-                            ),
-                          ],
-                        ),
+                          ),
+                          CircularProgressIndicator(
+                            color: AppColors.primary,
+                          ),
+                        ],
                       ),
-                    );
-                  }
-                  if (state is StudentLoaded) {
-                    return BlocProvider(
-                      create: (context) => JadwalDisplayCubit()
-                        ..displayJadwal(params: state.student.kelasId ?? 0),
-                      child: Expanded(
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: CardProfile(
-                                    student: state.student,
-                                  ),
+                    ),
+                  );
+                }
+                if (state is StudentLoaded) {
+                  return BlocProvider(
+                    create: (context) => JadwalDisplayCubit()
+                      ..displayJadwal(params: state.student.kelasId ?? 0),
+                    child: Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: CardProfile(
+                                  student: state.student,
                                 ),
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        context
-                                            .read<TwoContainersCubit>()
-                                            .selectContainerOne();
-                                      },
-                                      child: BlocBuilder<TwoContainersCubit,
-                                          TwoContainersState>(
-                                        builder: (context, state) {
-                                          return AnimatedContainer(
-                                            duration: const Duration(
-                                                milliseconds: 300),
-                                            width: state ==
+                              ),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      context
+                                          .read<TwoContainersCubit>()
+                                          .selectContainerOne();
+                                    },
+                                    child: BlocBuilder<TwoContainersCubit,
+                                        TwoContainersState>(
+                                      builder: (context, state) {
+                                        return AnimatedContainer(
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          width: state ==
+                                                  TwoContainersState
+                                                      .containerOneSelected
+                                              ? width * 0.125
+                                              : width * 0.09,
+                                          height: height * 0.055,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft:
+                                                  const Radius.circular(12),
+                                              bottomLeft: state ==
+                                                      TwoContainersState
+                                                          .containerOneSelected
+                                                  ? const Radius.circular(12)
+                                                  : const Radius.circular(0),
+                                            ),
+                                            color: state ==
                                                     TwoContainersState
                                                         .containerOneSelected
-                                                ? width * 0.125
-                                                : width * 0.09,
-                                            height: height * 0.055,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft:
-                                                    const Radius.circular(12),
-                                                bottomLeft: state ==
-                                                        TwoContainersState
-                                                            .containerOneSelected
-                                                    ? const Radius.circular(12)
-                                                    : const Radius.circular(0),
-                                              ),
+                                                ? AppColors.primary
+                                                : AppColors.secondary,
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.event,
                                               color: state ==
                                                       TwoContainersState
                                                           .containerOneSelected
-                                                  ? AppColors.primary
-                                                  : AppColors.secondary,
+                                                  ? AppColors.inversePrimary
+                                                  : AppColors.primary,
                                             ),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.event,
-                                                color: state ==
-                                                        TwoContainersState
-                                                            .containerOneSelected
-                                                    ? AppColors.inversePrimary
-                                                    : AppColors.primary,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        context
-                                            .read<TwoContainersCubit>()
-                                            .selectContainerTwo();
+                                          ),
+                                        );
                                       },
-                                      child: BlocBuilder<TwoContainersCubit,
-                                          TwoContainersState>(
-                                        builder: (context, state) {
-                                          return AnimatedContainer(
-                                            duration: const Duration(
-                                                milliseconds: 300),
-                                            width: state ==
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      context
+                                          .read<TwoContainersCubit>()
+                                          .selectContainerTwo();
+                                    },
+                                    child: BlocBuilder<TwoContainersCubit,
+                                        TwoContainersState>(
+                                      builder: (context, state) {
+                                        return AnimatedContainer(
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          width: state ==
+                                                  TwoContainersState
+                                                      .containerTwoSelected
+                                              ? width * 0.125
+                                              : width * 0.09,
+                                          height: height * 0.055,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: state ==
+                                                      TwoContainersState
+                                                          .containerTwoSelected
+                                                  ? const Radius.circular(12)
+                                                  : const Radius.circular(0),
+                                              bottomLeft:
+                                                  const Radius.circular(12),
+                                            ),
+                                            color: state ==
                                                     TwoContainersState
                                                         .containerTwoSelected
-                                                ? width * 0.125
-                                                : width * 0.09,
-                                            height: height * 0.055,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: state ==
-                                                        TwoContainersState
-                                                            .containerTwoSelected
-                                                    ? const Radius.circular(12)
-                                                    : const Radius.circular(0),
-                                                bottomLeft:
-                                                    const Radius.circular(12),
-                                              ),
+                                                ? AppColors.primary
+                                                : AppColors.secondary,
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.calendar_month,
                                               color: state ==
                                                       TwoContainersState
                                                           .containerTwoSelected
-                                                  ? AppColors.primary
-                                                  : AppColors.secondary,
+                                                  ? AppColors.inversePrimary
+                                                  : AppColors.primary,
                                             ),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.calendar_month,
-                                                color: state ==
-                                                        TwoContainersState
-                                                            .containerTwoSelected
-                                                    ? AppColors.inversePrimary
-                                                    : AppColors.primary,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: height * 0.02),
-                            Expanded(
-                              child: SizedBox(
-                                child: Builder(builder: (context) {
-                                  return context
-                                              .watch<TwoContainersCubit>()
-                                              .state ==
-                                          TwoContainersState
-                                              .containerOneSelected
-                                      ? const JadwalDaysSelection()
-                                      : ProfileStudentAttendanceView(
-                                          student: state.student);
-                                }),
+                                  ),
+                                ],
                               ),
+                            ],
+                          ),
+                          SizedBox(height: height * 0.02),
+                          Expanded(
+                            child: SizedBox(
+                              child: Builder(builder: (context) {
+                                return context
+                                            .watch<TwoContainersCubit>()
+                                            .state ==
+                                        TwoContainersState.containerOneSelected
+                                    ? const JadwalDaysSelection()
+                                    : ProfileStudentAttendanceView(
+                                        student: state.student);
+                              }),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    );
-                  }
-                  if (state is StudentFailure) {
-                    return Center(child: Text(state.errorMessage));
-                  }
-                  return Container();
-                },
-              ),
-            ],
-          ),
+                    ),
+                  );
+                }
+                if (state is StudentFailure) {
+                  return Center(child: Text(state.errorMessage));
+                }
+                return Container();
+              },
+            ),
+          ],
         ),
       ),
     );

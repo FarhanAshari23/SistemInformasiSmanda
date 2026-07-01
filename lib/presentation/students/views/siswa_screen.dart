@@ -20,7 +20,7 @@ class SiswaScreen extends StatelessWidget {
         child: Builder(
           builder: (context) {
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

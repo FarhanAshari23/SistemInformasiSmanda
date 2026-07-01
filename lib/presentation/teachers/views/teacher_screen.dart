@@ -87,6 +87,7 @@ class TeacherScreen extends StatelessWidget {
             final tabIndex = context.watch<TeacherNavigationCubit>().state;
             return ListView(
               scrollDirection: Axis.vertical,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               children: [
                 const Padding(
                   padding: EdgeInsets.all(8.0),
