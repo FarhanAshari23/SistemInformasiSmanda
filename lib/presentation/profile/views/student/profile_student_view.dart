@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../common/bloc/button/button.cubit.dart';
 import '../../../../common/bloc/student/get_student_cubit.dart';
 import '../../../../common/bloc/student/get_student_state.dart';
-import '../../../../common/widget/appbar/basic_appbar.dart';
 import '../../../../core/configs/theme/app_colors.dart';
 import '../../bloc/bar_days_cubit.dart';
 import '../../bloc/get_attendance_student_cubit.dart';
