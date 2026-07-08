@@ -30,7 +30,7 @@ class CardProfile extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: width * 0.015),
+      padding: EdgeInsets.symmetric(horizontal: width * 0.02),
       child: CustomInkWell(
         borderRadius: 16,
         defaultColor: AppColors.secondary,
@@ -47,7 +47,7 @@ class CardProfile extends StatelessWidget {
             bottom: 18,
             top: 18,
             right: 12,
-            left: 8,
+            left: 12,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -58,8 +58,8 @@ class CardProfile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     NetworkPhoto(
-                      width: width * 0.3,
-                      height: height * 0.15,
+                      width: width * 0.25,
+                      height: height * 0.1,
                       forceRefresh: true,
                       fallbackAsset: student != null
                           ? student?.gender == 1
@@ -133,11 +133,11 @@ class CardProfile extends StatelessWidget {
                           ),
                   ),
                   child: const Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(4),
                     child: Icon(
                       Icons.edit,
                       color: Colors.white,
-                      size: 16,
+                      size: 12,
                     ),
                   ),
                 ),

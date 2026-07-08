@@ -101,47 +101,41 @@ class ProfileTeacher extends StatelessWidget {
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  BlocBuilder<TwoContainersCubit,
-                                      TwoContainersState>(
+                                children: List.generate(2, (index) {
+                                  return BlocBuilder<TwoContainersCubit, int>(
                                     builder: (context, state) {
+                                      final isSelected = state == index;
+
                                       return GestureDetector(
                                         onTap: () {
                                           context
                                               .read<TwoContainersCubit>()
-                                              .selectContainerOne();
+                                              .selectIndex(index);
                                         },
                                         child: AnimatedContainer(
                                           duration:
                                               const Duration(milliseconds: 300),
-                                          width: state ==
-                                                  TwoContainersState
-                                                      .containerOneSelected
-                                              ? width * 0.12
+                                          width: isSelected
+                                              ? width * 0.125
                                               : width * 0.09,
                                           height: height * 0.055,
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.only(
-                                              topLeft:
-                                                  const Radius.circular(12),
-                                              bottomLeft: state ==
-                                                      TwoContainersState
-                                                          .containerOneSelected
+                                              topLeft: isSelected
+                                                  ? const Radius.circular(12)
+                                                  : const Radius.circular(0),
+                                              bottomLeft: isSelected
                                                   ? const Radius.circular(12)
                                                   : const Radius.circular(0),
                                             ),
-                                            color: state ==
-                                                    TwoContainersState
-                                                        .containerOneSelected
+                                            color: isSelected
                                                 ? AppColors.primary
                                                 : AppColors.secondary,
                                           ),
                                           child: Center(
                                             child: Icon(
-                                              Icons.calendar_month,
-                                              color: state ==
-                                                      TwoContainersState
-                                                          .containerOneSelected
+                                              _getIconForIndex(index),
+                                              color: isSelected
                                                   ? AppColors.inversePrimary
                                                   : AppColors.primary,
                                             ),
@@ -149,57 +143,9 @@ class ProfileTeacher extends StatelessWidget {
                                         ),
                                       );
                                     },
-                                  ),
-                                  BlocBuilder<TwoContainersCubit,
-                                      TwoContainersState>(
-                                    builder: (context, state) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          context
-                                              .read<TwoContainersCubit>()
-                                              .selectContainerTwo();
-                                        },
-                                        child: AnimatedContainer(
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                          width: state ==
-                                                  TwoContainersState
-                                                      .containerTwoSelected
-                                              ? width * 0.12
-                                              : width * 0.09,
-                                          height: height * 0.055,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: state ==
-                                                      TwoContainersState
-                                                          .containerTwoSelected
-                                                  ? const Radius.circular(12)
-                                                  : const Radius.circular(0),
-                                              bottomLeft:
-                                                  const Radius.circular(12),
-                                            ),
-                                            color: state ==
-                                                    TwoContainersState
-                                                        .containerTwoSelected
-                                                ? AppColors.primary
-                                                : AppColors.secondary,
-                                          ),
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.apps,
-                                              color: state ==
-                                                      TwoContainersState
-                                                          .containerTwoSelected
-                                                  ? AppColors.inversePrimary
-                                                  : AppColors.primary,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
+                                  );
+                                }),
+                              )
                             ],
                           ),
                           SizedBox(height: height * 0.01),
@@ -209,7 +155,7 @@ class ProfileTeacher extends StatelessWidget {
                                 return context
                                             .watch<TwoContainersCubit>()
                                             .state ==
-                                        TwoContainersState.containerOneSelected
+                                        1
                                     ? const JadwalDaysSelection(
                                         isTeacherSchedule: true,
                                       )
@@ -234,5 +180,17 @@ class ProfileTeacher extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+IconData _getIconForIndex(int index) {
+  switch (index) {
+    case 0:
+      return Icons.calendar_month;
+    case 1:
+      return Icons.apps;
+    case 2:
+    default:
+      return Icons.task;
   }
 }

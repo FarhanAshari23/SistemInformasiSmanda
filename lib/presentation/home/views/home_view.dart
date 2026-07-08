@@ -32,6 +32,13 @@ class HomeView extends StatelessWidget {
       AppSvg.ekskulLogo,
       AppSvg.userLogo,
     ];
+    List<String> iconImageSelected = [
+      AppSvg.newsLogoSelected,
+      AppSvg.studentLogoSelected,
+      AppSvg.teacherLogoSelected,
+      AppSvg.ekskulLogoSelected,
+      AppSvg.userLogoSelected,
+    ];
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -135,7 +142,7 @@ class HomeView extends StatelessWidget {
                         width: double.infinity,
                         color: AppColors.inversePrimary,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: List.generate(
                             iconImage.length,
                             (index) {
@@ -148,22 +155,22 @@ class HomeView extends StatelessWidget {
                                       .read<BarNavigationCubit>()
                                       .changeColor(index);
                                 },
-                                defaultColor: selected
-                                    ? AppColors.primary
-                                    : AppColors.inversePrimary,
+                                defaultColor: AppColors.inversePrimary,
                                 child: Container(
-                                  padding: const EdgeInsets.all(16),
-                                  width: height * 0.09,
-                                  height: height * 0.09,
+                                  padding: const EdgeInsets.all(12),
                                   child: Center(
                                     child: SvgPicture.asset(
-                                      iconImage[index],
+                                      selected
+                                          ? iconImageSelected[index]
+                                          : iconImage[index],
                                       colorFilter: ColorFilter.mode(
                                         selected
-                                            ? AppColors.inversePrimary
-                                            : AppColors.primary,
+                                            ? AppColors.primary
+                                            : AppColors.secondary,
                                         BlendMode.srcIn,
                                       ),
+                                      width: 24,
+                                      height: 24,
                                     ),
                                   ),
                                 ),

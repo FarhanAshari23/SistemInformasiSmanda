@@ -1,13 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum TwoContainersState { initial, containerOneSelected, containerTwoSelected }
-
-class TwoContainersCubit extends Cubit<TwoContainersState> {
-  TwoContainersCubit() : super(TwoContainersState.containerOneSelected);
-
-  void selectContainerOne() => emit(TwoContainersState.containerOneSelected);
-
-  void selectContainerTwo() => emit(TwoContainersState.containerTwoSelected);
-
-  void resetSelection() => emit(TwoContainersState.initial);
+class TwoContainersCubit extends Cubit<int> {
+  TwoContainersCubit() : super(0);
+  void selectIndex(int index) => emit(index);
+  void resetSelection() => emit(-1);
 }
