@@ -27,12 +27,15 @@ class CardProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    final mediaQueryHeight = MediaQuery.of(context).size.height;
+    final bodyHeight = mediaQueryHeight -
+        MediaQuery.of(context).padding.top -
+        MediaQuery.of(context).padding.bottom;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: width * 0.02),
       child: CustomInkWell(
-        borderRadius: 16,
+        borderRadius: 12,
         defaultColor: AppColors.secondary,
         onTap: () {
           if (student != null) {
@@ -42,24 +45,23 @@ class CardProfile extends StatelessWidget {
                 context, TeacherDetail(teacherId: teacher?.id ?? 0));
           }
         },
-        child: Container(
-          padding: const EdgeInsets.only(
-            bottom: 18,
-            top: 18,
-            right: 12,
-            left: 12,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    NetworkPhoto(
-                      width: width * 0.25,
-                      height: height * 0.1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.horizontal(
+                      left: Radius.circular(12),
+                    ),
+                    child: NetworkPhoto(
+                      width: student != null ? width * 0.245 : width * 0.235,
+                      height: student != null
+                          ? bodyHeight * 0.15
+                          : bodyHeight * 0.14,
                       forceRefresh: true,
                       fallbackAsset: student != null
                           ? student?.gender == 1
@@ -78,45 +80,44 @@ class CardProfile extends StatelessWidget {
                               teacher?.picture ?? '',
                             ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: RichText(
-                          textAlign: TextAlign.left,
-                          text: TextSpan(
-                            text:
-                                "${student != null ? student?.name : teacher?.name ?? ''}\n",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                              fontSize: 18,
+                  ),
+                  SizedBox(width: width * 0.05),
+                  Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "${student != null ? student?.name : teacher?.name ?? ''}",
+                              maxLines: 2,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
                             ),
-                            children: [
-                              WidgetSpan(
-                                child: SizedBox(
-                                  height: height * 0.03,
-                                ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "${student != null ? student?.nameClass : teacher?.nip}",
+                              maxLines: 1,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 14,
                               ),
-                              TextSpan(
-                                text: student != null
-                                    ? student?.nameClass
-                                    : teacher?.nip,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                            ),
+                          ],
+                        )),
+                  ),
+                ],
               ),
-              Align(
-                alignment: Alignment.bottomRight,
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: CustomInkWell(
                   borderRadius: 999,
                   defaultColor: AppColors.primary,
@@ -142,8 +143,8 @@ class CardProfile extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

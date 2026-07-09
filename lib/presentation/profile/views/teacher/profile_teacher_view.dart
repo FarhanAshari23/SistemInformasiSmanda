@@ -79,6 +79,14 @@ class ProfileTeacher extends StatelessWidget {
               );
             }
             if (teacherState is TeacherLoaded) {
+              List<Widget> pages = [
+                const JadwalDaysSelection(
+                  isTeacherSchedule: true,
+                ),
+                ProfileTeacherMenuView(
+                  teacher: teacherState.teacher,
+                ),
+              ];
               return SafeArea(
                 child: Column(
                   children: [
@@ -151,18 +159,13 @@ class ProfileTeacher extends StatelessWidget {
                           SizedBox(height: height * 0.01),
                           Expanded(
                             child: SizedBox(
-                              child: Builder(builder: (context) {
-                                return context
-                                            .watch<TwoContainersCubit>()
-                                            .state ==
-                                        1
-                                    ? const JadwalDaysSelection(
-                                        isTeacherSchedule: true,
-                                      )
-                                    : ProfileTeacherMenuView(
-                                        teacher: teacherState.teacher,
-                                      );
-                              }),
+                              child: Builder(
+                                builder: (context) {
+                                  return pages[context
+                                      .watch<TwoContainersCubit>()
+                                      .state];
+                                },
+                              ),
                             ),
                           )
                         ],

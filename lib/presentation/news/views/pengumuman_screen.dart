@@ -83,7 +83,7 @@ class PengumumanScreen extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               BlocBuilder<NewsCubit, NewsState>(
                 builder: (context, state) {
                   if (state is NewsLoading) {
