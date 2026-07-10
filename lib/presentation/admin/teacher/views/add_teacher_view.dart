@@ -101,14 +101,18 @@ class _AddTeacherViewState extends State<AddTeacherView> {
           },
           child: SafeArea(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const BasicAppbar(isBackViewed: true),
-                const Text(
-                  'TAMBAH DATA GURU',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.primary,
+                const Padding(
+                  padding: EdgeInsets.only(left: 18.0),
+                  child: Text(
+                    'TAMBAH DATA GURU',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
                 SizedBox(height: height * 0.02),

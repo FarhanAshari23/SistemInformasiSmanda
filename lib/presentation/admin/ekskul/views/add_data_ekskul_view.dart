@@ -112,17 +112,21 @@ class _AddDataEkskulViewState extends State<AddDataEkskulView> {
         child: Scaffold(
           body: SafeArea(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const BasicAppbar(isBackViewed: true),
                 SizedBox(height: height * 0.01),
-                const Text(
-                  'TAMBAH EKSKUL',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 24,
-                    color: AppColors.primary,
+                const Padding(
+                  padding: EdgeInsets.only(left: 18),
+                  child: Text(
+                    'TAMBAH EKSKUL',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
+                      color: AppColors.primary,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
                 SizedBox(height: height * 0.02),
                 Expanded(

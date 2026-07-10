@@ -95,15 +95,6 @@ class _EditNewsViewDetailState extends State<EditNewsViewDetail> {
             child: Column(
               children: [
                 const BasicAppbar(isBackViewed: true),
-                const Text(
-                  'EDIT PENGUMUMAN',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.primary,
-                  ),
-                ),
-                SizedBox(height: height * 0.05),
                 BlocBuilder<GetAllKelasCubit, KelasDisplayState>(
                   builder: (context, state) {
                     if (state is KelasDisplayLoading) {

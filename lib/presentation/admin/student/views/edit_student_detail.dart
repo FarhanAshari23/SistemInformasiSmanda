@@ -129,17 +129,22 @@ class _EditStudentDetailState extends State<EditStudentDetail> {
           child: SafeArea(
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const BasicAppbar(isBackViewed: true),
-                const Text(
-                  'Ubah data siswa',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.primary,
+                const Padding(
+                  padding: EdgeInsets.only(left: 18),
+                  child: Text(
+                    'Masukan informasi yang sesuai pada kolom berikut:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: AppColors.primary,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: height * 0.04),
+                const SizedBox(height: 12),
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 16),

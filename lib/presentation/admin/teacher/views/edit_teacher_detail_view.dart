@@ -109,17 +109,6 @@ class _EditTeacherDetailViewState extends State<EditTeacherDetailView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const BasicAppbar(isBackViewed: true),
-                const Center(
-                  child: Text(
-                    'EDIT DATA GURU',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
-                SizedBox(height: height * 0.04),
                 const Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
